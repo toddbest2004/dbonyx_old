@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 
 var auctionSchema = new Schema({
 	_id: Number,
-	item: Number,//{type: Number, ref: 'Item'}
+	item: {type: Number, ref: 'item'},
 	owner: String,
 	firstbid: Number,
 	bid: Number,

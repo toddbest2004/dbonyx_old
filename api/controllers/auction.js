@@ -14,7 +14,7 @@ router.get("/fetchauctions", function(req, res){
 	var limit = 5
 	var offset = 0
 
-	var query = db.auction.find({region:region,slugName:slugName}).skip(offset).limit(limit)
+	var query = db.auction.find({region:region,slugName:slugName,item:3184}).populate('item').skip(offset).limit(limit)
 	//query.populate('item', )
 	query.exec(function(err, auctions){
 		query.count(function(err, count){

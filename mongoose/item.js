@@ -2,6 +2,7 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var itemSchema = new Schema({
+	_id: Number,
 	itemId: Number,
 	disenchantingSkillRank: Number,
 	description: String,

@@ -1,0 +1,49 @@
+<div ng-controller='AuctionCtrl'>
+<div class="row" id="auctionSearchRow">
+<div class="col-md-12">
+<div id="realmDiv">
+<form action="" id="filterForm">
+<label for="realmInput">Select Server:</label>
+<input type="text" id="realmInput">
+<label for="search">Search Term:</label>
+<input type="text" id="search" class="itemFilter" ng-model="searchTerm">
+<button id="searchButton" ng-click="search($event)">Search</button>
+</form>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-9">
+<div id="auctionData">
+<div id="auctionIntro">Select a realm to get started</div>
+</div>
+<div>
+<textarea rows="5" cols="100" ng-model="testauctiondata"></textarea>
+</div>
+</div>
+<div class="col-md-3 auctionoptions">
+Traditional | Advanced
+<div id="itemFilterDiv">
+<select id="itemFilterQuality" class="itemFilter" multiple size='8'>
+	<option value="0" class="itemQuality0">Poor</option>
+	<option value="1" class="itemQuality1">Common</option>
+	<option value="2" class="itemQuality2">Uncommon</option>
+	<option value="3" class="itemQuality3">Rare</option>
+	<option value="4" class="itemQuality4">Epic</option>
+	<option value="5" class="itemQuality5">Legendary</option>
+	<option value="6" class="itemQuality6">Artifact</option>
+	<option value="7" class="itemQuality7">Heirloom</option>
+</select>
+<button id="clearItemFilterQuality">Clear</button>
+<ul id="itemFiltersList" class="list-unstyled">
+<!-- <li class="itemFilter">
+	<input type="button" value="test" class="filterType">
+	<input type="button" value=">" class="filterComparator">
+	<input class="filterValue">
+</li> -->
+</ul>
+<button id="addItemFilter">Add Item Filter</button>
+</div>
+</div>
+</div>
+</div>

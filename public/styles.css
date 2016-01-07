@@ -92,3 +92,21 @@ html, body {
 .center{
   text-align: center;
 }
+.autocomplete-group{
+	display:inline-block;
+}
+.autocomplete-dropdown{
+	position:absolute;
+}
+.autocomplete-row{
+	position:relative;
+	cursor:pointer;
+	width:200px;
+	background-color:black;
+	color:white;
+	z-index:1;
+}
+.autocomplete-row-selected{
+	background-color: white;
+	color:black;
+}

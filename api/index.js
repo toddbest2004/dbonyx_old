@@ -11,4 +11,11 @@ router.use("/character", characterCtrl);
 var auctionCtrl = require("./controllers/auction")
 router.use("/auction", auctionCtrl);
 
+router.get("/realms", function(req, res){
+	db.realm.find({}, function(err, realms){
+		var realmArray = realms.map(function(realm){return realm.name+'-'+realm.region.toUpperCase()})
+		res.json(realmArray)
+	})
+})
+
 module.exports = router;

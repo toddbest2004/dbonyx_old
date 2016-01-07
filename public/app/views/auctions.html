@@ -2,9 +2,9 @@
 <div class="row" id="auctionSearchRow">
 <div class="col-md-12">
 <div id="realmDiv">
-<form action="" id="filterForm">
+<form action="" id="filterForm"  autocomplete="off">
 <label for="realmInput">Select Server:</label>
-<input type="text" id="realmInput" ng-model="realmInput">
+<auto-complete></auto-complete>
 <label for="search">Search Term:</label>
 <input type="text" id="search" class="itemFilter" ng-model="searchTerm">
 <button id="searchButton" ng-click="search($event)">Search</button>

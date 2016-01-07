@@ -97,14 +97,16 @@ html, body {
 }
 .autocomplete-dropdown{
 	position:absolute;
+	max-height:160px;
+	overflow-y:scroll;
+	z-index:1;
 }
 .autocomplete-row{
 	position:relative;
 	cursor:pointer;
-	width:200px;
+	width:185px;
 	background-color:black;
 	color:white;
-	z-index:1;
 }
 .autocomplete-row-selected{
 	background-color: white;

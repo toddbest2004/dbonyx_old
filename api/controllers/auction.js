@@ -9,21 +9,24 @@ router.get("/fetchauctions", function(req, res){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
 	}
-	var realmSplit = query.realm.toLowerCase().split('-')
+	var realmSplit = query.realm.split('-')
 	if(realmSplit.length!==2){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
 	}
-	var region = realmSplit[1]
-	var slugName = realmSplit[0]
+	var region = realmSplit[1].toLowerCase()
+	var realmName = realmSplit[0]
 	var limit = 25
 	var offset = 0
 
-	var query = db.auction.find({region:region,slugName:slugName,item:{$lt:1000}}).populate('item').skip(offset).limit(limit)
-	//query.populate('item', )
-	query.exec(function(err, auctions){
-		query.count(function(err, count){
-			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
+	db.realm.findOne({name:realmName}, function(err, realm){
+		var slugName = realm.slug
+		var query = db.auction.find({region:region,slugName:slugName,item:{$lt:1000}}).populate('item').skip(offset).limit(limit)
+		//query.populate('item', )
+		query.exec(function(err, auctions){
+			query.count(function(err, count){
+				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
+			})
 		})
 	})
 })

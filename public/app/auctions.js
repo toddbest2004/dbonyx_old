@@ -28,7 +28,6 @@ angular.module('AuctionCtrls', [])
 			url: '/api/auction/fetchauctions',
 			params: {realm:$scope.realmInput,search:$scope.searchTerm}
 		}).then(function success(response){
-			console.log(response)
 			$scope.testauctions=JSON.stringify(response.data)
 			$scope.auctionResults=response.data
 		}, function error(response){
@@ -36,7 +35,7 @@ angular.module('AuctionCtrls', [])
 		})
 	}
 	$scope.getRealms=function(){
-		console.log("getting realms")
+		$scope.realms=['Loading Realms']
 		$http({
 			method: 'GET',
 			url: '/api/realms'
@@ -44,7 +43,7 @@ angular.module('AuctionCtrls', [])
 			console.log(response)
 			$scope.realms = response.data
 		}, function error(response){
-			console.log(response)
+			$scope.realms=['Unable to Load Realms']
 		})
 	}
 }]).directive('auctionResult', function(){

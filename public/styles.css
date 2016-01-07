@@ -1,12 +1,5 @@
-/*
-Blue: 2058D3;
-Dark: 393939;
-Medium Dark: 464646;
-Medium Light: 858585;
-Light: C5C5C5;
-*/
 body {
-  background-color: #4A4D3A;
+  background-color: #000;
   color: #00010D; }
 
 html, body {
@@ -17,79 +10,9 @@ html, body {
   height: auto !important;
   height: 100%;
   min-height: 100%; }
-
-#footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0; }
-
-.ui-autocomplete {
-  height: 200px;
-  overflow-y: scroll;
-  overflow-x: hidden; }
-
-#auctionSummary {
-  float: left;
-  display: inline-block; }
-
-#auctionNavLinks {
-  float: right;
-  display: inline-block; }
-
-.paginationNumber {
-  text-align: center;
-  display: inline-block;
-  width: 20px; }
-
-.itemMouseHover {
-  background-color: #00010D;
-  color: #565940; }
-
-.currentpage {
-  background-color: #00010D;
-  color: #565940; }
-
-.auctionoptions {
-  background-color: #565940; }
-
-.auctionnav, .auctionSort, .achievementCategory, .achievementHeader {
-  cursor: pointer;
-  font-weight: bold; }
-
-.hover, .selected {
-  background-color: #4A4D3A; }
-
-#graph {
-  min-width: 200px;
-  background-color: white;
-  z-index: 1;
-  position: absolute; }
-
-.closeGraph {
-  position: absolute;
-  right: 0;
-  top: -10;
-  border: 1px solid #00010D;
-  cursor: pointer; }
-
-.historyGraph, .watchAuction {
-  margin: 0 3px;
-  cursor: pointer;
-  font-size: 1.5em;
-  float: left; }
-
-#auctionSearchRow {
-  font-size: 1.2em;
-  text-align: center;
-  margin-bottom: 20px; }
-
-#auctionIntro {
-  font-size: 2em;
-  text-align: center; }
-
 .navbar {
   text-align: center;
-  background-color: #00010D; }
+  background-color: #000; }
   .navbar .navbar-nav {
     display: inline-block;
     float: none;
@@ -98,8 +21,7 @@ html, body {
       font-weight: bold; }
 
 .container {
-  background-color: #565940; }
-
+  background-color: #464646; }
 .icon {
   width: 32px;
   height: 32px; }
@@ -133,49 +55,40 @@ html, body {
   color: #E6CC80; }
 
 #itemFilterQuality {
-  background-color: #00010D; }
+  background-color: #000; }
   #itemFilterQuality option[selected] {
     color: red; }
+.auctionResultRow{
+	display:table-row;
+}
+.auctionResultCell{
+	display:table-cell;
+}
+.auctionResultTable{
+	display:table;
+}
+.auctionSort{
+	display:table-cell;
+	font-weight:bold;
+	font-size:1.2em;
+	text-align:center;
+}
+.historyGraph, .watchAuction {
+  margin: 0 3px;
+  cursor: pointer;
+  font-size: 1.5em;
+  float: left; }
 
-.itemFilterClose {
+#auctionSearchRow {
   font-size: 1.2em;
-  cursor: pointer; }
-
-.itemFilterValue {
-  width: 70px; }
-
-.item {
-  position: absolute;
-  color: white;
-  padding: 10px;
-  display: inline-block;
-  border: 1px solid #565940;
-  border-radius: 8px;
-  background: #444444;
-  font-size: .8em; }
-  .item li {
-    list-style-type: none; }
-
-.itemTitle {
-  font-size: 1.5em; }
-
-.itemSecondaryProperty {
-  color: #1EFF00; }
-
-.itemlevel {
-  color: gold; }
-
-.socketBonusOff, .openSocket {
-  color: #888; }
-
-.characterProfileMain {
-  position: relative; }
-
-.characterItem {
-  position: absolute; }
-
-.characterItemImg {
-  width: 48px;
-  height: 48px; }
-
-/*# sourceMappingURL=styles.css.map */
+  text-align: center;
+  margin-bottom: 20px; }
+#auctionIntro {
+  font-size: 2em;
+  text-align: center; }
+.right{
+  text-align: right;
+}
+.center{
+  text-align: center;
+}

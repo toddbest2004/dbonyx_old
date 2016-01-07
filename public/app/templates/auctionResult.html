@@ -1,0 +1,12 @@
+<div class="auctionResultRow"><div class="auctionResultCell center">{{auction.quantity}}</div>
+<div class="auctionResultCell">
+<span class="glyphicon glyphicon-stats historyGraph"></span>
+<span class="glyphicon glyphicon-eye-open watchAuction"></span>
+</div>
+<div class="auctionResultCell">
+<a href="/items/{{auction.item.itemId}}" class="itemLink itemQuality{{auction.item.quality}}"><img src="/images/icons/{{auction.item.icon}}.png" class="icon">{{auction.item.name}}</a>
+</div>
+<div class="auctionResultCell center">{{auction.item.itemLevel}}</div>
+<div class="auctionResultCell">{{auction.owner}}</div>
+<div class="auctionResultCell right">{{auction.bid}}</div>
+<div class="auctionResultCell right">{{auction.buyout}}</div></div>

@@ -14,17 +14,21 @@ router.get("/fetchauctions", function(req, res){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
 	}
+	
 	var region = realmSplit[1].toLowerCase()
 	var realmName = realmSplit[0]
-	var limit = 25
-	var offset = 0
+	var limit = parseInt(query.limit)
+	var offset = parseInt(query.offset)
+	if(limit>50){
+		limit=50
+	}
 
 	db.realm.findOne({name:realmName}, function(err, realm){
 		var slugName = realm.slug
-		var query = db.auction.find({region:region,slugName:slugName,item:{$lt:1000}}).populate('item').skip(offset).limit(limit)
+		var query = db.auction.find({region:region,slugName:slugName})
 		//query.populate('item', )
-		query.exec(function(err, auctions){
-			query.count(function(err, count){
+		query.populate('item').skip(offset).limit(limit).exec(function(err, auctions){
+			query.limit(0).skip(0).count(function(err, count){
 				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
 			})
 		})

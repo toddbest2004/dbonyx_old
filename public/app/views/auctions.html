@@ -17,6 +17,9 @@
 <div id="auctionData">
 <div id="auctionIntro" ng-if="!auctionResults">Select a realm to get started</div>
 </div>
+<div id="auctionNav" ng-if="auctionResults">
+<pagination page="{{auctionPage}}" max="{{auctionResults.count}}" limit="{{auctionLimit}}" results="{{auctionResults.auctions.length}}"></pagination>
+</div>
 <div class="auctionResultTable table table-condensed" ng-if="auctionResults">
 <div class="auctionResultRow"><div class="auctionSort" data-sort="quantity">Quantity</div>
 <div class="auctionResultCell">&nbsp;</div>

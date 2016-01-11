@@ -41,10 +41,12 @@ Light: C5C5C5;
 .auctionoptions {
   background-color: #565940; }
 
-.auctionnav, .auctionSort, .achievementCategory, .achievementHeader {
+.auctionNav, .auctionSort, .achievementCategory, .achievementHeader {
   cursor: pointer;
   font-weight: bold; }
-
+.auctionNav{
+  float:right;
+}
 .hover, .selected {
   background-color: #4A4D3A; }
 

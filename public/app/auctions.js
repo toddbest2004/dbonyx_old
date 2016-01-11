@@ -6,7 +6,9 @@ angular.module('AuctionCtrls', [])
 	$scope.realms=[]
 	$scope.realmInputSelected=false
 	$scope.hoverIndex=''
-	$scope.auctionPage=5
+	$scope.totalPages=0
+	$scope.auctionPage=1
+	$scope.currentPage=1
 	$scope.auctionLimit=25
 	$scope.blurIn=function(element){
 		if($scope.realms.length==0){
@@ -17,6 +19,47 @@ angular.module('AuctionCtrls', [])
 	$scope.blurOut=function(element){
 		$scope[element]=false
 	}
+	$scope.updatePages=function(){
+		$scope.backPages = []
+		$scope.nextPages = []
+		$scope.totalPages = Math.ceil($scope.auctionResults.count/$scope.auctionLimit)
+		$scope.low = ($scope.auctionPage-1)*$scope.auctionLimit
+		$scope.high = $scope.low+$scope.auctionResults.auctions.length
+		for(var i=$scope.auctionPage-5;i<$scope.auctionPage;i++){
+			if(i>0){
+				$scope.backPages.push(i)
+			}
+		}
+		for(var i=$scope.auctionPage+1;i<$scope.auctionPage+5;i++){
+			if(i<=$scope.totalPages){
+				$scope.nextPages.push(i)
+			}
+		}
+		$scope.currentPage=$scope.auctionPage
+	}
+	$scope.updatePage = function(page){
+		page=parseInt(page)
+		if(page<1){
+			page=1
+		}
+		if(page>$scope.totalPages){
+			page=$scope.totalPages
+		}
+		$scope.auctionPage=page
+		$scope.search()
+	}
+	$scope.firstPage = function(){
+		$scope.updatePage(1)
+	}
+	$scope.nextPage = function(){
+		$scope.updatePage($scope.auctionPage+1)
+	}
+	$scope.backPage = function(){
+		$scope.updatePage($scope.auctionPage-1)
+	}
+	$scope.lastPage = function(){
+		$scope.updatePage($scope.totalPages)
+	}
 	$scope.selectRealm = function(realm){
 		$scope.realmInput=realm
 	}
@@ -24,22 +67,20 @@ angular.module('AuctionCtrls', [])
 		$scope.hoverIndex=index
 	}
 	$scope.changePage=function(page){
-		console.log(page)
 		$scope.auctionPage=parseInt(page)
 		$scope.search()
 	}
 	$scope.search=function(e){
-		console.log("searching")
 		if(e){
 			e.preventDefault()
 		}
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
-			params: {realm:$scope.realmInput,search:$scope.searchTerm,offset:$scope.auctionPage*$scope.auctionLimit,limit:$scope.auctionLimit}
+			params: {realm:$scope.realmInput,search:$scope.searchTerm,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
 		}).then(function success(response){
-			$scope.testauctions=JSON.stringify(response.data)
 			$scope.auctionResults=response.data
+			$scope.updatePages()
 		}, function error(response){
 			console.log(response)
 		})
@@ -74,29 +115,7 @@ angular.module('AuctionCtrls', [])
 // 		$scope.nextPages = []
 // 		$scope.high=0
 // 		$scope.low=0
-// 		function updatePages(){
-// 			$scope.results = parseInt($scope.results)
-// 			$scope.page = parseInt($scope.page)
-// 			$scope.backPages = []
-// 			$scope.nextPages = []
-// 			var totalPages = Math.ceil($scope.max/$scope.limit)
-// 			$scope.low = $scope.page*$scope.limit
-// 			$scope.high = $scope.low+$scope.results
-// 			for(var i=$scope.page-4;i<$scope.page;i++){
-// 				if(i>=0){
-// 					$scope.backPages.push(i+1)
-// 				}
-// 			}
-// 			for(var i=$scope.page+1;i<$scope.page+6;i++){
-// 				if(i<=totalPages){
-// 					$scope.nextPages.push(i+1)
-// 				}
-// 			}
-// 		}
-// 		$scope.updatePage = function(page){
-// 			$scope.page=parseInt(page)
-// 			updatePages()
-// 		}
+
 
 // 		updatePages()
 // 	}]

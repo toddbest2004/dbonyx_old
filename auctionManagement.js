@@ -117,11 +117,49 @@ function importAuctionsFromFile(slug,region,touch,callback){
 }
 
 function updateAuctionHistory(slug, region, touch, callback){
-	// db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err){
-	// 	if(err){
-	// 		console.log(err)
-	// 	}
-		console.log("Completed in: "+(new Date()-start))
+	var curDate = new Date()
+	var dateString = curDate.getFullYear()+'-'+curDate.getMonth()+'-'+curDate.getDate()
+
+	var bulkInsert = db.auctionhistory.collection.initializeUnorderedBulkOp()
+
+	db.auction.find({region:region,slugName:slug,touch:{$lt:touch}}, function(err, oldAuctions){
+		//note, cannot insert the auctionDirectly or an error will be thrown, must create a json object
+		if(err||!oldAuctions||oldAuctions.length===0){
+			removeOldAuctions(slug, region, touch, callback)
+			return
+		}
+		for(var i=0;i<oldAuctions.length;i++){
+			var expired=0
+			var sold=0
+			var sellingPrice=0
+			if(oldAuctions[i].timeLeft==='VERY_SHORT'){
+				//does not yet check for bid items
+				// if(oldAuctions[i].firstbid===oldAuctions[i].bid){
+					expired=oldAuctions[i].quantity
+				// }else{
+				// 	sold=oldAuctions[i].quantity
+				// }
+			}else{
+				sold=oldAuctions[i].quantity
+			}
+			bulkInsert.find({slugName:slug,region:region,item:oldAuctions[i].item,date:dateString}).upsert().updateOne({
+				$inc:{listed:oldAuctions[i].quantity,sold:sold,expired:expired,sellingPrice:sellingPrice}
+			})
+		}
+		bulkInsert.execute(function(err,docs){
+			if(err)
+				console.log(err)
+			console.log("Auction history completed in: "+(new Date()-start))
+			removeOldAuctions(slug, region, touch, callback)
+		})
+	})
+}
+
+function removeOldAuctions(slug, region, touch, callback){
+	db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err){
+		if(err)
+			console.log(err)
+		console.log("Old auctions removed in "+(new Date()-start))
 		callback()
-	// })
+	})
 }

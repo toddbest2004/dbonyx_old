@@ -1,7 +1,7 @@
 angular.module('AuctionCtrls', [])
 .controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
 	$scope.searchTerm=''
-	$scope.realmInput='Ghostlands-US'
+	$scope.realmInput=''
 	$scope.filters=[]
 	$scope.realms=[]
 	$scope.realmInputSelected=false
@@ -39,11 +39,11 @@ angular.module('AuctionCtrls', [])
 	}
 	$scope.updatePage = function(page){
 		page=parseInt(page)
-		if(page<1){
-			page=1
-		}
 		if(page>$scope.totalPages){
 			page=$scope.totalPages
+		}
+		if(page<1){
+			page=1
 		}
 		$scope.auctionPage=page
 		$scope.search()

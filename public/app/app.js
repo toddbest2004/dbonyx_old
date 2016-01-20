@@ -10,9 +10,15 @@ $routeProvider
 .when('/database', {
 	templateUrl: 'app/views/database.html'
 })
+.when('/character', {
+	templateUrl: 'app/views/character.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })
 
 $locationProvider.html5Mode(true)
+}])
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+	
 }])

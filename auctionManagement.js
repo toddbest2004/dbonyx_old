@@ -17,7 +17,7 @@ var auctionQueue = async.queue(function(task, callback){
 
 auctionQueue.drain = function(){
 	console.log(realmcount+ " realms completed in "+(new Date()-start))
-	if(realmcount>=10){
+	if(realmcount>5){
 		load_auction_data()
 		start = new Date()
 	}else{
@@ -28,6 +28,8 @@ auctionQueue.drain = function(){
 }
 
 setTimeout(load_auction_data, 1000)
+// var url = "https://"+region+".api.battle.net/wow/auction/data/dathremar?locale=en_US&apikey="+process.env.API
+// checkServerForUpdatedAuctions(url, 'dathremar', 'us', 0,)
 
 function load_auction_data(){
 	db.realm.find({isMasterSlug:true}, null, {sort:{auctiontouch:1}}).then(function(realms){
@@ -35,7 +37,6 @@ function load_auction_data(){
 			var slug = realms[i].slug
 			var region = realms[i].region
 			var touch = realms[i].auctiontouch
-			//https://us.api.battle.net/wow/auction/data/medivh?locale=en_US&apikey=
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API
 			checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
 		}
@@ -57,7 +58,9 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				var task = {body:body.files[0].url,slug:slug,region:region,lastModified:lastModified/1000}
 				auctionQueue.push(task, function(){realmcount++})
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
-				console.log(lastModified);
+				console.log(slug+": "+lastModified);
+			}else{
+				console.log(slug+": up to date.")
 			}
 		}else{
 			console.log(response.statusCode)
@@ -71,7 +74,8 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 		json: true
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
-			writeAuctionDataToFile(body,slug,region,touch,callback)
+			// writeAuctionDataToFile(body,slug,region,touch,callback)
+			bulkImport(body, slug, region, touch, callback)
 		}
 	});
 }
@@ -114,6 +118,30 @@ function importAuctionsFromFile(slug,region,touch,callback){
 			updateAuctionHistory(slug, region, touch, callback);
 		})
 	});
+}
+
+function bulkImport(auctionData, slug, region, touch, callback){
+	var bulkImport = db.auction.collection.initializeUnorderedBulkOp()
+	for(var i=0; i<auctionData.auctions.length;i++){
+		var temp = auctionData.auctions[i]
+		temp._id = temp.auc
+		
+		temp.bidPerItem = Math.round(temp.bid/temp.quantity)
+		temp.buyoutPerItem = Math.round(temp.buyout/temp.quantity)
+		temp.slugName = slug
+		temp.region = region
+		temp.touch = touch;
+		temp.startTime = temp.timeLeft
+		// temp.$setOnInsert={firstbid:temp.bid}
+		delete temp.auc
+		delete temp.ownerRealm
+		auctionData.auctions[i] = temp
+		bulkImport.find({_id:temp._id}).upsert().updateOne(temp)
+	}
+	console.log(slug+": starting bluk import")
+	bulkImport.execute(function(err, data){
+		updateAuctionHistory(slug,region,touch,callback)
+	})
 }
 
 function updateAuctionHistory(slug, region, touch, callback){

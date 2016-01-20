@@ -5,7 +5,7 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 50
+var increment = 80
 
 var itemQueue = async.queue(function(task, callback){
 	insertItem(task.body, callback)

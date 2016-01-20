@@ -30,7 +30,7 @@ angular.module('AuctionCtrls', [])
 				$scope.backPages.push(i)
 			}
 		}
-		for(var i=$scope.auctionPage+1;i<$scope.auctionPage+5;i++){
+		for(var i=$scope.auctionPage+1;i<=$scope.auctionPage+5;i++){
 			if(i<=$scope.totalPages){
 				$scope.nextPages.push(i)
 			}

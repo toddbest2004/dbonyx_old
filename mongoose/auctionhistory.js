@@ -15,7 +15,7 @@ var auctionhistorySchema = new Schema({
 	context: Number
 })
 
-auctionhistorySchema.index({region:1, slugName:1,item:-1,buyoutPerItem:1})
+auctionhistorySchema.index({region:1, slugName:1,date:1,item:-1})
 
 var auctionhistory = mongoose.model('auctionhistory', auctionhistorySchema)
 module.exports = auctionhistory

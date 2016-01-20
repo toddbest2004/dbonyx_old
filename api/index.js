@@ -10,6 +10,8 @@ var characterCtrl = require("./controllers/character")
 router.use("/character", characterCtrl);
 var auctionCtrl = require("./controllers/auction")
 router.use("/auction", auctionCtrl);
+var itemCtrl = require("./controllers/item")
+router.use("/item", itemCtrl);
 
 router.get("/realms", function(req, res){
 	db.realm.find({}, function(err, realms){

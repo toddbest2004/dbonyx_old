@@ -1,0 +1,19 @@
+<div>
+<div ng-if="!loading">
+<img src="/images/icons/{{item.icon}}.png" class="icon">
+<ul class="item">
+<li class="itemTitle itemQuality{{item.quality}}">{{item.name}}</li>
+<li class="itemLevel">Item Level: {{item.itemLevel}}</li>
+<li>Item Bind:{{item.itemBind}}</li>
+<li>Slot:</li>
+<li>{{item.armor}} Armor</li>
+<li>Weapon Info:{{item.weaponInfo}}</li>
+<li ng-repeat="stat in item.bonusStats">{{stat}}</li>
+<li>Durability: {{item.maxDurability}}/{{item.maxDurability}}</li>
+<li>Cost: {{item.buyPrice}}</li>
+<li>Requires Level {{item.requiredLevel}}</li>
+<li>Sells For: {{item.sellPrice}}</li>
+</ul>
+{{item}}
+</div>
+</div>

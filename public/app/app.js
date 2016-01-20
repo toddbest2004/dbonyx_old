@@ -1,4 +1,4 @@
-var app = angular.module('dbonyx', ['AuctionCtrls','ngRoute'])
+var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls','ngRoute'])
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 $routeProvider
 .when('/', {
@@ -13,6 +13,9 @@ $routeProvider
 .when('/character', {
 	templateUrl: 'app/views/character.html'
 })
+.when('/items/:id', {
+	templateUrl: 'app/views/item.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })
@@ -20,5 +23,5 @@ $routeProvider
 $locationProvider.html5Mode(true)
 }])
 .controller('characterCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
-	
+
 }])

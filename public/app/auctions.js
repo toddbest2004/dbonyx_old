@@ -74,14 +74,17 @@ angular.module('AuctionCtrls', [])
 		if(e){
 			e.preventDefault()
 		}
+		$scope.loading=true
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
 			params: {realm:$scope.realmInput,search:$scope.searchTerm,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
 		}).then(function success(response){
+			$scope.loading=false
 			$scope.auctionResults=response.data
 			$scope.updatePages()
 		}, function error(response){
+			$scope.loading=false
 			console.log(response)
 		})
 	}

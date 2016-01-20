@@ -23,7 +23,9 @@ var auctionSchema = new Schema({
 	context: Number
 })
 
-auctionSchema.index({region:1, slugName:1,item:-1,buyoutPerItem:1})
+auctionSchema.index({region:1,slugName:1,item:-1,buyoutPerItem:1})
+auctionSchema.index({region:1,slugName:1,buyout:-1})
+auctionSchema.index({region:1,slugName:1,timeLeft:1})
 
 var auction = mongoose.model('auction', auctionSchema)
 module.exports = auction

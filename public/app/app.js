@@ -19,6 +19,6 @@ $routeProvider
 
 $locationProvider.html5Mode(true)
 }])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+.controller('characterCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
 	
 }])

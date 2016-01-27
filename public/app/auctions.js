@@ -3,6 +3,7 @@ angular.module('AuctionCtrls', [])
 	$scope.searchTerm=''
 	$scope.realmInput=''
 	$scope.filters=[]
+	$scope.qualities=[]
 	$scope.realms=[]
 	$scope.realmInputSelected=false
 	$scope.hoverIndex=''
@@ -78,7 +79,7 @@ angular.module('AuctionCtrls', [])
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
-			params: {realm:$scope.realmInput,search:$scope.searchTerm,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
+			params: {filters:$scope.filters,qualities:$scope.qualities,searchTerm:$scope.searchTerm,realm:$scope.realmInput,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
 		}).then(function success(response){
 			$scope.loading=false
 			$scope.auctionResults=response.data

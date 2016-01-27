@@ -5,6 +5,39 @@ var db = require("../../mongoose");
 
 router.get("/fetchauctions", function(req, res){
 	var query = req.query
+	var searchTerm=''
+	var qualities=[]
+	if(query.qualities){
+		if(typeof(query.qualities)==='string'){
+			if(!isNaN(parseInt(query.qualities))){
+				qualities.push(parseInt(query.qualities))
+			}else{
+				res.status(400).json({error:"Improper query string supplied."})
+				return	
+			}
+		}else if(typeof(query.qualities)==='object'&&query.qualities.length>0){
+			//qualities is an array with at least one item
+			qualities=query.qualities.map(function(item){
+				if(!isNaN(parseInt(item))){
+					return parseInt(item)
+				}
+			}).filter(function(item){
+				if(item||item===0){
+					return true
+				}
+			})
+		}else{
+			res.status(400).json({error:"Improper query string supplied."})
+			return			
+		}
+	}
+	if(query.searchTerm){
+		if(typeof(query.searchTerm)!=='string'){
+			res.status(400).json({error:"Improper query string supplied."})
+			return
+		}
+		searchTerm=query.searchTerm
+	}
 	if(!query.realm||typeof(query.realm)!=='string'){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
@@ -23,15 +56,29 @@ router.get("/fetchauctions", function(req, res){
 		limit=50
 	}
 
-	db.realm.findOne({name:realmName}, function(err, realm){
-		var slugName = realm.slug
-		var query = db.auction.find({region:region,slugName:slugName})
-		//query.populate('item', )
-		query.populate('item').skip(offset).limit(limit).exec(function(err, auctions){
-			query.limit(0).skip(0).count(function(err, count){
-				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
+	db.realm.findOne({name:realmName}).populate('masterSlug').exec(function(err, realm){
+		var slugName = realm.masterSlug.slug
+		var itemsFiltered = false
+		var itemQuery = db.item.find().select('_id')
+		if(qualities.length>0){
+			itemsFiltered = true
+			itemQuery.where('quality').in(qualities)
+		}
+		if(searchTerm){
+			itemsFiltered = true
+			var re = new RegExp(searchTerm)
+			itemQuery.regex('name',re)
+		}
+		if(itemsFiltered){
+			itemQuery.exec(function(err, items){
+				var itemIds = items.map(function(item){
+					return item._id
+				})
+				auctionQuery(res, region, slugName, limit, offset, itemIds)
 			})
-		})
+		}else{
+			auctionQuery(res, region, slugName, limit, offset, [])
+		}
 	})
 })
 
@@ -53,6 +100,19 @@ function parseFilters(filters){
 		}
 
 	}
-	console.log(filters)
 	return parsedFilters
+}
+
+function auctionQuery(res, region, slugName, limit, offset, filteredItems){
+		var auctionQuery = db.auction.find({region:region,slugName:slugName})
+		//query.populate('item', )
+		auctionQuery.populate('item').skip(offset).limit(limit)
+		if(filteredItems.length>0){
+			auctionQuery.where('item').in(filteredItems)
+		}
+		auctionQuery.exec(function(err, auctions){
+			auctionQuery.limit(0).skip(0).count(function(err, count){
+				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
+			})
+		})
 }

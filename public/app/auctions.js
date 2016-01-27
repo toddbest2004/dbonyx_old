@@ -1,5 +1,5 @@
 angular.module('AuctionCtrls', [])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams, ) {
 	$scope.searchTerm=''
 	$scope.realmInput=''
 	$scope.filters=[]
@@ -63,6 +63,7 @@ angular.module('AuctionCtrls', [])
 	}
 	$scope.selectRealm = function(realm){
 		$scope.realmInput=realm
+		$scope.firstPage()
 	}
 	$scope.hover=function(index){
 		$scope.hoverIndex=index
@@ -70,6 +71,10 @@ angular.module('AuctionCtrls', [])
 	$scope.changePage=function(page){
 		$scope.auctionPage=parseInt(page)
 		$scope.search()
+	}
+	$scope.clearQualityFilter=function(){
+		$scope.qualities=[]
+		$scope.firstPage()
 	}
 	$scope.search=function(e){
 		if(e){
@@ -100,6 +105,18 @@ angular.module('AuctionCtrls', [])
 			$scope.realms=['Unable to Load Realms']
 		})
 	}
+}]).directive('selectOnFocus', ['$window', function ($window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.on('click', function () {
+                if (!$window.getSelection().toString()) {
+                    // Required for mobile Safari
+                    this.setSelectionRange(0, this.value.length)
+                }
+            });
+        }
+    };
 }]).directive('auctionResult', function(){
 	return {
 		restrict: 'E',

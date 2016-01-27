@@ -71,6 +71,14 @@ router.get("/fetchauctions", function(req, res){
 		}
 		if(itemsFiltered){
 			itemQuery.exec(function(err, items){
+				if(err||!items){
+					res.status(400).json({error:"There was an error fetching data from the server."})
+					return
+				}
+				if(items.length===0){
+					res.json({success:true, count:0, auctions:[], offset:offset, limit:limit})
+					return
+				}
 				var itemIds = items.map(function(item){
 					return item._id
 				})

@@ -6,7 +6,7 @@
 <label for="realmInput">Select Server:</label>
 <auto-complete></auto-complete>
 <label for="search">Search Term:</label>
-<input type="text" id="search" class="itemFilter" ng-model="searchTerm">
+<input type="text" id="search" class="itemFilter" ng-model="searchTerm" ng-blur="firstPage()">
 <button id="searchButton" ng-click="search($event)">Search</button>
 </form>
 </div>
@@ -48,7 +48,7 @@ Loading Auctions...
 <div class="col-md-3 auctionoptions">
 Traditional | Advanced
 <div id="itemFilterDiv">
-<select id="itemFilterQuality" class="itemFilter" multiple size='8' ng-model="qualities">
+<select id="itemFilterQuality" class="itemFilter" multiple size='8' ng-model="qualities" ng-change="firstPage()">
 	<option value="0" class="itemQuality0">Poor</option>
 	<option value="1" class="itemQuality1">Common</option>
 	<option value="2" class="itemQuality2">Uncommon</option>
@@ -58,7 +58,7 @@ Traditional | Advanced
 	<option value="6" class="itemQuality6">Artifact</option>
 	<option value="7" class="itemQuality7">Heirloom</option>
 </select>
-<button id="clearItemFilterQuality">Clear</button>
+<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button>
 <ul id="itemFiltersList" class="list-unstyled">
 <!-- <li class="itemFilter">
 	<input type="button" value="test" class="filterType">

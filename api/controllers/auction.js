@@ -66,7 +66,7 @@ router.get("/fetchauctions", function(req, res){
 		}
 		if(searchTerm){
 			itemsFiltered = true
-			var re = new RegExp(searchTerm)
+			var re = new RegExp(searchTerm,"i")
 			itemQuery.regex('name',re)
 		}
 		if(itemsFiltered){

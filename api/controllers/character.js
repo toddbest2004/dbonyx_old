@@ -101,7 +101,7 @@ function processCharacter(name, realm, region, body, callback){
 				character.quests=body.quests
 				character.titles=body.titles
 				character.mounts=body.mounts.collected.map(function(mount){
-					return mount.creatureId
+					return mount.spellId
 				})
 				character.criteria=[]
 				for(var i=0; i<body.achievements.criteria.length;i++){

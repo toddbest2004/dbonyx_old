@@ -13,22 +13,25 @@ function get_achievements(){
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
 			for(var i=0;i<body.achievements.length;i++){
-				var categoryId = body.achievements[i].id
+				var achievement = body.achievements[i]
+				var categoryId = achievement.id
 				db.achievement.create({
 					_id:achievement.id,
-					title:achievement.title,
+					title:achievement.name,
 					isCategory:true,
 					categoryId:0
 				})
+				var parentId = categoryId
 				if(body.achievements[i].categories){
 					for(var j=0;j<body.achievements[i].categories.length;j++){
 						var category = body.achievements[i].categories[j]
 						db.achievement.create({
-							_id:categoryId,
+							_id:category.id,
 							isCategory:true,
-							categoryId:categoryId,
-							title:category.title
+							categoryId:parentId,
+							title:category.name
 						})
+						console.log(category.id,parentId)
 						var categoryId=category.id
 						for(var k=0;k<category.achievements.length;k++){
 							var achievement=category.achievements[k]

@@ -15,26 +15,17 @@ db.realm.find({}, function(err, realms){
 
 
 
-router.get("/*", function(req, res){
-	var realm = req.query.realm
-	var characterName = req.query.name
-	var realmSplit = realm.split('-')
-	if(realmSplit.length!==2){
-		res.status(400).json({error:"Improper query string supplied."})
+router.get("/load", function(req, res){
+	console.log(req.query)
+	if(!req.query.name){
+		res.status(400).json({error:"No name provided."})
 		return
 	}
-	
-	var region = realmSplit[1].toLowerCase()
-	var realmName = realmSplit[0]
-	importCharacter(characterName,realmName,region,function(result){
-		if(!result){
-			res.status(404).json({error:"Not Found.", result:false})
-			return
-		}
-		res.json({status:"success"})
-		console.log(region,realmName,characterName)
-	})
-	
+	if(req.query.realm){
+		findCharacter(req.query.realm,req.query.name,res)
+	}else{
+		findMultipleCharacters(req.query.name, res)
+	}
 	
 })
 
@@ -68,7 +59,65 @@ router.get("/:region/:realm/:charactername", function(req, res){
 
 module.exports = router
 
+function findCharacter(realm, name, res){
+	var realmSplit = realm.split('-')
+	if(realmSplit.length!==2){
+		res.status(400).json({error:"Improper query string supplied."})
+		return
+	}
+	var region = realmSplit[1].toLowerCase()
+	var realmName = realmSplit[0]
+	db.character.findOne({name:name,realm:realmName,region:region}, function(err, character){
+		if(err){
+			res.status(400).json({error:"Error reading database."})
+			return
+		}
+		if(!character){
+			importCharacter(name,realmName,region,function(result){
+				if(!result){
+					res.status(404).json({error:"Not Found.", result:false})
+					return
+				}
+				res.json({status:"success", count:1, character:{name:name,realm:realmName,region:region}})
+			})
+		}else{
+			res.json({status:"success", count:1, character:{name:name,realm:realmName,region:region}})
+		}
+	})
+}
+
+function findMultipleCharacters(name, res){
+	if(typeof(name)!=='string'){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.find({name:name}, function(err, characters){
+		if(err){
+			res.status(400).json({error:"Error reading database."})
+			return
+		}
+		if(characters.length===0){
+			res.status(404).json({error:"Not Found.", result:false})
+			return
+		}
+		if(characters.length===1){
+			var character = characters[0]
+			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase()}})
+			return
+		}
+		//characters.length>1
+		var characterArray = []
+		for(var i=0; i<characters.length;i++){
+			var character = characters[i]
+			characterArray.push({name:character.name,realm:character.realm,region:character.region,level:character.level,faction:character.faction})
+		}
+		res.json({status:"success", count:characters.count, characters:characterArray})
+		return
+	})
+}
+
 function importCharacter(name, realm, region, callback){
+	console.log("Importing Character: "+name)
 	var url = "http://"+region+".battle.net/api/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
 	request({
 		uri: url,

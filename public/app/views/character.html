@@ -1,10 +1,17 @@
 Character Tools
 <div ng-controller="characterCtrl">
+{{test}}
 <form>
 <auto-complete realm-input="realmInput"></auto-complete>
 <input id="characterName" ng-model="characterName">
 <button type="sumbit" ng-click="search($event)">Search</button>
 </form>
+<div ng-if="results">
+<div ng-repeat="result in results track by $index" ng-click="selectCharacter($index)">
+[{{result.level}}]{{result.name}} - {{result.realm}}({{result.region.toUpperCase()}})
+</div>
+</div>
+
 Placeholder for future character tools. Eventually you'll be able to:
 <ul>
 <li>See a listing of equipped gear, with an optional equipment audit.</li>

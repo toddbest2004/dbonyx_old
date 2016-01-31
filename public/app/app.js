@@ -16,6 +16,9 @@ $routeProvider
 .when('/character/main',{
 	templateUrl: 'app/views/characterMain.html'
 })
+.when('/character/:characterName', {
+	templateUrl: 'app/views/character.html'
+})
 .when('/items/:id', {
 	templateUrl: 'app/views/item.html'
 })
@@ -59,25 +62,52 @@ $locationProvider.html5Mode(true)
 	return user
 })
 .controller('characterCtrl', ['onyxPersistence', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, $scope, $http, $location, $routeParams) {
-	$scope.realmInput=onyxPersistence.getRealm()
-	$scope.characterName=onyxPersistence.getCharacterName()
-
 	$scope.search=function(e){
-		e.preventDefault()
+		if(e){
+			e.preventDefault()
+		}
 		$scope.loading=true
+		var params = {name:$scope.characterName}
+		if($routeParams.characterName){
+
+		}else if($scope.realmInput){
+			params.realm=$scope.realmInput
+		}
 		$http({
 			method: 'GET',
 			url: '/api/character/load',
-			params: {realm:$scope.realmInput,name:$scope.characterName}
+			params: params
 		}).then(function success(response){
-			onyxPersistence.setCharacterName($scope.characterName)
-			onyxPersistence.setCharacterRealm($scope.realmInput)
 			$scope.loading=false
-			$location.path('/character/main').replace()
+			if(response.data.count===1){
+				onyxPersistence.setCharacterName($scope.characterName)
+				$location.path('/character/main').replace()
+			}else{
+				//show all characters for choosing
+				$scope.results=response.data.characters
+				console.log(response.data)
+			}
 		}, function error(response){
 			onyxPersistence.setCharacterName('')
 			$scope.loading=false
+			console.log("Unable to find character.")
 			//Handle Character not found, unable to connect, etc.
 		})
 	}
+	$scope.selectCharacter = function(index){
+		console.log(index)
+		onyxPersistence.setCharacterName($scope.results[index].name)
+		onyxPersistence.setRealm($scope.results[index].realm+"-"+$scope.results[index].region.toUpperCase())
+		$location.path('/character/main').replace()
+	}
+	$scope.realmInput=onyxPersistence.getRealm()
+	$scope.characterName=onyxPersistence.getCharacterName()
+	if($routeParams.characterName){
+		onyxPersistence.setCharacterName($routeParams.characterName)
+		$scope.characterName=onyxPersistence.getCharacterName()
+		$scope.search()
+	}
+	
+	// $scope.test=$routeParams.characterName
+	
 }])

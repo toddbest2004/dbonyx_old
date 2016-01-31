@@ -1,3 +1,8 @@
+//TODO: Currently, searchTerm.length must be>=3
+//but there is no notification when it isn't
+//need something to say "Hey, we're only using a search term 
+//if it is at least three characters"
+
 var express = require("express");
 var router = express.Router();
 
@@ -36,7 +41,8 @@ router.get("/fetchauctions", function(req, res){
 			res.status(400).json({error:"Improper query string supplied."})
 			return
 		}
-		searchTerm=query.searchTerm
+		if(query.searchTerm.length>2)
+			searchTerm=query.searchTerm
 	}
 	if(!query.realm||typeof(query.realm)!=='string'){
 		res.status(400).json({error:"Improper query string supplied."})

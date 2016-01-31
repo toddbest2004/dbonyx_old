@@ -1,0 +1,75 @@
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
+
+var characterSchema = new Schema({
+	name: String,
+	realm: String,
+	region: String,
+	importing: Boolean,
+	slug: {type: Schema.Types.ObjectId, ref: 'Realm'},
+	class: Number,
+	race: Number,
+	gender: Number,
+	level: Number,
+	achievementPoints: Number,
+	thumbnail: String,
+	calcClass: String,
+	faction: Number,
+	// guild: {type: Schema.Types.ObjectId, ref: 'Guild'},
+	// feed:
+	appearance:{faceVariation:Number,skinColor:Number,hairVariation:Number,hairColor:Number,featureVariation:Number,showHelm:Boolean,showCloak:Boolean},
+	progression:{},
+	professions:{},
+	stats:{},
+	talents:{},
+	pvp:{},
+	items:{
+		averageItemLevel:Number,
+		averageItemLevelEquipped:Number,
+		head:{},
+		neck:{},
+		shoulder:{},
+		back:{},
+		chest:{},
+		tabard:{},
+		wrist:{},
+		hands:{},
+		waist:{},
+		legs:{},
+		feet:{},
+		finger1:{},
+		finger2:{},
+		trinket1:{},
+		trinket2:{},
+		mainHand:{},
+		offHand:{}},
+	reputation:[{
+		id:Number,
+		name:String,
+		standing:Number,
+		value:Number,
+		max:Number}],
+	mounts:[{type:Number, ref:"Mount"}],
+	battlePets:[{
+		creatureId:Number,
+		speciesId:Number,
+		breedId:Number,
+		petQualityId:Number,
+		level:Number,
+		health:Number,
+		power:Number,
+		speed:Number,
+		battlePetGuid:String,
+		name:String}],
+	quests:[{type:Number, ref:"Quest"}],
+	criteria:[{
+		id:Number,
+		quantity:Number,
+		timestamp:Number,
+		created:Number}],
+	achievements:[{id:Number,timestamp:Number}],
+	titles:[{id:Number,name:String}]
+})
+
+var character = mongoose.model('character', characterSchema)
+module.exports = character

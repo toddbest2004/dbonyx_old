@@ -1,25 +1,16 @@
 angular.module('AuctionCtrls', [])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams, ) {
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', function($scope, $http, $location, $routeParams, onyxPersistence) {
 	$scope.searchTerm=''
-	$scope.realmInput=''
+	$scope.realmInput=onyxPersistence.getRealm()
 	$scope.filters=[]
 	$scope.qualities=[]
 	$scope.realms=[]
-	$scope.realmInputSelected=false
 	$scope.hoverIndex=''
 	$scope.totalPages=0
 	$scope.auctionPage=1
 	$scope.currentPage=1
 	$scope.auctionLimit=25
-	$scope.blurIn=function(element){
-		if($scope.realms.length==0){
-			$scope.getRealms()
-		}
-		$scope[element]=true
-	}
-	$scope.blurOut=function(element){
-		$scope[element]=false
-	}
+
 	$scope.updatePages=function(){
 		$scope.backPages = []
 		$scope.nextPages = []
@@ -61,13 +52,6 @@ angular.module('AuctionCtrls', [])
 	$scope.lastPage = function(){
 		$scope.updatePage($scope.totalPages)
 	}
-	$scope.selectRealm = function(realm){
-		$scope.realmInput=realm
-		$scope.firstPage()
-	}
-	$scope.hover=function(index){
-		$scope.hoverIndex=index
-	}
 	$scope.changePage=function(page){
 		$scope.auctionPage=parseInt(page)
 		$scope.search()
@@ -94,22 +78,17 @@ angular.module('AuctionCtrls', [])
 			console.log(response)
 		})
 	}
-	$scope.getRealms=function(){
-		$scope.realms=['Loading Realms']
-		$http({
-			method: 'GET',
-			url: '/api/realms'
-		}).then(function success(response){
-			$scope.realms = response.data
-		}, function error(response){
-			$scope.realms=['Unable to Load Realms']
-		})
+	$scope.init=function(){
+		if($scope.realmInput){
+			$scope.firstPage()
+		}
 	}
+	$scope.init()
 }]).directive('selectOnFocus', ['$window', function ($window) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
-            element.on('click', function () {
+            element.on('focus', function () {
                 if (!$window.getSelection().toString()) {
                     // Required for mobile Safari
                     this.setSelectionRange(0, this.value.length)
@@ -124,10 +103,47 @@ angular.module('AuctionCtrls', [])
 		templateUrl: 'app/templates/auctionResult.html'
 	}
 }).directive('autoComplete', function(){
+	var autoCompleteCtrl = ['onyxPersistence', '$scope', '$http', function(onyxPersistence, $scope, $http){
+		$scope.realmInputSelected=false
+		$scope.realms=[]
+		$scope.blurIn=function(element){
+			if($scope.realms.length==0){
+				$scope.getRealms()
+			}
+			$scope[element]=true
+		}
+		$scope.blurOut=function(element){
+			$scope[element]=false
+		}
+		$scope.getRealms=function(){
+			$scope.realms=['Loading Realms']
+			$http({
+				method: 'GET',
+				url: '/api/realms'
+			}).then(function success(response){
+				$scope.realms = response.data
+			}, function error(response){
+				$scope.realms=['Unable to Load Realms']
+			})
+		}
+		$scope.selectRealm = function(realm){
+			$scope.realmInput=realm
+			onyxPersistence.setRealm(realm)
+			setTimeout($scope.search,0)
+		}
+		$scope.hover=function(index){
+			$scope.hoverIndex=index
+		}
+	}]
 	return {
 		restrict: 'E',
 		replace: true,
-		templateUrl: 'app/templates/autoComplete.html'
+		scope: {
+			realmInput: '=',
+			search: "&"
+		},
+		templateUrl: 'app/templates/autoComplete.html',
+		controller: autoCompleteCtrl
 	}
 })
 // .directive('pagination', function(){

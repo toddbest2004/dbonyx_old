@@ -4,7 +4,7 @@
 <div id="realmDiv">
 <form action="" id="filterForm"  autocomplete="off">
 <label for="realmInput">Select Server:</label>
-<auto-complete></auto-complete>
+<auto-complete realm-input="realmInput" search="search()"></auto-complete>
 <label for="search">Search Term:</label>
 <input type="text" id="search" class="itemFilter" ng-model="searchTerm" ng-blur="firstPage()">
 <button id="searchButton" ng-click="search($event)">Search</button>

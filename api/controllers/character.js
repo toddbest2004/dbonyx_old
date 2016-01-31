@@ -1,103 +1,63 @@
 var express = require("express");
+var request = require("request");
 var router = express.Router();
+
+var realmArray
+var regionArray = ['us', 'eu']
 
 var db = require("../../mongoose");
 // var characterData = require("../strangerogue.json")
 // var itemPositions = require("../static/itemPositions")
 // var util = require("./modules/util")
+db.realm.find({}, function(err, realms){
+	realmArray = realms.map(function(realm){return realm.name.toLowerCase()})
+})
 
 
 
 router.get("/*", function(req, res){
-	res.status(404).json({error:"Not Found.", result:false})
+	var realm = req.query.realm
+	var characterName = req.query.name
+	var realmSplit = realm.split('-')
+	if(realmSplit.length!==2){
+		res.status(400).json({error:"Improper query string supplied."})
+		return
+	}
+	
+	var region = realmSplit[1].toLowerCase()
+	var realmName = realmSplit[0]
+	importCharacter(characterName,realmName,region,function(result){
+		if(!result){
+			res.status(404).json({error:"Not Found.", result:false})
+			return
+		}
+		res.json({status:"success"})
+		console.log(region,realmName,characterName)
+	})
+	
+	
 })
 
 router.post("/", function(req, res){
-	//tests for character exisiting are in the module
-	var character = require("./modules/character.js")
-	character.import(req, res)
 })
 
 router.get("/importing", function(req, res){
-	res.render("character/importing")
 })
 
 router.get("/equipment", function(req, res){
-	if(typeof req.session.characterId != 'undefined'){
-		db.character.findById(req.session["characterId"], {include:[db.item]}).then(function(character){
-			if(character==null){
-				characterError(req, res, 'Error fetching character data, please try again.');
-			}
-			//TODO: ensure items display in the correct location
-			res.render("character/equipment", {character:character, itemPositions:itemPositions})
-		})
-	}else{
-		characterError(req, res, 'You must select a character');
-	}
 })
 
 router.get("/achievements", function(req, res){
-	if(typeof req.session.characterId != 'undefined'){
-		db.character.findById(req.session["characterId"]).then(function(character){
-			if(character==null){
-				characterError(req, res, 'Error fetching character data, please try again.');
-			}else{
-				db.achievementCategory.findAll({where:{parentId:null}, order:["orderIndex"], include:[{model:db.achievementCategory, as:"Child"}, {model:db.achievement}]}).then(function(categories){
-					res.render("character/achievements", {character:character,categories:categories})
-				})
-			}
-		})
-	}else{
-		characterError(req, res, 'You must select a character');
-	}
 })
 
 router.get("/mounts", function(req, res){
-	if(typeof req.session.characterId != 'undefined'){
-		db.character.findById(req.session.characterId).then(function(character){
-			character.getMounts().then(function(collected){
-				var collectedIds=[]
-				for(var i=0; i<collected.length;i++){
-					collectedIds.push(collected[i].id)
-				}
-				db.mount.findAll({where:{id:{$notIn:collectedIds}}}).then(function(uncollected){
-					res.render("character/mounts",{character:character,uncollected:uncollected,collected:collected})
-				})
-			})
-		})
-	}else{
-		characterError(req, res, 'You must select a character');
-	}
 })
 
 router.get("/pets", function(req, res){
-	if(typeof req.session.characterId != 'undefined'){
-		db.character.findById(req.session.characterId).then(function(character){
-			character.getBattlepets().then(function(collected){
-				var collectedIds=[]
-				for(var i=0; i<collected.length;i++){
-					collectedIds.push(collected[i].id)
-				}
-				db.battlepet.findAll({where:{id:{$notIn:collectedIds}}}).then(function(uncollected){
-					res.render("character/pets",{character:character,uncollected:uncollected,collected:collected})
-				})
-			})
-		})
-	}else{
-		characterError(req, res, 'You must select a character');
-	}
 })
 
 router.get("/reputation", function(req,res){
-	if(typeof req.session.characterId != 'undefined'){
-		db.character.findById(req.session.characterId).then(function(character){
-			character.getFactions().then(function(factions){
-				res.render("character/reputation",{character:character,factions:factions})
-			})
-		})
-	}else{
-		characterError(req, res, 'You must select a character');
-	}
+
 })
 
 router.get("/:region/:realm/:charactername", function(req, res){
@@ -108,8 +68,73 @@ router.get("/:region/:realm/:charactername", function(req, res){
 
 module.exports = router
 
-function characterError(req, res, error){
-	req.session.characterId = undefined;
-	req.flash('warning', error);
-	res.redirect('/character/');
+function importCharacter(name, realm, region, callback){
+	var url = "http://"+region+".battle.net/api/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	request({
+		uri: url,
+		json: true
+	}, function(error, response, body){
+		if(!error && response.statusCode===200){
+			processCharacter(name, realm, region, body, callback)
+		}else{
+			callback(false)
+		}
+	})
+}
+
+function processCharacter(name, realm, region, body, callback){
+	db.character.findOne({name:name,realm:realm,region:region}, function(err, character){
+		if(err){
+			callback(false)
+			return
+		}
+		if(!character){
+			db.character.create({name:name,realm:realm,region:region, importing:true}, function(err, character){
+				character.class=body.class
+				character.race=body.race
+				character.gender=body.gender
+				character.level=body.level
+				character.achievementPoints=body.achievementPoints
+				character.thumbnail=body.thumbnail
+				character.calcClass=body.calcClass
+				character.faction=body.faction
+				character.quests=body.quests
+				character.titles=body.titles
+				character.mounts=body.mounts.collected.map(function(mount){
+					return mount.creatureId
+				})
+				character.criteria=[]
+				for(var i=0; i<body.achievements.criteria.length;i++){
+					character.criteria.push({
+						id:body.achievements.criteria[i],
+						quantity:body.achievements.criteriaQuantity[i],
+						timestamp:body.achievements.criteriaTimestamp[i],
+						created:body.achievements.criteriaCreated[i]
+					})
+				}
+				character.achievements=[]
+				for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
+					character.achievements.push({
+						id:body.achievements.achievementsCompleted[i],
+						timestamp:body.achievements.achievementsCompletedTimestamp[i]
+					})
+				}
+				character.reputation=body.reputation
+				character.appearance=body.appearance
+				character.items=body.items
+				character.stats=body.stats
+				character.professions=body.professions
+				character.progression=body.progression
+				character.talents=body.talents
+				character.pvp=body.pvp
+				character.save(function(err){
+					callback(true)
+				})
+			})
+		}else{
+			callback(true)
+			//TODO: Update character information
+			console.log("character exists")
+		}
+	})
 }

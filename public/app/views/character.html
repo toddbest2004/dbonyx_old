@@ -1,23 +1,23 @@
-Character Tools
+<h1>Character Lookup</h1>
 <div ng-controller="characterCtrl">
-{{test}}
 <form>
 <auto-complete realm-input="realmInput"></auto-complete>
 <input id="characterName" ng-model="characterName">
 <button type="sumbit" ng-click="search($event)">Search</button>
 </form>
-<div ng-if="results">
-<div ng-repeat="result in results track by $index" ng-click="selectCharacter($index)">
-[{{result.level}}]{{result.name}} - {{result.realm}}({{result.region.toUpperCase()}})
+<div ng-if="loading">
+Looking for your character...
 </div>
+<div ng-if="error">
+{{error}}
+</div>
+<div ng-if="results">
+Looks like we found several characters with that name. Select your character below, or enter a realm above to find your specific character.
+<ul>
+<li ng-repeat="result in results track by $index" ng-click="selectCharacter($index)">
+[{{result.level}}]{{result.name}} - {{result.realm}}({{result.region.toUpperCase()}})
+</li>
+</ul>
 </div>
 
-Placeholder for future character tools. Eventually you'll be able to:
-<ul>
-<li>See a listing of equipped gear, with an optional equipment audit.</li>
-<li>View achievements with options to show/hide achievements based on various criteria.</li>
-<li>View a list of all completed/uncompleted quests, including quests needed for specific Loremaster requirements</li>
-<li>View all collected pets, including battlepet stats.</li>
-<li>View all collected/uncollected mounts, including detailed source information.</li>
-</ul>
 </div>

@@ -1,5 +1,6 @@
 var express = require("express");
 var request = require("request");
+var fs = require("fs")
 var router = express.Router();
 
 var realmArray
@@ -22,9 +23,9 @@ router.get("/load", function(req, res){
 		return
 	}
 	if(req.query.realm){
-		findCharacter(req.query.realm,req.query.name,res)
+		findCharacter(req.query.realm,req.query.name.capitalize(),res)
 	}else{
-		findMultipleCharacters(req.query.name, res)
+		findMultipleCharacters(req.query.name.capitalize(), res)
 	}
 	
 })
@@ -36,6 +37,24 @@ router.get("/importing", function(req, res){
 })
 
 router.get("/equipment", function(req, res){
+	var name = req.query.name.capitalize()
+	var realm = req.query.realm
+	var region = req.query.region.toLowerCase()
+	if(realmArray.indexOf(req.query.realm.toLowerCase())===-1){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	if(regionArray.indexOf(region)===-1){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.findOne({name:name, region:region, realm:realm}, function(err, character){
+		if(err||!character){
+			res.status(404).json({error:"Character not found."})
+			return
+		}
+		res.json({items:character.items})
+	})
 })
 
 router.get("/achievements", function(req, res){
@@ -78,10 +97,12 @@ function findCharacter(realm, name, res){
 					res.status(404).json({error:"Not Found.", result:false})
 					return
 				}
-				res.json({status:"success", count:1, character:{name:name,realm:realmName,region:region}})
+				db.character.findOne({name:name, realm:realmName, region:region}, function(err, character){
+					res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
+				})
 			})
 		}else{
-			res.json({status:"success", count:1, character:{name:name,realm:realmName,region:region}})
+			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
 		}
 	})
 }
@@ -102,14 +123,14 @@ function findMultipleCharacters(name, res){
 		}
 		if(characters.length===1){
 			var character = characters[0]
-			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase()}})
+			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
 			return
 		}
 		//characters.length>1
 		var characterArray = []
 		for(var i=0; i<characters.length;i++){
 			var character = characters[i]
-			characterArray.push({name:character.name,realm:character.realm,region:character.region,level:character.level,faction:character.faction})
+			characterArray.push({name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail})
 		}
 		res.json({status:"success", count:characters.count, characters:characterArray})
 		return
@@ -138,13 +159,14 @@ function processCharacter(name, realm, region, body, callback){
 			return
 		}
 		if(!character){
+			body.thumbnail = body.thumbnail.replace("avatar.jpg","")
 			db.character.create({name:name,realm:realm,region:region, importing:true}, function(err, character){
 				character.class=body.class
 				character.race=body.race
 				character.gender=body.gender
 				character.level=body.level
 				character.achievementPoints=body.achievementPoints
-				character.thumbnail=body.thumbnail
+				character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","")
 				character.calcClass=body.calcClass
 				character.faction=body.faction
 				character.quests=body.quests
@@ -177,7 +199,7 @@ function processCharacter(name, realm, region, body, callback){
 				character.talents=body.talents
 				character.pvp=body.pvp
 				character.save(function(err){
-					callback(true)
+					importCharacterImages(body.thumbnail, callback)
 				})
 			})
 		}else{
@@ -187,3 +209,22 @@ function processCharacter(name, realm, region, body, callback){
 		}
 	})
 }
+
+function importCharacterImages(thumbnail, callback){
+	var uri = "http://us.battle.net/static-render/us/"+thumbnail
+	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"")
+
+	download(uri+"avatar.jpg",filename+"avatar.jpg")
+	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback)
+	download(uri+"inset.jpg",filename+"inset.jpg")
+	// download(uri+"card.jpg",filename+"card.jpg")
+}
+
+var download = function(uri, filename, callback){
+	request.head(uri, function(err, res, body){
+		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
+			if(callback)
+				callback(true)
+		});
+	});
+};

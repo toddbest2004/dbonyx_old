@@ -30,6 +30,7 @@ $locationProvider.html5Mode(true)
 }])
 .factory('onyxPersistence', function($cookies){
 	var persistence = {}
+	var _persisted = {}
 	var _realm
 	var _characterName
 	var _characterRealm
@@ -54,6 +55,13 @@ $locationProvider.html5Mode(true)
 	persistence.getCharacterRealm=function(){
 		return _characterRealm||$cookies.get('characterRealm')||''
 	}
+	persistence.set=function(key, value){
+		_persisted[key]=value
+		$cookies.put(key,value)
+	}
+	persistence.get=function(key){
+		return _persisted[key]||$cookies.get(key)||''
+	}
 	return persistence
 })
 .factory('onyxUser', function($http){
@@ -61,7 +69,8 @@ $locationProvider.html5Mode(true)
 
 	return user
 })
-.controller('characterCtrl', ['onyxPersistence', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, $scope, $http, $location, $routeParams) {
+.controller('characterCtrl', ['onyxPersistence', 'onyxCharacter', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, onyxCharacter, $scope, $http, $location, $routeParams) {
+	$scope.character=onyxCharacter
 	$scope.search=function(e){
 		if(e){
 			e.preventDefault()
@@ -80,34 +89,77 @@ $locationProvider.html5Mode(true)
 		}).then(function success(response){
 			$scope.loading=false
 			if(response.data.count===1){
-				onyxPersistence.setCharacterName($scope.characterName)
-				$location.path('/character/main').replace()
+				onyxPersistence.set('characterName',$scope.characterName)
+				onyxPersistence.set("characterRealm",response.data.character.realm)
+				onyxPersistence.set("characterRegion",response.data.character.region)
+				$scope.character.setCharacter(response.data.character)
+				$location.url('/character/main')
 			}else{
 				//show all characters for choosing
 				$scope.results=response.data.characters
-				console.log(response.data)
 			}
 		}, function error(response){
-			onyxPersistence.setCharacterName('')
+			onyxPersistence.set('characterName','')
 			$scope.loading=false
-			console.log("Unable to find character.")
+			$scope.error="Unable to find character."
 			//Handle Character not found, unable to connect, etc.
 		})
 	}
 	$scope.selectCharacter = function(index){
 		console.log(index)
-		onyxPersistence.setCharacterName($scope.results[index].name)
-		onyxPersistence.setRealm($scope.results[index].realm+"-"+$scope.results[index].region.toUpperCase())
-		$location.path('/character/main').replace()
+		onyxCharacter.setCharacter($scope.results[index])
+		onyxPersistence.set("characterName",$scope.results[index].name)
+		onyxPersistence.set("characterRealm",$scope.results[index].realm)
+		onyxPersistence.set("characterRegion",$scope.results[index].region.toUpperCase())
+		$window.location.href = '/character/main';
 	}
-	$scope.realmInput=onyxPersistence.getRealm()
-	$scope.characterName=onyxPersistence.getCharacterName()
+
+	$scope.realmInput=onyxPersistence.get('characterRealm')+'-'+onyxPersistence.get('characterRegion')
+	$scope.characterName=onyxPersistence.get('characterName')
 	if($routeParams.characterName){
-		onyxPersistence.setCharacterName($routeParams.characterName)
-		$scope.characterName=onyxPersistence.getCharacterName()
+		onyxPersistence.set('characterName',$routeParams.characterName)
+		$scope.characterName=onyxPersistence.get('characterName')
 		$scope.search()
 	}
 	
 	// $scope.test=$routeParams.characterName
 	
 }])
+.controller('characterMain', ['onyxPersistence', 'onyxCharacter', '$scope', function(onyxPersistence, onyxCharacter, $scope) {
+	$scope.character=onyxCharacter
+	$scope.character.getEquipment()
+}])
+.factory('onyxCharacter', function($http){
+	var character = {}
+	var _characterData
+
+	character.setCharacter = function(data){
+		character.name = data.name
+		character.realm = data.realm
+		character.region = data.region
+		character.level = data.level
+		character.faction = data.faction
+		character.thumbnail = data.thumbnail
+	}
+
+	character.getEquipment = function(){
+		if(!character.items){
+			var params = {
+				name:character.name,
+				realm:character.realm,
+				region:character.region
+			}
+			$http({
+				method: 'GET',
+				url: '/api/character/equipment',
+				params: params
+			}).then(function success(response){
+				character.items = response.data.items
+			}, function error(response){
+
+			})
+		}
+	}
+
+	return character
+})

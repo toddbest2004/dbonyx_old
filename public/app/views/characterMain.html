@@ -1,3 +1,9 @@
-<div ng-controller="characterCtrl">
-{{characterName}}
+<div ng-controller="characterMain">
+<h1>{{character.name}}</h1>
+<h3>Guild Name</h3>
+<h5>Level {{character.level}}</h5>
+<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
+<div ng-repeat="item in character.items">
+<img src="/images/icons/{{item.icon}}.png">
+</div>
 </div>

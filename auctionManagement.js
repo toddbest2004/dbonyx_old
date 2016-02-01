@@ -8,11 +8,15 @@ var auctionlimit = process.env.AUCTION_LIMIT || 10 //this one limits how many au
 var start = new Date()
 
 var realmcount = 0; //counts how many auctions were loaded
-var auctionConcurrency = 2;
+var auctionConcurrency = 1;
 var pauseInterval = 120000 //number of miliseconds to wait after an auctionimport
 
 var auctionQueue = async.queue(function(task, callback){
-	importAuctionDataFromServer(task.body, task.slug, task.region, task.lastModified, callback)
+	// if(!task){
+		// setTimeout(callback, 5000)
+	// }else{
+		importAuctionDataFromServer(task.body, task.slug, task.region, task.lastModified, callback)
+	// }
 }, auctionConcurrency)
 
 auctionQueue.drain = function(){
@@ -60,7 +64,7 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
 				console.log(slug+": "+lastModified);
 			}else{
-				console.log(slug+": up to date.")
+				// auctionQueue.push(false, function(){console.log(slug+": up to date.")})
 			}
 		}else{
 			console.log(response.statusCode)
@@ -140,7 +144,8 @@ function bulkImport(auctionData, slug, region, touch, callback){
 	}
 	console.log(slug+": starting bluk import")
 	bulkImport.execute(function(err, data){
-		updateAuctionHistory(slug,region,touch,callback)
+		removeOldAuctions(slug, region, touch, callback)
+		// updateAuctionHistory(slug,region,touch,callback)
 	})
 }
 

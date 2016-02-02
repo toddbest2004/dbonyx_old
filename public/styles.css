@@ -54,6 +54,30 @@ html, body {
 .itemQuality7, a.itemQuality7 {
   color: #E6CC80; }
 
+.borderQuality0{
+  border-color: #9D9D9D; }
+
+.borderQuality1{
+  border-color: #FFFFFF; }
+
+.borderQuality2{
+  border-color: #1EFF00; }
+
+.borderQuality3{
+  border-color: #0070FF; }
+
+.borderQuality4{
+  border-color: #A335EE; }
+
+.borderQuality5{
+  border-color: #FF8000; }
+
+.borderQuality6{
+  border-color: #E6CC80; }
+
+.borderQuality7{
+  border-color: #E6CC80; }
+
 #itemFilterQuality {
   background-color: #000; }
   #itemFilterQuality option[selected] {
@@ -152,10 +176,13 @@ html, body {
 .reputationBarBack{
   position:absolute;
   float:left;
+  border-radius:5px;
+  border:1px solid #00010D;
 }
 .reputationBarText{
   position:absolute;
   width:100%;
+  font-weight: bold;
 }
 .reputation0{
   background-color:#c22;
@@ -180,4 +207,89 @@ html, body {
 }
 .reputation7{
   background-color:#0ff;
+}
+
+.profileItemDiv{
+  position:absolute;
+}
+
+.profileItemImg{
+  width:48px;
+  height:48px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 4px;
+}
+
+.profileItemhead{
+  left:40px;
+  top:10px;
+}
+.profileItemneck{
+  left:40px;
+  top:70px;
+}
+.profileItemshoulder{
+  left:40px;
+  top:130px;
+}
+.profileItemback{
+  left:40px;
+  top:190px;
+}
+.profileItemchest{
+  left:40px;
+  top:250px;
+}
+.profileItemshirt{
+  left:40px;
+  top:310px;
+}
+.profileItemtabard{
+  left:40px;
+  top:370px;
+}
+.profileItemwrist{
+  left:40px;
+  top:430px;
+}
+.profileItemhands{
+  left:100px;
+  top:10px;
+}
+.profileItemwaist{
+  left:100px;
+  top:70px;
+}
+.profileItemlegs{
+  left:100px;
+  top:130px;
+}
+.profileItemfeet{
+  left:100px;
+  top:190px;
+}
+.profileItemfinger1{
+  left:100px;
+  top:250px;
+}
+.profileItemfinger2{
+  left:100px;
+  top:310px;
+}
+.profileItemtrinket1{
+  left:100px;
+  top:370px;
+}
+.profileItemtrinket2{
+  left:100px;
+  top:430px;
+}
+.profileItemmainHand{
+  left:40px;
+  top:490px;
+}
+.profileItemoffHand{
+  left:100px;
+  top:490px;
 }

@@ -6,10 +6,10 @@
 </div>
 <div class="row">
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
-<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
-<div ng-repeat="item in character.items">
-<img src="/images/icons/{{item.icon}}.png">
+<div ng-repeat="(key, item) in character.items" ng-if="item.icon" class="profileItemDiv profileItem{{key}}">
+<a href="/items/{{item.id}}"><img src="/images/icons/{{item.icon}}.png" class="profileItemImg borderQuality{{item.quality}}"></a>
 </div>
+<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
 </div>
 <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">
 <ul>

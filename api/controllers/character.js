@@ -36,15 +36,11 @@ router.post("/", function(req, res){
 router.get("/importing", function(req, res){
 })
 
-router.get("/equipment", function(req, res){
+router.get("/items", function(req, res){
 	var name = req.query.name.capitalize()
 	var realm = req.query.realm
 	var region = req.query.region.toLowerCase()
-	if(realmArray.indexOf(req.query.realm.toLowerCase())===-1){
-		res.status(400).json({error:"Improper query string."})
-		return
-	}
-	if(regionArray.indexOf(region)===-1){
+	if(!verifyRealm(realm, region)){
 		res.status(400).json({error:"Improper query string."})
 		return
 	}
@@ -67,7 +63,19 @@ router.get("/pets", function(req, res){
 })
 
 router.get("/reputation", function(req,res){
+	var name = req.query.name.capitalize()
+	var realm = req.query.realm
+	var region = req.query.region.toLowerCase()
+	if(!verifyRealm(realm, region)){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.findOne({name:name,realm:realm,region:region},function(err, character){
+		if(err||!character){
 
+		}
+		res.json({status:"success",reputation:character.reputation})
+	})
 })
 
 router.get("/:region/:realm/:charactername", function(req, res){
@@ -228,3 +236,12 @@ var download = function(uri, filename, callback){
 		});
 	});
 };
+function verifyRealm(realm, region){
+	if(realmArray.indexOf(realm.toLowerCase())===-1){
+		return false
+	}
+	if(regionArray.indexOf(region.toLowerCase())===-1){
+		return false
+	}
+	return true
+}

@@ -16,6 +16,24 @@ $routeProvider
 .when('/character/main',{
 	templateUrl: 'app/views/characterMain.html'
 })
+.when('/character/reputation',{
+	templateUrl: 'app/views/characterReputation.html'
+})
+.when('/character/achievements',{
+	templateUrl: 'app/views/characterAchievements.html'
+})
+.when('/character/mounts',{
+	templateUrl: 'app/views/characterMounts.html'
+})
+.when('/character/battlepets',{
+	templateUrl: 'app/views/characterBattlepets.html'
+})
+.when('/character/professions',{
+	templateUrl: 'app/views/characterProfessions.html'
+})
+.when('/character/pvp',{
+	templateUrl: 'app/views/characterPvp.html'
+})
 .when('/character/:characterName', {
 	templateUrl: 'app/views/character.html'
 })
@@ -41,20 +59,7 @@ $locationProvider.html5Mode(true)
 	persistence.getRealm=function(){
 		return _realm||$cookies.get('realm')||''
 	}
-	persistence.setCharacterName=function(characterName){
-		_characterName=characterName
-		$cookies.put('characterName',characterName)
-	}
-	persistence.getCharacterName=function(){
-		return _characterName||$cookies.get('characterName')||''
-	}
-	persistence.setCharacterRealm=function(characterRealm){
-		_characterRealm=characterRealm
-		$cookies.put('characterRealm',characterRealm)
-	}
-	persistence.getCharacterRealm=function(){
-		return _characterRealm||$cookies.get('characterRealm')||''
-	}
+
 	persistence.set=function(key, value){
 		_persisted[key]=value
 		$cookies.put(key,value)
@@ -127,7 +132,8 @@ $locationProvider.html5Mode(true)
 }])
 .controller('characterMain', ['onyxPersistence', 'onyxCharacter', '$scope', function(onyxPersistence, onyxCharacter, $scope) {
 	$scope.character=onyxCharacter
-	$scope.character.getEquipment()
+	$scope.character.get('items')
+	$scope.character.get('reputation')
 }])
 .factory('onyxCharacter', function($http){
 	var character = {}
@@ -142,8 +148,27 @@ $locationProvider.html5Mode(true)
 		character.thumbnail = data.thumbnail
 	}
 
-	character.getEquipment = function(){
-		if(!character.items){
+	// character.getEquipment = function(){
+	// 	if(!character.items){
+	// 		var params = {
+	// 			name:character.name,
+	// 			realm:character.realm,
+	// 			region:character.region
+	// 		}
+	// 		$http({
+	// 			method: 'GET',
+	// 			url: '/api/character/equipment',
+	// 			params: params
+	// 		}).then(function success(response){
+	// 			character.items = response.data.items
+	// 		}, function error(response){
+
+	// 		})
+	// 	}
+	// }
+
+	character.get = function(key){
+		if(!character[key]){
 			var params = {
 				name:character.name,
 				realm:character.realm,
@@ -151,10 +176,10 @@ $locationProvider.html5Mode(true)
 			}
 			$http({
 				method: 'GET',
-				url: '/api/character/equipment',
+				url: '/api/character/'+key,
 				params: params
 			}).then(function success(response){
-				character.items = response.data.items
+				character[key] = response.data[key]
 			}, function error(response){
 
 			})

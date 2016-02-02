@@ -6,9 +6,13 @@
 </div>
 <div class="row">
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
-<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
-<div ng-repeat="item in character.items">
-<img src="/images/icons/{{item.icon}}.png">
+<div class="row" ng-repeat="rep in character.reputation">
+<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">{{rep.name}}:</div>
+<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9 center">
+	<div class="reputationBarBack reputation{{rep.standing}}" style="width:{{rep.value/rep.max*100}}%;">&nbsp;</div>
+	<div class="reputationBarText">{{rep.value}}/{{rep.max}}</div>
+	
+</div>
 </div>
 </div>
 <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">

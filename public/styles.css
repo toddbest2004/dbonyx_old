@@ -149,3 +149,35 @@ html, body {
 
 .itemLevel {
   color: gold; }
+.reputationBarBack{
+  position:absolute;
+  float:left;
+}
+.reputationBarText{
+  position:absolute;
+  width:100%;
+}
+.reputation0{
+  background-color:#c22;
+}
+.reputation1{
+  background-color:#f00;
+}
+.reputation2{
+  background-color:#e62;
+}
+.reputation3{
+  background-color:#ff0;
+}
+.reputation4{
+  background-color:#0f0;
+}
+.reputation5{
+  background-color:#0f8;
+}
+.reputation6{
+  background-color:#0fc;
+}
+.reputation7{
+  background-color:#0ff;
+}

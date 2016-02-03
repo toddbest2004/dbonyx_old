@@ -15,6 +15,7 @@ var characterSchema = new Schema({
 	thumbnail: String,
 	calcClass: String,
 	faction: Number,
+	guildName: String,
 	// guild: {type: Schema.Types.ObjectId, ref: 'Guild'},
 	// feed:
 	appearance:{faceVariation:Number,skinColor:Number,hairVariation:Number,hairColor:Number,featureVariation:Number,showHelm:Boolean,showCloak:Boolean},
@@ -49,7 +50,7 @@ var characterSchema = new Schema({
 		standing:Number,
 		value:Number,
 		max:Number}],
-	mounts:[{type:Number, ref:"Mount"}],
+	mounts:[{type:Number, ref:"mount"}],
 	battlePets:[{
 		creatureId:Number,
 		speciesId:Number,
@@ -67,7 +68,7 @@ var characterSchema = new Schema({
 		quantity:Number,
 		timestamp:Number,
 		created:Number}],
-	achievements:[{id:Number,timestamp:Number}],
+	achievements:[{id:{type:Number,ref:'achievement'},timestamp:Number}],
 	titles:[{id:Number,name:String}]
 })
 

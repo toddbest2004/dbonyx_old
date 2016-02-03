@@ -1,5 +1,9 @@
 #dbonyx
 
+Temporary onyx logo: jewel by Sagar Unagar from the Noun Project
+https://thenounproject.com/term/jewel/172482/
+https://thenounproject.com/term/jewel/172481/
+
 dbonyx is a World of Warcraft auction house aggregator and analytics service. During development, the site is collecting data only for US based auction houses (120 at this time), and **processes between 3 and 4 million auctions per hour.** When fully deployed I plan to add other regions to the database which should double the number of auctions processed.
 
 In addition to auction house statistics, I plan to add additional services, such as email price alerts for personalized watchlists, price trend graphs, tradeskill profitability calculators and more.

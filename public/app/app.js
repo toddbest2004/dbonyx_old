@@ -134,6 +134,8 @@ $locationProvider.html5Mode(true)
 	$scope.character=onyxCharacter
 	$scope.character.get('items')
 	$scope.character.get('reputation')
+	$scope.character.get('mounts')
+	$scope.character.get('achievements')
 }])
 .factory('onyxCharacter', function($http){
 	var character = {}
@@ -146,6 +148,7 @@ $locationProvider.html5Mode(true)
 		character.level = data.level
 		character.faction = data.faction
 		character.thumbnail = data.thumbnail
+		character.guildName = data.guildName
 	}
 
 	// character.getEquipment = function(){

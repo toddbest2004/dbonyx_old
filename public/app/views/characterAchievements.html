@@ -1,14 +1,14 @@
 <div ng-controller="characterMain">
 <div class="row">
 <h1>{{character.name}}</h1>
-<h3>Guild Name</h3>
+<h3>&lt;{{character.guildName}}&gt;</h3>
 <h5>Level {{character.level}}</h5>
 </div>
 <div class="row">
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
-<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
-<div ng-repeat="item in character.items">
-<img src="/images/icons/{{item.icon}}.png">
+<div ng-repeat='achievement in character.achievements'>
+<h3>{{achievement.id.title}} ({{achievement.id.points}}) </h3>
+{{achievement.id.description}}
 </div>
 </div>
 <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">

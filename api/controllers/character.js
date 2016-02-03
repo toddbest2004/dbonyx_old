@@ -54,13 +54,54 @@ router.get("/items", function(req, res){
 })
 
 router.get("/achievements", function(req, res){
+	var name = req.query.name.capitalize()
+	var realm = req.query.realm
+	var region = req.query.region.toLowerCase()
+	if(!verifyRealm(realm, region)){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.findOne({name:name,realm:realm,region:region}).populate('achievements.id').exec(function(err, character){
+		if(err||!character){
+
+		}
+		console.log(character.achievements)
+		res.json({status:"success",achievements:character.achievements})
+	})
 })
 
 router.get("/mounts", function(req, res){
+	var name = req.query.name.capitalize()
+	var realm = req.query.realm
+	var region = req.query.region.toLowerCase()
+	if(!verifyRealm(realm, region)){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.findOne({name:name,realm:realm,region:region}).populate('mounts').exec(function(err, character){
+		if(err||!character){
+
+		}
+		res.json({status:"success",mounts:character.mounts})
+	})
 })
 
-router.get("/pets", function(req, res){
-})
+// router.get("/battlepets", function(req, res){
+// 	var name = req.query.name.capitalize()
+// 	var realm = req.query.realm
+// 	var region = req.query.region.toLowerCase()
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."})
+// 		return
+// 	}
+// 	db.character.findOne({name:name,realm:realm,region:region}).populate('mounts').exec(function(err, character){
+// 		if(err||!character){
+
+// 		}
+// 		console.log(character.mounts)
+// 		res.json({status:"success",mounts:character.mounts})
+// 	})
+// })
 
 router.get("/reputation", function(req,res){
 	var name = req.query.name.capitalize()
@@ -106,11 +147,11 @@ function findCharacter(realm, name, res){
 					return
 				}
 				db.character.findOne({name:name, realm:realmName, region:region}, function(err, character){
-					res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
+					res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}})
 				})
 			})
 		}else{
-			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
+			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}})
 		}
 	})
 }
@@ -131,7 +172,7 @@ function findMultipleCharacters(name, res){
 		}
 		if(characters.length===1){
 			var character = characters[0]
-			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail}})
+			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}})
 			return
 		}
 		//characters.length>1
@@ -177,6 +218,7 @@ function processCharacter(name, realm, region, body, callback){
 				character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","")
 				character.calcClass=body.calcClass
 				character.faction=body.faction
+				character.guildName=body.guild.name
 				character.quests=body.quests
 				character.titles=body.titles
 				character.mounts=body.mounts.collected.map(function(mount){

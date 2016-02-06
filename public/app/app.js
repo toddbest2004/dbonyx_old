@@ -76,42 +76,28 @@ $locationProvider.html5Mode(true)
 })
 .controller('characterCtrl', ['onyxPersistence', 'onyxCharacter', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, onyxCharacter, $scope, $http, $location, $routeParams) {
 	$scope.character=onyxCharacter
-	$scope.search=function(e){
-		if(e){
-			e.preventDefault()
-		}
-		$scope.loading=true
-		var params = {name:$scope.characterName}
-		if($routeParams.characterName){
 
-		}else if($scope.realmInput){
-			params.realm=$scope.realmInput
+	$scope.search = function(e){
+		if(e){
+			e.preventDefault
 		}
-		$http({
-			method: 'GET',
-			url: '/api/character/load',
-			params: params
-		}).then(function success(response){
-			$scope.loading=false
-			if(response.data.count===1){
-				onyxPersistence.set('characterName',$scope.characterName)
-				onyxPersistence.set("characterRealm",response.data.character.realm)
-				onyxPersistence.set("characterRegion",response.data.character.region)
-				$scope.character.setCharacter(response.data.character)
-				$location.url('/character/main')
+		var name = $routeParams.characterName||$scope.characterName||''
+		var realm = $scope.realmInput || false
+		$scope.character.search(name, realm, function(result){
+			if(result){
+				if(result.count===1){
+					$location.url('/character/main')
+				}else{
+					$scope.results=result
+				}
 			}else{
-				//show all characters for choosing
-				$scope.results=response.data.characters
+				//handle character not found
+				$scope.error="Unable to find character."
 			}
-		}, function error(response){
-			onyxPersistence.set('characterName','')
-			$scope.loading=false
-			$scope.error="Unable to find character."
-			//Handle Character not found, unable to connect, etc.
 		})
 	}
+
 	$scope.selectCharacter = function(index){
-		console.log(index)
 		onyxCharacter.setCharacter($scope.results[index])
 		onyxPersistence.set("characterName",$scope.results[index].name)
 		onyxPersistence.set("characterRealm",$scope.results[index].realm)
@@ -133,61 +119,98 @@ $locationProvider.html5Mode(true)
 .controller('characterMain', ['onyxPersistence', 'onyxCharacter', '$scope', function(onyxPersistence, onyxCharacter, $scope) {
 	$scope.character=onyxCharacter
 	$scope.character.get('items')
-	$scope.character.get('reputation')
 	$scope.character.get('mounts')
 	$scope.character.get('achievements')
+	$scope.character.get('reputation')
 }])
-.factory('onyxCharacter', function($http){
+.factory('onyxCharacter', ['$http', 'onyxPersistence',function($http, onyxPersistence){
 	var character = {}
-	var _characterData
+	var getOnLoad =[]
+	character.loaded=false
 
 	character.setCharacter = function(data){
-		character.name = data.name
-		character.realm = data.realm
-		character.region = data.region
-		character.level = data.level
-		character.faction = data.faction
-		character.thumbnail = data.thumbnail
-		character.guildName = data.guildName
+		for(key in data){
+			character[key]=data[key]
+		}
 	}
 
-	// character.getEquipment = function(){
-	// 	if(!character.items){
-	// 		var params = {
-	// 			name:character.name,
-	// 			realm:character.realm,
-	// 			region:character.region
-	// 		}
-	// 		$http({
-	// 			method: 'GET',
-	// 			url: '/api/character/equipment',
-	// 			params: params
-	// 		}).then(function success(response){
-	// 			character.items = response.data.items
-	// 		}, function error(response){
+	character.runOnLoad = function(){
+		for(var i=0;i<getOnLoad.length;i++){
+			character.get(getOnLoad[i])
+		}
+	}
 
-	// 		})
-	// 	}
-	// }
+	character.search=function(name, realmInput, callback){
+		character.loading=true
+		if(!name){
+			character.loading=false
+			callback(false)
+			return
+		}
+		var params = {name:name}
+		if(realmInput){
+			params.realm=realmInput
+		}
+		$http({
+			method: 'GET',
+			url: '/api/character/load',
+			params: params
+		}).then(function success(response){
+			if(response.data.count===1){
+				onyxPersistence.set('characterName',name)
+				onyxPersistence.set("characterRealm",response.data.character.realm)
+				onyxPersistence.set("characterRegion",response.data.character.region)
+				character.setCharacter(response.data.character)
+				character.loading=false
+				character.loaded=true
+				character.runOnLoad()
+				callback(response.data)
+			}else{
+				//show all characters for choosing
+				character.loading=false
+				callback(response.data.characters)
+			}
+		}, function error(response){
+			character.loading=false
+			onyxPersistence.set('characterName','')
+			callback(false)
+			//Handle Character not found, unable to connect, etc.
+		})
+	}
 
 	character.get = function(key){
+		if(!character.loaded){
+			//set key to be loaded once the character is full implemented
+			getOnLoad.push(key)
+			return
+		}
 		if(!character[key]){
-			var params = {
-				name:character.name,
-				realm:character.realm,
-				region:character.region
+			if(!character.name||!character.realm||!character.region){
+				return
 			}
+			var params = {name:character.name, realm:character.realm, region:character.region}
 			$http({
 				method: 'GET',
 				url: '/api/character/'+key,
 				params: params
 			}).then(function success(response){
-				character[key] = response.data[key]
-			}, function error(response){
-
+				character[key]=response.data[key]
+			},function error(response){
+				//todo: error handling
 			})
 		}
 	}
 
+	character.init = function(){
+		var characterName = onyxPersistence.get('characterName')
+		var characterRealm = onyxPersistence.get('characterRealm')
+		var characterRegion = onyxPersistence.get('characterRegion')
+		var realmInput = characterRealm+"-"+characterRegion
+		if(typeof(characterName)==='string'&&characterName!==''){
+			character.search(characterName, realmInput, function(result){})
+		}
+	}
+
+	character.init()
 	return character
-})
+}])

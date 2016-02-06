@@ -73,10 +73,12 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 }
 
 function importAuctionDataFromServer(url, slug, region, touch,callback){
+	console.log("Requesting auction data."+(new Date()-start))
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
+		console.log("Auction data recieved"+(new Date()-start))
 		if(!error && response.statusCode===200){
 			// writeAuctionDataToFile(body,slug,region,touch,callback)
 			bulkImport(body, slug, region, touch, callback)
@@ -125,6 +127,7 @@ function importAuctionsFromFile(slug,region,touch,callback){
 }
 
 function bulkImport(auctionData, slug, region, touch, callback){
+	console.log("Initializing bulk op."+(new Date()-start))
 	var bulkImport = db.auction.collection.initializeUnorderedBulkOp()
 	for(var i=0; i<auctionData.auctions.length;i++){
 		var temp = auctionData.auctions[i]
@@ -136,13 +139,14 @@ function bulkImport(auctionData, slug, region, touch, callback){
 		temp.region = region
 		temp.touch = touch;
 		temp.startTime = temp.timeLeft
-		// temp.$setOnInsert={firstbid:temp.bid}
-		delete temp.auc
-		delete temp.ownerRealm
+		temp.$setOnInsert={firstbid:temp.bid}
+		// delete temp.auc
+		// delete temp.ownerRealm
 		auctionData.auctions[i] = temp
 		bulkImport.find({_id:temp._id}).upsert().updateOne(temp)
 	}
-	console.log(slug+": starting bluk import")
+	console.log(auctionData.auctions.length+" operations queued.")
+	console.log(slug+": starting bluk import"+(new Date()-start))
 	bulkImport.execute(function(err, data){
 		removeOldAuctions(slug, region, touch, callback)
 		// updateAuctionHistory(slug,region,touch,callback)
@@ -189,6 +193,7 @@ function updateAuctionHistory(slug, region, touch, callback){
 }
 
 function removeOldAuctions(slug, region, touch, callback){
+	console.log("Starting old auction removal."+(new Date()-start))
 	db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err){
 		if(err)
 			console.log(err)

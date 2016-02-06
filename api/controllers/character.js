@@ -17,7 +17,6 @@ db.realm.find({}, function(err, realms){
 
 
 router.get("/load", function(req, res){
-	console.log(req.query)
 	if(!req.query.name){
 		res.status(400).json({error:"No name provided."})
 		return
@@ -65,7 +64,7 @@ router.get("/achievements", function(req, res){
 		if(err||!character){
 
 		}
-		console.log(character.achievements)
+		// console.log(character.achievements)
 		res.json({status:"success",achievements:character.achievements})
 	})
 })
@@ -135,7 +134,7 @@ function findCharacter(realm, name, res){
 	}
 	var region = realmSplit[1].toLowerCase()
 	var realmName = realmSplit[0]
-	db.character.findOne({name:name,realm:realmName,region:region}, function(err, character){
+	db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
 		if(err){
 			res.status(400).json({error:"Error reading database."})
 			return
@@ -147,11 +146,25 @@ function findCharacter(realm, name, res){
 					return
 				}
 				db.character.findOne({name:name, realm:realmName, region:region}, function(err, character){
-					res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}})
+					res.json({status:"success", count:1, character:{
+						name:character.name,
+						realm:character.realm,
+						region:character.region.toUpperCase(),
+						level:character.level,
+						faction:character.faction,
+						thumbnail:character.thumbnail,
+						guildName:character.guildName}})
 				})
 			})
 		}else{
-			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}})
+			res.json({status:"success", count:1, character:{
+						name:character.name,
+						realm:character.realm,
+						region:character.region.toUpperCase(),
+						level:character.level,
+						faction:character.faction,
+						thumbnail:character.thumbnail,
+						guildName:character.guildName}})
 		}
 	})
 }

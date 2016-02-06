@@ -5,7 +5,7 @@
 <input id="characterName" ng-model="characterName">
 <button type="sumbit" ng-click="search($event)">Search</button>
 </form>
-<div ng-if="loading">
+<div ng-if="character.loading">
 Looking for your character...
 </div>
 <div ng-if="error">

@@ -8,7 +8,7 @@ var env       = process.env.NODE_ENV || 'development';
 
 mongoose.connect('mongodb://localhost/dbonyx')
 var db = mongoose.connection
-
+// mongoose.set('debug', true)
 db.on('error', function(error){console.log(error)})
 db.once('open', function(){
 	console.log('open')	

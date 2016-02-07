@@ -35,6 +35,23 @@ router.post("/", function(req, res){
 router.get("/importing", function(req, res){
 })
 
+router.get("/professions", function(req, res){
+	var name = req.query.name.capitalize()
+	var realm = req.query.realm
+	var region = req.query.region.toLowerCase()
+	if(!verifyRealm(realm, region)){
+		res.status(400).json({error:"Improper query string."})
+		return
+	}
+	db.character.findOne({name:name, region:region, realm:realm}).exec(function(err, character){
+		if(err||!character){
+			res.status(404).json({error:"Character not found."})
+			return
+		}
+		res.json({professions:character.professions})
+	})
+})
+
 router.get("/items", function(req, res){
 	var name = req.query.name.capitalize()
 	var realm = req.query.realm

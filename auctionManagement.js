@@ -22,13 +22,14 @@ var auctionQueue = async.queue(function(task, callback){
 auctionQueue.drain = function(){
 	console.log(realmcount+ " realms completed in "+(new Date()-start))
 	if(realmcount>5){
+		realmcount=0
 		load_auction_data()
 		start = new Date()
 	}else{
+		realmcount=0
 		setTimeout(load_auction_data, pauseInterval)
 		start = new Date()
 	}
-	realmcount=0
 }
 
 setTimeout(load_auction_data, 1000)

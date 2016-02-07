@@ -37,8 +37,11 @@ $routeProvider
 .when('/character/:characterName', {
 	templateUrl: 'app/views/character.html'
 })
-.when('/items/:id', {
+.when('/item/:id', {
 	templateUrl: 'app/views/item.html'
+})
+.when('/mount/:id', {
+	templateUrl: 'app/views/mount.html'
 })
 .otherwise({
 	templateUrl: 'app/views/404.html'
@@ -122,6 +125,34 @@ $locationProvider.html5Mode(true)
 	$scope.character.get('mounts')
 	$scope.character.get('achievements')
 	$scope.character.get('reputation')
+}])
+.controller('characterProfessions', ['onyxCharacter', '$scope', function(onyxCharacter, $scope){
+	$scope.character=onyxCharacter
+	$scope.character.get('professions')
+	$scope.expandRecipes=[false,false,false,false,false,false]
+	$scope.expandToggle=function(index){
+		console.log(index)
+		$scope.expandRecipes[index]=!$scope.expandRecipes[index]
+	}
+}])
+.controller('mountCtrl', ['$scope','$routeParams', '$http',function($scope, $routeParams, $http){
+	$scope.mountId = parseInt($routeParams.id)
+	$scope.mount = {}
+	$scope.loading=true
+
+	if($scope.mountId){
+		$http({
+			method: 'GET',
+			url: '/api/mount/'+$scope.mountId
+		}).then(function success(response){
+			console.log(response)
+			$scope.mount=response.data.mount
+		},function error(response){
+			console.log(response)
+		})
+	}
+
+	// $routeParams.id
 }])
 .factory('onyxCharacter', ['$http', 'onyxPersistence',function($http, onyxPersistence){
 	var character = {}

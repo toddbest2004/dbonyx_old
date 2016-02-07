@@ -146,6 +146,24 @@ angular.module('AuctionCtrls', [])
 		controller: autoCompleteCtrl
 	}
 })
+.directive('money', function(){
+	var moneyCtrl = ['$scope', function($scope){
+		$scope.amount = parseInt($scope.amount)
+		$scope.copper = $scope.amount%100
+		$scope.silver = parseInt($scope.amount/100)%100
+		$scope.gold = parseInt($scope.amount/10000)
+	}]
+
+	return {
+		restrict: 'E',
+		replace: true,
+		scope: {
+			amount: '='
+		},
+		templateUrl: 'app/templates/money.html',
+		controller: moneyCtrl
+	}
+})
 // .directive('pagination', function(){
 // 	var controller = ['$scope', function($scope){
 // 		$scope.backPages = []

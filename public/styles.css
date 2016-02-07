@@ -20,6 +20,19 @@ html, body {
     .navbar .navbar-nav li {
       font-weight: bold; }
 
+.money {
+  display:inline-block;
+}
+.gold{
+  color: #ff3;
+}
+.silver{
+  color: #eee;
+}
+.copper{
+  color: #ff5b00;
+}
+
 .container {
   background-color: #464646; }
 .icon {

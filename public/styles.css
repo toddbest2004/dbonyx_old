@@ -24,17 +24,23 @@ html, body {
   display:inline-block;
 }
 .gold{
-  color: #ff3;
+  border:5px solid #ff3;
+  border-radius:5px;
+  display:inline-block;
 }
 .silver{
-  color: #eee;
+  border:5px solid #ccc;
+  border-radius:5px;
+  display:inline-block;
 }
 .copper{
-  color: #ff5b00;
+  border:5px solid #dd5b00;
+  border-radius:5px;
+  display:inline-block;
 }
 
 .container {
-  background-color: #464646; }
+  background-color: #7A7575; }
 .icon {
   width: 32px;
   height: 32px; }
@@ -100,12 +106,15 @@ html, body {
 }
 .auctionResultCell{
 	display:table-cell;
+  border-bottom:1px solid black;
+  padding:0 6px;
 }
 .auctionResultTable{
 	display:table;
 }
 .auctionSort{
 	display:table-cell;
+  border-bottom:1px solid black;
 	font-weight:bold;
 	font-size:1.2em;
 	text-align:center;

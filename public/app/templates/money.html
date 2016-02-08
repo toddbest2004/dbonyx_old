@@ -1,1 +1,5 @@
-<div class="money"><span class="gold" ng-if="gold">{{gold}}g</span> <span class="silver" ng-if="silver||gold">{{silver}}s</span> <span class="copper" ng-if="copper||silver||gold">{{copper}}c</span></div>
+<div class="money">
+<span ng-if="gold">{{gold}}</span><span class="gold" ng-if="gold"></span>
+<span ng-if="silver||gold">{{silver}}</span><span class="silver" ng-if="silver||gold"></span>
+<span ng-if="copper||silver||gold">{{copper}}</span><span class="copper" ng-if="copper||silver||gold"></span>
+</div>

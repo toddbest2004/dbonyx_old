@@ -1,5 +1,7 @@
 #dbonyx
 
+Temporary URL for early development and testing: http://104.131.156.98:3000/auctions
+
 Temporary onyx logo: jewel by Sagar Unagar from the Noun Project
 https://thenounproject.com/term/jewel/172482/
 https://thenounproject.com/term/jewel/172481/

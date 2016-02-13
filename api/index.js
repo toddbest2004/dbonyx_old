@@ -14,6 +14,8 @@ var itemCtrl = require("./controllers/item")
 router.use("/item", itemCtrl);
 var mountCtrl = require("./controllers/mount")
 router.use("/mount", mountCtrl)
+// var userCtrl = require("./controllers/user")
+// router.use("/user", userCtrl)
 
 router.get("/realms", function(req, res){
 	db.realm.find({}, function(err, realms){

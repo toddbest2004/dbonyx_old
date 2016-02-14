@@ -74,9 +74,52 @@ $locationProvider.html5Mode(true)
 })
 .factory('onyxUser', function($http){
 	var user = {}
+	user.loggedin=false
+	$http({
+		method: 'GET',
+		url: '/api/user/getUser'
+	}).then(function success(response){
+		console.log("log stuff")
+		console.log(response)
+		user.username=response.data.username
+		user.email=response.data.email
+		user.loggedin=true
+		// $scope.mount=response.data.mount
+	},function error(response){
+		console.log(response)
+	})
 
 	return user
 })
+.controller('userCtrl', ['onyxUser','$scope','$http',function(onyxUser,$scope,$http){
+	$scope.user=onyxUser
+	$scope.login=function(){
+		console.log('a')
+		$http({
+			method: 'POST',
+			url: '/api/user/login',
+			data: {email:$scope.email,password:$scope.password}
+		}).then(function success(response){
+			console.log($scope.user)
+			$scope.user.username=response.data.username
+			$scope.user.email=response.data.email
+			$scope.user.loggedin=true
+		},function error(response){
+		})
+	}
+	$scope.logout=function(){
+		$http({
+			method: 'POST',
+			url: '/api/user/logout'
+		}).then(function success(response){
+			console.log('loggedout')
+			$scope.user.username=''
+			$scope.user.email=''
+			$scope.user.loggedin=false
+		},function error(response){
+		})
+	}
+}])
 .controller('characterCtrl', ['onyxPersistence', 'onyxCharacter', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, onyxCharacter, $scope, $http, $location, $routeParams) {
 	$scope.character=onyxCharacter
 

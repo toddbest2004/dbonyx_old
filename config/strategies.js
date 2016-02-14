@@ -7,13 +7,13 @@ module.exports = {
 	},
 	function(email, password, done) {
     console.log(email)
-	  db.user.findOne({email: email}).exec(function(err, user) {
+	  db.onyxUser.findOne({email: email}).exec(function(err, user) {
       console.log('asdf')
   		if (!err&&user) {
   		  user.comparePassword(password, function(err, result) {
     			if (err) return done(err)
     			if (result) {
-    			  done(null, user.get())
+    			  done(null, user)
     			} else {
     			  done(null, false, {message: 'Invalid password'})
     			}
@@ -27,8 +27,8 @@ module.exports = {
     done(null, user._id)
   },
   deserializeUser: function(id, done) {
-    db.user.findById(id).then(function(user) {
-      done(null, user.get())
+    db.onyxUser.findOne({_id:id}).then(function(user) {
+      done(null, user)
     }).catch(done)
   }
 }

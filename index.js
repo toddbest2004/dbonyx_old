@@ -3,8 +3,8 @@ var bodyParser = require('body-parser');
 var db = require('./mongoose');
 var path = require('path');
 var session = require('express-session');
-// var passport = require('passport');
-// var strategies = require('./config/strategies.js')
+var passport = require('passport');
+var strategies = require('./config/strategies.js')
 
 var app = express();
 
@@ -21,10 +21,11 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
-// passport.serializeUser(strategies.serializeUser)
-// passport.deserializeUser(strategies.deserializeUser)
-// passport.use(strategies.localStrategy)
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(strategies.serializeUser)
+passport.deserializeUser(strategies.deserializeUser)
+passport.use(strategies.localStrategy)
 
 var apiCtrl = require("./api/")
 app.use("/api", apiCtrl)

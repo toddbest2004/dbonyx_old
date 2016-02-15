@@ -6,7 +6,12 @@ var SALT_WORK_FACTOR = 10
 var onyxUserSchema = new Schema({
 	username: String,
 	password: String,
-	email: String
+	email: String,
+	emailValidation: String,
+	isEmailValidated: {type:Boolean, default:false},
+	emailValidationCreatedDate: {type:Date, default: Date.now},
+	emailValidatedDate: Date,
+	userCreatedDate: {type:Date, default: Date.now}
 })
 
 onyxUserSchema.pre('save', function(next) {

@@ -119,6 +119,12 @@ html, body {
 	font-size:1.2em;
 	text-align:center;
 }
+.auctionMoney{
+  min-width: 160px;
+}
+.auctionIcons{
+  min-width: 70px;
+}
 .historyGraph, .watchAuction {
   margin: 0 3px;
   cursor: pointer;

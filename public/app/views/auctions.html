@@ -36,12 +36,12 @@ Loading Auctions...
 </div>
 <div class="auctionResultTable table table-condensed" ng-if="auctionResults">
 <div class="auctionResultRow"><div class="auctionSort" data-sort="quantity">Quantity</div>
-<div class="auctionResultCell">&nbsp;</div>
+<div class="auctionResultCell auctionIcons">&nbsp;</div>
 <div class="auctionSort" data-sort="name">Item</div>
-<div class="auctionSort" data-sort="itemLevel">Item Level</div>
+<div class="auctionSort" data-sort="itemLevel">iLvl</div>
 <div class="auctionSort">Owner</div>
-<div class="auctionSort" data-sort="bid">Bid Price</div>
-<div class="auctionSort" data-sort="buyout">Buyout</div></div>
+<div class="auctionSort auctionMoney" data-sort="bid">Bid Price</div>
+<div class="auctionSort auctionMoney" data-sort="buyout">Buyout</div></div>
 <auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
 </div>
 </div>

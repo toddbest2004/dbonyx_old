@@ -43,6 +43,12 @@ $routeProvider
 .when('/mount/:id', {
 	templateUrl: 'app/views/mount.html'
 })
+.when('/register', {
+	templateUrl: 'app/views/register.html'
+})
+.when('/validate/:user/:validateString', {
+	templateUrl: 'app/views/validate.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })
@@ -74,9 +80,79 @@ $locationProvider.html5Mode(true)
 })
 .factory('onyxUser', function($http){
 	var user = {}
+	user.loggedin=false
+	$http({
+		method: 'GET',
+		url: '/api/user/getUser'
+	}).then(function success(response){
+		user.username=response.data.username
+		user.email=response.data.email
+		user.loggedin=true
+	},function error(response){
+		console.log(response)
+	})
 
 	return user
 })
+.controller('validateCtrl', ['$http','$location','$scope', '$routeParams', function($http,$location,$scope,$routeParams){
+	$http({
+		method: 'POST',
+		url: '/api/user/validate',
+		data: {username:$routeParams.user,validateString:$routeParams.validateString}
+	}).then(function success(response){
+		console.log("Success!")
+		$location.url('/')
+	},function error(response){
+		$scope.error=response.data.error
+	})
+}])
+.controller('userCtrl', ['onyxUser','$scope','$http','$location',function(onyxUser,$scope,$http,$location){
+	$scope.user=onyxUser
+	$scope.register=false
+	$scope.showRegister=function(){
+		$scope.register=!$scope.register
+		console.log($scope.register)
+	}
+	$scope.login=function(){
+		console.log('a')
+		$http({
+			method: 'POST',
+			url: '/api/user/login',
+			data: {email:$scope.email,password:$scope.password}
+		}).then(function success(response){
+			console.log($scope.user)
+			$scope.user.username=response.data.username
+			$scope.user.email=response.data.email
+			$scope.user.loggedin=true
+		},function error(response){
+		})
+	}
+	$scope.register=function(){
+		$http({
+			method: 'POST',
+			url: '/api/user/register',
+			data: {username:$scope.username,email:$scope.email,password1:$scope.password1,password2:$scope.password2}
+		}).then(function success(response){
+			$scope.user.username=''
+			$scope.user.email=''
+			$scope.user.loggedin=false
+			$location.url('/')
+		},function error(response){
+		})
+	}
+	$scope.logout=function(){
+		$http({
+			method: 'POST',
+			url: '/api/user/logout'
+		}).then(function success(response){
+			$scope.user.username=''
+			$scope.user.email=''
+			$scope.user.loggedin=false
+			$location.url('/')
+		},function error(response){
+		})
+	}
+}])
 .controller('characterCtrl', ['onyxPersistence', 'onyxCharacter', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, onyxCharacter, $scope, $http, $location, $routeParams) {
 	$scope.character=onyxCharacter
 

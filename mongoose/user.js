@@ -3,45 +3,49 @@ var Schema = mongoose.Schema
 var bcrypt = require('bcrypt')
 var SALT_WORK_FACTOR = 10
 
-var userSchema = new Schema({
+var onyxUserSchema = new Schema({
 	username: String,
 	password: String,
 	email: String,
-	games: [{type: Schema.Types.ObjectId, ref: 'game'}]
+	emailValidation: String,
+	isEmailValidated: {type:Boolean, default:false},
+	emailValidationCreatedDate: {type:Date, default: Date.now},
+	emailValidatedDate: Date,
+	userCreatedDate: {type:Date, default: Date.now}
 })
 
-userSchema.pre('save', function(next) {
-    var user = this;
+onyxUserSchema.pre('save', function(next) {
+    var onyxUser = this;
 	// only hash the password if it has been modified (or is new)
-	if (!user.isModified('password')) return next();
+	if (!onyxUser.isModified('password')) return next();
 	// generate a salt
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
 	    if (err) return next(err);
 	    // hash the password using our new salt
-	    bcrypt.hash(user.password, salt, function(err, hash) {
+	    bcrypt.hash(onyxUser.password, salt, function(err, hash) {
 	        if (err) return next(err);
 	        // override the cleartext password with the hashed one
-	        user.password = hash;
+	        onyxUser.password = hash;
 	        next();
 	    });
 	});
 });
 
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
+onyxUserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
     });
 };
 
-var user = mongoose.model('user', userSchema)
-module.exports = user
+var onyxUser = mongoose.model('onyxUser', onyxUserSchema)
+module.exports = onyxUser
 
 // User Password check example
-// user.comparePassword(req.body.password, function(err, isMatch) {
+// onyxUser.comparePassword(req.body.password, function(err, isMatch) {
 // 	if (err||!isMatch){
 // 		res.status(404).send({result:false,error:"Username/password not found."})
 // 	}
-// 	req.session.username=user.username
+// 	req.session.onyxUsername=onyxUser.onyxUsername
 // 	res.send({result:true})
 // });

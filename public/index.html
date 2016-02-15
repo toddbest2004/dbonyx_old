@@ -20,13 +20,21 @@
 <img src="/images/logo.png" width="15%" height="15%"></img>
 <div id="brand" style="font-family: 'Exo 2', sans-serif; font-size: 24px">DB ONYX</div>
 </div>
-<div style="float:right">
-login message
-	<form action="/user/login" method="POST" id="login">
-	<input type="text" name="username" id="username" placeholder="Username"><br>
-	<input type="password" name="password" id="password" placeholder="Password"><br>
-	<input type="submit" value="Log In"><a href="/user/register">Sign Up</a>
-	</form></div>
+<div ng-controller="userCtrl">
+  <div ng-if="!user.loggedin">
+    login message
+    {{email}}
+    <form ng-submit="login()" id="login" ng-controller="userCtrl">
+    <input ng-model="email" type="text" name="email" id="email" placeholder="Email"><br>
+    <input type="password" name="password" id="password" placeholder="Password" ng-model="password"><br>
+    <input type="submit" value="Log In"><a href='/register'>Sign Up</a>
+    </form>
+  </div>
+  <div ng-if="user.loggedin">
+  {{user.username}}
+  <a ng-click="logout()">logout</a>
+  </div>
+</div>
 </div>
 <div class="row">
 <nav class="navbar navbar-default">

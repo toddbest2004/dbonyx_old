@@ -43,6 +43,7 @@ function load_auction_data(){
 			var region = realms[i].region
 			var touch = realms[i].auctiontouch
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API
+			console.log(url);
 			checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
 		}
 	})
@@ -140,15 +141,17 @@ function bulkImport(auctionData, slug, region, touch, callback){
 		temp.region = region
 		temp.touch = touch;
 		temp.startTime = temp.timeLeft
-		temp.$setOnInsert={firstbid:temp.bid}
+		// temp.$setOnInsert={firstbid:temp.bid}
 		// delete temp.auc
 		// delete temp.ownerRealm
 		auctionData.auctions[i] = temp
-		bulkImport.find({_id:temp._id}).upsert().updateOne(temp)
+		// console.log(temp._id)
+		bulkImport.insert(temp)//find({_id:temp._id}).upsert().updateOne(temp)
 	}
 	console.log(auctionData.auctions.length+" operations queued.")
 	console.log(slug+": starting bluk import"+(new Date()-start))
 	bulkImport.execute(function(err, data){
+		// callback()
 		removeOldAuctions(slug, region, touch, callback)
 		// updateAuctionHistory(slug,region,touch,callback)
 	})

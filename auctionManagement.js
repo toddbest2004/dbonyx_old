@@ -207,8 +207,13 @@ function removeOldAuctions(slug, region, touch, callback){
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))
-		callback()
+		checkWatchlists(slug, region, touch, callback)
 	})
+}
+
+function checkWatchlists(slug, region, touch, callback){
+	auctionLog("Starting watchlist checking")
+	callback()
 }
 
 function auctionLog(outputString){

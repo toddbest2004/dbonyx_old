@@ -59,7 +59,7 @@ $routeProvider
 
 $locationProvider.html5Mode(true)
 }])
-.factory('onyxPersistence', function($cookies){
+.factory('onyxPersistence', ['$cookies',function($cookies){
 	var persistence = {}
 	var _persisted = {}
 	var _realm
@@ -81,10 +81,9 @@ $locationProvider.html5Mode(true)
 		return _persisted[key]||$cookies.get(key)||''
 	}
 	return persistence
-})
-.factory('onyxUser', function($http){
-	var user = {}
-	user.loggedin=false
+}])
+.factory('onyxUser', ['$http',function($http){
+	var user = {loggedin:false}
 	$http({
 		method: 'GET',
 		url: '/api/user/getUser'
@@ -97,7 +96,7 @@ $locationProvider.html5Mode(true)
 	})
 
 	return user
-})
+}])
 .controller('validateCtrl', ['$http','$location','$scope', '$routeParams', function($http,$location,$scope,$routeParams){
 	$http({
 		method: 'POST',

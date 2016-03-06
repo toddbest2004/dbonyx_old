@@ -97,9 +97,15 @@ angular.module('AuctionCtrls', [])
         }
     };
 }]).directive('auctionResult', function(){
+	var controller = ['$scope', function($scope){
+		$scope.watchlist = function(itemId,slugName,region){
+			//handle watchlist modal here
+		}
+	}]
 	return {
 		restrict: 'E',
 		replace: true,
+		controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
 	}
 }).directive('autoComplete', function(){

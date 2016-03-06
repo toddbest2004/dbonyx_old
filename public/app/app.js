@@ -43,6 +43,10 @@ $routeProvider
 .when('/mount/:id', {
 	templateUrl: 'app/views/mount.html'
 })
+.when('/profile', {
+	controller: 'userCtrl',
+	templateUrl: 'app/views/profile.html'
+})
 .when('/register', {
 	templateUrl: 'app/views/register.html'
 })
@@ -89,7 +93,7 @@ $locationProvider.html5Mode(true)
 		user.email=response.data.email
 		user.loggedin=true
 	},function error(response){
-		console.log(response)
+		// console.log(response)
 	})
 
 	return user
@@ -100,7 +104,7 @@ $locationProvider.html5Mode(true)
 		url: '/api/user/validate',
 		data: {username:$routeParams.user,validateString:$routeParams.validateString}
 	}).then(function success(response){
-		console.log("Success!")
+		// console.log("Success!")
 		$location.url('/')
 	},function error(response){
 		$scope.error=response.data.error
@@ -111,16 +115,16 @@ $locationProvider.html5Mode(true)
 	$scope.register=false
 	$scope.showRegister=function(){
 		$scope.register=!$scope.register
-		console.log($scope.register)
+		// console.log($scope.register)
 	}
 	$scope.login=function(){
-		console.log('a')
+		// console.log('a')
 		$http({
 			method: 'POST',
 			url: '/api/user/login',
 			data: {email:$scope.email,password:$scope.password}
 		}).then(function success(response){
-			console.log($scope.user)
+			// console.log($scope.user)
 			$scope.user.username=response.data.username
 			$scope.user.email=response.data.email
 			$scope.user.loggedin=true
@@ -207,7 +211,7 @@ $locationProvider.html5Mode(true)
 	$scope.character.get('professions')
 	$scope.expandRecipes=[false,false,false,false,false,false]
 	$scope.expandToggle=function(index){
-		console.log(index)
+		// console.log(index)
 		$scope.expandRecipes[index]=!$scope.expandRecipes[index]
 	}
 }])
@@ -221,10 +225,10 @@ $locationProvider.html5Mode(true)
 			method: 'GET',
 			url: '/api/mount/'+$scope.mountId
 		}).then(function success(response){
-			console.log(response)
+			// console.log(response)
 			$scope.mount=response.data.mount
 		},function error(response){
-			console.log(response)
+			// console.log(response)
 		})
 	}
 
@@ -320,4 +324,19 @@ $locationProvider.html5Mode(true)
 
 	character.init()
 	return character
+}])
+.controller('watchlistCtrl', ['$scope','$http',function($scope, $http){
+	var getWatchlists = function(){
+		$http({
+			method: 'GET',
+			url: '/api/watchlist/'
+		}).then(function success(response){
+			$scope.watchlists=response.data.watchlists
+		},function error(response){
+			//todo: error handling
+		})
+	}
+	getWatchlists()
+	$scope.watchlists=[]
+	
 }])

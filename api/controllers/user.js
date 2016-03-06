@@ -19,9 +19,9 @@ router.post("/login", function(req, res){
 		if (user) {
 	  		req.login(user, function(err) {
 				if (err) throw err
-				req.session.username=user.username
-				req.session.email=user.email
-				res.json({username:req.session.username,email:req.session.email})
+				// req.session.username=user.username
+				// req.session.email=user.email
+				res.json({username:req.user.username,email:req.user.email})
 				return
 			})
   		} else {
@@ -36,7 +36,6 @@ router.post("/logout", function(req, res){
 })
 
 router.post("/register", function(req, res){
-	console.log(req.body)
 	if(req.body.password1.length<8||req.body.password2.length<8){
 		res.status(401).json({error:"Passwords must be at least 8 characters."})
 		return

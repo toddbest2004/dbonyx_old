@@ -16,6 +16,8 @@ var mountCtrl = require("./controllers/mount")
 router.use("/mount", mountCtrl)
 var userCtrl = require("./controllers/user")
 router.use("/user", userCtrl)
+var watchlistCtrl = require("./controllers/watchlist")
+router.use("/watchlist", watchlistCtrl)
 
 router.get("/realms", function(req, res){
 	db.realm.find({}, function(err, realms){

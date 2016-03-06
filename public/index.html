@@ -22,7 +22,6 @@
 </div>
 <div ng-controller="userCtrl">
   <div ng-if="!user.loggedin">
-    login message
     {{email}}
     <form ng-submit="login()" id="login" ng-controller="userCtrl">
     <input ng-model="email" type="text" name="email" id="email" placeholder="Email"><br>
@@ -31,7 +30,7 @@
     </form>
   </div>
   <div ng-if="user.loggedin">
-  {{user.username}}
+  <a href="/profile">{{user.username}}</a>
   <a ng-click="logout()">logout</a>
   </div>
 </div>

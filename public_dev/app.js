@@ -98,6 +98,7 @@ $locationProvider.html5Mode(true)
 	return user
 }])
 .controller('validateCtrl', ['$http','$location','$scope', '$routeParams', function($http,$location,$scope,$routeParams){
+	//validates user's email (by clicking link created and sent to email)
 	$http({
 		method: 'POST',
 		url: '/api/user/validate',
@@ -106,6 +107,7 @@ $locationProvider.html5Mode(true)
 		// console.log("Success!")
 		$location.url('/')
 	},function error(response){
+		//TODO:Handle login error
 		$scope.error=response.data.error
 	})
 }])
@@ -128,6 +130,7 @@ $locationProvider.html5Mode(true)
 			$scope.user.email=response.data.email
 			$scope.user.loggedin=true
 		},function error(response){
+			//TODO: Hanlde login error
 		})
 	}
 	$scope.register=function(){
@@ -141,6 +144,7 @@ $locationProvider.html5Mode(true)
 			$scope.user.loggedin=false
 			$location.url('/')
 		},function error(response){
+			//TODO: handle register error
 		})
 	}
 	$scope.logout=function(){
@@ -153,6 +157,7 @@ $locationProvider.html5Mode(true)
 			$scope.user.loggedin=false
 			$location.url('/')
 		},function error(response){
+			//TODO: handle logout error
 		})
 	}
 }])
@@ -173,7 +178,7 @@ $locationProvider.html5Mode(true)
 					$scope.results=result
 				}
 			}else{
-				//handle character not found
+				//TODO: handle character not found
 				$scope.error="Unable to find character."
 			}
 		})
@@ -227,6 +232,7 @@ $locationProvider.html5Mode(true)
 			// console.log(response)
 			$scope.mount=response.data.mount
 		},function error(response){
+			//TODO: handle error
 			// console.log(response)
 		})
 	}

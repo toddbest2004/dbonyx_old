@@ -83,7 +83,14 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 		if(!error && response.statusCode===200){
 			auctionLog("Auction data recieved"+(new Date()-start))
 			// writeAuctionDataToFile(body,slug,region,touch,callback)
-			bulkImport(body, slug, region, touch, callback)
+			if(body.auctions){
+				bulkImport(body, slug, region, touch, callback)
+			}else{
+				console.error("No auctions returned.")
+				console.error("Body:")
+				console.error(body)
+				callback()
+			}
 		}else{
 			auctionLog("Auction data error "+(new Date()-start))
 			auctionLog("Response code: "+response.statusCode)

@@ -108,6 +108,11 @@ angular.module('AuctionCtrls', [])
 		controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
 	}
+}).directive('watchlistForm', function(){
+	return {
+		restrict: 'E',
+		templateUrl: 'app/templates/watchlist.html'
+	}
 }).directive('autoComplete', function(){
 	var autoCompleteCtrl = ['onyxPersistence', '$scope', '$http', function(onyxPersistence, $scope, $http){
 		$scope.realmInputSelected=false

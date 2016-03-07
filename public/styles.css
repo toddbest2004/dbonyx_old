@@ -143,6 +143,10 @@ html, body {
 #auctionNav{
   text-align:right;
 }
+.watchlistForm{
+  background-color: #858585;
+  position:absolute;
+}
 .right{
   text-align: right;
 }

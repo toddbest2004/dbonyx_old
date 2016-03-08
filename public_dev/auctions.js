@@ -98,9 +98,6 @@ angular.module('AuctionCtrls', [])
     };
 }]).directive('auctionResult', function(){
 	var controller = ['$scope', function($scope){
-		$scope.watchlist = function(itemId,slugName,region){
-			//handle watchlist modal here
-		}
 	}]
 	return {
 		restrict: 'E',
@@ -109,8 +106,23 @@ angular.module('AuctionCtrls', [])
 		templateUrl: 'app/templates/auctionResult.html'
 	}
 }).directive('watchlistForm', function(){
+	//expects $scope.item to be an instance of Item
+	var controller = ['$scope', function($scope){
+		if($scope.item){
+			$scope.maxQuantity = $scope.item.stackable||9999
+		}else{
+			//defaults in case item isn't passed
+			$scope.maxQuantity=9999
+		}
+	}]
 	return {
 		restrict: 'E',
+		controller: controller,
+		scope:{
+			item:"=",
+			price: "@",
+			showWatchlist: "=" 
+		},
 		templateUrl: 'app/templates/watchlist.html'
 	}
 }).directive('autoComplete', function(){

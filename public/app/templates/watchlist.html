@@ -1,5 +1,5 @@
 <div class="watchlistForm">
 <span class="close" ng-click="showWatchlist=!showWatchlist">(close)</span>
-{{auction}}
-aItem: _________ Min: __ Max: __ Max buyout: ______g __s __c
-</div>
+<a href="/item/{{item.itemId}}" class="itemLink itemQuality{{item.quality}}"><img src="/images/icons/{{item.icon}}.png" class="icon">{{item.name}}</a>
+Min: <input size="3" value="1" select-on-focus> Max: <input size="3" value="{{maxQuantity}}" select-on-focus> Max buyout: ______g __s __c
+</div> 

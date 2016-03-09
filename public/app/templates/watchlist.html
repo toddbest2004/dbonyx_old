@@ -1,0 +1,5 @@
+<div class="watchlistForm">
+<span class="close" ng-click="showWatchlist=!showWatchlist">(close)</span><form>
+<a href="/item/{{item.itemId}}" class="itemLink itemQuality{{item.quality}}"><img src="/images/icons/{{item.icon}}.png" class="icon">{{item.name}}</a>
+Min: <input size="3" ng-model="minQuantity" select-on-focus> Max: <input size="3" ng-model="maxQuantity" select-on-focus> Max buyout: <input size="6" ng-model="gold" select-on-focus>g <input size="2" ng-model="silver" select-on-focus>s <input size="2" ng-model="copper" select-on-focus>c <input type="submit" value="Add" ng-click="submit()"></form>
+</div>

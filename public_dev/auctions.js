@@ -98,15 +98,43 @@ angular.module('AuctionCtrls', [])
     };
 }]).directive('auctionResult', function(){
 	var controller = ['$scope', function($scope){
-		$scope.watchlist = function(itemId,slugName,region){
-			//handle watchlist modal here
-		}
 	}]
 	return {
 		restrict: 'E',
 		replace: true,
 		controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
+	} 
+}).directive('watchlistForm', function(){
+	//expects $scope.item to be an instance of Item
+	var controller = ['$scope', '$http', function($scope, $http){
+		$scope.minQuantity=1
+		if($scope.item){
+			$scope.maxQuantity = $scope.item.stackable||9999
+		}else{
+			//defaults in case item isn't passed
+			$scope.maxQuantity=9999
+		}
+		if(!$scope.price){
+			$scope.price=0
+		}
+		$scope.originalPrice=$scope.price
+		$scope.gold = Math.floor($scope.price/10000)
+		$scope.silver = Math.floor(($scope.price%10000)/100)
+		$scope.copper = $scope.price%100
+		$scope.submit = function(){
+			// alert("asdf") 
+		}
+	}]
+	return {
+		restrict: 'E',
+		controller: controller,
+		scope:{
+			item:"=",
+			price: "@",
+			showWatchlist: "=" 
+		},
+		templateUrl: 'app/templates/watchlist.html'
 	}
 }).directive('autoComplete', function(){
 	var autoCompleteCtrl = ['onyxPersistence', '$scope', '$http', function(onyxPersistence, $scope, $http){

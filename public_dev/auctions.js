@@ -104,15 +104,26 @@ angular.module('AuctionCtrls', [])
 		replace: true,
 		controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
-	}
+	} 
 }).directive('watchlistForm', function(){
 	//expects $scope.item to be an instance of Item
-	var controller = ['$scope', function($scope){
+	var controller = ['$scope', '$http', function($scope, $http){
+		$scope.minQuantity=1
 		if($scope.item){
 			$scope.maxQuantity = $scope.item.stackable||9999
 		}else{
 			//defaults in case item isn't passed
 			$scope.maxQuantity=9999
+		}
+		if(!$scope.price){
+			$scope.price=0
+		}
+		$scope.originalPrice=$scope.price
+		$scope.gold = Math.floor($scope.price/10000)
+		$scope.silver = Math.floor(($scope.price%10000)/100)
+		$scope.copper = $scope.price%100
+		$scope.submit = function(){
+			// alert("asdf") 
 		}
 	}]
 	return {

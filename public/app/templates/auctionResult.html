@@ -2,7 +2,7 @@
 <div class="auctionResultCell">
 <span class="glyphicon glyphicon-stats historyGraph"></span>
 <span class="glyphicon glyphicon-eye-open watchAuction" ng-click="showWatchlist=!showWatchlist"></span>
-<watchlist-form ng-show="showWatchlist" show-watchlist="showWatchlist" item="auction.item" price="999"></watchlist-form>
+<watchlist-form ng-show="showWatchlist" show-watchlist="showWatchlist" item="auction.item" price="{{auction.buyout}}"></watchlist-form>
 </div>
 <div class="auctionResultCell">
 <a href="/item/{{auction.item.itemId}}" class="itemLink itemQuality{{auction.item.quality}}"><img src="/images/icons/{{auction.item.icon}}.png" class="icon">{{auction.item.name}}</a>

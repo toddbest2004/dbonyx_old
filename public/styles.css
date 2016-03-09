@@ -326,3 +326,136 @@ html, body {
   left:100px;
   top:490px;
 }
+body {
+  font-family: 'Maven Pro';
+  font-size: 14px;
+  text-align: justify;
+}
+
+/* TOP BAR */
+
+#brand-nav {
+  height: 30px;
+  min-height: 30px;
+}
+
+#proprietary-bar {
+  background: rgb(69,72,77); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(69,72,77,1) 0%, rgba(0,0,0,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
+#proprietary-bar, .navbar-collapse, .navbar-header {
+  background-color: transparent;
+  height: 30px;
+}
+
+/* MAIN NAVIGATION */
+
+#nav-container {
+  background-color: silver;
+}
+
+#secondary-nav {
+  top: 40px;
+  width: 100%;
+  position: absolute;
+  background-color: red;
+  z-index: 1;
+}
+
+#user-panel {
+  background-color: #777;
+}
+
+form.navbar-form.navbar-right {
+  margin-top: 2px;
+  margin-right: 6px;
+}
+
+.nav-tabs li, .nav-tabs li a {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border: 0;
+  margin-bottom: 0;
+}
+
+/* PROPRIETARY LOGO */
+a.navbar-brand {
+  font-family: 'Aldrich';
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+a.navbar-brand {
+  color: rgba(255,255,255,.75) !important;
+}
+
+form.navbar-form {
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb {
+  background-color: #ddd;
+  font-size: 12px;
+}
+
+.navbar, .navbar-collapse, .navbar-header, .nav-tabs, .breadcrumb {
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+}
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+  margin-left: 0px;
+}
+
+a.navbar-brand,
+ul.nav.navbar-nav li a
+ {
+  height: 30px;
+  padding: 0px;
+  font-size: 14px;
+  margin-right: 15px;
+  margin-left: 15px;
+  vertical-align: middle;
+  line-height: 30px;
+}
+
+ul.nav.navbar-nav li a {
+  margin-top: -1px;
+}
+/* CONTENT DIVS */
+
+#main-content {
+  background-color: #ccc;
+}
+
+#sub-content {
+  background-color: #aaa;
+}
+
+/* ADVERTISEMENTS */
+
+#leaderboard {
+  width: 728px;
+  height: 90px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: #ccc;
+}
+
+#skyscraper {
+  width: 160px;
+  height: 600px;
+  background-color: #ccc;
+}
+
+/* FOOTER */
+
+#footer-container {
+  background-color: #777;
+}

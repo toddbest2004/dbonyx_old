@@ -1,4 +1,4 @@
-var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls','ngRoute','ngCookies'])
+var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls', 'MenuCtrls','ngRoute','ngCookies'])
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 $routeProvider
 .when('/', {

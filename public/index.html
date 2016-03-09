@@ -1,10 +1,24 @@
+
 <!DOCTYPE html>
-<html ng-app='dbonyx'>
+<html lang="en" ng-app="dbonyx">
 <head>
-	<base href="/">
-	<title>DBOnyx</title>
-	<link rel="stylesheet" media="screen" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
+  <base href="/">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DB ONYX - THE WORLD'S PREMIER SOCIAL GAMING NETWORK</title>
+  <!-- Google Web Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Aldrich|Maven+Pro' rel='stylesheet' type='text/css'>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+    <link rel="stylesheet" media="screen" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
   <link href='https://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-route.js"></script>
@@ -12,43 +26,127 @@
     <script src="app/min.js"></script>
 </head>
 <body>
-<div class="container">
-<div class="row">
-<div id="logo" style="float:left;">
-<img src="/images/logo.png" width="15%" height="15%"></img>
-<div id="brand" style="font-family: 'Exo 2', sans-serif; font-size: 24px">DB ONYX</div>
-</div>
-<div ng-controller="userCtrl">
-  <div ng-if="!user.loggedin">
-    {{email}}
-    <form ng-submit="login()" id="login" ng-controller="userCtrl">
-    <input ng-model="email" type="text" name="email" id="email" placeholder="Email"><br>
-    <input type="password" name="password" id="password" placeholder="Password" ng-model="password"><br>
-    <input type="submit" value="Log In"><a href='/register'>Sign Up</a>
-    </form>
+  <!-- BRAND NAVIGATION AND USER PANEL -->
+  <div class="col-xs-12">
+    <div class="row">
+      <nav role="navigation" class="navbar navbar-default" id="brand-nav">
+        <div class="container-fluid" id="proprietary-bar">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">ONYX GAMING</a>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a>Evydia (207) <b class="caret"></b></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="row">
+      <div id="user-panel">
+        <!-- Logged in user panel and stats -->
+        User Panel
+      </div>
+    </div>
   </div>
-  <div ng-if="user.loggedin">
-  <a href="/profile">{{user.username}}</a>
-  <a ng-click="logout()">logout</a>
+  <!-- LEADERBOARD -->
+  <div class="col-xs-12">
+    <div class="row">
+      <div id="leaderboard" class="center-block">Leaderboard</div>
+    </div>
   </div>
-</div>
-</div>
-<div class="row">
-<nav class="navbar navbar-default">
-<div class="container-fluid">
-      <ul class="nav navbar-nav">
-      <li><a href="/database">Database</a></li>
-      <li><a href="/auctions">Auction House</a></li>
-      <li><a href="/character">Character Tools</a></li>
-      <li><a href="#">Community</a></li>
-      </ul>
-      <div style="float:right;margin:10px 0;"><input type="text" placeholder="search"></div>
-</div>
-</nav>
-</div>
-<ng-view></ng-view>
-<div id="footer">
-</div>
-</div>
+  <!-- MAIN NAVIGATION PANEL -->
+  <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <div class="row" id="nav-container" ng-controller="MenuCtrl">
+      <!-- MAIN MENU -->
+      <nav id="primary-nav">
+        <ul class="nav nav-tabs navbar-left">
+          <menu-head selected="selected" title="Database"></menu-head>
+          <menu-head selected="selected" title="Auction House"></menu-head>
+          <menu-head selected="selected" title="Character Tools"></menu-head>
+          <menu-head selected="selected" title="Community"></menu-head>
+        </ul>
+        <form role="search" class="navbar-form navbar-right">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search the database">
+          </div>
+          <button type="submit" class="btn btn-default">Go</button>
+        </form>
+      </nav>
+      <!-- SUB MENU -->
+      <nav id="secondary-nav">
+        <menu-sub selected="selected" title="Database">Database Menu</menu-sub>
+        <menu-sub selected="selected" title="Auction House">Auction House Menu</menu-sub>
+        <menu-sub selected="selected" title="Character Tools">Character Tools Menu</menu-sub>
+        <menu-sub selected="selected" title="Community">Community Menu</menu-sub>
+      </nav>
+    </div>
+    <!-- MAIN CONTENT AND SIDE PANEL -->
+    <div class="row" id="main-container">
+      <div class="col-xs-9" id="main-content">
+        <div class="row">
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Character Tools</a></li>
+            <li class="active">Reputation</li>
+          </ol>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <ng-view></ng-view>
+            Main Content
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-3" id="sub-content">
+        <div class="row">
+          <div class="col-xs-12" id="side-nav">
+            <!-- SUB CONTENT AREA -->
+            Sub Content
+            <div id="skyscraper" class="center-block">Skyscraper</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SITE MAP AND FOOTER PANEL -->
+    <div class="row" id="footer-container">
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-sm-3">
+            Database
+          </div>
+          <div class="col-sm-3">
+            Character Tools
+          </div>
+          <div class="col-sm-3">
+            Guild Portal
+          </div>
+          <div class="col-sm-3">
+            Forum
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">
+            Auction House
+          </div>
+          <div class="col-sm-3">
+            Game Guides
+          </div>
+          <div class="col-sm-3">
+            Community
+          </div>
+          <div class="col-sm-3">
+            Social
+          </div>
+        </div>
+        <div class="row">
+          <div class="footer text-center">
+          <!-- FOOTER INFO -->
+          Copyright, About, Privacy Policy
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -452,6 +452,7 @@ ul.nav.navbar-nav li a {
   width: 160px;
   height: 600px;
   background-color: #ccc;
+  margin: 10px auto;
 }
 
 /* FOOTER */

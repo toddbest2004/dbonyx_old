@@ -345,3 +345,11 @@ $locationProvider.html5Mode(true)
 	$scope.watchlists=[]
 	
 }])
+.directive('sidebar', [function(){
+	return {
+		restrict: 'E',
+		replace: true,
+		transclude: true,
+		templateUrl: 'app/templates/sidebar.html'
+	}
+}])

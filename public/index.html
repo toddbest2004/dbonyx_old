@@ -57,30 +57,12 @@
   </div>
   <!-- MAIN NAVIGATION PANEL -->
   <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-    <div class="row" id="nav-container" ng-controller="MenuCtrl">
-      <!-- MAIN MENU -->
-      <nav id="primary-nav">
-        <ul class="nav nav-tabs navbar-left">
-          <menu-head selected="selected" title="Database"></menu-head>
-          <menu-head selected="selected" title="Auction House"></menu-head>
-          <menu-head selected="selected" title="Character Tools"></menu-head>
-          <menu-head selected="selected" title="Community"></menu-head>
-        </ul>
-        <form role="search" class="navbar-form navbar-right">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search the database">
-          </div>
-          <button type="submit" class="btn btn-default">Go</button>
-        </form>
-      </nav>
-      <!-- SUB MENU -->
-      <nav id="secondary-nav">
-        <menu-sub selected="selected" title="Database">Database Menu</menu-sub>
-        <menu-sub selected="selected" title="Auction House">Auction House Menu</menu-sub>
-        <menu-sub selected="selected" title="Character Tools">Character Tools Menu</menu-sub>
-        <menu-sub selected="selected" title="Community">Community Menu</menu-sub>
-      </nav>
-    </div>
+    <menu-bar>
+      <menu title="Database"><img src="/images/logo.png" style="width:32px;height:32px;">Databse Links</menu>
+      <menu title="Auction House">Auction House Links</menu>
+      <menu title="Character Tools">Character Tools</menu>
+      <menu title="Community">Community</menu>
+    </menu-bar>
     <!-- MAIN CONTENT AND SIDE PANEL -->
     <div class="row" id="main-container">
       <div class="col-xs-9" id="main-content">

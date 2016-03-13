@@ -1,11 +1,11 @@
 <div ng-controller="characterMain">
+<div class="row">
+<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
 <div class="row" ng-if="!character.loading">
 <h1>{{character.name}}</h1>
 <h3>&lt;{{character.guildName}}&gt;</h3>
 <h5>Level {{character.level}}</h5>
 </div>
-<div class="row">
-<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
 <div class="row" ng-repeat="rep in character.reputation" style="margin:3px;">
 <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">{{rep.name}}:</div>
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9 center">
@@ -15,7 +15,7 @@
 </div>
 </div>
 </div>
-<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">
+<sidebar>
 <ul>
 <li><a href="/character/main">Profile</a></li>
 <li><a href="/character/reputation">Reputation</a></li>
@@ -25,6 +25,6 @@
 <li><a href="/character/professions">Professions</a></li>
 <li><a href="/character/pvp">PvP</a></li>
 </ul>
-</div>
+</sidebar>
 </div>
 </div>

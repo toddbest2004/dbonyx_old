@@ -114,6 +114,7 @@ $locationProvider.html5Mode(true)
 .controller('userCtrl', ['onyxUser','$scope','$http','$location',function(onyxUser,$scope,$http,$location){
 	$scope.user=onyxUser
 	$scope.register=false
+	$scope.login = {}
 	$scope.showRegister=function(){
 		$scope.register=!$scope.register
 		// console.log($scope.register)
@@ -123,7 +124,7 @@ $locationProvider.html5Mode(true)
 		$http({
 			method: 'POST',
 			url: '/api/user/login',
-			data: {email:$scope.email,password:$scope.password}
+			data: {email:$scope.login.email,password:$scope.login.password}
 		}).then(function success(response){
 			// console.log($scope.user)
 			$scope.user.username=response.data.username
@@ -351,5 +352,13 @@ $locationProvider.html5Mode(true)
 		replace: true,
 		transclude: true,
 		templateUrl: 'app/templates/sidebar.html'
+	}
+}])
+.directive('mainContent', [function(){
+	return {
+		restrict: 'E',
+		replace: true,
+		transclude: true,
+		templateUrl: 'app/templates/mainContent.html'
 	}
 }])

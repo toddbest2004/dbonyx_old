@@ -46,7 +46,8 @@ angular.module('MenuCtrls', [])
 		restrict: 'E',
 		transclude: true,
 		scope: {
-			title: '@'
+			title: '@',
+			link: '@'
 		},
 		link: function(scope, element, attrs, menuCtrl) {
 			console.log(menuCtrl)

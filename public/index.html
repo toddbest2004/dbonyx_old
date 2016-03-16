@@ -27,16 +27,16 @@
 </head>
 <body>
   <!-- BRAND NAVIGATION AND USER PANEL -->
-  <div class="col-xs-12">
+  <div class="col-xs-12" ng-controller='userCtrl'>
     <div class="row">
       <nav role="navigation" class="navbar navbar-default" id="brand-nav">
         <div class="container-fluid" id="proprietary-bar">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">ONYX GAMING</a>
+            <a class="navbar-brand" href="/">ONYX GAMING</a>
           </div>
-          <ul class="nav navbar-nav navbar-right" ng-controller='userCtrl'>
+          <ul class="nav navbar-nav navbar-right">
             <li ng-if="user.loggedin">
-              <a>{{user.username}} <b class="caret"></b></a>
+              <div ng-click="toggleUserPanel()">{{user.username}} <b class="caret"></b></div>
             </li>
             <li ng-if="!user.loggedin">
               <form ng-submit="login()">
@@ -49,7 +49,7 @@
         </div>
       </nav>
     </div>
-    <div class="row">
+    <div class="row" ng-show="showUserPanel">
       <div id="user-panel">
         <!-- Logged in user panel and stats -->
         User Panel

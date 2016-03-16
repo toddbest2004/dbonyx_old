@@ -115,6 +115,7 @@ $locationProvider.html5Mode(true)
 	$scope.user=onyxUser
 	$scope.register=false
 	$scope.login = {}
+	$scope.showUserPanel=false
 	$scope.showRegister=function(){
 		$scope.register=!$scope.register
 		// console.log($scope.register)
@@ -160,6 +161,9 @@ $locationProvider.html5Mode(true)
 		},function error(response){
 			//TODO: handle logout error
 		})
+	}
+	$scope.toggleUserPanel = function(){
+		$scope.showUserPanel = !$scope.showUserPanel
 	}
 }])
 .controller('characterCtrl', ['onyxPersistence', 'onyxCharacter', '$scope', '$http', '$location', '$routeParams', function(onyxPersistence, onyxCharacter, $scope, $http, $location, $routeParams) {

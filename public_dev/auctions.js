@@ -125,7 +125,22 @@ angular.module('AuctionCtrls', [])
 		$scope.silver = Math.floor(($scope.price%10000)/100)
 		$scope.copper = $scope.price%100
 		$scope.submit = function(){
-			// alert("asdf") 
+			var price = parseInt($scope.copper+$scope.silver*100+$scope.gold*10000)
+			$http({
+				method: 'POST',
+				url: '/api/watchlist',
+				data: {
+					price: price,
+					item: $scope.item._id,
+					min: $scope.minQuantity,
+					max: $scope.maxQuantity,
+					realm: $scope.realmInput
+				} 
+			}).then(function success(response){
+				console.log(response.data)
+			}, function error(response){
+				console.log(response.data)
+			}) 
 		}
 	}]
 	return {
@@ -134,7 +149,8 @@ angular.module('AuctionCtrls', [])
 		scope:{
 			item:"=",
 			price: "@",
-			showWatchlist: "=" 
+			showWatchlist: "=",
+			realmInput: "=" 
 		},
 		templateUrl: 'app/templates/watchlist.html'
 	}

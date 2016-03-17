@@ -9,6 +9,7 @@ var watchlistSchema = new Schema({
 	maxBuyout: Number,
 	maxBuyoutPerItem: Number,
 	minQuantity: Number,
+	maxQuantity: Number,
 	isActive: Boolean,
 	status: Number,
 	isPet: Boolean,

@@ -2,8 +2,8 @@ angular.module('AuctionCtrls', [])
 .controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', function($scope, $http, $location, $routeParams, onyxPersistence) {
 	$scope.searchTerm=''
 	$scope.realmInput=onyxPersistence.getRealm()
-	$scope.filters=[]
-	$scope.qualities=[]
+	$scope.filters={}
+	$scope.filters.qualities=[]
 	$scope.realms=[]
 	$scope.hoverIndex=''
 	$scope.totalPages=0
@@ -57,7 +57,7 @@ angular.module('AuctionCtrls', [])
 		$scope.search()
 	}
 	$scope.clearQualityFilter=function(){
-		$scope.qualities=[]
+		$scope.filters.qualities=[]
 		$scope.firstPage()
 	}
 	$scope.search=function(e){
@@ -65,10 +65,12 @@ angular.module('AuctionCtrls', [])
 			e.preventDefault()
 		}
 		$scope.loading=true
+		console.log("______")
+		console.log($scope.filters) 
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
-			params: {filters:$scope.filters,qualities:$scope.qualities,searchTerm:$scope.searchTerm,realm:$scope.realmInput,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
+			params: {filters:$scope.filters,qualities:$scope.filters.qualities,searchTerm:$scope.searchTerm,realm:$scope.realmInput,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
 		}).then(function success(response){
 			$scope.loading=false
 			$scope.auctionResults=response.data

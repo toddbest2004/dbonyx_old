@@ -46,6 +46,7 @@ html, body {
   height: 32px; }
 
 .itemLink {
+  font-family: 'Aldrich';
   font-size: 1.2em;
   font-weight: bold; }
 
@@ -119,8 +120,11 @@ html, body {
 	font-size:1.2em;
 	text-align:center;
 }
+#auctionItem{
+  width:100%;
+}
 .auctionMoney{
-  min-width: 160px;
+  min-width: 130px;
 }
 .auctionIcons{
   min-width: 70px;
@@ -329,7 +333,7 @@ html, body {
 body {
   font-family: 'Maven Pro';
   font-size: 14px;
-  text-align: justify;
+  /*text-align: justify;*/
 }
 
 /* TOP BAR */
@@ -355,14 +359,14 @@ body {
 /* MAIN NAVIGATION */
 
 #nav-container {
-  background-color: silver;
+  background-color: #aaa;
 }
 
 #secondary-nav {
   top: 40px;
   width: 100%;
   position: absolute;
-  background-color: red;
+  background-color: #777;
   z-index: 1;
 }
 

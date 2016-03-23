@@ -6,7 +6,7 @@
 <h3>&lt;{{character.guildName}}&gt;</h3>
 <h5>Level {{character.level}}</h5>
 </div>
-<div>
+<div id="characterProfileDiv">
 <img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
 <div ng-repeat="(key, item) in character.items" ng-if="item.icon" class="profileItemDiv profileItem{{key}}">
 <a href="/item/{{item.id}}"><img src="/images/icons/{{item.icon}}.png" class="profileItemImg borderQuality{{item.quality}}"></a>

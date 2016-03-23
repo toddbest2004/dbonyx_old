@@ -234,6 +234,9 @@ html, body {
 
 .itemLevel {
   color: gold; }
+#characterProfileDiv{
+  position:relative;
+}
 .reputationBarBack{
   position:absolute;
   float:left;

@@ -6,7 +6,7 @@
 <watchlist-form ng-show="showWatchlist" show-watchlist="showWatchlist" item="auction.item" price="{{auction.buyout}}" realm-input="realmInput"></watchlist-form>
 </div>
 <div class="auctionResultCell">
-<a href="/item/{{auction.item.itemId}}" class="itemLink itemQuality{{auction.item.quality}}"><img src="/images/icons/{{auction.item.icon}}.png" class="icon">{{auction.item.name}}</a>
+<item-link item="auction.item" quantity="{{auction.quantity}}"></item-link>
 </div>
 <div class="auctionResultCell center">{{auction.item.itemLevel}}</div>
 <!-- <div class="auctionResultCell">{{auction.owner}}</div> -->

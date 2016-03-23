@@ -36,9 +36,19 @@ angular.module('ItemCtrls', [])
 		templateUrl: 'app/templates/itemDisplay.html'
 	}
 })
-.directive('itemLink', ['$scope', function($scope){
-
+.directive('itemLink', [function(){
+	var controller = ['$scope',function($scope){
+		if($scope.quantity&&parseInt($scope.quantity)!==1){
+			$scope.showQuantity=true
+		}
+	}]
 	return {
+		controller: controller,
+		scope: {
+			item: '=',
+			quantity: '@'
+		},
+		replace: true,
 		templateUrl: 'app/templates/itemLink.html'
 	}
 }])

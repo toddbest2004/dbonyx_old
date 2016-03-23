@@ -50,9 +50,23 @@ html, body {
   height: 32px; }
 
 .itemLink {
-  font-family: 'Aldrich';
+  display: inline-block;
+  /*font-family: 'Aldrich';*/
   font-size: 1.2em;
   font-weight: bold; }
+.itemQuantity{
+  background-color: black;
+  color:white;
+  font-size:0.6em;
+  position:absolute;
+  padding:0 1px;
+  bottom:0;
+  right:0;
+}
+.itemLinkImage{
+  position:relative;
+  display:inline-block;
+}
 
 .itemQuality0, a.itemQuality0 {
   color: #9D9D9D; }

@@ -65,8 +65,6 @@ angular.module('AuctionCtrls', [])
 			e.preventDefault()
 		}
 		$scope.loading=true
-		console.log("______")
-		console.log($scope.filters) 
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',

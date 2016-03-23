@@ -15,8 +15,7 @@
 		<div id="auctionIntro" ng-if="!auctionResults">Select a realm to get started</div>
 		</div>
 		<div id="auctionNav" ng-if="auctionResults">
-		<div>page:{{auctionPage}} max:{{auctionResults.count}} limit:{{limit}}
-		{{low}}-{{high}} of {{auctionResults.count}}
+		<div>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}
 		<div>
 		<div class="pagination" ng-click="firstPage()"><span class="glyphicon glyphicon-step-backward"></span></div>
 		<div class="pagination" ng-click="backPage()"><span class="glyphicon glyphicon-chevron-left"></span></div>

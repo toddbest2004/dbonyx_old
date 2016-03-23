@@ -39,10 +39,11 @@
               <div ng-click="toggleUserPanel()">{{user.username}} <b class="caret"></b></div>
             </li>
             <li ng-if="!user.loggedin">
-              <form ng-submit="login()">
+              <form>
                 <input ng-model="login.email" placeholder="Email Address">
                 <input ng-model="login.password" type="password" placeholder="Password">
-                <input type="submit" value="Log In">
+                <input type="submit" value="Log In" ng-click="login()">
+                <button ng-click="showRegister()">Register</button>
               </form>
             </li>
           </ul>
@@ -55,6 +56,7 @@
         User Panel
       </div>
     </div>
+    <user-register-form ng-show="showRegisterForm"></user-register-form>
   </div>
   <!-- LEADERBOARD -->
   <div class="col-xs-12">

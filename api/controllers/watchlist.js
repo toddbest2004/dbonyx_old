@@ -16,16 +16,15 @@ router.get("/", function(req,res){
 
 //add route
 router.post("/", function(req,res){
-	console.log(req.body)
 	var query = req.body
 	if(!req.user){
 		res.status(403).json({error:"You must be logged in."})
 		return
 	}
-	// if(!req.user.isEmailValidated){
-	// 	res.status(403).json({error:"You must authenticate your email before you can create a watchlist."})
-	// 	return
-	// }
+	if(!req.user.isEmailValidated){
+		res.status(403).json({error:"You must authenticate your email before you can create a watchlist."})
+		return
+	}
 	var itemId
 	if(!query.item||!(itemId=parseInt(query.item))){
 		res.status(400).json({error:"Improper query string supplied."})

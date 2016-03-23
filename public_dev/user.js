@@ -30,11 +30,12 @@ angular.module('UserCtrls', [])
 }])
 .controller('userCtrl', ['onyxUser','$scope','$http','$location',function(onyxUser,$scope,$http,$location){
 	$scope.user=onyxUser
-	$scope.register=false
+	$scope.showRegisterForm=false
 	$scope.login = {}
 	$scope.showUserPanel=false
+	// $scope.showRegisterForm=false
 	$scope.showRegister=function(){
-		$scope.register=!$scope.register
+		$scope.showRegisterForm=!$scope.showRegisterForm
 		// console.log($scope.register)
 	}
 	$scope.login=function(){
@@ -52,20 +53,6 @@ angular.module('UserCtrls', [])
 			//TODO: Hanlde login error
 		})
 	}
-	$scope.register=function(){
-		$http({
-			method: 'POST',
-			url: '/api/user/register',
-			data: {username:$scope.username,email:$scope.email,password1:$scope.password1,password2:$scope.password2}
-		}).then(function success(response){
-			$scope.user.username=''
-			$scope.user.email=''
-			$scope.user.loggedin=false
-			$location.url('/')
-		},function error(response){
-			//TODO: handle register error
-		})
-	}
 	$scope.logout=function(){
 		$http({
 			method: 'POST',
@@ -81,5 +68,32 @@ angular.module('UserCtrls', [])
 	}
 	$scope.toggleUserPanel = function(){
 		$scope.showUserPanel = !$scope.showUserPanel
+	}
+}])
+.directive('userRegisterForm', [function(){
+	var controller = ['$scope','$http', '$location',function($scope,$http,$location){
+		$scope.register=function(){
+			$http({
+				method: 'POST',
+				url: '/api/user/register',
+				data: {username:$scope.username,email:$scope.email,password1:$scope.password1,password2:$scope.password2}
+			}).then(function success(response){
+				$scope.user.username=''
+				$scope.user.email=''
+				$scope.user.loggedin=false
+				$scope.showRegister()
+				//TODO: Show Register Success!
+			},function error(response){
+				console.log(response.data)
+				//TODO: handle register error
+			})
+		}
+	}]
+
+	return {
+		controller: controller,
+		restrict: 'E',
+		replace: true,
+		templateUrl: 'app/templates/userRegisterForm.html' 
 	}
 }])

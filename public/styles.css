@@ -19,7 +19,11 @@ html, body {
     vertical-align: top; }
     .navbar .navbar-nav li {
       font-weight: bold; }
-
+.registerForm{
+  width: 500px;
+  margin: 0 0 0 auto;
+  z-index: 1;
+}
 .money {
   display:inline-block;
 }

@@ -36,3 +36,9 @@ angular.module('ItemCtrls', [])
 		templateUrl: 'app/templates/itemDisplay.html'
 	}
 })
+.directive('itemLink', ['$scope', function($scope){
+
+	return {
+		templateUrl: 'app/templates/itemLink.html'
+	}
+}])

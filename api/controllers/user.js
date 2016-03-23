@@ -37,6 +37,7 @@ router.post("/logout", function(req, res){
 })
 
 router.post("/register", function(req, res){
+	console.log(req.body)
 	if(!req.body.username||!req.body.email||!req.body.password1||!req.body.password2){
 		res.status(401).json({error:"Missing one or more requried fields"})
 		return
@@ -70,6 +71,7 @@ router.post("/register", function(req, res){
 				password:req.body.password1,
 				emailValidation:validationString
 			},function(err, newUser){
+				console.log("User Created")
 				if(err||!newUser){
 					res.status(401).json({error:"There was an error creating the account."})
 					return

@@ -57,7 +57,7 @@ function findItem(id, context){
 		if(!error && response.statusCode===200){
 			itemQueue.push({body:body}, function(){console.log("item: done.")})
 		}else{
-			console.log(response.statusCode)
+			console.log(id, response.statusCode)
 		}
 	})	
 }

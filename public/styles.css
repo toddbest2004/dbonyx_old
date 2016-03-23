@@ -50,7 +50,7 @@ html, body {
   height: 32px; }
 .itemIcon{
   border-width: 2px;
-  border-radius: 2px;
+  border-radius: 4px;
   border-style: solid;
 }
 

@@ -143,30 +143,35 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 function bulkImport(auctionData, slug, region, touch, callback){
 	auctionLog("Initializing bulk op. "+(new Date()-start))
 	var bulkImport = db.auction.collection.initializeUnorderedBulkOp()
-	for(var i=0; i<auctionData.auctions.length;i++){
-		var temp = auctionData.auctions[i]
-		temp._id = temp.auc
-		
-		temp.bidPerItem = Math.round(temp.bid/temp.quantity)
-		temp.buyoutPerItem = Math.round(temp.buyout/temp.quantity)
-		temp.slugName = slug
-		temp.region = region
-		temp.touch = touch;
-		temp.startTime = temp.timeLeft
-		// temp.$setOnInsert={firstbid:temp.bid}
-		// delete temp.auc
-		// delete temp.ownerRealm
-		auctionData.auctions[i] = temp
-		// auctionLog(temp._id)
-		bulkImport.insert(temp)//find({_id:temp._id}).upsert().updateOne(temp)
+	if(auctionData&&auctionData.auctions&&auctionData.auctions.length){
+		for(var i=0; i<auctionData.auctions.length;i++){
+			var temp = auctionData.auctions[i]
+			temp._id = temp.auc
+			
+			temp.bidPerItem = Math.round(temp.bid/temp.quantity)
+			temp.buyoutPerItem = Math.round(temp.buyout/temp.quantity)
+			temp.slugName = slug
+			temp.region = region
+			temp.touch = touch;
+			temp.startTime = temp.timeLeft
+			// temp.$setOnInsert={firstbid:temp.bid}
+			// delete temp.auc
+			// delete temp.ownerRealm
+			auctionData.auctions[i] = temp
+			// auctionLog(temp._id)
+			bulkImport.insert(temp)//find({_id:temp._id}).upsert().updateOne(temp)
+		}
+		auctionLog(auctionData.auctions.length+" operations queued.")
+		auctionLog(slug+": starting bluk import "+(new Date()-start))
+		bulkImport.execute(function(err, data){
+			// callback()
+			removeOldAuctions(slug, region, touch, callback)
+			// updateAuctionHistory(slug,region,touch,callback)
+		})
+	}else{
+		auctionLog("No Auctions Found!")
+		callback()
 	}
-	auctionLog(auctionData.auctions.length+" operations queued.")
-	auctionLog(slug+": starting bluk import "+(new Date()-start))
-	bulkImport.execute(function(err, data){
-		// callback()
-		removeOldAuctions(slug, region, touch, callback)
-		// updateAuctionHistory(slug,region,touch,callback)
-	})
 }
 
 function updateAuctionHistory(slug, region, touch, callback){

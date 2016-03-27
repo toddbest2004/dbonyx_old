@@ -69,7 +69,7 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				auctionLog(slug+": up to date.")
 			}
 		}else{
-			auctionLog(response.statusCode)
+			auctionLog(response.statusCode||"No status code: "+slug)
 		}
 	});
 }

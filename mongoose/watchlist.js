@@ -2,8 +2,8 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var watchlistSchema = new Schema({
-	user: {type: Schema.Types.ObjectId, ref: 'User'},
-	item: {type: Number, ref: 'Item'},
+	user: {type: Schema.Types.ObjectId, ref: 'onyxUser'},
+	item: {type: Number, ref: 'item'},
 	region: String,
 	slug: String,
 	maxBuyout: Number,

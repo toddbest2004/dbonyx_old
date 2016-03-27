@@ -2,6 +2,7 @@ var fs = require("fs");
 var request = require("request");
 var db = require('./mongoose');
 var async = require('async')
+var transporter = require('./config/email.js')
 var auctionlimit = process.env.AUCTION_LIMIT || 10 //this one limits how many auctions we'll load per run
 
 var start = new Date()

@@ -1,89 +1,145 @@
 angular.module('AuctionCtrls', [])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', function($scope, $http, $location, $routeParams, onyxPersistence) {
-	$scope.searchTerm=''
-	$scope.realmInput=onyxPersistence.getRealm()
-	$scope.filters={}
-	$scope.filters.qualities=[]
-	$scope.realms=[]
-	$scope.hoverIndex=''
-	$scope.totalPages=0
-	$scope.auctionPage=1
-	$scope.currentPage=1
-	$scope.auctionLimit=25
-
-	$scope.updatePages=function(){
-		$scope.backPages = []
-		$scope.nextPages = []
-		$scope.totalPages = Math.ceil($scope.auctionResults.count/$scope.auctionLimit)
-		$scope.low = ($scope.auctionPage-1)*$scope.auctionLimit
-		$scope.high = $scope.low+$scope.auctionResults.auctions.length
-		for(var i=$scope.auctionPage-5;i<$scope.auctionPage;i++){
-			if(i>0){
-				$scope.backPages.push(i)
-			}
-		}
-		for(var i=$scope.auctionPage+1;i<=$scope.auctionPage+5;i++){
-			if(i<=$scope.totalPages){
-				$scope.nextPages.push(i)
-			}
-		}
-		$scope.currentPage=$scope.auctionPage
+.factory('auctionService', ['$http',function($http){
+	var auction = {
+		searchTerm: '',
+		realmInput: '',
+		filters: {qualities:[]},
+		resultPages: 0,
+		currentPage: 1,
+		resultHigh:0,
+		resultLow:0,
+		limit: 25,
+		loading: false,
+		auctionResults: []
 	}
-	$scope.updatePage = function(page){
+	auction.setSearchTerm = function(term){
+		auction.searchTerm = term
+	}
+	auction.setRealm = function(realm){
+		auction.realmInput = realm
+	}
+	auction.search = function(callback){
+		if(!auction.realmInput){
+			//cb false
+			return
+		}
+		$http({
+			method: 'GET',
+			url: '/api/auction/fetchauctions',
+			params: {
+				filters:auction.filters,
+				searchTerm:auction.searchTerm,
+				realm:auction.realmInput,
+				offset:(auction.currentPage-1)*auction.limit,
+				limit:auction.limit
+			}
+		}).then(function success(response){
+			auction.loading=false
+			auction.auctionResults=response.data
+			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)
+			auction.resultLow = (auction.currentPage-1)*auction.auctionLimit
+			auction.resultHigh = auction.resultLow+auction.auctionResults.auctions.length 
+			// $scope.updatePages()
+			callback(true)
+		}, function error(response){
+			auction.loading=false
+			// console.log(response)
+			callback(false)
+		})
+	}
+	auction.updatePage = function(page){
 		page=parseInt(page)
-		if(page>$scope.totalPages){
-			page=$scope.totalPages
+		if(page>auction.resultPages){
+			page=auction.resultPages
 		}
 		if(page<1){
 			page=1
 		}
-		$scope.auctionPage=page
+		auction.currentPage=page
+	}
+	auction.firstPage = function(){
+		auction.updatePage(1)
+	}
+	auction.backPage = function(){
+		auction.updatePage(auction.currentPage-1)
+	}
+	auction.nextPage = function(){
+		auction.updatePage(auction.currentPage+1)
+	}
+	auction.lastPage = function(){
+		auction.updatePage(auction.resultPages)
+	}
+
+	return auction
+}])
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService',function($scope, $http, $location, $routeParams, onyxPersistence, auctionService) {
+	$scope.searchTerm=''
+	$scope.realmInput=onyxPersistence.getRealm()
+	$scope.realms=[]
+	$scope.auctionResults = auctionService.auctionResults
+	$scope.loading=false
+	$scope.filters=auctionService.filters
+	// $scope.hoverIndex=''
+
+	$scope.updatePages=function(){
+		$scope.backPages = []
+		$scope.nextPages = []
+		$scope.low = auctionService.resultLow
+		$scope.high = auctionService.resultHigh
+		for(var i = auctionService.currentPage-5;i<auctionService.currentPage;i++){
+			if(i>0){
+				$scope.backPages.push(i)
+			}
+		}
+		for(var i=auctionService.currentPage+1;i<=auctionService.currentPage+5;i++){
+			if(i<=auctionService.resultPages){
+				$scope.nextPages.push(i)
+			}
+		}
+		$scope.currentPage=auctionService.currentPage
+	}
+	$scope.updatePage = function(page){
+		auctionService.updatePage(page)
 		$scope.search()
 	}
 	$scope.firstPage = function(){
-		$scope.updatePage(1)
+		auctionService.firstPage()
+		$scope.search()
 	}
 	$scope.nextPage = function(){
-		$scope.updatePage($scope.auctionPage+1)
+		auctionService.nextPage()
+		$scope.search()
 	}
 	$scope.backPage = function(){
-		$scope.updatePage($scope.auctionPage-1)
+		auctionService.backPage()
+		$scope.search()
 	}
 	$scope.lastPage = function(){
-		$scope.updatePage($scope.totalPages)
-	}
-	$scope.changePage=function(page){
-		$scope.auctionPage=parseInt(page)
+		auctionService.lastPage()
 		$scope.search()
 	}
 	$scope.clearQualityFilter=function(){
 		$scope.filters.qualities=[]
 		$scope.firstPage()
 	}
+	var auctionUpdate = function(success){
+		$scope.loading = false
+		$scope.auctionResults = auctionService.auctionResults
+		$scope.updatePages()
+	}
+	// $scope.selectRealm
 	$scope.search=function(e){
 		if(e){
 			e.preventDefault()
 		}
 		$scope.loading=true
-		$http({
-			method: 'GET',
-			url: '/api/auction/fetchauctions',
-			params: {filters:$scope.filters,qualities:$scope.filters.qualities,searchTerm:$scope.searchTerm,realm:$scope.realmInput,offset:($scope.auctionPage-1)*$scope.auctionLimit,limit:$scope.auctionLimit}
-		}).then(function success(response){
-			$scope.loading=false
-			$scope.auctionResults=response.data
-			$scope.updatePages()
-		}, function error(response){
-			$scope.loading=false
-			console.log(response)
-		})
+		// $scope.updatePages()
+		auctionService.filters=$scope.filters
+		auctionService.setSearchTerm($scope.searchTerm)
+		auctionService.setRealm($scope.realmInput)
+		auctionService.search(auctionUpdate)
 	}
-	$scope.init=function(){
-		if($scope.realmInput){
-			$scope.firstPage()
-		}
-	}
-	$scope.init()
+	$scope.search()
 }]).directive('selectOnFocus', ['$window', function ($window) {
     return {
         restrict: 'A',
@@ -97,12 +153,12 @@ angular.module('AuctionCtrls', [])
         }
     };
 }]).directive('auctionResult', function(){
-	var controller = ['$scope', function($scope){
-	}]
+	// var controller = ['$scope', function($scope){
+	// }]
 	return {
 		restrict: 'E',
 		replace: true,
-		controller: controller,
+		// controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
 	} 
 }).directive('watchlistForm', function(){

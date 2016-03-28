@@ -6,7 +6,6 @@ var LocalStrategy = require('passport-local').Strategy
 var transporter = require('../../config/email.js')
 
 router.post("/getUser", function(req, res){
-	console.log(req.user)
 	if(req.user){
 		res.json({username:req.user.username})
 		return

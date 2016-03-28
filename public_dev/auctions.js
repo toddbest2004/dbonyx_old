@@ -107,7 +107,8 @@ angular.module('AuctionCtrls', [])
 	} 
 }).directive('watchlistForm', function(){
 	//expects $scope.item to be an instance of Item
-	var controller = ['$scope', '$http', function($scope, $http){
+	var controller = ['$scope', '$http', 'onyxUser', function($scope, $http, onyxUser){
+		$scope.user = onyxUser
 		$scope.minQuantity=1
 		if($scope.item){
 			$scope.maxQuantity = $scope.item.stackable||9999

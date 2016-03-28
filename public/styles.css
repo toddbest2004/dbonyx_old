@@ -175,6 +175,7 @@ html, body {
   background-color: #858585;
   position:absolute;
   z-index:1;
+  padding:0 30px;
 }
 .right{
   text-align: right;
@@ -182,8 +183,14 @@ html, body {
 .center{
   text-align: center;
 }
+.input-caret{
+  position:absolute;
+  top:12px;
+  right:6px;
+}
 .autocomplete-group{
 	display:inline-block;
+  position: relative;
 }
 .autocomplete-dropdown{
 	position:absolute;
@@ -493,4 +500,8 @@ ul.nav.navbar-nav li a {
 
 #footer-container {
   background-color: #777;
+}
+
+.warning{
+  color: red;
 }

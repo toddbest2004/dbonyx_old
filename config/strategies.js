@@ -6,9 +6,7 @@ module.exports = {
 	  usernameField: 'email'
 	},
 	function(email, password, done) {
-    console.log(email)
 	  db.onyxUser.findOne({email: email}).exec(function(err, user) {
-      console.log('asdf')
   		if (!err&&user) {
   		  user.comparePassword(password, function(err, result) {
     			if (err) return done(err)

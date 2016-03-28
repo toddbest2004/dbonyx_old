@@ -50,7 +50,7 @@ angular.module('MenuCtrls', [])
 			link: '@'
 		},
 		link: function(scope, element, attrs, menuCtrl) {
-			console.log(menuCtrl)
+			// console.log(menuCtrl)
 			menuCtrl.addMenu(scope);
 			element.on('mouseover', function(){
 				menuCtrl.select(scope)

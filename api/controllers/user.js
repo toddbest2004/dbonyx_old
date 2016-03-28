@@ -5,9 +5,9 @@ var passport = require("passport")
 var LocalStrategy = require('passport-local').Strategy
 var transporter = require('../../config/email.js')
 
-router.get("/getUser", function(req, res){
-	if(req.session.username&&req.session.email){
-		res.json({username:req.session.username,email:req.session.email})
+router.post("/getUser", function(req, res){
+	if(req.user){
+		res.json({username:req.user.username})
 		return
 	}
 	res.status(401).json({error:"User not logged in."})
@@ -15,7 +15,6 @@ router.get("/getUser", function(req, res){
 })
 
 router.post("/login", function(req, res){
-	console.log(req.body)
 	passport.authenticate('local', function(err, user, info) {
 		if (user) {
 	  		req.login(user, function(err) {
@@ -37,7 +36,6 @@ router.post("/logout", function(req, res){
 })
 
 router.post("/register", function(req, res){
-	console.log(req.body)
 	if(!req.body.username||!req.body.email||!req.body.password1||!req.body.password2){
 		res.status(401).json({error:"Missing one or more requried fields"})
 		return

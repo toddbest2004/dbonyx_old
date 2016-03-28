@@ -2,14 +2,12 @@ angular.module('UserCtrls', [])
 .factory('onyxUser', ['$http',function($http){
 	var user = {loggedin:false}
 	$http({
-		method: 'GET',
+		method: 'POST',
 		url: '/api/user/getUser'
 	}).then(function success(response){
 		user.username=response.data.username
-		user.email=response.data.email
 		user.loggedin=true
 	},function error(response){
-		// console.log(response)
 	})
 
 	return user

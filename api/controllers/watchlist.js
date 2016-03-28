@@ -9,7 +9,7 @@ router.get("/", function(req,res){
 		return
 	}
 	db.watchlist.find({user:req.user._id}).exec(function(err, watchlists){
-		console.log(watchlists)
+		// console.log(watchlists)
 	})
 	res.json({test:'test'})
 })

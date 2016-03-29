@@ -4,6 +4,8 @@ angular.module('AuctionCtrls', [])
 		searchTerm: '',
 		realmInput: '',
 		filters: {qualities:[]},
+		sortBy: 'buyout',
+		sortOrder: -1,
 		resultPages: 0,
 		currentPage: 1,
 		resultHigh:0,
@@ -31,7 +33,9 @@ angular.module('AuctionCtrls', [])
 				searchTerm:auction.searchTerm,
 				realm:auction.realmInput,
 				offset:(auction.currentPage-1)*auction.limit,
-				limit:auction.limit
+				limit:auction.limit,
+				sortBy:auction.sortBy,
+				sortOrder:auction.sortOrder
 			}
 		}).then(function success(response){
 			auction.loading=false

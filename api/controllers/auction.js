@@ -13,6 +13,11 @@ router.get("/fetchauctions", function(req, res){
 	var searchTerm=''
 	var qualities=[]
 	var filters={}
+	var sort={}
+	if(query.sortBy&&query.sortOrder){
+		console.log(query.sortBy, query.sortOrder)
+		sort[query.sortBy]=parseInt(query.sortOrder)
+	}
 	if(query.filters&&query.filters.length>0){
 		query.filters=JSON.parse(query.filters)
 		console.log(query.filters)
@@ -96,10 +101,10 @@ router.get("/fetchauctions", function(req, res){
 				var itemIds = items.map(function(item){
 					return item._id
 				})
-				auctionQuery(res, region, slugName, limit, offset, itemIds)
+				auctionQuery(res, region, slugName, limit, offset, sort, itemIds)
 			})
 		}else{
-			auctionQuery(res, region, slugName, limit, offset, [])
+			auctionQuery(res, region, slugName, limit, offset, sort, [])
 		}
 	})
 })
@@ -125,10 +130,9 @@ function parseFilters(filters){
 	return parsedFilters
 }
 
-function auctionQuery(res, region, slugName, limit, offset, filteredItems){
+function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems){
 		var auctionQuery = db.auction.find({region:region,slugName:slugName})
-		//query.populate('item', )
-		auctionQuery.populate('item').skip(offset).limit(limit)
+		auctionQuery.populate({path:'item'}).skip(offset).sort(sort).limit(limit)
 		if(filteredItems.length>0){
 			auctionQuery.where('item').in(filteredItems)
 		}

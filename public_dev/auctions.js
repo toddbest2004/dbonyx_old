@@ -41,7 +41,7 @@ angular.module('AuctionCtrls', [])
 			auction.loading=false
 			auction.auctionResults=response.data
 			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)
-			auction.resultLow = (auction.currentPage-1)*auction.auctionLimit
+			auction.resultLow = (auction.currentPage-1)*auction.limit
 			auction.resultHigh = auction.resultLow+auction.auctionResults.auctions.length 
 			// $scope.updatePages()
 			callback(true)

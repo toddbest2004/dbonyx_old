@@ -4,14 +4,16 @@
 <ul class="item">
 <li class="itemTitle itemQuality{{item.quality}}">{{item.name}}</li>
 <li class="itemLevel">Item Level: {{item.itemLevel}}</li>
-<li>Item Bind:{{item.itemBind}}</li>
-<li>Slot:{{inventoryType()}}</li>
+<li ng-if="item.itemBind">{{item.itemBind}}</li>
+<li ng-if="item.equippable">{{item.inventoryType}}</li>
 <li ng-if="item.armor">{{item.armor}} Armor</li>
-<li ng-if="item.weaponInfo">Weapon Info:{{item.weaponInfo}}</li>
-<li ng-repeat="stat in item.bonusStats">{{stat}}</li>
+<li ng-if="item.weaponInfo.weaponSpeed" class="float-right">Speed {{item.weaponInfo.weaponSpeed}}</li>
+<li ng-if="item.weaponInfo">{{item.weaponInfo.damage.min}} - {{item.weaponInfo.damage.max}} Damage</li>
+<li ng-if="item.weaponInfo">({{item.weaponInfo.dps}} Damage Per Second)</li>
+<li class="{{stat.class}}" ng-repeat="stat in item.stats track by $index">{{stat.name}}: {{stat.amount}}</li>
 <li ng-if="item.maxDurability">Durability: {{item.maxDurability}}/{{item.maxDurability}}</li>
-<li>Cost: <money amount="item.buyPrice"></money></li>
-<li>Requires Level {{item.requiredLevel}}</li>
+
+<li ng-if="item.requiredLevel">Requires Level {{item.requiredLevel}}</li>
 <li>Sells For: <money amount="item.sellPrice"></money></li>
 </ul>
 {{item}}

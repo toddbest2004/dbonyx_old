@@ -229,13 +229,15 @@ html, body {
   border: 1px solid #565940;
   border-radius: 8px;
   background: #444444;
-  font-size: .8em; }
+  font-size: .8em;
+  min-width: 200px; }
   .item li {
     list-style-type: none; }
 
 .itemTitle {
   font-size: 1.5em; }
-
+.itemSecondaryProperty {
+  color: white; }
 .itemSecondaryProperty {
   color: #1EFF00; }
 
@@ -504,4 +506,7 @@ ul.nav.navbar-nav li a {
 
 .warning{
   color: red;
+}
+.float-right{
+  float:right;
 }

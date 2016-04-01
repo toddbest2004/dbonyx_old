@@ -3,6 +3,7 @@
 <img src="/images/icons/{{item.icon}}.png" class="icon">
 <ul class="item">
 <li class="itemTitle itemQuality{{item.quality}}">{{item.name}}</li>
+<li class="itemNameDescription" style="color:#{{item.nameDescriptionColor}};" ng-if="item.nameDescription">{{item.nameDescription}}</li>
 <li class="itemLevel">Item Level: {{item.itemLevel}}</li>
 <li ng-if="item.itemBind">{{item.itemBind}}</li>
 <li ng-if="item.equippable">{{item.inventoryType}}</li>
@@ -10,10 +11,33 @@
 <li ng-if="item.weaponInfo.weaponSpeed" class="float-right">Speed {{item.weaponInfo.weaponSpeed}}</li>
 <li ng-if="item.weaponInfo">{{item.weaponInfo.damage.min}} - {{item.weaponInfo.damage.max}} Damage</li>
 <li ng-if="item.weaponInfo">({{item.weaponInfo.dps}} Damage Per Second)</li>
-<li class="{{stat.class}}" ng-repeat="stat in item.stats track by $index">{{stat.name}}: {{stat.amount}}</li>
-<li ng-if="item.maxDurability">Durability: {{item.maxDurability}}/{{item.maxDurability}}</li>
+<li class="{{stat.class}}" ng-repeat="stat in item.stats|orderBy: 'order'">+ {{stat.amount}} {{stat.name}}</li>
 
+<li ng-if="item.socketInfo">
+	<ul>
+	<li>&nbsp;</li>
+	<li class="itemEmptySocket" ng-repeat="socket in item.socketInfo.sockets">{{socket.type}}</li>
+	</ul>
+</li>
+<li class="itemEmptySocket" ng-if="item.socketInfo.socketBonus">Socket Bonus: {{item.socketInfo.socketBonus}}</li>
+
+<li>&nbsp;</li>
+<li ng-if="item.maxDurability">Durability: {{item.maxDurability}}/{{item.maxDurability}}</li> 
+<!-- <li ng-if="item.allowableClasses">Classes: [list classes]</li> -->
 <li ng-if="item.requiredLevel">Requires Level {{item.requiredLevel}}</li>
+
+<li ng-if="!item.itemSet">
+	
+	<li>&nbsp;</li>
+	<li class="itemSetName">Set Name (equipped/total)</li>
+	<li class="itemActiveItemSet">[list items in set (active)]</li>
+	<li class="itemInactiveItemSet">[list items in set (inactive)]</li>
+	<li>&nbsp;</li>
+	<li class="itemActiveItemSet">[item set bonuses]</li>
+	<li class="itemInactiveItemSet">[item set bonuses]</li>
+
+</li>
+
 <li>Sells For: <money amount="item.sellPrice"></money></li>
 </ul>
 {{item}}

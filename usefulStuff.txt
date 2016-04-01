@@ -1,0 +1,4 @@
+Useful mongo commands for testing purposes:
+
+//Shows all item bonus stat ids
+db.items.aggregate([{$unwind:"$bonusStats"},{$group:{_id:null,stats:{$addToSet:"$bonusStats.stat"}}}])

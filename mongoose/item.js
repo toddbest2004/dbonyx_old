@@ -1,6 +1,8 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
+//lacking itemSet, itemSpells, allowableClasses
+
 var itemSchema = new Schema({
 	_id: Number,
 	itemId: Number,

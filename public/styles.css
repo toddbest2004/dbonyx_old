@@ -236,13 +236,27 @@ html, body {
 
 .itemTitle {
   font-size: 1.5em; }
-.itemSecondaryProperty {
+.itemUnusedProperty {
+  color: grey;
+}
+.itemPrimaryProperty {
   color: white; }
 .itemSecondaryProperty {
   color: #1EFF00; }
-
+.itemEmptySocket{
+  color: grey;
+}
+.itemSetName{
+  color: gold;
+}
 .itemLevel {
   color: gold; }
+.itemActiveItemSet{
+  color: #1EFF00; 
+}
+.itemInactiveItemSet{
+  color: grey;
+}
 #characterProfileDiv{
   position:relative;
 }

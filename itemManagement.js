@@ -5,7 +5,7 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 80
+var increment = 20
 
 console.log(process.argv[2])
 
@@ -38,7 +38,7 @@ function startImport(start){
 }
 
 function setTimer(){
-	intervalId = setInterval(function(){findItems()}, 1100)
+	intervalId = setInterval(function(){findItems()}, 1500)
 }
 
 function findItems(){

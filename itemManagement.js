@@ -15,17 +15,20 @@ var json = ["id","disenchantingSkillRank","description","name","icon","stackable
 var json2 = ["bonusStats", "itemSpells", "itemSource", "bonusLists", "availableContexts", "bonusSummary", "weaponInfo", "socketInfo", "requiredAbility", "allowableClasses", "allowableRaces"]
 var reported = [];
 
-// findItems()
+// startImport()
+findItem(60410)
 
-db.item.findOne({}).sort({itemId:-1}).exec(function(err, count){
-	// console.log(count)
-	startCount=0
-	if(count){
-		startCount = count.itemId
-	}
-	myCount = startCount
-	setTimer()
-})
+function startImport(){
+	db.item.findOne({}).sort({itemId:-1}).exec(function(err, count){
+		// console.log(count)
+		startCount=0
+		if(count){
+			startCount = count.itemId
+		}
+		myCount = startCount
+		setTimer()
+	})
+}
 
 function setTimer(){
 	intervalId = setInterval(function(){findItems()}, 1100)
@@ -114,9 +117,9 @@ function insertItem(body, callback){
 						// console.log(item.socketInfo.sockets[i])
 					}
 				}
-				if(item.itemSet){
-					item.itemSet = item.itemSet.id	
-				}
+				// if(item.itemSet){
+				// 	item.itemSet = item.itemSet.id	
+				// }
 				if(item.availableContexts && item.availableContexts !== "" && item.availableContexts.length>0){
 					//TODO: Handle multiple contexts
 				}

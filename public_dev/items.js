@@ -24,8 +24,7 @@ angular.module('ItemCtrls', [])
 	$scope.id = $routeParams.id
 }]).directive('itemDisplay', function(){
 	var controller = ['$scope', 'itemService',function($scope, itemService){
-		$scope.inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun']
-	
+		// $scope.inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun']
 		
 		$scope.getItem = function(){
 			$scope.item="Loading"
@@ -36,9 +35,9 @@ angular.module('ItemCtrls', [])
 			})
 		}
 		$scope.getItem()
-	$scope.inventoryType=function(){
-		return $scope.inventoryTypes[parseInt($scope.item.inventoryType)]
-	}
+	// $scope.inventoryType=function(){
+	// 	return $scope.inventoryTypes[parseInt($scope.item.inventoryType)]
+	// }
 	}]
 	return {
 		controller: controller,

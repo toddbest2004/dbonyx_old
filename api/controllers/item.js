@@ -9,7 +9,7 @@ router.get("/pretty/:id", function(req, res){
 		res.status(400).send({error:"Invalid id."})
 		return
 	}
-	db.item.findOne({_id:id}).lean().exec(function(err, item){
+	db.item.findOne({_id:id}).populate('itemSet.items').lean().exec(function(err, item){
 		if(err){
 			res.status(400).send({error:"Invalid id."})
 			return
@@ -75,7 +75,16 @@ function prettify(item){
 		item.weaponInfo.weaponSpeed = item.weaponInfo.weaponSpeed.toFixed(2)
 		item.weaponInfo.dps = item.weaponInfo.dps.toFixed(2)
 	}
-	// console.log(item)
+
+	//itemSets
+	if(item.itemSet){
+		item.itemSet.equipped=2
+		for(var i=0; i<item.itemSet.items.length;i++){
+			//TODO: test against equipped modifiers
+			item.itemSet.items[i].equipped=false
+		}
+	}
+	// console.log(item.itemSet)
 
 	return item
 }

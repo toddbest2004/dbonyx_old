@@ -44,6 +44,7 @@ var itemSchema = new Schema({
 	context: String,
 	bonusLists: [],
 	avalableContexts: [String],
+	itemSet: {id:Number, name: String, items:[{type: Number, ref: 'item'}], setBonuses:[{description:String,threshold:Number}]},
 	bonusSummary: {defaultBonusLists:[], chancebonusLists:[Number], 
 		bonusChances:[{chanceType:String,
 			upgrade:{upgradeType:String,name:String,id:Number},

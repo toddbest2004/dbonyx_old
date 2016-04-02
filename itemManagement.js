@@ -7,6 +7,8 @@ var myCount = 0
 var intervalId = 0
 var increment = 80
 
+console.log(process.argv[2])
+
 var itemQueue = async.queue(function(task, callback){
 	insertItem(task.body, callback)
 })
@@ -15,7 +17,7 @@ var json = ["id","disenchantingSkillRank","description","name","icon","stackable
 var json2 = ["bonusStats", "itemSpells", "itemSource", "bonusLists", "availableContexts", "bonusSummary", "weaponInfo", "socketInfo", "requiredAbility", "allowableClasses", "allowableRaces"]
 var reported = [];
 
-startImport(1)
+startImport(parseInt(process.argv[2])||null)
 // findItem(929)
 
 function startImport(start){

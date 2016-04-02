@@ -2,3 +2,8 @@ Useful mongo commands for testing purposes:
 
 //Shows all item bonus stat ids
 db.items.aggregate([{$unwind:"$bonusStats"},{$group:{_id:null,stats:{$addToSet:"$bonusStats.stat"}}}])
+
+//show all itemSpell triggers
+db.items.aggregate([{$unwind:"$itemSpells"},{$group:{_id:null,triggers:{$addToSet:"$itemSpells.trigger"}}}])
+
+db.items.aggregate([{$unwind:"$itemSpells"},{$group:{_id:null,categories:{$addToSet:"$itemSpells.categoryId"}}}])

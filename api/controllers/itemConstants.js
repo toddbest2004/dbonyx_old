@@ -52,4 +52,12 @@ itemConstants.bonusStats = {
 	56: {name: 'Arcane Resistance', class: 1},
 	57: {name: 'PvP Power', class: 2}
 }
+
+itemConstants.itemSpellTriggers = {
+	ON_PROC:"Chance On Hit",
+	ON_EQUIP:"Equip:",
+	ON_USE:"Use:",
+	ON_PICKUP:"",
+	ON_LEARN:""
+}
 module.exports = itemConstants

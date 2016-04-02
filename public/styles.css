@@ -239,9 +239,9 @@ html, body {
 .itemUnusedProperty {
   color: grey;
 }
-.itemPrimaryProperty {
+.itemPrimaryProperty, .white{
   color: white; }
-.itemSecondaryProperty {
+.itemSecondaryProperty, .itemSpell {
   color: #1EFF00; }
 .itemEmptySocket{
   color: grey;
@@ -251,10 +251,10 @@ html, body {
 }
 .itemLevel {
   color: gold; }
-.itemActiveItemSet{
+.itemActiveItemSet, .itemActiveItemSet a{
   color: #1EFF00; 
 }
-.itemInactiveItemSet{
+.itemInactiveItemSet, .itemInactiveItemSet a{
   color: grey;
 }
 #characterProfileDiv{

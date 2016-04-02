@@ -6,34 +6,36 @@
 <li class="itemNameDescription" style="color:#{{item.nameDescriptionColor}};" ng-if="item.nameDescription">{{item.nameDescription}}</li>
 <li class="itemLevel">Item Level: {{item.itemLevel}}</li>
 <li ng-if="item.itemBind">{{item.itemBind}}</li>
-<li ng-if="item.equippable">{{item.inventoryType}}</li>
+<li ng-if="item.equippable&&item.itemClass!='Container'">{{item.inventoryType}}</li>
+<li ng-if="item.itemClass==='Container'">{{item.containerSlots}} Slot {{item.itemSubClass}}</li>
 <li ng-if="item.armor">{{item.armor}} Armor</li>
 <li ng-if="item.weaponInfo.weaponSpeed" class="float-right">Speed {{item.weaponInfo.weaponSpeed}}</li>
 <li ng-if="item.weaponInfo">{{item.weaponInfo.damage.min}} - {{item.weaponInfo.damage.max}} Damage</li>
 <li ng-if="item.weaponInfo">({{item.weaponInfo.dps}} Damage Per Second)</li>
 <li class="{{stat.class}}" ng-repeat="stat in item.stats|orderBy: 'order'">+ {{stat.amount}} {{stat.name}}</li>
 
-<li ng-if="item.socketInfo">
-	<ul>
-	<li>&nbsp;</li>
-	<li class="itemEmptySocket" ng-repeat="socket in item.socketInfo.sockets">{{socket.type}}</li>
-	</ul>
-</li>
-<li class="itemEmptySocket" ng-if="item.socketInfo.socketBonus">Socket Bonus: {{item.socketInfo.socketBonus}}</li>
 
+<ul ng-if="item.hasSockets">
 <li>&nbsp;</li>
+<li class="itemEmptySocket" ng-repeat="socket in item.socketInfo.sockets">{{socket.type}}</li>
+</ul>
+<li class="itemEmptySocket" ng-if="item.socketInfo.socketBonus">Socket Bonus: {{item.socketInfo.socketBonus}}</li>
+<li ng-if="item.hasSockets">&nbsp;</li>
+
 <li ng-if="item.maxDurability">Durability: {{item.maxDurability}}/{{item.maxDurability}}</li> 
 <!-- <li ng-if="item.allowableClasses">Classes: [list classes]</li> -->
+<!-- Spells-->
+<li ng-repeat="spell in item.itemSpells" class="itemSpell">{{spell.trigger}} {{spell.spell.description}} <span ng-if="spell.spell.cooldown">({{spell.spell.cooldown}})</span>
+<div ng-if="spell.nCharges>1" class="white">{{spell.nCharges}} Charges</div>
+</li>
+
 <li ng-if="item.requiredLevel">Requires Level {{item.requiredLevel}}</li>
 
-<li ng-if="item.itemSet">
-	
-	<li>&nbsp;</li>
-	<li class="itemSetName">{{item.itemSet.name}} ({{item.itemSet.equipped}}/{{item.itemSet.items.length}})</li>
-	<li ng-repeat="setItem in item.itemSet.items" ng-class="{itemActiveItemSet:setItem.equipped,itemInactiveItemSet:!setItem.equipped}">{{setItem.name}}</li>
-	<li>&nbsp;</li>
-	<li ng-repeat="bonus in item.itemSet.setBonuses|orderBy:bonus.threshold" ng-class="{itemActiveItemSet:bonus.threshold<=item.itemSet.equipped,itemInactiveItemSet:bonus.threshold>item.itemSet.equipped}">({{bonus.threshold}}) {{bonus.description}}</li>
-</li>
+<li ng-if="item.itemSet.items.length">&nbsp;</li>
+<li ng-if="item.itemSet.items.length" class="itemSetName">{{item.itemSet.name}} ({{item.itemSet.equipped}}/{{item.itemSet.items.length}})</li>
+<li ng-if="item.itemSet.items.length" ng-repeat="setItem in item.itemSet.items" ng-class="{itemActiveItemSet:setItem.equipped,itemInactiveItemSet:!setItem.equipped}"><a href="/item/{{setItem.itemId}}">{{setItem.name}}</a></li>
+<li ng-if="item.itemSet.items.length">&nbsp;</li>
+<li ng-repeat="bonus in item.itemSet.setBonuses|orderBy:bonus.threshold" ng-class="{itemActiveItemSet:bonus.threshold<=item.itemSet.equipped,itemInactiveItemSet:bonus.threshold>item.itemSet.equipped}">({{bonus.threshold}}) {{bonus.description}}</li>
 
 <li>Sells For: <money amount="item.sellPrice"></money></li>
 </ul>

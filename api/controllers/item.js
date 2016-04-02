@@ -78,10 +78,17 @@ function prettify(item){
 
 	//itemSets
 	if(item.itemSet){
-		item.itemSet.equipped=2
+		item.itemSet.equipped=0
 		for(var i=0; i<item.itemSet.items.length;i++){
 			//TODO: test against equipped modifiers
 			item.itemSet.items[i].equipped=false
+		}
+	}
+
+	if(item.itemSpells){
+		for(var i=0; i<item.itemSpells.length;i++){
+			var spell=item.itemSpells[i]
+			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger]
 		}
 	}
 	// console.log(item.itemSet)

@@ -50,8 +50,30 @@ var itemSchema = new Schema({
 			upgrade:{upgradeType:String,name:String,id:Number},
 			stats:[{statid:String,delta:Number}],
 			sockets:[{socketType:String}]
-		}]}
+		}]},
+	itemSpells:[{}]
 })
 
 var item = mongoose.model('item', itemSchema)
 module.exports = item
+
+
+// "itemSpells":[
+// {"spellId":441,"spell":{"id":441,"name":"Healing Potion",
+// 	"icon":"inv_potion_51",
+// 	"description":"Restores 300 health.",
+// 	"castTime":"Instant",
+// 	"cooldown":"1 min cooldown"},
+// "nCharges":1,
+// "consumable":true,
+// "categoryId":30,
+// "trigger":"ON_USE"}]
+
+// "spell":{"id":138894,"name":"Item - Proc Haste",
+// 	"icon":"inv_jewelry_trinket_10",
+// 	"description":"Your attacks have a chance to grant you ^0.5190 haste for 10 sec.  This effect can stack up to 5 times.  (Approximately 3.50 procs per minute)",
+// 	"castTime":"Passive"},
+// 	"nCharges":0,
+// 	"consumable":false,
+// 	"categoryId":0,
+// 	"trigger":"ON_EQUIP"}]

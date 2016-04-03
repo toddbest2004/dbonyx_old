@@ -88,7 +88,11 @@ function prettify(item){
 	if(item.itemSpells){
 		for(var i=0; i<item.itemSpells.length;i++){
 			var spell=item.itemSpells[i]
+			if(spell.spell.description===''&&spell.trigger=="ON_USE"){
+				spell.spell.description=item.description
+			}
 			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger]
+
 		}
 	}
 	// console.log(item.itemSet)

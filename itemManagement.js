@@ -22,6 +22,7 @@ startImport(parseInt(process.argv[2])||null)
 
 function startImport(start){
 	if(start){
+		startCount = start
 		myCount = start
 		setTimer()
 	}else{	

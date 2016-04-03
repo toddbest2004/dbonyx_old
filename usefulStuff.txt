@@ -1,3 +1,25 @@
+Re-add the following to menubar.html in templates
+ ng-mouseover="select(menu)" ng-mouseleave="off(menu)"
+
+
+Footer Second Row
+    <div class="row">
+      <div class="col-sm-3">
+        <!-- Guild Portal -->
+      </div>
+      <div class="col-sm-3">
+        <!-- Forums -->
+      </div>
+      <div class="col-sm-3">
+        <!-- Game Guides -->
+      </div>
+
+      <div class="col-sm-3">
+        <!-- Social -->
+      </div>
+    </div>
+
+
 Useful mongo commands for testing purposes:
 
 //Shows all item bonus stat ids

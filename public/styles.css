@@ -5,6 +5,10 @@ body {
 html, body {
   height: 100%; }
 
+a, a:hover, a:visited, a:active{
+  color: #00010D;
+}
+
 .container {
   position: relative;
   height: auto !important;

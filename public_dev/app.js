@@ -286,4 +286,4 @@ $locationProvider.html5Mode(true)
 	return {
 		templateUrl: 'app/templates/footer.html'
 	}
-}])
+}]) 

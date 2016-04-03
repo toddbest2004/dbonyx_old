@@ -2,7 +2,7 @@
   <!-- MAIN MENU -->
   <nav id="primary-nav">
     <ul class="nav nav-tabs navbar-left">
-      <li ng-repeat="menu in menus" ng-mouseover="select(menu)" ng-mouseleave="off(menu)"><a href="{{menu.link}}">{{menu.title}} <b class="caret"></b></a></li>
+      <li ng-repeat="menu in menus"><a href="{{menu.link}}">{{menu.title}} <b class="caret"></b></a></li>
     </ul>
     <form role="search" class="navbar-form navbar-right">
       <div class="form-group">

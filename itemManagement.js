@@ -5,7 +5,9 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 80
+var increment = 20
+
+console.log(process.argv[2])
 
 var itemQueue = async.queue(function(task, callback){
 	insertItem(task.body, callback)
@@ -15,11 +17,12 @@ var json = ["id","disenchantingSkillRank","description","name","icon","stackable
 var json2 = ["bonusStats", "itemSpells", "itemSource", "bonusLists", "availableContexts", "bonusSummary", "weaponInfo", "socketInfo", "requiredAbility", "allowableClasses", "allowableRaces"]
 var reported = [];
 
-startImport(1)
+startImport(parseInt(process.argv[2])||null)
 // findItem(929)
 
 function startImport(start){
 	if(start){
+		startCount = start
 		myCount = start
 		setTimer()
 	}else{	
@@ -36,7 +39,7 @@ function startImport(start){
 }
 
 function setTimer(){
-	intervalId = setInterval(function(){findItems()}, 1100)
+	intervalId = setInterval(function(){findItems()}, 1500)
 }
 
 function findItems(){
@@ -65,7 +68,8 @@ function findItem(id, context){
 		if(!error && response.statusCode===200){
 			itemQueue.push({body:body}, function(){console.log("item: done.")})
 		}else{
-			console.log(id, response.statusCode)
+			if(response.statusCode!=404)
+				console.log(id, body)
 		}
 	})	
 }

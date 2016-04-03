@@ -282,3 +282,8 @@ $locationProvider.html5Mode(true)
 		templateUrl: 'app/templates/mainContent.html'
 	}
 }])
+.directive('onyxFooter', [function(){
+	return {
+		templateUrl: 'app/templates/footer.html'
+	}
+}])

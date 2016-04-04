@@ -1,9 +1,8 @@
-var fs = require("fs");
 var request = require("request");
 var db = require('./mongoose');
 var async = require('async')
 var transporter = require('./config/email.js')
-var auctionlimit = process.env.AUCTION_LIMIT || 10 //this one limits how many auctions we'll load per run
+var auctionlimit = 10//process.env.AUCTION_LIMIT || 10 //this one limits how many auctions we'll load per run
 
 var start = new Date()
 
@@ -102,8 +101,8 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 
 function bulkImport(auctionData, slug, region, touch, callback){
 	auctionLog("Initializing bulk op. "+(new Date()-start))
-	var bulkImport = db.auction.collection.initializeUnorderedBulkOp()
 	if(auctionData&&auctionData.auctions&&auctionData.auctions.length){
+		var bulkImport = db.auction.collection.initializeUnorderedBulkOp()
 		for(var i=0; i<auctionData.auctions.length;i++){
 			var temp = auctionData.auctions[i]
 			temp._id = temp.auc
@@ -124,9 +123,7 @@ function bulkImport(auctionData, slug, region, touch, callback){
 		auctionLog(auctionData.auctions.length+" operations queued.")
 		auctionLog(slug+": starting bluk import "+(new Date()-start))
 		bulkImport.execute(function(err, data){
-			// callback()
-			removeOldAuctions(slug, region, touch, callback)
-			// updateAuctionHistory(slug,region,touch,callback)
+			countSold(slug, region, touch, callback)
 		})
 	}else{
 		auctionLog("No Auctions Found!")
@@ -134,42 +131,48 @@ function bulkImport(auctionData, slug, region, touch, callback){
 	}
 }
 
-function updateAuctionHistory(slug, region, touch, callback){
-	var curDate = new Date()
-	var dateString = curDate.getFullYear()+'-'+curDate.getMonth()+'-'+curDate.getDate()
-
-	var bulkInsert = db.auctionhistory.collection.initializeUnorderedBulkOp()
-
-	db.auction.find({region:region,slugName:slug,touch:{$lt:touch}}, function(err, oldAuctions){
-		//note, cannot insert the auctionDirectly or an error will be thrown, must create a json object
-		if(err||!oldAuctions||oldAuctions.length===0){
-			removeOldAuctions(slug, region, touch, callback)
-			return
-		}
-		for(var i=0;i<oldAuctions.length;i++){
-			var expired=0
-			var sold=0
-			var sellingPrice=0
-			if(oldAuctions[i].timeLeft==='VERY_SHORT'){
-				//does not yet check for bid items
-				// if(oldAuctions[i].firstbid===oldAuctions[i].bid){
-					expired=oldAuctions[i].quantity
-				// }else{
-				// 	sold=oldAuctions[i].quantity
-				// }
-			}else{
-				sold=oldAuctions[i].quantity
+//Rough draft of auction histories
+//Currently assumes any auction listed as "SHORT" is expired
+//All other auctions are considered 'sold'
+//Does not check time between imports, so if it misses an hour
+//will cause some errors in reporting sold/expired items.
+function countSold(slug, region, touch, callback){
+	db.auction.aggregate().match({slugName:slug,region:region,timeLeft:{$ne:'SHORT'},touch:{$lt:touch}}).group({_id:'$item', totalItemCount:{'$sum':'$quantity'},totalPrice:{'$sum':'$buyout'}, auctionCount:{'$sum':1}}).exec(function(err, data){
+		if(err||!data||!data.length){
+			auctionLog('No sold auctions found.')
+			countExpired(slug, region, touch, callback)
+		}else{
+			var bulkHistory = db.auctionhistory.collection.initializeUnorderedBulkOp()
+			for(var i=0;i<data.length;i++){
+				bulkHistory.find({slugName:slug,region:region,item:data[i]._id, date:new Date(start.getFullYear(), start.getMonth(), start.getDate())}).upsert().updateOne({
+					'$inc':{sold:data[i].totalItemCount, sellingPrice:data[i].totalPrice}
+				});
 			}
-			bulkInsert.find({slugName:slug,region:region,item:oldAuctions[i].item,date:dateString}).upsert().updateOne({
-				$inc:{listed:oldAuctions[i].quantity,sold:sold,expired:expired,sellingPrice:sellingPrice}
+			auctionLog('Updating selling details of '+data.length+' items')
+			bulkHistory.execute(function(err, historyData){
+				countExpired(slug, region, touch, callback)
 			})
 		}
-		bulkInsert.execute(function(err,docs){
-			if(err)
-				auctionLog(err)
-			auctionLog("Auction history completed in: "+(new Date()-start))
+	})
+}
+
+function countExpired(slug, region, touch, callback){
+	db.auction.aggregate().match({slugName:slug,region:region,timeLeft:'SHORT',touch:{$lt:touch}}).group({_id:'$item', totalItemCount:{'$sum':'$quantity'},totalPrice:{'$sum':'$buyout'}, auctionCount:{'$sum':1}}).exec(function(err, data){
+		if(err||!data||!data.length){
+			auctionLog('No expired auctions found.')
 			removeOldAuctions(slug, region, touch, callback)
-		})
+		}else{
+			var bulkHistory = db.auctionhistory.collection.initializeUnorderedBulkOp()
+			for(var i=0;i<data.length;i++){
+				bulkHistory.find({slugName:slug,region:region,item:data[i]._id, date:new Date(start.getFullYear(), start.getMonth(), start.getDate())}).upsert().updateOne({
+					'$inc':{expired:data[i].totalItemCount}
+				});
+			}
+			auctionLog('Updating expiration details of '+data.length+' items')
+			bulkHistory.execute(function(err, historyData){
+				removeOldAuctions(slug, region, touch, callback)
+			})
+		}
 	})
 }
 

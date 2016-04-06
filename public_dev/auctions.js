@@ -196,9 +196,9 @@ angular.module('AuctionCtrls', [])
 					realm: $scope.realmInput
 				} 
 			}).then(function success(response){
-				console.log(response.data)
+				// console.log(response.data)
 			}, function error(response){
-				console.log(response.data)
+				// console.log(response.data)
 			}) 
 		}
 	}]
@@ -274,7 +274,68 @@ angular.module('AuctionCtrls', [])
 		templateUrl: 'app/templates/money.html',
 		controller: moneyCtrl
 	}
-})
+}).directive('auctionHistory', function(){
+	//expects $scope.item to be an instance of Item
+	var controller = ['$scope', 'auctionHistory',function($scope, auctionHistory){
+		if($scope.item){
+			auctionHistory.search($scope.item._id,$scope.realmInput,function(err, data){
+				if(err||!data){
+					//TODO: handle Error
+					return err
+				}
+				$scope.aucHistoryLoading=false
+				$scope.histories=data.histories
+				$scope.count=$scope.histories.length
+				$scope.barwidth=Math.floor(480/$scope.count)
+				$scope.barheight=280
+				$scope.width=$scope.barwidth*$scope.count
+				for(var i=0;i<$scope.histories.length;i++){
+					var averagePrice = parseInt($scope.histories[i].sellingPrice/$scope.histories[i].sold)
+					$scope.histories[i].y=280-($scope.barheight*averagePrice/data.max)
+				}
+			})
+		}
+		$scope.aucHistoryLoading=true
+
+		$scope.hoverIn = function(index){
+			$scope.histories[index].selected=true
+		}
+		$scope.hoverOut = function(index){
+			$scope.histories[index].selected=false
+		}
+	}]
+	return {
+		restrict: 'E',
+		controller: controller,
+		scope:{
+			item:"=",  
+			showAuctionHistory: "=",
+			realmInput: "=" 
+		},
+		templateUrl: 'app/templates/auctionHistory.html'
+	}
+}).factory('auctionHistory',['$http',function($http){
+	var history = {}
+	history.search = function(item, realmInput, cb){
+		$http({
+			method: 'GET',
+			url: '/api/auction/auctionHistory',
+			params: {
+				item:item,
+				realm: realmInput
+			}
+		}).then(function success(response){
+			cb(null,response.data)
+		}, function error(response){
+			cb(response.data,null)
+		})
+	}
+	return history
+}])
+
+
+
+
 // // .directive('pagination', function(){
 // // 	var controller = ['$scope', function($scope){
 // // 		$scope.backPages = []

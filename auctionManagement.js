@@ -38,7 +38,7 @@ setTimeout(load_auction_data, 1000)
 function load_auction_data(){
 	db.realm.find({isMasterSlug:true}, null, {sort:{auctiontouch:1}}).then(function(realms){
 		for(var i=0; i<auctionlimit;i++){			
-			var slug = realms[i].slug
+			var slug = 'kelthuzad'//realms[i].slug
 			var region = realms[i].region
 			var touch = realms[i].auctiontouch
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API

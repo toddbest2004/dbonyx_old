@@ -8,6 +8,14 @@ var router = express.Router();
 
 var db = require("../../mongoose");
 
+var realmArray ={}
+
+db.realm.find({}).populate('masterSlug').exec(function(err, realms){
+	realms.forEach(function(realm){
+		realmArray[realm.name.toLowerCase()]=realm.masterSlug.slug	
+	})
+})
+
 router.get("/fetchauctions", function(req, res){
 	var query = req.query
 	var searchTerm=''
@@ -106,6 +114,37 @@ router.get("/fetchauctions", function(req, res){
 		}else{
 			auctionQuery(res, region, slugName, limit, offset, sort, [])
 		}
+	})
+})
+
+router.get("/auctionHistory", function(req, res){
+	var query = req.query
+	// console.log(req.query.realm)
+	if(!query.item){
+		res.status(400).json({error:"Improper query string supplied."})
+		return
+	}
+	if(!query.realm||typeof(query.realm)!=='string'){
+		res.status(400).json({error:"Improper query string supplied."})
+		return
+	}
+	var realmSplit = query.realm.split('-')
+	if(realmSplit.length!==2){
+		res.status(400).json({error:"Improper query string supplied."})
+		return
+	}
+	var item = parseInt(query.item)
+	var region = realmSplit[1].toLowerCase()
+	var realmName = realmSplit[0].toLowerCase()
+	var masterSlug = realmArray[realmName]
+	db.auctionhistory.find({slugName:masterSlug,region:region,item:item}).exec(function(err, data){
+		if(err) return res.json({error:"Error executing query."})
+		var min=9999999999999999,max=0
+		for(var i=0;i<data.length;i++){
+			min = Math.min(min, parseInt(data[i].sellingPrice/data[i].sold))
+			max = Math.max(max, parseInt(data[i].sellingPrice/data[i].sold))
+		}
+		res.json({min:min,max:max,histories:data})
 	})
 })
 

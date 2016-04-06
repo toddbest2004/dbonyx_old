@@ -175,11 +175,20 @@ a, a:hover, a:visited, a:active{
 #auctionNav{
   text-align:right;
 }
-.watchlistForm{
+.watchlistForm, .auctionHistory{
   background-color: #858585;
   position:absolute;
   z-index:1;
-  padding:0 30px;
+  padding:10px 30px;
+}
+.auctionHistory{
+  width: 540px;
+}
+.auctionHistoryBar{
+  fill:white;
+}
+.auctionHistoryBarSelected{
+  fill:#ddd;
 }
 .right{
   text-align: right;

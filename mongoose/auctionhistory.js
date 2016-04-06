@@ -4,14 +4,15 @@ var Schema = mongoose.Schema
 var auctionhistorySchema = new Schema({
 	_id: Number,
 	item: {type: Number, ref: 'item'},
+	slugName: String,
+	region: String,
+	histories: {},
 	listed: Number,
 	sold: Number,
 	expired: Number,
 	sellingPrice: Number,
 	date: Date,
 	slug: {type: Schema.Types.ObjectId, ref: 'Realm'},
-	slugName: String,
-	region: String,
 	context: Number
 })
 

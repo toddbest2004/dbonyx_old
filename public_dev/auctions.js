@@ -157,12 +157,15 @@ angular.module('AuctionCtrls', [])
         }
     };
 }]).directive('auctionResult', function(){
-	// var controller = ['$scope', function($scope){
-	// }]
+	var controller = ['$scope', function($scope){
+		$scope.toggleHistory = function(){
+			$scope.showAuctionHistory=!$scope.showAuctionHistory
+		}
+	}]
 	return {
 		restrict: 'E',
 		replace: true,
-		// controller: controller,
+		controller: controller,
 		templateUrl: 'app/templates/auctionResult.html'
 	} 
 }).directive('watchlistForm', function(){
@@ -279,11 +282,11 @@ angular.module('AuctionCtrls', [])
 	var controller = ['$scope', 'auctionHistory',function($scope, auctionHistory){
 		if($scope.item){
 			auctionHistory.search($scope.item._id,$scope.realmInput,function(err, data){
+				$scope.aucHistoryLoading=false
 				if(err||!data){
 					//TODO: handle Error
 					return err
 				}
-				$scope.aucHistoryLoading=false
 				$scope.histories=data.histories
 				$scope.count=$scope.histories.length
 				$scope.barwidth=Math.floor(480/$scope.count)
@@ -291,14 +294,21 @@ angular.module('AuctionCtrls', [])
 				$scope.width=$scope.barwidth*$scope.count
 				for(var i=0;i<$scope.histories.length;i++){
 					var averagePrice = parseInt($scope.histories[i].sellingPrice/$scope.histories[i].sold)
-					$scope.histories[i].y=280-($scope.barheight*averagePrice/data.max)
+					$scope.histories[i].x=$scope.barwidth*i
+					$scope.histories[i].y=25+$scope.barheight-($scope.barheight*averagePrice/data.max)
+					$scope.histories[i].averagePrice = (Math.floor(averagePrice/10000))+'g'+(Math.floor(averagePrice%10000/100))+'s'+(averagePrice%100)+'c'
+					$scope.histories[i].texty = $scope.histories[i].y-10
+					$scope.histories[i].textx = $scope.histories[i].x+$scope.barwidth*.5
+					if($scope.histories[i].textx>($scope.width*.5)){
+						$scope.histories[i].textx-=($scope.histories[i].averagePrice.length*7)
+					} 
 				}
 			})
 		}
 		$scope.aucHistoryLoading=true
 
 		$scope.hoverIn = function(index){
-			$scope.histories[index].selected=true
+			$scope.histories[index].selected=true 
 		}
 		$scope.hoverOut = function(index){
 			$scope.histories[index].selected=false
@@ -309,7 +319,7 @@ angular.module('AuctionCtrls', [])
 		controller: controller,
 		scope:{
 			item:"=",  
-			showAuctionHistory: "=",
+			showAuctionHistory: "&",
 			realmInput: "=" 
 		},
 		templateUrl: 'app/templates/auctionHistory.html'

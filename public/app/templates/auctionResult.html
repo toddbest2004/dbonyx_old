@@ -2,9 +2,9 @@
 <!-- <div class="auctionResultCell center">{{auction.quantity}}</div> -->
 <div class="auctionResultCell">
 <span class="glyphicon glyphicon-stats historyGraph" ng-click="showAuctionHistory=!showAuctionHistory"></span>
-<span class="glyphicon glyphicon-eye-open watchAuction" ng-click="showWatchlist=!showWatchlist"></span>
+<span class="glyphicon glyphicon-eye-open watchAuction" ng-click="toggleHistory()"></span>
 <watchlist-form ng-show="showWatchlist" show-watchlist="showWatchlist" item="auction.item" price="{{auction.buyout}}" realm-input="realmInput"></watchlist-form>
-<auction-history ng-show="showAuctionHistory" show-auction-history="showAuctionHistory" item="auction.item" realm-input="realmInput"></auction-history>
+<auction-history ng-if="showAuctionHistory" show-auction-history="toggleHistory()" item="auction.item" realm-input="realmInput"></auction-history>
 </div>
 <div class="auctionResultCell">
 <item-link item="auction.item" quantity="{{auction.quantity}}"></item-link>

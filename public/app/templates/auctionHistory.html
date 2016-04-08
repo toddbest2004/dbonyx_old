@@ -1,6 +1,8 @@
 <div class="auctionHistory">
 <div class="close" ng-click="showAuctionHistory()">(close)</div>
-<div class="row"><item-link item="item"></item-link></div>
+<div class="center"><h3>Average Selling Price History</h3></div>
+<div><item-link item="item"></item-link></div>
+<div>Mouseover or click graph for details</div>
 <svg width="480" height="320">
 <rect width="100%" height="100%" fill="black"></rect>
 <rect ng-attr-width="{{barwidth}}px" ng-attr-height="{{barheight}}px" ng-repeat="history in histories track by $index" ng-attr-x="{{history.x}}" class="auctionHistoryBar" ng-class="{auctionHistoryBarSelected:history.selected}" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"></rect>

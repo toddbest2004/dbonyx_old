@@ -7,7 +7,8 @@
 <rect width="100%" height="100%" fill="black"></rect>
 <rect ng-attr-width="{{barwidth}}px" ng-attr-height="{{barheight}}px" ng-repeat="history in histories track by $index" ng-attr-x="{{history.x}}" class="auctionHistoryBar" ng-class="{auctionHistoryBarSelected:history.selected}" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"></rect>
 <text ng-repeat="history in histories track by $index" fill="black" ng-attr-x="{{history.textx}}" ng-attr-y="{{history.texty}}" ng-if="history.selected">{{history.averagePrice}}</text>
-<circle ng-repeat="history in histories track by $index" ng-attr-cx="{{history.x+barwidth/2}}" ng-attr-cy="{{history.y}}" r="4" stroke="black" stroke-width="1" fill="black" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"/>
+<line ng-repeat="history in histories track by $index" x1="{{history.x+barwidth/2}}" x2="{{histories[$index-1].x+barwidth/2}}" y1="{{history.y}}" y2="{{histories[$index-1].y}}" stroke='black' stroke-width='1' ng-if="$index>0"></line>
+<circle ng-repeat="history in histories track by $index" ng-attr-cx="{{history.x+barwidth/2}}" ng-attr-cy="{{history.y}}" r="4" stroke="black" stroke-width="1" fill="black" ng-if="history.selected" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"/>
 
 </svg>
 </div>

@@ -62,7 +62,6 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 		json: true
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
-			var lastModified = body.files[0].lastModified;
 			if(lastModified>touch){
 				realm.auctiontouch = lastModified
 				realm.save()
@@ -70,14 +69,11 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				auctionQueue.push(task, function(){realmcount++})
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
 				auctionLog(slug+": "+lastModified);
-				return 1
 			}else{
-				auctionLog(slug+": up to date.")
-				return 0
+				auctionQueue.push(false, function(){auctionLog(slug+": up to date.")})
 			}
 		}else{
-			auctionLog(response.statusCode||"No status code: "+slug)
-			return 0
+			auctionQueue.push(false, function(){auctionLog(response.statusCode||"No status code: "+slug)})
 		}
 	});
 }

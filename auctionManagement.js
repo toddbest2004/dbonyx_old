@@ -37,13 +37,19 @@ setTimeout(load_auction_data, 1000)
 
 function load_auction_data(){
 	db.realm.find({isMasterSlug:true}, null, {sort:{auctiontouch:1}}).then(function(realms){
+		var modifiedRealmCount = 0
 		for(var i=0; i<auctionlimit;i++){			
-			var slug = 'kelthuzad'//realms[i].slug
+			var slug = realms[i].slug
 			var region = realms[i].region
 			var touch = realms[i].auctiontouch
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API
-			auctionLog(url);
-			checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
+			// auctionLog(url);
+			modifiedRealmCount+=checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
+		}
+		if(!modifiedRealmCount){
+			realmcount=0
+			setTimeout(load_auction_data, pauseInterval)
+			start = new Date()
 		}
 	})
 
@@ -64,11 +70,14 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				auctionQueue.push(task, function(){realmcount++})
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
 				auctionLog(slug+": "+lastModified);
+				return 1
 			}else{
 				auctionLog(slug+": up to date.")
+				return 0
 			}
 		}else{
 			auctionLog(response.statusCode||"No status code: "+slug)
+			return 0
 		}
 	});
 }

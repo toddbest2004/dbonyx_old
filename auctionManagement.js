@@ -90,9 +90,6 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 			if(body.auctions){
 				bulkImport(body, slug, region, touch, callback)
 			}else{
-				console.error("No auctions returned.")
-				console.error("Body:")
-				console.error(body)
 				callback()
 			}
 		}else{

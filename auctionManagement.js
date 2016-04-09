@@ -62,6 +62,7 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 		json: true
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
+			var lastModified = body.files[0].lastModified;
 			if(lastModified>touch){
 				realm.auctiontouch = lastModified
 				realm.save()
@@ -215,7 +216,7 @@ function checkWatchlists(slug, region, touch, callback){
 
 function notifyWatchlistUser(list, auctions){
 	if(list.user){
-		console.log(list.user.email)
+		// console.log(list.user.email)
 		var auctionMail = {
 			from: 'mmofount@gmail.com',
 			to: list.user.email,

@@ -2,7 +2,7 @@ var request = require("request");
 var db = require('./mongoose');
 var async = require('async')
 var transporter = require('./config/email.js')
-var auctionlimit = 10//process.env.AUCTION_LIMIT || 10 //this one limits how many auctions we'll load per run
+var auctionlimit = process.env.AUCTION_LIMIT || 10 //this one limits how many auctions we'll load per run
 
 var start = new Date()
 
@@ -117,7 +117,12 @@ function bulkImport(auctionData, slug, region, touch, callback){
 			// delete temp.ownerRealm
 			auctionData.auctions[i] = temp
 			// auctionLog(temp._id)
-			bulkImport.insert(temp)//find({_id:temp._id}).upsert().updateOne(temp)
+
+			//Just import new records
+			// bulkImport.insert(temp)
+
+			//update records that exist
+			bulkImport.find({_id:temp._id}).upsert().updateOne(temp)
 		}
 		auctionLog(auctionData.auctions.length+" operations queued.")
 		auctionLog(slug+": starting bluk import "+(new Date()-start))
@@ -137,18 +142,22 @@ function bulkImport(auctionData, slug, region, touch, callback){
 //will cause some errors in reporting sold/expired items.
 function countSold(slug, region, touch, callback){
 	db.auction.aggregate().match({slugName:slug,region:region,timeLeft:{$ne:'SHORT'},touch:{$lt:touch}}).group({_id:'$item', totalItemCount:{'$sum':'$quantity'},totalPrice:{'$sum':'$buyout'}, auctionCount:{'$sum':1}}).exec(function(err, data){
+		var auctionCount=0;
 		if(err||!data||!data.length){
 			auctionLog('No sold auctions found.')
 			countExpired(slug, region, touch, callback)
 		}else{
 			var bulkHistory = db.auctionhistory.collection.initializeUnorderedBulkOp()
 			for(var i=0;i<data.length;i++){
+				auctionCount+=data[i].auctionCount
 				bulkHistory.find({slugName:slug,region:region,item:data[i]._id, date:new Date(start.getFullYear(), start.getMonth(), start.getDate())}).upsert().updateOne({
 					'$inc':{sold:data[i].totalItemCount, sellingPrice:data[i].totalPrice}
 				});
 			}
 			auctionLog('Updating selling details of '+data.length+' items')
 			bulkHistory.execute(function(err, historyData){
+				console.log("____")
+				console.log("Sold count: "+auctionCount)
 				countExpired(slug, region, touch, callback)
 			})
 		}
@@ -161,14 +170,17 @@ function countExpired(slug, region, touch, callback){
 			auctionLog('No expired auctions found.')
 			removeOldAuctions(slug, region, touch, callback)
 		}else{
+			var auctionCount = 0
 			var bulkHistory = db.auctionhistory.collection.initializeUnorderedBulkOp()
 			for(var i=0;i<data.length;i++){
+				auctionCount+=data[i].auctionCount
 				bulkHistory.find({slugName:slug,region:region,item:data[i]._id, date:new Date(start.getFullYear(), start.getMonth(), start.getDate())}).upsert().updateOne({
 					'$inc':{expired:data[i].totalItemCount}
 				});
 			}
 			auctionLog('Updating expiration details of '+data.length+' items')
 			bulkHistory.execute(function(err, historyData){
+				console.log("Expired count: "+auctionCount)
 				removeOldAuctions(slug, region, touch, callback)
 			})
 		}
@@ -177,7 +189,8 @@ function countExpired(slug, region, touch, callback){
 
 function removeOldAuctions(slug, region, touch, callback){
 	auctionLog("Starting old auction removal."+(new Date()-start))
-	db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err){
+	db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err, removed){
+		console.log(removed)
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))

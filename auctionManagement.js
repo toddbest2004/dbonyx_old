@@ -180,7 +180,6 @@ function countExpired(slug, region, touch, callback){
 			}
 			auctionLog('Updating expiration details of '+data.length+' items')
 			bulkHistory.execute(function(err, historyData){
-				console.log("Expired count: "+auctionCount)
 				removeOldAuctions(slug, region, touch, callback)
 			})
 		}
@@ -190,7 +189,6 @@ function countExpired(slug, region, touch, callback){
 function removeOldAuctions(slug, region, touch, callback){
 	auctionLog("Starting old auction removal."+(new Date()-start))
 	db.auction.remove({region:region,slugName:slug,touch:{$lt:touch}}, function(err, removed){
-		console.log(removed)
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))

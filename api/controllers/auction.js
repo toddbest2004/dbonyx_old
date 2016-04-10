@@ -74,47 +74,47 @@ router.get("/fetchauctions", function(req, res){
 		return
 	}
 	
-	var region = realmSplit[1].toLowerCase()
-	var realmName = realmSplit[0]
 	var limit = parseInt(query.limit)
 	var offset = parseInt(query.offset)
 	if(limit>50){
 		limit=50
 	}
-
-	db.realm.findOne({name:realmName}).populate('masterSlug').exec(function(err, realm){
-		var slugName = realm.masterSlug.slug
-		var itemsFiltered = false
-		var itemQuery = db.item.find().select('_id')
-		if(filters.qualities){
-			itemsFiltered = true
-			itemQuery.where('quality').in(filters.qualities)
-			console.log("asdf")
-		}
-		if(searchTerm){
-			itemsFiltered = true
-			var re = new RegExp(searchTerm,"i")
-			itemQuery.regex('name',re)
-		}
-		if(itemsFiltered){
-			itemQuery.exec(function(err, items){
-				if(err||!items){
-					res.status(400).json({error:"There was an error fetching data from the server."})
-					return
-				}
-				if(items.length===0){
-					res.json({success:true, count:0, auctions:[], offset:offset, limit:limit})
-					return
-				}
-				var itemIds = items.map(function(item){
-					return item._id
-				})
-				auctionQuery(res, region, slugName, limit, offset, sort, itemIds)
+	var region = realmSplit[1].toLowerCase()
+	var realmName = realmSplit[0].toLowerCase()
+	var slugName = realmArray[realmName]||false
+	if(!slugName){
+		res.status(400).json({error:"Cannot find realm."})
+		return
+	}
+	var itemsFiltered = false
+	var itemQuery = db.item.find().select('_id')
+	if(filters.qualities){
+		itemsFiltered = true
+		itemQuery.where('quality').in(filters.qualities)
+	}
+	if(searchTerm){
+		itemsFiltered = true
+		var re = new RegExp(searchTerm,"i")
+		itemQuery.regex('name',re)
+	}
+	if(itemsFiltered){
+		itemQuery.exec(function(err, items){
+			if(err||!items){
+				res.status(400).json({error:"There was an error fetching data from the server."})
+				return
+			}
+			if(items.length===0){
+				res.json({success:true, count:0, auctions:[], offset:offset, limit:limit})
+				return
+			}
+			var itemIds = items.map(function(item){
+				return item._id
 			})
-		}else{
-			auctionQuery(res, region, slugName, limit, offset, sort, [])
-		}
-	})
+			auctionQuery(res, region, slugName, limit, offset, sort, itemIds)
+		})
+	}else{
+		auctionQuery(res, region, slugName, limit, offset, sort, [])
+	}
 })
 
 router.get("/auctionHistory", function(req, res){
@@ -136,7 +136,11 @@ router.get("/auctionHistory", function(req, res){
 	var item = parseInt(query.item)
 	var region = realmSplit[1].toLowerCase()
 	var realmName = realmSplit[0].toLowerCase()
-	var masterSlug = realmArray[realmName]
+	var masterSlug = realmArray[realmName]||false
+	if(!masterSlug){
+		res.status(400).json({error:"Cannot find realm."})
+		return
+	}
 	db.auctionhistory.find({slugName:masterSlug,region:region,item:item}).exec(function(err, data){
 		if(err) return res.json({error:"Error executing query."})
 		var min=9999999999999999,max=0,maxQuantity=0

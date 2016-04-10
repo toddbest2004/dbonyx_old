@@ -118,9 +118,21 @@ router.post('/validate', function(req, res){
 		user.save(function(err){
 			res.json({result:"Success!"})
 		})
-
 	})
+})
 
+router.post('/feedback', function(req, res){
+	var title = req.body.title
+	var message = req.body.message
+	var feedbackMail = {
+		from: 'mmofount@gmail.com',
+		to: 'mmofount@gmail.com',
+		subject: 'DB Onyx Feedback Received',
+		html: '<div>Title: '+title+'</div><div>Message: '+message+'</div>'
+	}
+	transporter.sendMail(feedbackMail, function(err, response){
+		res.json({success:true})
+	})
 })
 
 module.exports = router

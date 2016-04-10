@@ -77,8 +77,9 @@ angular.module('AuctionCtrls', [])
 	return auction
 }])
 .controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService',function($scope, $http, $location, $routeParams, onyxPersistence, auctionService) {
-	$scope.searchTerm=''
-	$scope.realmInput=onyxPersistence.getRealm()
+	var searchValues = $location.search()
+	$scope.searchTerm=searchValues.s||''
+	$scope.realmInput=searchValues.r||onyxPersistence.getRealm()||''
 	$scope.realms=[]
 	$scope.auctionResults = auctionService.auctionResults
 	$scope.loading=false

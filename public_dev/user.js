@@ -24,7 +24,7 @@ angular.module('UserCtrls', [])
 			return response
 		},function error(response){
 			//TODO:Handle login error
-			return cb(response.data.error)
+			return cb("There was an error validating your email.")
 		})
 	}
 

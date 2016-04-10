@@ -1,3 +1,4 @@
 <div ng-controller='validateCtrl'>
-{{error}}
+	<div ng-if="error">{{error}}</div>
+	<div ng-if="!error">Success! Your email has been successfully validated.</div>
 </div>

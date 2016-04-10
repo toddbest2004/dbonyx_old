@@ -3,7 +3,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 $routeProvider
 .when('/', {
 	templateUrl: 'app/views/index.html'
-}) 
+})
+.when('/about', {
+	templateUrl: 'app/views/about.html'
+})
 .when('/auctions', {
 	templateUrl: 'app/views/auctions.html'
 }) 
@@ -36,6 +39,9 @@ $routeProvider
 })
 .when('/character/:characterName', {
 	templateUrl: 'app/views/character.html'
+})
+.when('/feedback', {
+	templateUrl: 'app/views/feedback.html'
 })
 .when('/item/:id', {
 	templateUrl: 'app/views/item.html'
@@ -159,6 +165,24 @@ $locationProvider.html5Mode(true)
 	}
 
 	// $routeParams.id
+}])
+.controller('feedbackCtrl', ['$http','$scope', function($http, $scope){
+	$scope.sendFeedback = function(){
+		$scope.error=''
+		if($scope.message&&$scope.title){
+			$http({
+				url:'/api/user/feedback',
+				method:'POST',
+				data:{title:$scope.title,message:$scope.message}
+			}).then(function success(response){
+				$scope.success="Your message has been sent successfully!"
+			}, function error(response){
+				$scope.error="There was an error sending your message, please try again."
+			})
+		}else{
+			$scope.error="Please provide a title and a message."
+		}
+	}
 }])
 .factory('onyxCharacter', ['$http', 'onyxPersistence',function($http, onyxPersistence){
 	var character = {}

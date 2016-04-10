@@ -45,7 +45,7 @@ function load_auction_data(){
 			var touch = realms[i].auctiontouch
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API
 			// auctionLog(url);
-			modifiedRealmCount+=checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
+			checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
 		}
 	})
 

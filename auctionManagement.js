@@ -19,7 +19,9 @@ var auctionQueue = async.queue(function(task, callback){
 }, auctionConcurrency)
 
 auctionQueue.drain = function(){
+	console.log("DRAIN")
 	auctionLog(realmcount+ " realms completed in "+(new Date()-start))
+	console.log("________")
 	if(realmcount>5){
 		realmcount=0
 		load_auction_data()
@@ -37,7 +39,6 @@ setTimeout(load_auction_data, 1000)
 
 function load_auction_data(){
 	db.realm.find({isMasterSlug:true}, null, {sort:{auctiontouch:1}}).then(function(realms){
-		var modifiedRealmCount = 0
 		for(var i=0; i<auctionlimit;i++){			
 			var slug = realms[i].slug
 			var region = realms[i].region
@@ -45,11 +46,6 @@ function load_auction_data(){
 			var url = "https://"+region+".api.battle.net/wow/auction/data/"+slug+"?locale=en_US&apikey="+process.env.API
 			// auctionLog(url);
 			modifiedRealmCount+=checkServerForUpdatedAuctions(url, slug, region, touch,realms[i])
-		}
-		if(!modifiedRealmCount){
-			realmcount=0
-			setTimeout(load_auction_data, pauseInterval)
-			start = new Date()
 		}
 	})
 

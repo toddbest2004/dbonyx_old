@@ -139,12 +139,16 @@ router.get("/auctionHistory", function(req, res){
 	var masterSlug = realmArray[realmName]
 	db.auctionhistory.find({slugName:masterSlug,region:region,item:item}).exec(function(err, data){
 		if(err) return res.json({error:"Error executing query."})
-		var min=9999999999999999,max=0
+		var min=9999999999999999,max=0,maxQuantity=0
 		for(var i=0;i<data.length;i++){
-			min = Math.min(min, parseInt(data[i].sellingPrice/data[i].sold))
-			max = Math.max(max, parseInt(data[i].sellingPrice/data[i].sold))
+			data[i].sold = data[i].sold||0
+			data[i].expired = data[i].expired||0
+			//ternary check to skip if sold is 0
+			min = Math.min(min, data[i].sold?parseInt(data[i].sellingPrice/data[i].sold):min)
+			max = Math.max(max, data[i].sold?parseInt(data[i].sellingPrice/data[i].sold):max)
+			maxQuantity = Math.max(maxQuantity, data[i].sold+data[i].expired)
 		}
-		res.json({min:min,max:max,histories:data})
+		res.json({min:min,max:max,maxQuantity:maxQuantity,histories:data})
 	})
 })
 

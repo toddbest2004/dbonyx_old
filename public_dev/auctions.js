@@ -295,23 +295,31 @@ angular.module('AuctionCtrls', [])
 				for(var i=0;i<$scope.histories.length;i++){
 					var averagePrice = parseInt($scope.histories[i].sellingPrice/$scope.histories[i].sold)
 					$scope.histories[i].x=$scope.barwidth*i
-					$scope.histories[i].y=25+$scope.barheight-($scope.barheight*averagePrice/data.max)
-					$scope.histories[i].averagePrice = (Math.floor(averagePrice/10000))+'g'+(Math.floor(averagePrice%10000/100))+'s'+(averagePrice%100)+'c'
-					$scope.histories[i].texty = $scope.histories[i].y-10
-					$scope.histories[i].textx = $scope.histories[i].x+$scope.barwidth*.5
-					if($scope.histories[i].textx>($scope.width*.5)){
-						$scope.histories[i].textx-=($scope.histories[i].averagePrice.length*7)
-					} 
+					$scope.histories[i].y=$scope.barheight-(($scope.barheight-25)*averagePrice/data.max)
+					$scope.histories[i].averagePrice = averagePrice
+					// $scope.histories[i].texty = $scope.histories[i].y-10
+					// $scope.histories[i].textx = $scope.histories[i].x+$scope.barwidth*.5
+					// if($scope.histories[i].textx>($scope.width*.5)){
+					// 	$scope.histories[i].textx-=($scope.histories[i].averagePrice.length*7)
+					// }
+					$scope.histories[i].soldy=$scope.barheight+(40-40*($scope.histories[i].sold/data.maxQuantity))
+					$scope.histories[i].soldheight=40*($scope.histories[i].sold/data.maxQuantity)
+					$scope.histories[i].expiredheight=40*($scope.histories[i].expired/data.maxQuantity)
+					$scope.histories[i].expiredy=$scope.histories[i].soldy-$scope.histories[i].expiredheight
+					console.log($scope.histories[i].expiredheight,$scope.histories[i].soldheight)
+					console.log($scope.histories[i].expiredy,$scope.histories[i].soldy)
 				}
 			})
 		}
 		$scope.aucHistoryLoading=true
 
 		$scope.hoverIn = function(index){
-			$scope.histories[index].selected=true 
+			$scope.histories[index].selected=true
+			$scope.selected = $scope.histories[index]
 		}
 		$scope.hoverOut = function(index){
 			$scope.histories[index].selected=false
+			$scope.selected = false
 		}
 	}]
 	return {

@@ -2,13 +2,14 @@
 <div class="close" ng-click="showAuctionHistory()">(close)</div>
 <div class="center"><h3>Average Selling Price History</h3></div>
 <div><item-link item="item"></item-link></div>
-<div>Mouseover or click graph for details</div>
+<div ng-if="!selected">Mouseover or click graph for details</div>
+<div ng-if="selected">Average Selling Price: <money amount="selected.averagePrice"></money> Sold: {{selected.sold}} Expired: {{selected.expired}}</div>
 <svg width="480" height="320">
 <rect width="100%" height="100%" fill="black"></rect>
 <rect ng-attr-width="{{barwidth}}px" ng-attr-height="{{barheight}}px" ng-repeat="history in histories track by $index" ng-attr-x="{{history.x}}" class="auctionHistoryBar" ng-class="{auctionHistoryBarSelected:history.selected}" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"></rect>
-<text ng-repeat="history in histories track by $index" fill="black" ng-attr-x="{{history.textx}}" ng-attr-y="{{history.texty}}" ng-if="history.selected">{{history.averagePrice}}</text>
 <line ng-repeat="history in histories track by $index" x1="{{history.x+barwidth/2}}" x2="{{histories[$index-1].x+barwidth/2}}" y1="{{history.y}}" y2="{{histories[$index-1].y}}" stroke='black' stroke-width='1' ng-if="$index>0"></line>
 <circle ng-repeat="history in histories track by $index" ng-attr-cx="{{history.x+barwidth/2}}" ng-attr-cy="{{history.y}}" r="4" stroke="black" stroke-width="1" fill="black" ng-if="history.selected" ng-mouseenter="hoverIn($index)" ng-mouseleave="hoverOut($index)" ng-click="hoverIn($index)"/>
-
+<rect ng-repeat="history in histories track by $index" ng-attr-width="{{barwidth}}px" ng-attr-height="{{history.expiredheight}}" ng-attr-x="{{history.x}}" ng-attr-y="{{history.expiredy}}" fill="red"/>
+<rect ng-repeat="history in histories track by $index" ng-attr-width="{{barwidth}}px" ng-attr-height="{{history.soldheight}}" ng-attr-x="{{history.x}}" ng-attr-y="{{history.soldy}}" fill="green"/>
 </svg>
 </div>

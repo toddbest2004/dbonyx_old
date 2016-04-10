@@ -23,13 +23,12 @@ angular.module('UserCtrls', [])
 			console.log("Success!")
 			return response
 		},function error(response){
-			//TODO:Handle login error
 			return cb("There was an error validating your email.")
 		})
 	}
 
-	user.login=function(email, password){
-		// console.log('a')
+	user.login=function(email, password, cb){
+		console.log('a');
 		$http({
 			method: 'POST',
 			url: '/api/user/login',
@@ -39,8 +38,9 @@ angular.module('UserCtrls', [])
 			user.username=response.data.username
 			user.email=response.data.email
 			user.loggedin=true
+			cb(null, true)
 		},function error(response){
-			//TODO: Hanlde login error
+			cb(response.data.error, false)
 		})
 	}
 
@@ -67,10 +67,8 @@ angular.module('UserCtrls', [])
 			user.email=''
 			user.loggedin=false
 			return callback(true)
-			//TODO: Show Register Success!
 		},function error(response){
 			return callback(null, response.data.error)
-			//TODO: handle register error
 		})
 	}
 	
@@ -84,43 +82,54 @@ angular.module('UserCtrls', [])
 .controller('userCtrl', ['onyxUser','$scope','$http','$location',function(onyxUser,$scope,$http,$location){
 	$scope.user=onyxUser
 	$scope.showRegisterForm=false
-	$scope.login = {}
 	$scope.showUserPanel=false
-	// $scope.showRegisterForm=false
-	$scope.showRegister=function(){
+	$scope.showRegisterForm=false
+	$scope.toggleRegister=function(){
 		$scope.showRegisterForm=!$scope.showRegisterForm
-		// console.log($scope.register)
 	}
 	$scope.login = function(){
-		onyxUser.login($scope.login.email, $scope.login.password)
+		onyxUser.login($scope.login.email, $scope.login.password, function(err, success){
+			if(err){
+				$scope.error=err
+			}
+			$scope.showRegisterForm=false
+		})
 	}
 	$scope.logout=function(){
 		onyxUser.logout()
+		$scope.showUserPanel=false
 	}
 	$scope.toggleUserPanel = function(){
 		$scope.showUserPanel = !$scope.showUserPanel
 	}
+	$scope.register=function(){
+		onyxUser.register($scope.username, $scope.email, $scope.password1, $scope.password2, function(success, err){
+			if(success){
+				$scope.success="Registered Successfully!"
+				$scope.toggleRegister()
+			}else{
+				if(err)
+					$scope.registerError=err
+			}
+		})
+	}
+	$scope.clearError = function(){
+		$scope.error=false
+		$scope.registerError=false
+		$scope.success=false
+	}
 }])
 .directive('userRegisterForm', [function(){
-	var controller = ['$scope', 'onyxUser', function($scope,onyxUser){
-		$scope.register=function(){
-			onyxUser.register($scope.username, $scope.email, $scope.password1, $scope.password2, function(success, err){
-				if(success){
-					//TODO: Show register success
-					$scope.showRegister()
-				}else{
-					//TODO: Show register error
-					if(err)
-						console.log(err)
-				}
-			})
-		}
-	}]
-
 	return {
-		controller: controller,
 		restrict: 'E',
 		replace: true,
 		templateUrl: 'app/templates/userRegisterForm.html' 
+	}
+}])
+.directive('userPanel', [function(){
+	return {
+		restrict: 'E',
+		replace: true,
+		templateUrl: 'app/templates/userPanel.html' 
 	}
 }])

@@ -35,26 +35,25 @@
             <a class="navbar-brand" href="/">ONYX GAMING</a>
           </div>
           <ul class="nav navbar-nav navbar-right">
+            <li class="warning" ng-if="error">{{error}}</li>
+            <li class="success" ng-if="success">{{success}}</li>
             <li ng-if="user.loggedin">
               <div ng-click="toggleUserPanel()" class="userName">{{user.username}} <b class="caret"></b></div>
             </li>
             <li ng-if="!user.loggedin">
               <form>
-                <input ng-model="login.email" placeholder="Email Address">
-                <input ng-model="login.password" type="password" placeholder="Password">
-                <input type="submit" value="Log In" ng-click="login()">
-                <button ng-click="showRegister()">Register</button>
+                <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
+                <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
+                <input type="submit" value="Log In" ng-focus="clearError()" ng-click="login()">
+                <button ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
               </form>
             </li>
           </ul>
         </div>
       </nav>
     </div>
-    <div class="row" ng-show="showUserPanel">
-      <div id="user-panel">
-        <!-- Logged in user panel and stats -->
-        User Panel
-      </div>
+    <div class="row" ng-if="showUserPanel">
+      <user-panel></user-panel>
     </div>
     <user-register-form ng-show="showRegisterForm"></user-register-form>
   </div>

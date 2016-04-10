@@ -534,6 +534,9 @@ ul.nav.navbar-nav li a {
 .warning{
   color: red;
 }
+.success{
+  color:green;
+}
 .float-right{
   float:right;
 }

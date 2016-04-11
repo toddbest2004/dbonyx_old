@@ -14,7 +14,7 @@ angular.module('dbonyx')
 		$scope.results=[]
 	}
 	$scope.hide=function(){
-		setTimeout(function(){$scope.results=[];$scope.$apply()},0)
+		setTimeout(function(){$scope.results=[];$scope.$apply()},100)
 	}
 	$scope.clear()
 }])

@@ -4,9 +4,14 @@
     <ul class="nav nav-tabs navbar-left">
       <li ng-repeat="menu in menus"><a href="{{menu.link}}">{{menu.title}} <b class="caret"></b></a></li>
     </ul>
-    <form role="search" class="navbar-form navbar-right">
+    <form role="search" class="navbar-form navbar-right" ng-controller="searchBarCtrl">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search the database">
+        <input type="text" ng-model="searchTerm" ng-change="search()" ng-blur="hide()" ng-focus="search()" class="form-control" placeholder="Search the database">
+        <div id="searchBarResults" ng-if="results.length">
+          <div ng-repeat="result in results">
+            <item-link item="result" ng-click="clear()"></item-link>
+          </div>
+        </div>
       </div>
       <button type="submit" class="btn btn-default">Go</button>
     </form>

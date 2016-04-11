@@ -23,6 +23,12 @@ a, a:hover, a:visited, a:active{
     vertical-align: top; }
     .navbar .navbar-nav li {
       font-weight: bold; }
+#searchBarResults{
+  position:absolute;
+  z-index: 1;
+  background-color: #7A7575;
+  padding: 2px;
+}
 .registerForm{
   width: 500px;
   margin: 0 0 0 auto;

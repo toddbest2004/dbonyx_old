@@ -3,6 +3,21 @@ var router = express.Router()
 var itemConstants = require('./itemConstants')
 var db = require("../../mongoose")
 
+router.get('/search/:term', function(req, res){
+	var term = req.params.term
+	if(typeof(term)!='string'){
+		res.status(400).json({error:'Invalid search term.'})
+		return
+	}
+	db.item.find({name: new RegExp(term,'i')}).limit(10).lean().exec(function(err, items){
+		if(err){
+			res.status(400).json({error:"Error reading from database."})
+			return
+		}
+		res.json(items)
+	})
+})
+
 router.get("/pretty/:id", function(req, res){
 	var id = parseInt(req.params.id)
 	if(!id){

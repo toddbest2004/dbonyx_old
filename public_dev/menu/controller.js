@@ -52,6 +52,12 @@ angular.module('MenuCtrls', [])
 		link: function(scope, element, attrs, menuCtrl) {
 			// console.log(menuCtrl)
 			menuCtrl.addMenu(scope);
+			element.on('mouseover', function(){
+				menuCtrl.select(scope)
+			})
+			element.on('mouseleave', function(){
+				menuCtrl.off()
+			})
 		},
 		templateUrl: 'app/templates/menu.html'
 	};

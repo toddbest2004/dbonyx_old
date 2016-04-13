@@ -3,6 +3,7 @@ var concat = require('gulp-concat')
 var uglify = require('gulp-uglify')
 var watch = require('gulp-watch')
 var batch = require('gulp-batch')
+var sass = require('gulp-sass')
 
 gulp.task('default', function() {
 	return gulp.src('public_dev/**/*.js')
@@ -11,8 +12,17 @@ gulp.task('default', function() {
 		.pipe(gulp.dest('public/app/'))
 })
 
+gulp.task('sass', function () {
+  return gulp.src('public_dev/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('public/'));
+});
+
 gulp.task('watch', function () {
 	watch('public_dev/**/*.js', batch(function (events, done) {
 		gulp.start('default', done)
+	}))
+	watch('public_dev/**/*.scss', batch(function (events, done) {
+		gulp.start('sass', done)
 	}))
 })

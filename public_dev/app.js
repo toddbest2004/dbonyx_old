@@ -1,5 +1,7 @@
 var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls', 'MenuCtrls', 'UserCtrls','ngRoute','ngCookies'])
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
+
+app.config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider){
+$httpProvider.interceptors.push('AuthInterceptor')
 $routeProvider
 .when('/', {
 	templateUrl: 'app/views/index.html'
@@ -65,6 +67,7 @@ $routeProvider
 
 $locationProvider.html5Mode(true)
 }])
+
 .factory('onyxPersistence', ['$cookies',function($cookies){
 	var persistence = {}
 	var _persisted = {}

@@ -1,5 +1,11 @@
-var LocalStrategy = require('passport-local').Strategy
-var db = require('./../mongoose')
+var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var db = require('./../mongoose');
+var opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  secretOrKey: 'mysupersecretpassword'
+};
 
 module.exports = {
 	localStrategy: new LocalStrategy({
@@ -28,5 +34,19 @@ module.exports = {
     db.onyxUser.findOne({_id:id}).then(function(user) {
       done(null, user)
     }).catch(done)
-  }
+  },
+  jwtStrategy: new JwtStrategy(opts, function(jwt_payload, done){
+    console.log('JWT PAYLOAD: ' + JSON.stringify(jwt_payload))
+    console.log(jwt_payload.email)
+    db.onyxUser.findOne({email: jwt_payload.email}, function(err, user){
+      if (err) {
+        return done(err, false);
+      }
+      if (user) {
+        done(null, user);
+      } else {
+        done(null, false);
+      }
+    });
+  })
 }

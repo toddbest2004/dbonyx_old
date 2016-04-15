@@ -3,9 +3,12 @@ var router = express.Router();
 var db = require('../../mongoose')
 var passport = require("passport")
 var LocalStrategy = require('passport-local').Strategy
+var jwtStrategy = require('passport-jwt').Strategy
 var transporter = require('../../config/email.js')
+var jwt = require('jsonwebtoken');
+var secret = "mysupersecretpassword";
 
-router.post("/getUser", function(req, res){
+router.post("/getUser", passport.authenticate('jwt', {session: false}),function(req, res){
 	if(req.user){
 		res.json({username:req.user.username})
 		return
@@ -17,13 +20,19 @@ router.post("/getUser", function(req, res){
 router.post("/login", function(req, res){
 	passport.authenticate('local', function(err, user, info) {
 		if (user) {
-	  		req.login(user, function(err) {
-				if (err) throw err
-				// req.session.username=user.username
-				// req.session.email=user.email
-				res.json({username:req.user.username,email:req.user.email})
-				return
-			})
+	  // 		req.login(user, function(err) {
+			// 	if (err) throw err
+			// 	// req.session.username=user.username
+			// 	// req.session.email=user.email
+			// 	res.json({username:req.user.username,email:req.user.email})
+			// 	return
+			// })
+			var token = jwt.sign({email:user.email,username:user.username}, secret);
+			res.send({
+				email: user.email,
+				username: user.username,
+				token: token
+			});
   		} else {
 	  		res.status(401).json({error:"Incorrect email/password combination."})
 		}

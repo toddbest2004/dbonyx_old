@@ -1,0 +1,30 @@
+<div ng-controller="characterMain">
+<div class="row">
+<div ng-controller="characterCtrl" class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
+<h1>Character Lookup</h1>
+<h4>These tools are very much still in alpha, we are working to get them fully functional</h4>
+<form>
+<auto-complete realm-input="realmInput"></auto-complete>
+<input id="characterName" ng-model="characterName">
+<button type="sumbit" ng-click="search($event)">Search</button>
+</form>
+<div ng-if="character.loading">
+Looking for your character...
+</div>
+<div ng-if="error">
+{{error}}
+</div>
+<div ng-if="results">
+Looks like we found several characters with that name. Select your character below, or enter a realm above to find your specific character.
+<ul>
+<li ng-repeat="result in results track by $index" ng-click="selectCharacter($index)">
+[{{result.level}}]{{result.name}} - {{result.realm}}({{result.region.toUpperCase()}})
+</li>
+</ul>
+</div>
+</div>
+<sidebar>
+
+</sidebar>
+</div>
+</div>

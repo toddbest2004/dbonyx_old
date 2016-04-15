@@ -1,0 +1,7 @@
+<div>page:{{page}} max:{{max}} limit:{{limit}}
+{{low}}-{{high}} of {{max}} 
+<div>
+<span ng-repeat="page in backPages track by $index"> {{page}} </span><span ng-repeat="page in nextPages"> {{page}} </span>
+</div>
+<button ng-click="updatePage(3)">asdfadsf</button>
+</div>

@@ -1,0 +1,71 @@
+<div ng-controller='AuctionCtrl'>
+
+	<div class="row">
+		<div class="col-md-9">
+		<h1>Auction House</h1>
+		<div id="realmDiv">
+				<form action="" id="filterForm"  autocomplete="off">
+					<label for="realmInput">Select Realm:</label>
+					<auto-complete realm-input="realmInput" search="search()"></auto-complete>
+					<label for="search">Search Term:</label>
+					<input type="text" id="search" class="itemFilter" ng-model="searchTerm">
+					<button id="searchButton" ng-click="search($event)">Search</button>
+				</form>
+			</div>
+		<div id="auctionData">
+		<div id="auctionIntro" ng-if="!auctionResults">Select a realm to get started</div>
+		</div>
+		<div id="auctionNav" ng-if="auctionResults">
+		<div>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}
+		<div>
+		<div class="pagination" ng-click="firstPage()"><span class="glyphicon glyphicon-step-backward"></span></div>
+		<div class="pagination" ng-click="backPage()"><span class="glyphicon glyphicon-chevron-left"></span></div>
+		<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
+		<div class="pagination pagination-current"> {{currentPage}} </div>
+		<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
+		<div class="pagination" ng-click="nextPage()"><span class="glyphicon glyphicon-chevron-right"></span></div>
+		<div class="pagination" ng-click="lastPage()"><span class="glyphicon glyphicon-step-forward"></span></div>
+		</div>
+		</div>
+		</div>
+		<div id="auctionLoading" ng-if="loading">
+		Loading Auctions...
+		</div>
+		<div class="auctionResultTable table table-condensed" ng-if="auctionResults">
+		<div class="auctionResultRow">
+			<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
+			<div class="auctionResultCell auctionIcons">&nbsp;</div>
+			<div id="auctionItem" class="auctionSort" data-sort="name">Item</div>
+			<div class="auctionSort" data-sort="itemLevel">iLvl</div>
+			<!-- <div class="auctionSort">Owner</div> -->
+			<div class="auctionSort auctionMoney" data-sort="bid">Bid Price</div>
+			<div class="auctionSort auctionMoney" data-sort="buyout">Buyout</div></div>
+			<auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
+		</div>
+		</div>
+		<sidebar>
+		Traditional | Advanced
+		<div id="itemFilterDiv">
+		<select id="itemFilterQuality" class="itemFilter" multiple size='8' ng-model="filters.qualities" ng-change="firstPage()">
+			<option value="0" class="itemQuality0">Poor</option>
+			<option value="1" class="itemQuality1">Common</option>
+			<option value="2" class="itemQuality2">Uncommon</option>
+			<option value="3" class="itemQuality3">Rare</option>
+			<option value="4" class="itemQuality4">Epic</option>
+			<option value="5" class="itemQuality5">Legendary</option>
+			<option value="6" class="itemQuality6">Artifact</option>
+			<option value="7" class="itemQuality7">Heirloom</option>
+		</select>
+		<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button>
+		<ul id="itemFiltersList" class="list-unstyled">
+		<!-- <li class="itemFilter">
+			<input type="button" value="test" class="filterType">
+			<input type="button" value=">" class="filterComparator">
+			<input class="filterValue">
+		</li> -->
+		</ul>
+		<button id="addItemFilter">Add Item Filter</button>
+		</div>
+		</sidebar>
+	</div>
+</div>

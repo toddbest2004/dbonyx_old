@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var db = require('./mongoose');
 var path = require('path');
 var session = require('express-session');
+var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var strategies = require('./config/strategies.js')
 
@@ -26,6 +27,7 @@ app.use(passport.session());
 passport.serializeUser(strategies.serializeUser)
 passport.deserializeUser(strategies.deserializeUser)
 passport.use(strategies.localStrategy)
+passport.use(strategies.jwtStrategy)
 
 var apiCtrl = require("./api/")
 app.use("/api", apiCtrl)

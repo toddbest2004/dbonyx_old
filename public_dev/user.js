@@ -1,5 +1,5 @@
 angular.module('UserCtrls', [])
-.factory('onyxUser', ['$http',function($http){
+.factory('onyxUser', ['$http', 'Auth', function($http, Auth){
 	var user = {loggedin:false}
 	
 	user.checkLoggedInStatus = function(){
@@ -34,27 +34,23 @@ angular.module('UserCtrls', [])
 			url: '/api/user/login',
 			data: {email:email,password:password}
 		}).then(function success(response){
-			// console.log($scope.user)
+			console.log(response)
+			Auth.saveToken(response.data.token);
 			user.username=response.data.username
 			user.email=response.data.email
 			user.loggedin=true
 			cb(null, true)
 		},function error(response){
+			console.log(response);
 			cb(response.data.error, false)
 		})
 	}
 
 	user.logout=function(){
-		$http({
-			method: 'POST',
-			url: '/api/user/logout'
-		}).then(function success(response){
-			user.username=''
-			user.email=''
-			user.loggedin=false
-		},function error(response){
-			//TODO: handle logout error
-		})
+		Auth.removeToken();
+		user.loggedin = false;
+		user.username = null;
+		user.email = null;
 	}
 
 	user.register=function(username, email, password1, password2, callback){
@@ -63,10 +59,9 @@ angular.module('UserCtrls', [])
 			url: '/api/user/register',
 			data: {username:username,email:email,password1:password1,password2:password2}
 		}).then(function success(response){
-			user.username=''
-			user.email=''
-			user.loggedin=false
-			return callback(true)
+			user.login(email, password1, function(err, success){
+				callback(true)
+			})
 		},function error(response){
 			return callback(null, response.data.error)
 		})
@@ -74,6 +69,34 @@ angular.module('UserCtrls', [])
 	
 	user.checkLoggedInStatus()
 	return user 
+}])
+.factory("Auth", ["$window", function($window){
+	return {
+		saveToken: function(token){
+			$window.localStorage["onyx-token"] = token;
+		},
+		getToken: function(){
+			return $window.localStorage["onyx-token"];
+		},
+		removeToken: function(){
+			return $window.localStorage.removeItem('onyx-token')
+		},
+		isLoggedIn: function(){
+			var token = this.getToken();
+			return token ? true : false
+		}
+	};
+}])
+.factory("AuthInterceptor", ["Auth", function(Auth){
+	return {
+		request: function(config){
+			var token = Auth.getToken();
+			if (token) {
+				config.headers.Authorization = 'JWT ' + token;
+			}
+			return config;
+		}
+	};
 }])
 .controller('validateCtrl', ['$http','$location','$scope', '$routeParams', 'onyxUser', function($http,$location,$scope,$routeParams, onyxUser){
 	//validates user's email (by clicking link created and sent to email)
@@ -97,6 +120,7 @@ angular.module('UserCtrls', [])
 	}
 	$scope.logout=function(){
 		onyxUser.logout()
+		$scope.user = onyxUser;
 		$scope.showUserPanel=false
 	}
 	$scope.toggleUserPanel = function(){

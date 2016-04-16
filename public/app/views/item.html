@@ -1,12 +1,19 @@
-<div class="row">
+<div class="row" ng-controller="itemCtrl">
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
-<div ng-controller="itemCtrl">
+<div>
 
 <item-display item-id="{{id}}"></item-display>
 
 </div>
 </div>
 <sidebar>
-
+<h2>Sources</h2>
+<h2>Uses</h2>
+<div>
+	<h2>Auction House Data</h2>
+	<label for="realmInput">Select Realm to get Auction House Data:</label>
+	<auto-complete realm-input="realmInput" search="getAuctionDetails()"></auto-complete>
+	<div ng-if="auctionLoading">Loading Data</div>
+</div>
 </sidebar>
 </div>

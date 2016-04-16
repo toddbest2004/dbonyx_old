@@ -1,0 +1,26 @@
+#user-panel {
+	height: 200px;
+	background: white;
+	-webkit-transition: all linear .25s;
+	transition: all linear .25s;
+}
+
+#user-panel.ng-hide {
+	height: 0px;
+	opacity: 0;
+}
+
+#user-panel.ng-hide.ng-hide-active{
+	opacity: 1;
+}
+
+#user-panel {
+	padding-top: 15px;
+	background-color: #4E4E54;
+	height: 160px;
+-webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+-moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+background-size: 132px 132px;
+background-blend-mode: multiply;
+}

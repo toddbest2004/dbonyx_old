@@ -1,9 +1,35 @@
+nav#secondary-nav {
+  height: 200px;
+  color: black;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+  background: white;
+  /* Old browsers */
+  background: -moz-linear-gradient(-45deg, white 0%, #f6f6f6 47%, #ededed 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, white 0%, #f6f6f6 47%, #ededed 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, white 0%, #f6f6f6 47%, #ededed 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */ }
+
+/* wow class text colors */
+/* wow reputation bar colors */
+/* wow item/pet quality colors */
 body {
-  background-color: #000;
+  background-color: #303b4b;
   color: #00010D; }
 
 html, body {
   height: 100%; }
+
+hr {
+  border: 0;
+  height: 0;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 
 a, a:hover, a:visited, a:active {
   color: #00010D; }
@@ -438,7 +464,7 @@ body {
 
 /* MAIN NAVIGATION */
 #nav-container {
-  background-color: #aaa; }
+  background-color: #050505; }
 
 #secondary-nav {
   top: 40px;
@@ -462,6 +488,26 @@ form.navbar-form.navbar-right {
   border-top-left-radius: 0;
   border: 0;
   margin-bottom: 0; }
+
+nav#primary-nav li a, .caret {
+  cursor: pointer;
+  font-size: 18px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+37,f1f1f1+50,e1e1e1+51,f6f6f6+100;White+Gloss+%231 */
+  background: white;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
+  /* IE6-9 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  font-family: 'Roboto';
+  text-shadow: 1px 0px 5px rgba(150, 150, 150, 0.6); }
 
 /* PROPRIETARY LOGO */
 a.navbar-brand {
@@ -535,3 +581,26 @@ ul.nav.navbar-nav li a {
 
 .float-right {
   float: right; }
+
+#user-panel {
+  height: 200px;
+  background: white;
+  -webkit-transition: all linear .25s;
+  transition: all linear .25s; }
+
+#user-panel.ng-hide {
+  height: 0px;
+  opacity: 0; }
+
+#user-panel.ng-hide.ng-hide-active {
+  opacity: 1; }
+
+#user-panel {
+  padding-top: 15px;
+  background-color: #4E4E54;
+  height: 160px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  background-size: 132px 132px;
+  background-blend-mode: multiply; }

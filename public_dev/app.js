@@ -1,4 +1,4 @@
-var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls', 'MenuCtrls', 'UserCtrls','ngRoute','ngCookies'])
+var app = angular.module('dbonyx', ['AuctionCtrls', 'ItemCtrls', 'MenuCtrls', 'UserCtrls','ngRoute','ngCookies', 'ngAnimate'])
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider){
 $httpProvider.interceptors.push('AuthInterceptor')

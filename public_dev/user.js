@@ -102,7 +102,7 @@ angular.module('UserCtrls', [])
 	//validates user's email (by clicking link created and sent to email)
 	onyxUser.validateUser($routeParams.user, $routeParams.validateString, function(response){$scope.error=response})
 }])
-.controller('userCtrl', ['onyxUser','$scope','$http','$location',function(onyxUser,$scope,$http,$location){
+.controller('userCtrl', ['onyxUser','$scope','$http','$location', function(onyxUser,$scope,$http,$location){
 	$scope.user=onyxUser
 	$scope.showRegisterForm=false
 	$scope.showUserPanel=false

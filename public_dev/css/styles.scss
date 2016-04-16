@@ -1,9 +1,49 @@
+/* wow class text colors */
+$deathknight-class: #C41F3B;
+$druid-class: #FF7D0A;
+$hunter-class: #ABD473;
+$mage-class: #69CCF0;
+$monk-class: #00FF96;
+$paladin-class: #F58CBA;
+$priest-class: #FFFFFF;
+$rogue-class: #FFF569;
+$shaman-class: #0070DE;
+$warlock-class: #9482C9;
+$warrior-class: #C79C6E;
+/* wow reputation bar colors */
+$reputation0: #c22;
+$reputation1: #f00;
+$reputation2: #e62;
+$reputation3: #ff0;
+$reputation4: #0f0;
+$reputation5: #0f8;
+$reputation6: #0fc;
+$reputation7: #0ff;
+/* wow item/pet quality colors */
+$quality0: #9D9D9D;
+$quality1: #FFFFFF;
+$quality2: #1EFF00;
+$quality3: #0070FF;
+$quality4: #A335EE;
+$quality5: #FF8000;
+$quality6: #E6CC80;
+$quality7: #E6CC80;
+
 body { 
-  background-color: #000;
-  color: #00010D; }
+  background-color: #303b4b;
+  color: #00010D; } 
 
 html, body {
   height: 100%; }
+
+hr {
+    border: 0;
+    height: 0;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
 a, a:hover, a:visited, a:active{
   color: #00010D;
@@ -428,7 +468,7 @@ body {
 /* MAIN NAVIGATION */
 
 #nav-container {
-  background-color: #aaa;
+  background-color: #050505;
 }
 
 #secondary-nav {
@@ -456,6 +496,23 @@ form.navbar-form.navbar-right {
   border-top-left-radius: 0;
   border: 0;
   margin-bottom: 0;
+}
+
+nav#primary-nav li a, .caret {
+  cursor: pointer;
+  font-size: 18px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+37,f1f1f1+50,e1e1e1+51,f6f6f6+100;White+Gloss+%231 */
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 37%, rgba(241,241,241,1) 50%, rgba(225,225,225,1) 51%, rgba(246,246,246,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 37%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 37%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  font-family: 'Roboto';
+  text-shadow: 1px 0px 5px rgba(150, 150, 150, .6);
 }
 
 /* PROPRIETARY LOGO */

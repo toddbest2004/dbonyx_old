@@ -36,8 +36,6 @@ module.exports = {
     }).catch(done)
   },
   jwtStrategy: new JwtStrategy(opts, function(jwt_payload, done){
-    console.log('JWT PAYLOAD: ' + JSON.stringify(jwt_payload))
-    console.log(jwt_payload.email)
     db.onyxUser.findOne({email: jwt_payload.email}, function(err, user){
       if (err) {
         return done(err, false);

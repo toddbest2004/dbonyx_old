@@ -37,7 +37,7 @@
 <li ng-if="item.itemSet.items.length">&nbsp;</li>
 <li ng-repeat="bonus in item.itemSet.setBonuses|orderBy:bonus.threshold" ng-class="{itemActiveItemSet:bonus.threshold<=item.itemSet.equipped,itemInactiveItemSet:bonus.threshold>item.itemSet.equipped}">({{bonus.threshold}}) {{bonus.description}}</li>
 
-<li>Sells For: <money amount="item.sellPrice"></money></li>
+<li ng-if="item.sellPrice">Sells For: <money amount="item.sellPrice"></money></li>
 </ul>
 <!-- {{item}} -->
 </div>

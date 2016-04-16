@@ -4,6 +4,9 @@ angular.module('MenuCtrls', [])
 .directive('menuBar', [function(){
 	var menuBarController = ['$scope',function($scope){
 		var timeoutId
+		$scope.rehover=function(){
+			$scope.hover = true
+		}
 		$scope.menus = []
 		this.select = $scope.select = function(menu){
 			$scope.hover = menu
@@ -11,6 +14,7 @@ angular.module('MenuCtrls', [])
 				menu.selected=false
 			})
 			menu.selected=true
+			// console.log(menu)
 			$scope.menuSelected=true
 		}
 
@@ -50,14 +54,7 @@ angular.module('MenuCtrls', [])
 			link: '@'
 		},
 		link: function(scope, element, attrs, menuCtrl) {
-			// console.log(menuCtrl)
 			menuCtrl.addMenu(scope);
-			element.on('mouseover', function(){
-				menuCtrl.select(scope)
-			})
-			element.on('mouseleave', function(){
-				menuCtrl.off()
-			})
 		},
 		templateUrl: 'app/templates/menu.html'
 	};

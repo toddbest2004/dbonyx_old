@@ -15,12 +15,17 @@ var battlepetSchema = new Schema({
 	strongAgainst: [String],
 	weakAgainst: [String],
 	source: String,
-	stats:{},
+	stats:{
+		petQualityId: Number,
+		health: Number,
+		power: Number,
+		speed: Number
+	},
 	abilities: [{
 		slot: Number,
 		order: Number,
 		requiredLevel: Number,
-		id: {type: Number, ref: 'battlepetAbility'}
+		_id: {type: Number, ref: 'battlepetAbility'}
 	}]
 
 })

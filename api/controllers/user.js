@@ -6,7 +6,7 @@ var LocalStrategy = require('passport-local').Strategy
 var jwtStrategy = require('passport-jwt').Strategy
 var transporter = require('../../config/email.js')
 var jwt = require('jsonwebtoken');
-var secret = "mysupersecretpassword";
+var secret = process.env.JWT_SECRET;
 
 router.post("/getUser", passport.authenticate('jwt', {session: false}),function(req, res){
 	if(req.user){

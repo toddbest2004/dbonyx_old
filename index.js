@@ -9,6 +9,8 @@ var strategies = require('./config/strategies.js')
 
 var app = express();
 
+checkEnvVariables();
+
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 }
@@ -18,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
-  secret:'3da6f15641a9a688457d114185f91ea907b4f7d5f793770baf5ae',
+  secret:process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }));
@@ -41,3 +43,15 @@ var serverip = process.env.IP || "localhost";
 
 app.listen(port, serverip);
 console.log('Server running at '+serverip+":"+port);
+
+function checkEnvVariables(){
+	if(!process.env.API||
+		!process.env.EMAIL_PASS||
+		!process.env.EMAIL_USER||
+		!process.env.IP||
+		!process.env.PORT||
+		!process.env.AUCTION_LIMIT||
+		!process.env.SESSION_SECRET||
+		!process.env.JWT_SECRET)
+	throw "Missing environment variables!"
+}

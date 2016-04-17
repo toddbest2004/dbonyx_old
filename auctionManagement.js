@@ -70,7 +70,7 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				auctionQueue.push(false, function(){auctionLog(slug+": up to date.")})
 			}
 		}else{
-			auctionQueue.push(false, function(){auctionLog(response.statusCode||"No status code: "+slug)})
+			auctionQueue.push(false, function(){auctionLog("No status code: "+slug)})
 		}
 	});
 }

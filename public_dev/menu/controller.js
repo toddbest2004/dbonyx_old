@@ -8,15 +8,15 @@ angular.module('MenuCtrls', [])
 			$scope.hover = true
 		}
 		$scope.menus = []
-		this.select = $scope.select = function(menu){
-			$scope.hover = menu
-			angular.forEach($scope.menus, function(menu){
-				menu.selected=false
-			})
-			menu.selected=true
-			// console.log(menu)
-			$scope.menuSelected=true
-		}
+		// this.select = $scope.select = function(menu){ 
+		// 	$scope.hover = menu
+		// 	angular.forEach($scope.menus, function(menu){
+		// 		menu.selected=false
+		// 	})
+		// 	menu.selected=true
+		// 	// console.log(menu)
+		// 	$scope.menuSelected=true
+		// }
 
 		this.off = $scope.off = function(){
 			$scope.hover = false

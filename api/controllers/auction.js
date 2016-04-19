@@ -117,42 +117,42 @@ router.get("/fetchauctions", function(req, res){
 	}
 })
 
-//route for getting detailed statistics for a single item
-router.get('/item', function(req,res){
-	var id = parseInt(req.query.id)
-	if(!id)
-		return res.status(400).json({error:"Improper query string supplied."})
-	if(!req.query.realm||typeof(req.query.realm)!=='string'){
-		res.status(400).json({error:"Improper query string supplied."})
-		return
-	}
-	var realmSplit = req.query.realm.split('-')
-	if(realmSplit.length!==2){
-		res.status(400).json({error:"Improper query string supplied."})
-		return
-	}
-	var region = realmSplit[1].toLowerCase()
-	var realmName = realmSplit[0].toLowerCase()
-	var masterSlug = realmArray[realmName]||false
-	if(!masterSlug){
-		res.status(400).json({error:"Cannot find realm."})
-		return
-	}
+// //route for getting detailed statistics for a single item
+// router.get('/item', function(req,res){
+// 	var id = parseInt(req.query.id)
+// 	if(!id)
+// 		return res.status(400).json({error:"Improper query string supplied."})
+// 	if(!req.query.realm||typeof(req.query.realm)!=='string'){
+// 		res.status(400).json({error:"Improper query string supplied."})
+// 		return
+// 	}
+// 	var realmSplit = req.query.realm.split('-')
+// 	if(realmSplit.length!==2){
+// 		res.status(400).json({error:"Improper query string supplied."})
+// 		return
+// 	}
+// 	var region = realmSplit[1].toLowerCase()
+// 	var realmName = realmSplit[0].toLowerCase()
+// 	var masterSlug = realmArray[realmName]||false
+// 	if(!masterSlug){
+// 		res.status(400).json({error:"Cannot find realm."})
+// 		return
+// 	}
 	
-	db.auction.find({slugName:masterSlug,region:region,item:id,buyout:{'$gt':0}}).sort({buyoutPerItem:1}).limit(1).exec(function(err, auction){
-		if(err)
-			return res.status(400).json({error:"Error running query."})
-		if(!auction.length)
-			return res.json({})	
-		db.auction.aggregate().match({slugName:masterSlug,region:region,item:id}).group({_id:'$item', totalItemCount:{'$sum':'$quantity'},totalPrice:{'$sum':'$buyout'}, auctionCount:{'$sum':1}}).exec(function(err, aggregateData){
-			if(err)
-				return res.status(400).json({error:"Error running query."})
-			var results = {aggregate:aggregateData[0], low:auction[0]}
-			res.json(results)
-		})
-	})
+// 	db.auction.find({slugName:masterSlug,region:region,item:id,buyout:{'$gt':0}}).sort({buyoutPerItem:1}).limit(1).exec(function(err, auction){
+// 		if(err)
+// 			return res.status(400).json({error:"Error running query."})
+// 		if(!auction.length)
+// 			return res.json({})	
+// 		db.auction.aggregate().match({slugName:masterSlug,region:region,item:id}).group({_id:'$item', totalItemCount:{'$sum':'$quantity'},totalPrice:{'$sum':'$buyout'}, auctionCount:{'$sum':1}}).exec(function(err, aggregateData){
+// 			if(err)
+// 				return res.status(400).json({error:"Error running query."})
+// 			var results = {aggregate:aggregateData[0], low:auction[0]}
+// 			res.json(results)
+// 		})
+// 	})
 
-})
+// })
 
 router.get("/auctionHistory", function(req, res){
 	var query = req.query

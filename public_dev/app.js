@@ -42,6 +42,9 @@ $routeProvider
 .when('/character/:characterName', {
 	templateUrl: 'app/views/character.html'
 })
+.when('/community', {
+	templateUrl: 'app/views/community.html' 
+})
 .when('/feedback', {
 	templateUrl: 'app/views/feedback.html'
 })

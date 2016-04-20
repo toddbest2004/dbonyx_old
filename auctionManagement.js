@@ -225,7 +225,7 @@ function notifyWatchlistUser(list, auctions){
 	if(list.user){
 		// console.log(list.user.email)
 		var auctionMail = {
-			from: 'mmofount@gmail.com',
+			from: 'admin@dbonyx.com',
 			to: list.user.email,
 			subject: 'DBOnyx: An item on your watchlist has been spotted on the Auction House',
 			html: formMessage(auctions)

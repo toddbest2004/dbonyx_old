@@ -85,7 +85,7 @@ router.post("/register", function(req, res){
 				}
 				//Character account successfully created
 				var testMail = {
-					from: 'mmofount@gmail.com',
+					from: 'admin@dbonyx.com',
 					to: newUser.email,
 					subject: 'Welcome to DBOnyx!',
 					html: '<a href="http://www.dbonyx.com/validate/'+newUser.username+'/'+validationString+'">Click here to validate your email</a>'
@@ -134,8 +134,8 @@ router.post('/feedback', function(req, res){
 	var title = req.body.title
 	var message = req.body.message
 	var feedbackMail = {
-		from: 'mmofount@gmail.com',
-		to: 'mmofount@gmail.com',
+		from: 'admin@dbonyx.com',
+		to: 'admin@dbonyx.com',
 		subject: 'DB Onyx Feedback Received',
 		html: '<div>Title: '+title+'</div><div>Message: '+message+'</div>'
 	}

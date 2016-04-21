@@ -18,6 +18,9 @@ db.realm.find({}).populate('masterSlug').exec(function(err, realms){
 
 router.get("/fetchauctions", function(req, res){
 	var query = req.query
+	//default qualities to empty array if it is not sent
+	if(!query.qualities)
+		query.qualities=[]
 	var searchTerm=''
 	var qualities=[]
 	var filters={}
@@ -28,32 +31,27 @@ router.get("/fetchauctions", function(req, res){
 	}
 	if(query.filters&&query.filters.length>0){
 		query.filters=JSON.parse(query.filters)
-		console.log(query.filters)
-		if(query.filters.qualities&&query.filters.qualities.length>0){
-			filters.qualities=[]
-			var myQualities = query.filters.qualities
-			if(typeof(myQualities)==='string'){
-				if(!isNaN(parseInt(myQualities))){
-					filters.qualities.push(parseInt(myQualities))
-				}else{
-					res.status(400).json({error:"Improper query string supplied."})
-					return	
+	}
+	//item qualities use a special filter catch
+	console.log(query.qualities)
+	if(query.qualities&&query.qualities.length>0){
+
+		filters.qualities=[]
+		var myQualities = query.qualities
+		if(typeof(myQualities)==='object'){
+			//qualities is an array with at least one item
+			filters.qualities=myQualities.map(function(item){
+				if(!isNaN(parseInt(item))){
+					return parseInt(item)
 				}
-			}else if(typeof(myQualities)==='object'){
-				//qualities is an array with at least one item
-				filters.qualities=myQualities.map(function(item){
-					if(!isNaN(parseInt(item))){
-						return parseInt(item)
-					}
-				}).filter(function(item){
-					if(item||item===0){
-						return true
-					}
-				})
-			}else{
-				res.status(400).json({error:"Improper query string supplied."})
-				return			
-			}
+			}).filter(function(item){
+				if(item||item===0){
+					return true
+				}
+			})
+		}else{
+			res.status(400).json({error:"Improper query string supplied."})
+			return			
 		}
 	}
 	if(query.searchTerm){

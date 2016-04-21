@@ -3,7 +3,8 @@ angular.module('AuctionCtrls', [])
 	var auction = {
 		searchTerm: '',
 		realmInput: '',
-		filters: {qualities:[]},
+		filters: {},
+		qualities:[],
 		sortBy: 'buyout',
 		sortOrder: -1,
 		resultPages: 0,
@@ -25,12 +26,15 @@ angular.module('AuctionCtrls', [])
 			//cb false
 			return
 		}
+		console.log('as')
+		console.log(auction.qualities)
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
 			params: {
+				'qualities[]':auction.qualities,
 				filters:auction.filters,
-				searchTerm:auction.searchTerm,
+				searchTerm:auction.searchTerm, 
 				realm:auction.realmInput,
 				offset:(auction.currentPage-1)*auction.limit,
 				limit:auction.limit,
@@ -84,6 +88,7 @@ angular.module('AuctionCtrls', [])
 	$scope.auctionResults = auctionService.auctionResults
 	$scope.loading=false
 	$scope.filters=auctionService.filters
+	$scope.qualities={values:[]}
 	// $scope.hoverIndex=''
 
 	$scope.updatePages=function(){
@@ -124,8 +129,11 @@ angular.module('AuctionCtrls', [])
 		$scope.search()
 	}
 	$scope.clearQualityFilter=function(){
-		$scope.filters.qualities=[]
+		$scope.qualities=[]
 		$scope.firstPage()
+	}
+	$scope.addFilter = function(){
+		alert('asdf')
 	}
 	var auctionUpdate = function(success){
 		$scope.loading = false
@@ -138,7 +146,8 @@ angular.module('AuctionCtrls', [])
 			e.preventDefault()
 		}
 		$scope.loading=true
-		// $scope.updatePages()
+
+		auctionService.qualities=$scope.qualities.values
 		auctionService.filters=$scope.filters
 		auctionService.setSearchTerm($scope.searchTerm)
 		auctionService.setRealm($scope.realmInput)

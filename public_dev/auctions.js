@@ -13,7 +13,7 @@ angular.module('AuctionCtrls', [])
 		resultLow:0,
 		limit: 25,
 		loading: false,
-		auctionResults: []
+		auctionResults: false
 	}
 	auction.setSearchTerm = function(term){
 		auction.searchTerm = term
@@ -23,7 +23,7 @@ angular.module('AuctionCtrls', [])
 	}
 	auction.noMatch=function(){
 		auction.loading=false
-		auction.auctionResults={}
+		auction.auctionResults=[]
 		auction.resultPages = 0
 		auction.resultLow = 0
 		auction.resultHigh = 0
@@ -158,7 +158,9 @@ angular.module('AuctionCtrls', [])
 		auctionService.setRealm($scope.realmInput)
 		auctionService.search(auctionUpdate)
 	}
-	$scope.search()
+	if($scope.realmInput){
+		$scope.search()
+	}
 }]).directive('selectOnFocus', ['$window', function ($window) {
     return {
         restrict: 'A',

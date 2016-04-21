@@ -61,6 +61,11 @@ router.post("/register", function(req, res){
 		res.status(401).json({error:"Not a valid email address."})
 		return
 	}
+	var validCharacters = /^[a-z][a-z0-9_\-]*$/i
+	if(!validCharacters.test(req.body.username)){
+		res.status(401).json({error:"Invalid username. Name must start with a letter and can only contain letters, numbers and - and _"})
+		return
+	}
 	db.onyxUser.findOne({email:req.body.email}).exec(function(err, userCheck){
 		if(err||userCheck){
 			res.status(401).json({error:"Email already in use"})

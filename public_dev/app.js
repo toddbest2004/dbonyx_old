@@ -54,12 +54,18 @@ $routeProvider
 .when('/mount/:id', {
 	templateUrl: 'app/views/mount.html'
 })
+.when('/privacy', {
+	templateUrl: 'app/views/privacy.html'
+})
 .when('/profile', {
 	controller: 'userCtrl',
 	templateUrl: 'app/views/profile.html'
 })
 .when('/register', {
 	templateUrl: 'app/views/register.html'
+})
+.when('/terms', {
+	templateUrl: 'app/views/terms.html'
 })
 .when('/validate/:user/:validateString', {
 	templateUrl: 'app/views/validate.html'

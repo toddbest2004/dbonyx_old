@@ -179,6 +179,7 @@ $locationProvider.html5Mode(true)
 	// $routeParams.id
 }])
 .controller('feedbackCtrl', ['$http','$scope', function($http, $scope){
+	$scope.showForm=true
 	$scope.sendFeedback = function(){
 		$scope.error=''
 		if($scope.message&&$scope.title){
@@ -188,6 +189,7 @@ $locationProvider.html5Mode(true)
 				data:{title:$scope.title,message:$scope.message}
 			}).then(function success(response){
 				$scope.success="Your message has been sent successfully!"
+				$scope.showForm = false
 			}, function error(response){
 				$scope.error="There was an error sending your message, please try again."
 			})

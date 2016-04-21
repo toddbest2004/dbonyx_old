@@ -10,7 +10,7 @@
 <div ng-if="success">
 <h2>{{success}}</h2>
 </div>
-<form ng-submit="sendFeedback()">
+<form ng-submit="sendFeedback()" ng-show="showForm">
 <div class="form-group">
 <label class="form-control-label" for="title">Feedback Title</label>
 <input class="form-control" type="text" id="title" ng-model="title">

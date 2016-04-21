@@ -13,7 +13,7 @@
 				</form>
 			</div>
 		<div id="auctionData">
-		<div id="auctionIntro" ng-if="!auctionResults">Select a realm to get started</div>
+		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
 		<div id="auctionLoading" ng-if="loading">
 		Loading Auctions...
@@ -61,13 +61,20 @@
 			<option value="6" class="itemQuality6">Artifact</option>
 			<option value="7" class="itemQuality7">Heirloom</option>
 		</select>
-		<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button>
+		<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button> 
 		<ul id="itemFiltersList" class="list-unstyled">
-		<!-- <li class="itemFilter">
-			<input type="button" value="test" class="filterType">
-			<input type="button" value=">" class="filterComparator">
-			<input class="filterValue">
-		</li> -->
+			<li ng-repeat="filter in filters track by $index">
+				<button class="btn-danger" ng-click="removeFilter($index)">X</button>
+				<select ng-model="filter.type">
+					<option ng-repeat="option in validFilters" value="{{option}}">{{option}}</option>
+				</select>
+				<select ng-model="filter.comparator">
+					<option>&gt;</option>
+					<option>=</option>
+					<option>&lt;</option>
+				</select>
+				<input type="number" ng-model="filter.value">
+			</li>
 		</ul>
 		<button id="addItemFilter" ng-click="addFilter()">Add Item Filter</button>
 		</div>

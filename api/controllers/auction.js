@@ -8,6 +8,8 @@ var router = express.Router();
 
 var db = require("../../mongoose");
 
+var validComparators = {'>':'$gt', '=':'$eq','<':'$lt'}
+var validFilters = {'Item Level':'itemLevel','Required Level':'requiredLevel'}
 var realmArray ={}
 
 db.realm.find({}).populate('masterSlug').exec(function(err, realms){
@@ -26,14 +28,9 @@ router.get("/fetchauctions", function(req, res){
 	var filters={}
 	var sort={}
 	if(query.sortBy&&query.sortOrder){
-		console.log(query.sortBy, query.sortOrder)
+		// console.log(query.sortBy, query.sortOrder)
 		sort[query.sortBy]=parseInt(query.sortOrder)
 	}
-	if(query.filters&&query.filters.length>0){
-		query.filters=JSON.parse(query.filters)
-	}
-
-
 	if(!query.realm||typeof(query.realm)!=='string'){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
@@ -90,6 +87,17 @@ router.get("/fetchauctions", function(req, res){
 			var re = new RegExp(searchTerm,"i")
 			itemQuery.regex('name',re)
 		}
+	}
+	if(query.filters&&query.filters.length>0){
+		if(typeof(query.filters)==='string'){
+			processFilter(query.filters, itemQuery)
+		}else{
+			query.filters.forEach(function(filter){
+				processFilter(filter,itemQuery)
+			})
+		}
+		itemsFiltered=true
+		
 	}
 	if(itemsFiltered){
 		itemQuery.exec(function(err, items){
@@ -219,4 +227,21 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
 			})
 		})
+}
+
+function processFilter(filter, itemQuery){
+	var tmpFilter = JSON.parse(filter)
+	var tmpWhere = {}
+	if(validFilters[tmpFilter.type]){
+		var filterType = validFilters[tmpFilter.type]
+		tmpWhere[filterType]={}
+		if(validComparators[tmpFilter.comparator]){
+			var comparatorType = validComparators[tmpFilter.comparator]
+			if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
+				tmpWhere[filterType][comparatorType]=parseInt(tmpFilter.value)
+				itemQuery.where(tmpWhere)
+			}
+		}
+	}	
+	return filter
 }

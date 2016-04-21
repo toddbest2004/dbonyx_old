@@ -3,7 +3,7 @@ angular.module('AuctionCtrls', [])
 	var auction = {
 		searchTerm: '',
 		realmInput: '',
-		filters: {},
+		filters: [],
 		qualities:[],
 		sortBy: 'buyout',
 		sortOrder: -1,
@@ -39,7 +39,7 @@ angular.module('AuctionCtrls', [])
 			url: '/api/auction/fetchauctions',
 			params: {
 				'qualities[]':auction.qualities,
-				filters:auction.filters,
+				'filters[]':auction.filters,
 				searchTerm:auction.searchTerm, 
 				realm:auction.realmInput,
 				offset:(auction.currentPage-1)*auction.limit,
@@ -89,10 +89,13 @@ angular.module('AuctionCtrls', [])
 	var searchValues = $location.search()
 	$scope.searchTerm=searchValues.s||''
 	$scope.realmInput=searchValues.r||onyxPersistence.getRealm()||''
+
+	$scope.validFilters = ['Item Level','Required Level']
+
 	$scope.realms=[]
 	$scope.auctionResults = auctionService.auctionResults
 	$scope.loading=false
-	$scope.filters=auctionService.filters
+	$scope.filters=auctionService.filters 
 	$scope.qualities={values:[]}
 	// $scope.hoverIndex=''
 
@@ -139,6 +142,13 @@ angular.module('AuctionCtrls', [])
 	}
 	$scope.addFilter = function(){
 		// alert('asdf')
+		auctionService.filters.push({type:'0',comparator:'>',value:''})
+		// $scope.filters = auctionService.filters
+
+		console.log($scope.filters)
+	}
+	$scope.removeFilter = function(index){
+		auctionService.filters.splice(index,1)
 	}
 	var auctionUpdate = function(success){
 		$scope.loading = false

@@ -32,36 +32,8 @@ router.get("/fetchauctions", function(req, res){
 	if(query.filters&&query.filters.length>0){
 		query.filters=JSON.parse(query.filters)
 	}
-	//item qualities use a special filter catch
-	console.log(query.qualities)
-	if(query.qualities&&query.qualities.length>0){
 
-		filters.qualities=[]
-		var myQualities = query.qualities
-		if(typeof(myQualities)==='object'){
-			//qualities is an array with at least one item
-			filters.qualities=myQualities.map(function(item){
-				if(!isNaN(parseInt(item))){
-					return parseInt(item)
-				}
-			}).filter(function(item){
-				if(item||item===0){
-					return true
-				}
-			})
-		}else{
-			res.status(400).json({error:"Improper query string supplied."})
-			return			
-		}
-	}
-	if(query.searchTerm){
-		if(typeof(query.searchTerm)!=='string'){
-			res.status(400).json({error:"Improper query string supplied."})
-			return
-		}
-		if(query.searchTerm.length>2)
-			searchTerm=query.searchTerm
-	}
+
 	if(!query.realm||typeof(query.realm)!=='string'){
 		res.status(400).json({error:"Improper query string supplied."})
 		return
@@ -86,14 +58,38 @@ router.get("/fetchauctions", function(req, res){
 	}
 	var itemsFiltered = false
 	var itemQuery = db.item.find().select('_id')
-	if(filters.qualities){
-		itemsFiltered = true
-		itemQuery.where('quality').in(filters.qualities)
+	if(query.qualities&&query.qualities.length>0){
+		filters.qualities=[]
+		var myQualities = query.qualities
+		if(typeof(myQualities)==='object'){
+			//qualities is an array with at least one item
+			filters.qualities=myQualities.map(function(item){
+				if(!isNaN(parseInt(item))){
+					return parseInt(item)
+				}
+			}).filter(function(item){
+				if(item||item===0){
+					return true
+				}
+			})
+			itemsFiltered = true
+			itemQuery.where('quality').in(filters.qualities)
+		}else{
+			res.status(400).json({error:"Improper query string supplied."})
+			return			
+		}
 	}
-	if(searchTerm){
-		itemsFiltered = true
-		var re = new RegExp(searchTerm,"i")
-		itemQuery.regex('name',re)
+	if(query.searchTerm){
+		if(typeof(query.searchTerm)!=='string'){
+			res.status(400).json({error:"Improper query string supplied."})
+			return
+		}
+		if(query.searchTerm.length>2){
+			searchTerm=query.searchTerm
+			itemsFiltered = true
+			var re = new RegExp(searchTerm,"i")
+			itemQuery.regex('name',re)
+		}
 	}
 	if(itemsFiltered){
 		itemQuery.exec(function(err, items){

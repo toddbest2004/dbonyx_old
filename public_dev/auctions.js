@@ -21,13 +21,19 @@ angular.module('AuctionCtrls', [])
 	auction.setRealm = function(realm){
 		auction.realmInput = realm
 	}
+	auction.noMatch=function(){
+		auction.loading=false
+		auction.auctionResults={}
+		auction.resultPages = 0
+		auction.resultLow = 0
+		auction.resultHigh = 0
+	}
 	auction.search = function(callback){
-		if(!auction.realmInput){
-			//cb false
+		if(!auction.realmInput.length){
+			auction.noMatch()
+			callback(false)
 			return
 		}
-		console.log('as')
-		console.log(auction.qualities)
 		$http({
 			method: 'GET',
 			url: '/api/auction/fetchauctions',
@@ -47,10 +53,9 @@ angular.module('AuctionCtrls', [])
 			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)
 			auction.resultLow = (auction.currentPage-1)*auction.limit
 			auction.resultHigh = auction.resultLow+auction.auctionResults.auctions.length 
-			// $scope.updatePages()
 			callback(true)
 		}, function error(response){
-			auction.loading=false
+			auction.noMatch()
 			// console.log(response)
 			callback(false)
 		})
@@ -133,7 +138,7 @@ angular.module('AuctionCtrls', [])
 		$scope.firstPage()
 	}
 	$scope.addFilter = function(){
-		alert('asdf')
+		// alert('asdf')
 	}
 	var auctionUpdate = function(success){
 		$scope.loading = false

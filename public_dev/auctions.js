@@ -60,6 +60,14 @@ angular.module('AuctionCtrls', [])
 			callback(false)
 		})
 	}
+	auction.setSortBy=function(sort){
+		if(auction.sortBy===sort){//if clicking on same column, reverse the order
+			auction.sortOrder*=-1
+		}else{//otherwise set it
+			auction.sortBy=sort
+			auction.sortOrder=-1
+		}
+	}
 	auction.updatePage = function(page){
 		page=parseInt(page)
 		if(page>auction.resultPages){
@@ -70,7 +78,7 @@ angular.module('AuctionCtrls', [])
 		}
 		auction.currentPage=page
 	}
-	auction.firstPage = function(){
+	auction.firstPage = function(){ 
 		auction.updatePage(1)
 	}
 	auction.backPage = function(){
@@ -140,12 +148,17 @@ angular.module('AuctionCtrls', [])
 		$scope.qualities=[]
 		$scope.firstPage()
 	}
+	$scope.setSortBy=function(sort){
+		// console.log(sort)
+		auctionService.setSortBy(sort)
+		$scope.search()
+	}
 	$scope.addFilter = function(){
 		// alert('asdf')
 		auctionService.filters.push({type:'0',comparator:'>',value:''})
 		// $scope.filters = auctionService.filters
 
-		console.log($scope.filters)
+		// console.log($scope.filters)
 	}
 	$scope.removeFilter = function(index){
 		auctionService.filters.splice(index,1)
@@ -333,8 +346,8 @@ angular.module('AuctionCtrls', [])
 					$scope.histories[i].soldheight=40*($scope.histories[i].sold/data.maxQuantity)
 					$scope.histories[i].expiredheight=40*($scope.histories[i].expired/data.maxQuantity)
 					$scope.histories[i].expiredy=$scope.histories[i].soldy-$scope.histories[i].expiredheight
-					console.log($scope.histories[i].expiredheight,$scope.histories[i].soldheight)
-					console.log($scope.histories[i].expiredy,$scope.histories[i].soldy)
+					// console.log($scope.histories[i].expiredheight,$scope.histories[i].soldheight)
+					// console.log($scope.histories[i].expiredy,$scope.histories[i].soldy)
 				}
 			})
 		}

@@ -42,8 +42,8 @@
 				<div id="auctionItem" class="auctionSort" data-sort="name">Item</div>
 				<div class="auctionSort" data-sort="itemLevel">iLvl</div>
 				<!-- <div class="auctionSort">Owner</div> -->
-				<div class="auctionSort auctionMoney" data-sort="bid">Bid Price</div>
-				<div class="auctionSort auctionMoney" data-sort="buyout">Buyout</div></div>
+				<div class="auctionSort auctionMoney" data-sort="bid" ng-click="setSortBy('bid')">Bid Price</div>
+				<div class="auctionSort auctionMoney" data-sort="buyout" ng-click="setSortBy('buyout')">Buyout</div></div>
 				<auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
 			</div>
 		</div>

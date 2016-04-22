@@ -9,7 +9,11 @@ var router = express.Router();
 var db = require("../../mongoose");
 
 var validComparators = {'>':'$gt', '=':'$eq','<':'$lt'}
-var validFilters = {'Item Level':'itemLevel','Required Level':'requiredLevel'}
+var validFilters = {
+	'Item Level':'itemLevel',
+	'Required Level':'requiredLevel',
+	'Agility':{'bonusStats.stat':3}
+}
 var realmArray ={}
 
 db.realm.find({}).populate('masterSlug').exec(function(err, realms){
@@ -240,6 +244,9 @@ function processFilter(filter, itemQuery){
 			if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
 				tmpWhere[filterType][comparatorType]=parseInt(tmpFilter.value)
 				itemQuery.where(tmpWhere)
+				// itemQuery.where({'bonusStats.stat':4,'bonusStats.amount':{$lte:10}})
+				// itemQuery.where({'bonusStats.amount':{$lte:10}})
+				// itemQuery.populate({path:'bonusStat', match:{stat:4,amount:{$lte:10}}})
 			}
 		}
 	}	

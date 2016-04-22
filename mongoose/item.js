@@ -1,7 +1,11 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-//lacking itemSet, itemSpells, allowableClasses
+var bonusStat = new Schema({
+	stat: Number, 
+	amount: Number
+})
+
 
 var itemSchema = new Schema({
 	_id: Number,
@@ -12,8 +16,7 @@ var itemSchema = new Schema({
 	icon: String,
 	stackable: Number,
 	itemBind: Number,
-	bonusStats: [{stat: Number, amount: Number}],
-	itemSpells: [],
+	bonusStats: [bonusStat],
 	buyPrice: Number,
 	itemClass: Number,
 	itemSubClass: Number,

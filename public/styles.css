@@ -1,3 +1,140 @@
+/* Sitewide style colors */
+/* Sitewide font colors */
+/* Mixins */
+/* MAIN PAGE ELEMENTS */
+body {
+  background-color: #9B9B9B;
+  color: #FFFFFF;
+  font-family: 'Maven Pro';
+  font-size: 14px; }
+
+hr {
+  border: 0;
+  height: 0;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+a {
+  color: green; }
+
+a:hover {
+  color: pink; }
+
+/* TOP BAR */
+#brand-nav {
+  height: 64px;
+  min-height: 64px;
+  line-height: 64px;
+  vertical-align: middle;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+  border: 0;
+  border-radius: 0; }
+
+.navbar-brand {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-family: 'Aldrich';
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  line-height: 64px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 64px;
+  padding-left: 15px; }
+
+#user-login input {
+  height: 32px;
+  line-height: 32px;
+  color: gray;
+  border: 0;
+  padding: 1px 8px; }
+
+/* USER PANEL */
+#user-panel {
+  background-color: green; }
+
+.userName {
+  color: #FFF; }
+
+/* MAIN NAVIGATION */
+#nav-container {
+  background-color: #050505;
+  background: white;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
+  /* IE6-9 */ }
+
+#primary-nav ul.nav.nav-tabs.navbar-left {
+  border-bottom: 0px; }
+
+#primary-nav ul li {
+  border: 0;
+  padding: 0;
+  border: 0;
+  height: 64px; }
+
+#primary-nav ul li:hover {
+  background-color: green; }
+
+#primary-nav ul li a {
+  /* Menu list items */
+  line-height: 64px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 64px;
+  margin: 0px 10px;
+  border: 0; }
+
+#primary-nav ul li a:hover {
+  background-color: transparent;
+  border: 0; }
+
+form.navbar-form {
+  padding: 0;
+  margin: 0; }
+
+#secondary-nav {
+  /* Submenu */
+  background-color: #777;
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  z-index: 1; }
+
+/* CONTENT DIVS */
+#main-content {
+  background-color: #D8D8D8; }
+
+#sub-content {
+  background-color: #9B9B9B; }
+
+/* ADVERTISEMENTS */
+#leaderboard {
+  width: 728px;
+  height: 90px;
+  margin: 30px auto;
+  background-color: #CCCCCC; }
+
+#skyscraper {
+  width: 160px;
+  height: 600px;
+  margin: 10px auto;
+  background-color: #CCCCCC; }
+
+/* FOOTER */
+#footer-container {
+  background-color: #4A4A4A; }
+
 nav#secondary-nav {
   height: 200px;
   color: black;
@@ -16,24 +153,6 @@ nav#secondary-nav {
 /* wow class text colors */
 /* wow reputation bar colors */
 /* wow item/pet quality colors */
-body {
-  background-color: #303b4b;
-  color: #00010D; }
-
-html, body {
-  height: 100%; }
-
-hr {
-  border: 0;
-  height: 0;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-
-a, a:hover, a:visited, a:active {
-  color: #00010D; }
-
 .container {
   position: relative;
   height: auto !important;
@@ -42,7 +161,7 @@ a, a:hover, a:visited, a:active {
 
 .navbar {
   text-align: center;
-  background-color: #000; }
+  background-color: #4A4A4A; }
 
 .navbar .navbar-nav {
   display: inline-block;
@@ -435,143 +554,6 @@ a, a:hover, a:visited, a:active {
 .profileItemoffHand {
   left: 100px;
   top: 490px; }
-
-body {
-  font-family: 'Maven Pro';
-  font-size: 14px;
-  /*text-align: justify;*/ }
-
-/* TOP BAR */
-#brand-nav {
-  height: 30px;
-  min-height: 30px; }
-
-#proprietary-bar {
-  background: #45484d;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #45484d 0%, black 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #45484d 0%, black 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #45484d 0%, black 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 );
-  /* IE6-9 */ }
-
-#proprietary-bar, .navbar-collapse, .navbar-header {
-  background-color: transparent;
-  height: 30px; }
-
-/* MAIN NAVIGATION */
-#nav-container {
-  background-color: #050505; }
-
-#secondary-nav {
-  top: 40px;
-  width: 100%;
-  position: absolute;
-  background-color: #777;
-  z-index: 1; }
-
-#user-panel {
-  background-color: #777; }
-
-.userName {
-  color: #FFF; }
-
-form.navbar-form.navbar-right {
-  margin-top: 2px;
-  margin-right: 6px; }
-
-.nav-tabs li, .nav-tabs li a {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  border: 0;
-  margin-bottom: 0; }
-
-nav#primary-nav li a, .caret {
-  cursor: pointer;
-  font-size: 18px;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+37,f1f1f1+50,e1e1e1+51,f6f6f6+100;White+Gloss+%231 */
-  background: white;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, white 0%, white 37%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
-  /* IE6-9 */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-  font-family: 'Roboto';
-  text-shadow: 1px 0px 5px rgba(150, 150, 150, 0.6); }
-
-/* PROPRIETARY LOGO */
-a.navbar-brand {
-  font-family: 'Aldrich';
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 14px; }
-
-a.navbar-brand {
-  color: rgba(255, 255, 255, 0.75) !important; }
-
-form.navbar-form {
-  padding: 0;
-  margin: 0; }
-
-.breadcrumb {
-  background-color: #ddd;
-  font-size: 12px; }
-
-.navbar, .navbar-collapse, .navbar-header, .nav-tabs, .breadcrumb {
-  margin-bottom: 0;
-  border: none;
-  border-radius: 0; }
-
-.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
-  margin-left: 0px; }
-
-a.navbar-brand,
-ul.nav.navbar-nav li a {
-  height: 30px;
-  padding: 0px;
-  font-size: 14px;
-  margin-right: 15px;
-  margin-left: 15px;
-  vertical-align: middle;
-  line-height: 30px; }
-
-ul.nav.navbar-nav li a {
-  margin-top: -1px; }
-
-/* CONTENT DIVS */
-#main-content {
-  background-color: #cecece; }
-
-#sub-content {
-  background-color: #aaa; }
-
-/* ADVERTISEMENTS */
-#leaderboard {
-  width: 728px;
-  height: 90px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  background-color: #ccc; }
-
-#skyscraper {
-  width: 160px;
-  height: 600px;
-  background-color: #ccc;
-  margin: 10px auto; }
-
-/* FOOTER */
-#footer-container {
-  background-color: #777; }
 
 .warning {
   color: red; }

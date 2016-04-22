@@ -1,0 +1,167 @@
+/* Sitewide style colors */
+$mainBackgroundColor: #9B9B9B;
+$darkBackgroundColor: #4A4A4A;
+$lightBackgroundColor: #D8D8D8;
+$advertBackgroundColor: #CCCCCC;
+
+/* Sitewide font colors */
+$bodyTextColor: #FFFFFF;
+$menuBarHeight: 64px;
+$linkColor: green;
+$hoverColor: pink;
+
+/* Mixins */
+@mixin align-middle($height) {
+  line-height: $height;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: $height;
+}
+
+@mixin input-fields(){
+  padding: 1px 8px;
+}
+
+/* MAIN PAGE ELEMENTS */
+body { 
+  background-color: $mainBackgroundColor;
+  color: $bodyTextColor;
+  font-family: 'Maven Pro';
+  font-size: 14px;
+} 
+
+hr {
+    border: 0;
+    height: 0;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+a {
+  color: $linkColor;
+}
+
+a:hover {
+  color: $hoverColor;
+}
+
+/* TOP BAR */
+#brand-nav {
+  height: $menuBarHeight;
+  min-height: $menuBarHeight;
+  line-height: $menuBarHeight;
+  vertical-align: middle;
+  box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.50);
+  border: 0;
+  border-radius: 0;
+}
+
+.navbar-brand {
+  color: rgba(255,255,255,.75) !important;
+  font-family: 'Aldrich';
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  @include align-middle($menuBarHeight);
+  padding-left: 15px;
+}
+
+#user-login input {
+  height: 32px;
+  line-height: 32px;
+  color: gray;
+  border: 0;
+  @include input-fields;
+}
+
+/* USER PANEL */
+#user-panel {
+  background-color: green;
+}
+.userName{
+  color: #FFF;
+}
+
+/* MAIN NAVIGATION */
+#nav-container {
+  background-color: #050505;
+  background: rgb(255,255,255); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(241,241,241,1) 85%, rgba(241,241,241,1) 85%, rgba(225,225,225,1) 86%, rgba(246,246,246,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,241,241,1) 85%,rgba(241,241,241,1) 85%,rgba(225,225,225,1) 86%,rgba(246,246,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(241,241,241,1) 85%,rgba(241,241,241,1) 85%,rgba(225,225,225,1) 86%,rgba(246,246,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+}
+
+#primary-nav ul.nav.nav-tabs.navbar-left {
+  border-bottom: 0px;
+}
+
+#primary-nav ul li {
+  border: 0;
+  padding: 0;
+  border: 0;
+  height: $menuBarHeight;
+}
+
+#primary-nav ul li:hover {
+  background-color: green;
+}
+
+#primary-nav ul li a { /* Menu list items */
+  @include align-middle($menuBarHeight);
+  margin: 0px 10px;
+  border: 0;
+}
+
+#primary-nav ul li a:hover {
+  background-color: transparent;
+  border: 0;
+}
+
+form.navbar-form {
+  padding: 0;
+  margin: 0;
+}
+
+#secondary-nav { /* Submenu */
+  background-color: #777;
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  z-index: 1;
+}
+
+/* CONTENT DIVS */
+
+#main-content {
+  background-color: $lightBackgroundColor;
+}
+
+#sub-content {
+  background-color: $mainBackgroundColor;
+}
+
+/* ADVERTISEMENTS */
+
+#leaderboard {
+  width: 728px;
+  height: 90px;
+  margin: 30px auto;
+  background-color: $advertBackgroundColor;
+}
+
+#skyscraper {
+  width: 160px;
+  height: 600px;
+  margin: 10px auto;
+  background-color: $advertBackgroundColor;
+}
+
+/* FOOTER */
+
+#footer-container {
+  background-color: $darkBackgroundColor;
+}

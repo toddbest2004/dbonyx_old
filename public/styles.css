@@ -22,6 +22,16 @@ a {
 a:hover {
   color: pink; }
 
+.btn:focus, .btn:active:focus, .btn.active:focus,
+.btn.focus, .btn:active.focus, .btn.active.focus {
+  outline: none;
+  box-shadow: none; }
+
+input:focus {
+  box-shadow: none;
+  outline: none;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.25); }
+
 /* TOP BAR */
 #brand-nav {
   height: 64px;
@@ -33,11 +43,11 @@ a:hover {
   border-radius: 0; }
 
 .navbar-brand {
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: #D8D8D8 !important;
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 64px;
   vertical-align: middle;
   padding: 0;
@@ -45,12 +55,16 @@ a:hover {
   height: 64px;
   padding-left: 15px; }
 
+#user-login {
+  margin-right: 15px; }
+
 #user-login input {
   height: 32px;
   line-height: 32px;
   color: gray;
   border: 0;
-  padding: 1px 8px; }
+  padding: 1px 8px;
+  border-radius: 1px; }
 
 /* USER PANEL */
 #user-panel {
@@ -92,6 +106,11 @@ a:hover {
   padding: 0;
   margin: 0;
   height: 64px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #4A4A4A;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
   margin: 0px 10px;
   border: 0; }
 

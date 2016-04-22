@@ -44,7 +44,7 @@
       <nav role="navigation" class="navbar navbar-default" id="brand-nav">
         <div class="container-fluid" id="proprietary-bar">
           <div class="navbar-header">
-            <a class="navbar-brand" href="/">ONYX GAMING</a>
+            <a class="navbar-brand" href="/">DB ONYX</a>
           </div>
           <ul class="nav navbar-nav navbar-right">
             <li class="warning" ng-if="error">{{error}}</li>
@@ -57,7 +57,7 @@
                 <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
                 <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
                 <input type="submit" value="Log In" ng-focus="clearError()" ng-click="login()">
-                <button class="btn btn-info" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
+                <button class="btn btn-warning" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
               </form>
             </li>
           </ul>

@@ -3,6 +3,7 @@ $mainBackgroundColor: #9B9B9B;
 $darkBackgroundColor: #4A4A4A;
 $lightBackgroundColor: #D8D8D8;
 $advertBackgroundColor: #CCCCCC;
+$accentColor: #FF8000;
 
 /* Sitewide font colors */
 $bodyTextColor: #FFFFFF;
@@ -21,6 +22,15 @@ $hoverColor: pink;
 
 @mixin input-fields(){
   padding: 1px 8px;
+  border-radius: 1px;
+}
+
+@mixin menu-font(){
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: $darkBackgroundColor;
+  text-shadow: 0px 1px 0px rgba(0,0,0,0.1);
 }
 
 /* MAIN PAGE ELEMENTS */
@@ -48,6 +58,18 @@ a:hover {
   color: $hoverColor;
 }
 
+.btn:focus,.btn:active:focus,.btn.active:focus,
+.btn.focus,.btn:active.focus,.btn.active.focus {
+    outline: none;
+    box-shadow: none;
+}
+
+input:focus {   
+  box-shadow: none;
+  outline: none;
+  box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
+}
+
 /* TOP BAR */
 #brand-nav {
   height: $menuBarHeight;
@@ -60,13 +82,17 @@ a:hover {
 }
 
 .navbar-brand {
-  color: rgba(255,255,255,.75) !important;
+  color: $lightBackgroundColor !important;
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 14px;
+  font-size: 12px;
   @include align-middle($menuBarHeight);
   padding-left: 15px;
+}
+
+#user-login {
+  margin-right: 15px;
 }
 
 #user-login input {
@@ -112,6 +138,7 @@ a:hover {
 
 #primary-nav ul li a { /* Menu list items */
   @include align-middle($menuBarHeight);
+  @include menu-font();
   margin: 0px 10px;
   border: 0;
 }

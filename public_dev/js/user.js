@@ -3,14 +3,17 @@ angular.module('UserCtrls', [])
 	var user = {loggedin:false}
 	
 	user.checkLoggedInStatus = function(){
-		$http({
-			method: 'POST',
-			url: '/api/user/getUser'
-		}).then(function success(response){
-			user.username=response.data.username
-			user.loggedin=true
-		},function error(response){
-		})
+		user.loggedin=Auth.isLoggedIn()
+		if(user.loggedin){
+			$http({
+				method: 'POST',
+				url: '/api/user/getUser'
+			}).then(function success(response){
+				user.username=response.data.username
+				user.loggedin=true
+			},function error(response){
+			})
+		}
 	}
 
 	//validates user's email (by clicking link created and sent to email)

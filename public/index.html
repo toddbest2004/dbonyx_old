@@ -53,13 +53,16 @@
               <div ng-click="toggleUserPanel()" class="userName">{{user.username}} <b class="caret"></b></div>
             </li>
             <li ng-if="!user.loggedin">
-              <form id="user-login">
+              <a ng-if="!signin" href="#" ng-click="signinActive()">Sign in</a>
+              <form id="user-login" style="display: inline-block" ng-show="signin">
                 <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
                 <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
-                <input type="submit" value="Log In" ng-focus="clearError()" ng-click="login()">
-                <button class="btn btn-warning" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
+                <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
               </form>
             </li>
+            <li>
+             <button class="btn" style="display: inline-block" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
+             </li>
           </ul>
         </div>
       </nav>

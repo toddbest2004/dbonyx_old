@@ -126,6 +126,10 @@ angular.module('UserCtrls', [])
 	$scope.toggleUserPanel = function(){
 		$scope.showUserPanel = !$scope.showUserPanel
 	}
+	$scope.signinActive = function(){
+		$scope.signin=true
+		document.getElementById('email').focus();
+	}
 	$scope.register=function(){
 		onyxUser.register($scope.username, $scope.email, $scope.password1, $scope.password2, function(success, err){
 			if(success){

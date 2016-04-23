@@ -32,6 +32,9 @@ input:focus {
   outline: none;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.25); }
 
+.btn {
+  border: 0; }
+
 /* TOP BAR */
 #brand-nav {
   height: 64px;
@@ -40,20 +43,39 @@ input:focus {
   vertical-align: middle;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   border: 0;
-  border-radius: 0; }
+  border-radius: 0;
+  padding: 0px 15px; }
+
+#brand-nav .btn {
+  border: solid 1px orange;
+  background-color: orange;
+  margin-top: -2px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase; }
 
 .navbar-brand {
   color: #D8D8D8 !important;
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 64px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 64px; }
+
+.navbar-nav li a {
   line-height: 64px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
   height: 64px;
-  padding-left: 15px; }
+  padding: 0px 15px;
+  color: #9B9B9B !important;
+  font-weight: normal !important;
+  font-size: 14px; }
 
 #user-login {
   margin-right: 15px; }

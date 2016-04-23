@@ -70,6 +70,10 @@ input:focus {
   box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
 }
 
+.btn {
+  border: 0;
+}
+
 /* TOP BAR */
 #brand-nav {
   height: $menuBarHeight;
@@ -79,6 +83,16 @@ input:focus {
   box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.50);
   border: 0;
   border-radius: 0;
+  padding: 0px 15px;
+}
+
+#brand-nav .btn {
+  border: solid 1px orange;
+  background-color: orange;
+  margin-top: -2px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .navbar-brand {
@@ -86,9 +100,16 @@ input:focus {
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 12px;
+  font-size: 14px;
   @include align-middle($menuBarHeight);
-  padding-left: 15px;
+}
+
+.navbar-nav li a {
+  @include align-middle($menuBarHeight);
+  padding: 0px 15px;
+  color: $mainBackgroundColor !important;
+  font-weight: normal !important;
+  font-size: 14px;
 }
 
 #user-login {

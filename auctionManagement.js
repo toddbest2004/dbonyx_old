@@ -91,7 +91,7 @@ function importAuctionDataFromServer(url, slug, region, touch,callback){
 			}
 		}else{
 			auctionLog("Auction data error "+(new Date()-start))
-			auctionLog("Response code: "+response.statusCode)
+			auctionLog("Response code: ")
 			auctionLog("Skipping")
 			callback()
 		}

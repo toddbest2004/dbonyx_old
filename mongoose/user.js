@@ -3,10 +3,18 @@ var Schema = mongoose.Schema
 var bcrypt = require('bcrypt')
 var SALT_WORK_FACTOR = 10
 
+function capitalize (v) {
+    return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();
+}
+
+function toLower (v) {
+  return v.toLowerCase();
+}
+
 var onyxUserSchema = new Schema({
-	username: String,
-	password: String,
-	email: String,
+	username: {type: String,required:true, set: capitalize},
+	password: {type: String, required: true},
+	email: {type: String, set: toLower, requied: true},
 	emailValidation: String,
 	isEmailValidated: {type:Boolean, default:false},
 	emailValidationCreatedDate: {type:Date, default: Date.now},

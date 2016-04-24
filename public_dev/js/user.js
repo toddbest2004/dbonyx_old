@@ -115,6 +115,8 @@ angular.module('UserCtrls', [])
 	}
 	$scope.login = function(){
 		onyxUser.login($scope.login.email, $scope.login.password, function(err, success){
+			$scope.login.email=null
+			$scope.login.password=null
 			if(err){
 				$scope.error=err
 			}

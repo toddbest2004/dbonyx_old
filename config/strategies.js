@@ -12,6 +12,7 @@ module.exports = {
 	  usernameField: 'email'
 	},
 	function(email, password, done) {
+    email = email.toLowerCase()
 	  db.onyxUser.findOne({email: email}).exec(function(err, user) {
   		if (!err&&user) {
   		  user.comparePassword(password, function(err, result) {

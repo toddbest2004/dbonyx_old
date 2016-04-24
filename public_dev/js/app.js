@@ -70,6 +70,18 @@ $routeProvider
 .when('/validate/:user/:validateString', {
 	templateUrl: 'app/views/validate.html'
 })
+.when('/forums', {
+	controller: 'forumCtrl',
+	templateUrl: 'app/views/forums/forumMain.html'
+})
+.when('/forums/cat/:categoryId', {
+	controller: 'forumCatCtrl',
+	templateUrl: 'app/views/forums/forumCategory.html'
+})
+.when('/forums/thread/:threadId', {
+	controller: 'forumThreadCtrl',
+	templateUrl: 'app/views/forums/forumThread.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })

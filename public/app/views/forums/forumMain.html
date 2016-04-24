@@ -1,0 +1,16 @@
+<div class="row">
+<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
+<h1>Welcome to the Forums!</h1>
+<div ng-repeat="category in categories">
+	<h3>{{category.name}}</h3>
+	<div ng-repeat="sub in category.subCategories">
+		<a href='/forums/cat/{{sub._id}}'><b>{{sub.name}}</b>
+		{{sub.threads.length}} Thread<span ng-if="sub.threads.length!==1">s</span></a>
+	</div>
+</div>
+
+</div>
+<sidebar>
+
+</sidebar>
+</div>

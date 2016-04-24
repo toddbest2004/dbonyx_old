@@ -43,7 +43,9 @@ $quality7: #E6CC80;
     vertical-align: top; }
     .navbar .navbar-nav li {
       font-weight: bold; }
-#searchBarResults{ 
+#searchBarResults{
+  width: 200px;
+  top: 100%;
   position:absolute;
   z-index: 1;
   background-color: #7A7575;

@@ -13,8 +13,9 @@
 body {
   background-color: #9B9B9B;
   color: #FFFFFF;
-  font-family: 'Maven Pro';
-  font-size: 14px; }
+  font-family: 'Merriweather Sans', 'Maven Pro';
+  font-weight: 300;
+  font-size: 12px; }
 
 hr {
   border: 0;
@@ -28,7 +29,8 @@ a {
   color: green; }
 
 a:hover {
-  color: pink; }
+  color: pink;
+  border-bottom: double 1px; }
 
 .btn:focus, .btn:active:focus, .btn.active:focus,
 .btn.focus, .btn:active.focus, .btn.active.focus {
@@ -83,10 +85,14 @@ input:focus {
   padding: 0;
   margin: 0;
   height: 64px;
+  -moz-transition: color 0.25s;
+  -o-transition: color 0.25s;
+  -webkit-transition: color 0.25s;
+  transition: color 0.25s;
   padding: 0px 15px;
   color: #9B9B9B !important;
   font-weight: normal !important;
-  font-size: 14px; }
+  font-size: 12px; }
 
 .navbar-nav li a:hover {
   color: #D8D8D8 !important; }
@@ -105,6 +111,9 @@ input:focus {
   border: 0;
   color: #4A4A4A;
   background-color: #D8D8D8; }
+
+#user-login, #register-button {
+  display: inline-block; }
 
 /* REGISTER FORM */
 .registerForm {
@@ -136,10 +145,16 @@ input:focus {
   background: linear-gradient(to bottom, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
-  /* IE6-9 */ }
+  /* IE6-9 */
+  margin-bottom: 15px;
+  border-radius: 3px;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.1); }
 
 #primary-nav ul.nav.nav-tabs.navbar-left {
   border-bottom: 0px; }
+
+#primary-nav {
+  padding: 0px 16px; }
 
 #primary-nav ul li {
   border: 0;
@@ -158,20 +173,29 @@ input:focus {
   margin: 0;
   height: 64px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Roboto';
   text-transform: uppercase;
   color: #4A4A4A;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
-  margin: 0px 10px;
+  margin: 0px 16px;
   border: 0; }
 
-#primary-nav ul li a:hover {
+#primary-nav ul li a:hover, #primary-nav ul li a:focus {
   background-color: transparent;
   border: 0; }
 
 form.navbar-form {
+  line-height: 64px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 64px;
   padding: 0;
   margin: 0; }
+
+form.navbar-form input {
+  width: 200px !important; }
 
 #secondary-nav {
   /* Submenu */
@@ -220,6 +244,22 @@ nav#secondary-nav {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
+.registerForm {
+  height: 300px;
+  background: #4A4A4A;
+  -webkit-transition: all linear .25s;
+  transition: all linear .25s;
+  padding-top: 15px;
+  background-size: 132px 132px;
+  background-blend-mode: multiply; }
+
+.registerForm.ng-hide {
+  height: 0px;
+  opacity: 0; }
+
+.registerForm.ng-hide.ng-hide-active {
+  opacity: 1; }
+
 /* wow class text colors */
 /* wow reputation bar colors */
 /* wow item/pet quality colors */
@@ -238,7 +278,12 @@ nav#secondary-nav {
   float: none;
   vertical-align: top; }
 
+.navbar .navbar-nav li {
+  font-weight: bold; }
+
 #searchBarResults {
+  width: 200px;
+  top: 100%;
   position: absolute;
   z-index: 1;
   background-color: #7A7575;

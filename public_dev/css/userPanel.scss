@@ -4,9 +4,9 @@
 	-webkit-transition: all linear .25s;
 	transition: all linear .25s;
 	padding-top: 15px;
-	-webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
-	-moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
-	box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	// -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	// -moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	// box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
 	background-size: 132px 132px;
 	background-blend-mode: multiply;
 }
@@ -21,6 +21,10 @@
 }
 
 .userName{
-  color: #FFF;
+  color: $mainBackgroundColor;
   cursor: pointer;
+}
+
+.userName:hover {
+	color: $lightBackgroundColor;
 }

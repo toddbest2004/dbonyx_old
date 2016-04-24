@@ -1,6 +1,14 @@
 /* Sitewide style colors */
 /* Sitewide font colors */
 /* Mixins */
+.btn {
+  font-family: 'Roboto';
+  font-weight: 700;
+  color: white !important;
+  font-size: 14px;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 100px; }
+
 /* MAIN PAGE ELEMENTS */
 body {
   background-color: #9B9B9B;
@@ -80,6 +88,9 @@ input:focus {
   font-weight: normal !important;
   font-size: 14px; }
 
+.navbar-nav li a:hover {
+  color: #D8D8D8 !important; }
+
 #user-login {
   margin-right: 15px; }
 
@@ -92,7 +103,8 @@ input:focus {
   border-radius: 1px;
   height: 32px;
   border: 0;
-  color: #4A4A4A; }
+  color: #4A4A4A;
+  background-color: #D8D8D8; }
 
 /* REGISTER FORM */
 .registerForm {
@@ -109,7 +121,8 @@ input:focus {
   border-radius: 1px;
   height: 32px;
   border: 0;
-  color: #4A4A4A; }
+  color: #4A4A4A;
+  background-color: #D8D8D8; }
 
 /* MAIN NAVIGATION */
 #nav-container {
@@ -224,9 +237,6 @@ nav#secondary-nav {
   display: inline-block;
   float: none;
   vertical-align: top; }
-
-.navbar .navbar-nav li {
-  font-weight: bold; }
 
 #searchBarResults {
   position: absolute;
@@ -619,9 +629,6 @@ nav#secondary-nav {
   -webkit-transition: all linear .25s;
   transition: all linear .25s;
   padding-top: 15px;
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
   background-size: 132px 132px;
   background-blend-mode: multiply; }
 
@@ -633,5 +640,8 @@ nav#secondary-nav {
   opacity: 1; }
 
 .userName {
-  color: #FFF;
+  color: #9B9B9B;
   cursor: pointer; }
+
+.userName:hover {
+  color: #D8D8D8; }

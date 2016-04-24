@@ -11,6 +11,7 @@
   <link href='https://fonts.googleapis.com/css?family=Aldrich|Maven+Pro' rel='stylesheet' type='text/css'>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -19,7 +20,7 @@
   <![endif]-->
     <link rel="stylesheet" media="screen" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link href='https://fonts.googleapis.com/css?family=Exo+2:400|Roboto:300,300italic,400|PT+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Exo+2:400|Roboto:300,300italic,400,700,900' rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-route.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-cookies.js"></script>
@@ -50,10 +51,10 @@
             <li class="warning" ng-if="error">{{error}}</li>
             <li class="success" ng-if="success">{{success}}</li>
             <li ng-if="user.loggedin">
-              <div ng-click="toggleUserPanel()" class="userName">{{user.username}} <b class="caret"></b></div>
+              <div ng-click="toggleUserPanel()" class="userName"><i class="fa fa-lock"></i> {{user.username}} <i class="fa fa-angle-down"></i></div>
             </li>
             <li ng-if="!user.loggedin">
-              <a ng-if="!signin" href="#" ng-click="signinActive()">Sign in</a>
+              <a ng-if="!signin" href="#" ng-click="signinActive()"><i class="fa fa-unlock-alt"></i> Sign in</a>
               <form id="user-login" style="display: inline-block" ng-show="signin">
                 <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
                 <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">

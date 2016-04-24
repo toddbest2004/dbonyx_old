@@ -1,15 +1,15 @@
 <div ng-controller='AuctionCtrl'>
 
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-9" id="main-content">
 		<h1>Auction House</h1>
 		<div id="realmDiv">
 				<form action="" id="filterForm"  autocomplete="off">
 					<label for="realmInput">Select Realm:</label>
 					<auto-complete realm-input="realmInput" search="search()"></auto-complete>
 					<label for="search">Search Term:</label>
-					<input type="text" id="search" class="itemFilter" ng-model="searchTerm">
-					<button id="searchButton" ng-click="search($event)">Search</button>
+					<input type="text" id="search" class="itemFilter form-control" ng-model="searchTerm">
+					<button id="searchButton" ng-click="search($event)" class="btn">Search</button>
 				</form>
 			</div>
 		<div id="auctionData">

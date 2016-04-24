@@ -1,15 +1,21 @@
 /* Sitewide style colors */
-$mainBackgroundColor: #9B9B9B;
-$darkBackgroundColor: #4A4A4A;
-$lightBackgroundColor: #D8D8D8;
+$darkBackgroundColor: #212121;
+$mainBackgroundColor: #303030;
+$lightBackgroundColor: #424242;
 $advertBackgroundColor: #CCCCCC;
 $accentColor: #FF8000;
 
 /* Sitewide font colors */
-$bodyTextColor: #FFFFFF;
-$menuBarHeight: 48px;
+$darkTextColor: #E0E0E0;
+$mainTextColor: #F5F5F5;
+$lightTextColor: #FAFAFA;
+
+/* Anchor Colors */
 $linkColor: green;
 $hoverColor: pink;
+
+/* Heights and Widths */
+$menuBarHeight: 48px;
 
 /* Box shadows */
 $btnShadow: 2px 4px 8px -4px rgba(0,0,0,0.25);
@@ -90,8 +96,8 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
 
 /* MAIN PAGE ELEMENTS */
 body { 
-  background-color: $mainBackgroundColor;
-  color: $bodyTextColor;
+  background-color: $darkBackgroundColor;
+  color: $mainTextColor;
   font-family: 'Merriweather Sans', 'Maven Pro';
   font-weight: 300;
   font-size: 12px;
@@ -165,6 +171,7 @@ input:focus {
 
 /* TOP BAR */
 #brand-nav {
+  background-color: $lightBackgroundColor;
   height: $menuBarHeight;
   min-height: $menuBarHeight;
   line-height: $menuBarHeight;
@@ -192,21 +199,21 @@ input:focus {
   font-size: 14px;
   @include align-middle($menuBarHeight);
   /* Inset shadows are visible under slightly transparent text color */
-  color: rgba(74,74,74, 0.25) !important;
-  text-shadow: 1px 4px 6px $darkBackgroundColor, 0 0 0 #000, 1px 4px 6px $darkBackgroundColor;
+  // color: rgba(74,74,74, 0.25) !important;
+  // text-shadow: 1px 4px 6px $darkBackgroundColor, 0 0 0 #000, 1px 4px 6px $darkBackgroundColor;
 }
 
 .navbar-nav li a {
   @include align-middle($menuBarHeight);
   // @include transition(color .25s);
   padding: 0px 15px;
-  color: $mainBackgroundColor !important;
+  color: $mainTextColor !important;
   font-weight: normal !important;
   font-size: 12px;
 }
 
 .navbar-nav li a:hover {
-  color: $lightBackgroundColor !important;
+  color: $lightTextColor !important;
 }
 
 #user-login {
@@ -306,7 +313,7 @@ form.navbar-form input {
 /* CONTENT DIVS */
 
 #main-content {
-  background-color: $lightBackgroundColor;
+  background-color: $mainBackgroundColor;
 }
 
 #sub-content {
@@ -332,5 +339,6 @@ form.navbar-form input {
 /* FOOTER */
 
 #footer-container {
-  background-color: $darkBackgroundColor;
+  margin-top: 16px;
+  background-color: $lightBackgroundColor;
 }

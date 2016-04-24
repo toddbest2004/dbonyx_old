@@ -1,0 +1,20 @@
+$auctionItemHeight: 42px;
+
+.auctionResultCell {
+	@include align-middle($auctionItemHeight);
+	height: $auctionItemHeight;
+	font-size: 12px !important;
+}
+
+.historyGraph, .watchAuction {
+	color: $darkTextColor;
+}
+
+.itemLinkImage {
+	margin-right: 12px;
+}
+
+#search {
+	width: 200px;
+	display: inline-block;
+}

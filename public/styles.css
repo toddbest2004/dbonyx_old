@@ -1,11 +1,13 @@
 /* Sitewide style colors */
 /* Sitewide font colors */
+/* Anchor Colors */
+/* Heights and Widths */
 /* Box shadows */
 /* Mixins */
 /* MAIN PAGE ELEMENTS */
 body {
-  background-color: #9B9B9B;
-  color: #FFFFFF;
+  background-color: #212121;
+  color: #F5F5F5;
   font-family: 'Merriweather Sans', 'Maven Pro';
   font-weight: 300;
   font-size: 12px; }
@@ -62,6 +64,7 @@ input:focus {
 
 /* TOP BAR */
 #brand-nav {
+  background-color: #424242;
   height: 48px;
   min-height: 48px;
   line-height: 48px;
@@ -92,9 +95,7 @@ input:focus {
   padding: 0;
   margin: 0;
   height: 48px;
-  /* Inset shadows are visible under slightly transparent text color */
-  color: rgba(74, 74, 74, 0.25) !important;
-  text-shadow: 1px 4px 6px #4A4A4A, 0 0 0 #000, 1px 4px 6px #4A4A4A; }
+  /* Inset shadows are visible under slightly transparent text color */ }
 
 .navbar-nav li a {
   line-height: 48px;
@@ -103,12 +104,12 @@ input:focus {
   margin: 0;
   height: 48px;
   padding: 0px 15px;
-  color: #9B9B9B !important;
+  color: #F5F5F5 !important;
   font-weight: normal !important;
   font-size: 12px; }
 
 .navbar-nav li a:hover {
-  color: #D8D8D8 !important; }
+  color: #FAFAFA !important; }
 
 #user-login {
   margin-right: 15px; }
@@ -122,8 +123,8 @@ input:focus {
   border-radius: 1px;
   height: 32px;
   border: 0;
-  color: #4A4A4A;
-  background-color: #D8D8D8; }
+  color: #212121;
+  background-color: #424242; }
 
 #user-login, #register-button {
   display: inline-block; }
@@ -133,7 +134,7 @@ input:focus {
   padding: 15px;
   padding-right: 30px;
   z-index: 1;
-  background-color: #4A4A4A; }
+  background-color: #212121; }
 
 .registerForm form {
   float: right; }
@@ -143,8 +144,8 @@ input:focus {
   border-radius: 1px;
   height: 32px;
   border: 0;
-  color: #4A4A4A;
-  background-color: #D8D8D8; }
+  color: #212121;
+  background-color: #424242; }
 
 /* MAIN NAVIGATION */
 #nav-container {
@@ -190,7 +191,7 @@ input:focus {
   font-weight: 700;
   font-family: 'Roboto';
   text-transform: uppercase;
-  color: #4A4A4A;
+  color: #212121;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
   margin: 0px 16px;
   border: 0; }
@@ -221,10 +222,10 @@ form.navbar-form input {
 
 /* CONTENT DIVS */
 #main-content {
-  background-color: #D8D8D8; }
+  background-color: #303030; }
 
 #sub-content {
-  background-color: #9B9B9B; }
+  background-color: #303030; }
 
 /* ADVERTISEMENTS */
 #leaderboard {
@@ -241,7 +242,27 @@ form.navbar-form input {
 
 /* FOOTER */
 #footer-container {
-  background-color: #4A4A4A; }
+  margin-top: 16px;
+  background-color: #424242; }
+
+.auctionResultCell {
+  line-height: 42px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 42px;
+  height: 42px;
+  font-size: 12px !important; }
+
+.historyGraph, .watchAuction {
+  color: #E0E0E0; }
+
+.itemLinkImage {
+  margin-right: 12px; }
+
+#search {
+  width: 200px;
+  display: inline-block; }
 
 nav#secondary-nav {
   height: 200px;
@@ -260,7 +281,7 @@ nav#secondary-nav {
 
 .registerForm {
   height: 300px;
-  background: #4A4A4A;
+  background: #212121;
   -webkit-transition: all linear .25s;
   transition: all linear .25s;
   padding-top: 15px;
@@ -285,7 +306,7 @@ nav#secondary-nav {
 
 .navbar {
   text-align: center;
-  background-color: #4A4A4A; }
+  background-color: #212121; }
 
 .navbar .navbar-nav {
   display: inline-block;
@@ -684,7 +705,7 @@ nav#secondary-nav {
 
 #user-panel {
   height: 200px;
-  background: #4A4A4A;
+  background: #212121;
   -webkit-transition: all linear .25s;
   transition: all linear .25s;
   padding-top: 15px;
@@ -699,8 +720,8 @@ nav#secondary-nav {
   opacity: 1; }
 
 .userName {
-  color: #9B9B9B;
+  color: #303030;
   cursor: pointer; }
 
 .userName:hover {
-  color: #D8D8D8; }
+  color: #424242; }

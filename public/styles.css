@@ -44,7 +44,8 @@ input:focus {
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   border: 0;
   border-radius: 0;
-  padding: 0px 15px; }
+  padding: 0px 15px;
+  margin-bottom: 0; }
 
 #brand-nav .btn {
   border: solid 1px orange;
@@ -55,7 +56,6 @@ input:focus {
   text-transform: uppercase; }
 
 .navbar-brand {
-  color: #D8D8D8 !important;
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -64,7 +64,10 @@ input:focus {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 64px; }
+  height: 64px;
+  /* Inset shadows are visible under slightly transparent text color */
+  color: rgba(74, 74, 74, 0.25) !important;
+  text-shadow: 1px 4px 6px #4A4A4A, 0 0 0 #000, 1px 4px 6px #4A4A4A; }
 
 .navbar-nav li a {
   line-height: 64px;
@@ -86,14 +89,27 @@ input:focus {
   color: gray;
   border: 0;
   padding: 1px 8px;
-  border-radius: 1px; }
+  border-radius: 1px;
+  height: 32px;
+  border: 0;
+  color: #4A4A4A; }
 
-/* USER PANEL */
-#user-panel {
-  background-color: green; }
+/* REGISTER FORM */
+.registerForm {
+  padding: 15px;
+  padding-right: 30px;
+  z-index: 1;
+  background-color: #4A4A4A; }
 
-.userName {
-  color: #FFF; }
+.registerForm form {
+  float: right; }
+
+.registerForm form input {
+  padding: 1px 8px;
+  border-radius: 1px;
+  height: 32px;
+  border: 0;
+  color: #4A4A4A; }
 
 /* MAIN NAVIGATION */
 #nav-container {
@@ -218,11 +234,6 @@ nav#secondary-nav {
   background-color: #7A7575;
   padding: 2px; }
 
-.registerForm {
-  width: 500px;
-  margin: 0 0 0 auto;
-  z-index: 1; }
-
 .money {
   display: inline-block; }
 
@@ -240,9 +251,6 @@ nav#secondary-nav {
   border: 5px solid #dd5b00;
   border-radius: 5px;
   display: inline-block; }
-
-.container {
-  background-color: #7A7575; }
 
 .icon {
   width: 32px;
@@ -607,9 +615,15 @@ nav#secondary-nav {
 
 #user-panel {
   height: 200px;
-  background: white;
+  background: #4A4A4A;
   -webkit-transition: all linear .25s;
-  transition: all linear .25s; }
+  transition: all linear .25s;
+  padding-top: 15px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  background-size: 132px 132px;
+  background-blend-mode: multiply; }
 
 #user-panel.ng-hide {
   height: 0px;
@@ -618,12 +632,6 @@ nav#secondary-nav {
 #user-panel.ng-hide.ng-hide-active {
   opacity: 1; }
 
-#user-panel {
-  padding-top: 15px;
-  background-color: #4E4E54;
-  height: 160px;
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  background-size: 132px 132px;
-  background-blend-mode: multiply; }
+.userName {
+  color: #FFF;
+  cursor: pointer; }

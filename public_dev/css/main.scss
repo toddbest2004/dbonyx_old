@@ -23,6 +23,9 @@ $hoverColor: pink;
 @mixin input-fields(){
   padding: 1px 8px;
   border-radius: 1px;
+  height: 32px;
+  border: 0;
+  color: $darkBackgroundColor;
 }
 
 @mixin menu-font(){
@@ -84,6 +87,7 @@ input:focus {
   border: 0;
   border-radius: 0;
   padding: 0px 15px;
+  margin-bottom: 0;
 }
 
 #brand-nav .btn {
@@ -96,12 +100,14 @@ input:focus {
 }
 
 .navbar-brand {
-  color: $lightBackgroundColor !important;
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 14px;
   @include align-middle($menuBarHeight);
+  /* Inset shadows are visible under slightly transparent text color */
+  color: rgba(74,74,74, 0.25) !important;
+  text-shadow: 1px 4px 6px $darkBackgroundColor, 0 0 0 #000, 1px 4px 6px $darkBackgroundColor;
 }
 
 .navbar-nav li a {
@@ -124,12 +130,20 @@ input:focus {
   @include input-fields;
 }
 
-/* USER PANEL */
-#user-panel {
-  background-color: green;
+/* REGISTER FORM */
+.registerForm{
+  padding: 15px;
+  padding-right: 30px;
+  z-index: 1;
+  background-color: $darkBackgroundColor;
 }
-.userName{
-  color: #FFF;
+
+.registerForm form {
+  float: right;
+}
+
+.registerForm form input {
+  @include input-fields();
 }
 
 /* MAIN NAVIGATION */

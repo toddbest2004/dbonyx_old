@@ -60,7 +60,7 @@
                 <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
               </form>
             </li>
-            <li>
+            <li ng-if="!user.loggedin">
              <button class="btn" style="display: inline-block" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
              </li>
           </ul>

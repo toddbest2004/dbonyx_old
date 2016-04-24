@@ -1,4 +1,4 @@
-<div ng-show="" class="container registerForm">
+<div ng-show="" class="row registerForm">
 	<form ng-submit="register()">
 		<div class="form-group row">
 			<div class="col-xs-6"><label for="username">Username: </label></div>
@@ -17,7 +17,7 @@
 			<div class="col-xs-6"><input id="password2" type="password" ng-model="password2" placeholder="re-enter password" ng-focus="clearError()"></div>
 		</div>
 		<div class="form-group row center">
-			<input type="submit" value="Register" ng-focus="clearError()">
+			<input type="submit" value="Register" ng-focus="clearError()" class="pull-right">
 		</div>
 		<div class="warning center" ng-if="registerError">
 			<h3>{{registerError}}</h3>

@@ -2,7 +2,7 @@
   <!-- MAIN MENU -->
   <nav id="primary-nav">
     <ul class="nav nav-tabs navbar-left">
-      <li><a href="/"><i class="fa fa-home" style="font-size: 28px;" aria-hidden="true"></i></a></li>
+      <li><a href="/"><i class="fa fa-home fa-fw fa-lg" aria-hidden="true"></i></a></li>
       <li ng-repeat="menu in menus" ng-mouseover="select(menu)" ng-mouseleave="off(menu)"><a href="{{menu.link}}">{{menu.title}} <i class="fa fa-angle-down"></i></a></li>
     </ul>
     <form role="search" class="navbar-form navbar-right" ng-controller="searchBarCtrl">

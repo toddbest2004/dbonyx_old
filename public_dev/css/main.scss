@@ -7,45 +7,55 @@ $accentColor: #FF8000;
 
 /* Sitewide font colors */
 $bodyTextColor: #FFFFFF;
-$menuBarHeight: 64px;
+$menuBarHeight: 48px;
 $linkColor: green;
 $hoverColor: pink;
+
+/* Box shadows */
+$btnShadow: 2px 4px 8px -4px rgba(0,0,0,0.25);
+$insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
 
 /* Mixins */
 
 @mixin transition($transition...) {
-    -moz-transition:    $transition;
-    -o-transition:      $transition;
-    -webkit-transition: $transition;
-    transition:         $transition;
+  -moz-transition:    $transition;
+  -o-transition:      $transition;
+  -webkit-transition: $transition;
+  transition:         $transition;
 }
 
 @mixin transition-property($property...) {
-    -moz-transition-property:    $property;
-    -o-transition-property:      $property;
-    -webkit-transition-property: $property;
-    transition-property:         $property;
+  -moz-transition-property:    $property;
+  -o-transition-property:      $property;
+  -webkit-transition-property: $property;
+  transition-property:         $property;
 }
 
 @mixin transition-duration($duration...) {
-    -moz-transition-property:    $duration;
-    -o-transition-property:      $duration;
-    -webkit-transition-property: $duration;
-    transition-property:         $duration;
+  -moz-transition-property:    $duration;
+  -o-transition-property:      $duration;
+  -webkit-transition-property: $duration;
+  transition-property:         $duration;
 }
 
 @mixin transition-timing-function($timing...) {
-    -moz-transition-timing-function:    $timing;
-    -o-transition-timing-function:      $timing;
-    -webkit-transition-timing-function: $timing;
-    transition-timing-function:         $timing;
+  -moz-transition-timing-function:    $timing;
+  -o-transition-timing-function:      $timing;
+  -webkit-transition-timing-function: $timing;
+  transition-timing-function:         $timing;
 }
 
 @mixin transition-delay($delay...) {
-    -moz-transition-delay:    $delay;
-    -o-transition-delay:      $delay;
-    -webkit-transition-delay: $delay;
-    transition-delay:         $delay;
+  -moz-transition-delay:    $delay;
+  -o-transition-delay:      $delay;
+  -webkit-transition-delay: $delay;
+  transition-delay:         $delay;
+}
+
+@mixin box-shadow($shadow){
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
 }
 
 @mixin align-middle($height) {
@@ -74,13 +84,8 @@ $hoverColor: pink;
   text-shadow: 0px 1px 0px rgba(0,0,0,0.1);
 }
 
-.btn {
-  font-family: 'Roboto';
-  font-weight: 700;
-  color: white !important;
-  font-size: 14px;
-  text-shadow: 0px 1px 0px rgba(0,0,0,0.25);
-  border-radius: 100px;
+@mixin menu-shadow(){
+  @include box-shadow(0px 1px 5px 1px rgba(0,0,0,0.50));
 }
 
 /* MAIN PAGE ELEMENTS */
@@ -122,8 +127,40 @@ input:focus {
   box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
 }
 
+// .btn {
+//   font-family: 'Roboto';
+//   font-weight: 700;
+//   color: white !important;
+//   font-size: 12px;
+//   border: 0;
+//   text-shadow: 0px 1px 0px rgba(0,0,0,0.25);
+//   @include box-shadow($btnShadow);
+// }
+
 .btn {
-  border: 0;
+  background-color:#ffa200;
+  border: 0 !important;
+  @include box-shadow($btnShadow);
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+  border-radius:4px;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family: 'Roboto';
+  font-size:12px;
+  text-shadow:0px 1px 0px #ff7000;
+}
+
+.btn:active {
+  position:relative;
+  top:1px;
+}
+
+.form-control:focus {   
+  border-color: #ccc;
+  box-shadow: none;
+  outline: 0 none;
 }
 
 /* TOP BAR */
@@ -132,7 +169,7 @@ input:focus {
   min-height: $menuBarHeight;
   line-height: $menuBarHeight;
   vertical-align: middle;
-  box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.50);
+  @include menu-shadow();
   border: 0;
   border-radius: 0;
   padding: 0px 15px;
@@ -161,7 +198,7 @@ input:focus {
 
 .navbar-nav li a {
   @include align-middle($menuBarHeight);
-  @include transition(color .25s);
+  // @include transition(color .25s);
   padding: 0px 15px;
   color: $mainBackgroundColor !important;
   font-weight: normal !important;
@@ -206,15 +243,16 @@ input:focus {
 
 /* MAIN NAVIGATION */
 #nav-container {
-  background-color: #050505;
-  background: rgb(255,255,255); /* Old browsers */
-  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(241,241,241,1) 85%, rgba(241,241,241,1) 85%, rgba(225,225,225,1) 86%, rgba(246,246,246,1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,241,241,1) 85%,rgba(241,241,241,1) 85%,rgba(225,225,225,1) 86%,rgba(246,246,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(241,241,241,1) 85%,rgba(241,241,241,1) 85%,rgba(225,225,225,1) 86%,rgba(246,246,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-  margin-bottom: 15px;
+  background: rgba(255,255,255,1);
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );margin-bottom: 15px;
   border-radius: 3px;
-  box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.1);
+  @include box-shadow($btnShadow);
 }
 
 #primary-nav ul.nav.nav-tabs.navbar-left {
@@ -233,7 +271,7 @@ input:focus {
 }
 
 #primary-nav ul li:hover {
-  background-color: green;
+  @include box-shadow($insetShadow);
 }
 
 #primary-nav ul li a { /* Menu list items */

@@ -1,14 +1,7 @@
 /* Sitewide style colors */
 /* Sitewide font colors */
+/* Box shadows */
 /* Mixins */
-.btn {
-  font-family: 'Roboto';
-  font-weight: 700;
-  color: white !important;
-  font-size: 14px;
-  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 100px; }
-
 /* MAIN PAGE ELEMENTS */
 body {
   background-color: #9B9B9B;
@@ -43,14 +36,38 @@ input:focus {
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.25); }
 
 .btn {
-  border: 0; }
+  background-color: #ffa200;
+  border: 0 !important;
+  -webkit-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: 'Roboto';
+  font-size: 12px;
+  text-shadow: 0px 1px 0px #ff7000; }
+
+.btn:active {
+  position: relative;
+  top: 1px; }
+
+.form-control:focus {
+  border-color: #ccc;
+  box-shadow: none;
+  outline: 0 none; }
 
 /* TOP BAR */
 #brand-nav {
-  height: 64px;
-  min-height: 64px;
-  line-height: 64px;
+  height: 48px;
+  min-height: 48px;
+  line-height: 48px;
   vertical-align: middle;
+  -webkit-box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   border: 0;
   border-radius: 0;
@@ -70,25 +87,21 @@ input:focus {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 14px;
-  line-height: 64px;
+  line-height: 48px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 64px;
+  height: 48px;
   /* Inset shadows are visible under slightly transparent text color */
   color: rgba(74, 74, 74, 0.25) !important;
   text-shadow: 1px 4px 6px #4A4A4A, 0 0 0 #000, 1px 4px 6px #4A4A4A; }
 
 .navbar-nav li a {
-  line-height: 64px;
+  line-height: 48px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 64px;
-  -moz-transition: color 0.25s;
-  -o-transition: color 0.25s;
-  -webkit-transition: color 0.25s;
-  transition: color 0.25s;
+  height: 48px;
   padding: 0px 15px;
   color: #9B9B9B !important;
   font-weight: normal !important;
@@ -135,20 +148,19 @@ input:focus {
 
 /* MAIN NAVIGATION */
 #nav-container {
-  background-color: #050505;
   background: white;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, white 0%, #f1f1f1 85%, #f1f1f1 85%, #e1e1e1 86%, #f6f6f6 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
-  /* IE6-9 */
+  background: -moz-linear-gradient(top, white 0%, #f6f6f6 47%, #ededed 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, white), color-stop(47%, #f6f6f6), color-stop(100%, #ededed));
+  background: -webkit-linear-gradient(top, white 0%, #f6f6f6 47%, #ededed 100%);
+  background: -o-linear-gradient(top, white 0%, #f6f6f6 47%, #ededed 100%);
+  background: -ms-linear-gradient(top, white 0%, #f6f6f6 47%, #ededed 100%);
+  background: linear-gradient(to bottom, white 0%, #f6f6f6 47%, #ededed 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
   margin-bottom: 15px;
   border-radius: 3px;
-  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.1); }
+  -webkit-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25); }
 
 #primary-nav ul.nav.nav-tabs.navbar-left {
   border-bottom: 0px; }
@@ -160,18 +172,20 @@ input:focus {
   border: 0;
   padding: 0;
   border: 0;
-  height: 64px; }
+  height: 48px; }
 
 #primary-nav ul li:hover {
-  background-color: green; }
+  -webkit-box-shadow: inset 1px 3px 8px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 1px 3px 8px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 1px 3px 8px 0px rgba(0, 0, 0, 0.2); }
 
 #primary-nav ul li a {
   /* Menu list items */
-  line-height: 64px;
+  line-height: 48px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 64px;
+  height: 48px;
   font-size: 14px;
   font-weight: 700;
   font-family: 'Roboto';
@@ -186,11 +200,11 @@ input:focus {
   border: 0; }
 
 form.navbar-form {
-  line-height: 64px;
+  line-height: 48px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 64px;
+  height: 48px;
   padding: 0;
   margin: 0; }
 

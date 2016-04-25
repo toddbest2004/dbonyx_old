@@ -2,17 +2,18 @@
 $darkBackgroundColor: #212121;
 $mainBackgroundColor: #303030;
 $lightBackgroundColor: #424242;
-$advertBackgroundColor: #CCCCCC;
+$advertBackgroundColor: rgba(255,255,255,.1);
 $accentColor: #FF8000;
 
 /* Sitewide font colors */
-$darkTextColor: #E0E0E0;
-$mainTextColor: #F5F5F5;
-$lightTextColor: #FAFAFA;
+$darkTextColor: #BDBDBD;
+$mainTextColor: #E0E0E0;
+$lightTextColor: #EEEEEE;
+$superLightTextColor: #F5F5F5;
 
 /* Anchor Colors */
-$linkColor: green;
-$hoverColor: pink;
+$linkColor: #FF8000;
+$hoverColor: darken($linkColor, 15%);
 
 /* Heights and Widths */
 $menuBarHeight: 48px;
@@ -112,7 +113,7 @@ hr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-a {
+a, a:visited {
   color: $linkColor;
 }
 
@@ -121,16 +122,22 @@ a:hover {
   border-bottom: double 1px;
 }
 
-.btn:focus,.btn:active:focus,.btn.active:focus,
-.btn.focus,.btn:active.focus,.btn.active.focus {
-    outline: none;
-    box-shadow: none;
-}
-
 input:focus {   
   box-shadow: none;
   outline: none;
   box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
+}
+
+h1 {
+  color: $lightTextColor;
+  font-size: 28px;
+  font-family: 'Roboto'
+}
+h4 {
+  color: $darkTextColor;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 // .btn {
@@ -161,6 +168,22 @@ input:focus {
 .btn:active {
   position:relative;
   top:1px;
+}
+
+.btn:focus,.btn:active:focus,.btn.active:focus,
+.btn.focus,.btn:active.focus,.btn.active.focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.insetBox {
+  padding: 3px;
+  background-color: rgba(0,0,0,.25);
+  border-radius: 6px;
+  border-top: solid 1px rgba(0,0,0,.25);
+  border-left: solid 1px rgba(0,0,0,.25);
+  border-right: solid 1px rgba(0,0,0,.25);
+  border-bottom: solid 1px rgba(255,255,255,.25);
 }
 
 .form-control:focus {   
@@ -196,24 +219,26 @@ input:focus {
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 14px;
+  font-size: 12px;
   @include align-middle($menuBarHeight);
-  /* Inset shadows are visible under slightly transparent text color */
-  // color: rgba(74,74,74, 0.25) !important;
-  // text-shadow: 1px 4px 6px $darkBackgroundColor, 0 0 0 #000, 1px 4px 6px $darkBackgroundColor;
+  color: $darkTextColor !important;
+}
+
+.navbar-brand .dark {
+  color: #000000;
 }
 
 .navbar-nav li a {
   @include align-middle($menuBarHeight);
   // @include transition(color .25s);
   padding: 0px 15px;
-  color: $mainTextColor !important;
+  color: $darkTextColor !important;
   font-weight: normal !important;
   font-size: 12px;
 }
 
 .navbar-nav li a:hover {
-  color: $lightTextColor !important;
+  color: $mainTextColor !important;
 }
 
 #user-login {
@@ -230,22 +255,6 @@ input:focus {
 
 #user-login, #register-button {
   display: inline-block;
-}
-
-/* REGISTER FORM */
-.registerForm{
-  padding: 15px;
-  padding-right: 30px;
-  z-index: 1;
-  background-color: $darkBackgroundColor;
-}
-
-.registerForm form {
-  float: right;
-}
-
-.registerForm form input {
-  @include input-fields();
 }
 
 /* MAIN NAVIGATION */
@@ -314,10 +323,13 @@ form.navbar-form input {
 
 #main-content {
   background-color: $mainBackgroundColor;
+  border: solid 1px $lightBackgroundColor;
+  border-radius: 3px;
+  @include box-shadow($btnShadow);
 }
 
 #sub-content {
-  background-color: $mainBackgroundColor;
+  background-color: transparent;
 }
 
 /* ADVERTISEMENTS */

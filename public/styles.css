@@ -7,7 +7,7 @@
 /* MAIN PAGE ELEMENTS */
 body {
   background-color: #212121;
-  color: #F5F5F5;
+  color: #E0E0E0;
   font-family: 'Merriweather Sans', 'Maven Pro';
   font-weight: 300;
   font-size: 12px; }
@@ -20,22 +20,28 @@ hr {
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 
-a {
-  color: green; }
+a, a:visited {
+  color: #FF8000; }
 
 a:hover {
-  color: pink;
+  color: #b35a00;
   border-bottom: double 1px; }
-
-.btn:focus, .btn:active:focus, .btn.active:focus,
-.btn.focus, .btn:active.focus, .btn.active.focus {
-  outline: none;
-  box-shadow: none; }
 
 input:focus {
   box-shadow: none;
   outline: none;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.25); }
+
+h1 {
+  color: #EEEEEE;
+  font-size: 28px;
+  font-family: 'Roboto'; }
+
+h4 {
+  color: #BDBDBD;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase; }
 
 .btn {
   background-color: #ffa200;
@@ -56,6 +62,20 @@ input:focus {
 .btn:active {
   position: relative;
   top: 1px; }
+
+.btn:focus, .btn:active:focus, .btn.active:focus,
+.btn.focus, .btn:active.focus, .btn.active.focus {
+  outline: none;
+  box-shadow: none; }
+
+.insetBox {
+  padding: 3px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  border-top: solid 1px rgba(0, 0, 0, 0.25);
+  border-left: solid 1px rgba(0, 0, 0, 0.25);
+  border-right: solid 1px rgba(0, 0, 0, 0.25);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.25); }
 
 .form-control:focus {
   border-color: #ccc;
@@ -89,13 +109,16 @@ input:focus {
   font-family: 'Aldrich';
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 48px;
   vertical-align: middle;
   padding: 0;
   margin: 0;
   height: 48px;
-  /* Inset shadows are visible under slightly transparent text color */ }
+  color: #BDBDBD !important; }
+
+.navbar-brand .dark {
+  color: #000000; }
 
 .navbar-nav li a {
   line-height: 48px;
@@ -104,12 +127,12 @@ input:focus {
   margin: 0;
   height: 48px;
   padding: 0px 15px;
-  color: #F5F5F5 !important;
+  color: #BDBDBD !important;
   font-weight: normal !important;
   font-size: 12px; }
 
 .navbar-nav li a:hover {
-  color: #FAFAFA !important; }
+  color: #E0E0E0 !important; }
 
 #user-login {
   margin-right: 15px; }
@@ -128,24 +151,6 @@ input:focus {
 
 #user-login, #register-button {
   display: inline-block; }
-
-/* REGISTER FORM */
-.registerForm {
-  padding: 15px;
-  padding-right: 30px;
-  z-index: 1;
-  background-color: #212121; }
-
-.registerForm form {
-  float: right; }
-
-.registerForm form input {
-  padding: 1px 8px;
-  border-radius: 1px;
-  height: 32px;
-  border: 0;
-  color: #212121;
-  background-color: #424242; }
 
 /* MAIN NAVIGATION */
 #nav-container {
@@ -222,23 +227,28 @@ form.navbar-form input {
 
 /* CONTENT DIVS */
 #main-content {
-  background-color: #303030; }
+  background-color: #303030;
+  border: solid 1px #424242;
+  border-radius: 3px;
+  -webkit-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25); }
 
 #sub-content {
-  background-color: #303030; }
+  background-color: transparent; }
 
 /* ADVERTISEMENTS */
 #leaderboard {
   width: 728px;
   height: 90px;
   margin: 30px auto;
-  background-color: #CCCCCC; }
+  background-color: rgba(255, 255, 255, 0.1); }
 
 #skyscraper {
   width: 160px;
   height: 600px;
   margin: 10px auto;
-  background-color: #CCCCCC; }
+  background-color: rgba(255, 255, 255, 0.1); }
 
 /* FOOTER */
 #footer-container {
@@ -255,7 +265,12 @@ form.navbar-form input {
   font-size: 12px !important; }
 
 .historyGraph, .watchAuction {
-  color: #E0E0E0; }
+  color: #BDBDBD;
+  line-height: 42px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: 42px; }
 
 .itemLinkImage {
   margin-right: 12px; }
@@ -279,14 +294,28 @@ nav#secondary-nav {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
+/* REGISTER FORM */
 .registerForm {
+  -moz-transition: all linear 0.25s;
+  -o-transition: all linear 0.25s;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  padding: 15px;
+  padding-right: 30px;
+  background-color: #303030;
   height: 300px;
-  background: #212121;
-  -webkit-transition: all linear .25s;
-  transition: all linear .25s;
-  padding-top: 15px;
-  background-size: 132px 132px;
-  background-blend-mode: multiply; }
+  z-index: 1; }
+
+.registerForm form {
+  float: right; }
+
+.registerForm form input {
+  padding: 1px 8px;
+  border-radius: 1px;
+  height: 32px;
+  border: 0;
+  color: #212121;
+  background-color: #424242; }
 
 .registerForm.ng-hide {
   height: 0px;
@@ -341,6 +370,9 @@ nav#secondary-nav {
   border: 5px solid #dd5b00;
   border-radius: 5px;
   display: inline-block; }
+
+.gold, .silver, .copper {
+  margin-left: 2px; }
 
 .icon {
   width: 32px;
@@ -425,34 +457,8 @@ nav#secondary-nav {
 #itemFilterQuality option[selected] {
   color: red; }
 
-.auctionResultRow {
-  display: table-row; }
-
-.auctionResultCell {
-  display: table-cell;
-  border-bottom: 1px solid black;
-  padding: 0 6px; }
-
-.auctionResultTable {
-  display: table; }
-
-.auctionSort {
-  display: table-cell;
-  border-bottom: 1px solid black;
-  font-weight: bold;
-  font-size: 1.2em;
-  text-align: center; }
-
-#auctionItem {
-  width: 100%; }
-
-.auctionMoney {
-  min-width: 135px; }
-
-.auctionIcons {
-  min-width: 70px; }
-
 .historyGraph, .watchAuction {
+  color: #BDBDBD !important;
   margin: 0 3px;
   cursor: pointer;
   font-size: 1.5em;
@@ -487,12 +493,6 @@ nav#secondary-nav {
 
 .auctionHistoryBarSelected {
   fill: #ddd; }
-
-.right {
-  text-align: right; }
-
-.center {
-  text-align: center; }
 
 .input-caret {
   position: absolute;

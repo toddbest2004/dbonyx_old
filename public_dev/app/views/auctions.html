@@ -16,7 +16,7 @@
 		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
 		<div id="auctionLoading" ng-if="loading">
-		Loading Auctions...
+			<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
 		</div>
 		<div ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
 			<h1>No auctions match your search</h1>
@@ -36,14 +36,20 @@
 			</div>
 			</div>
 			<div class="auctionResultTable table table-condensed">
-			<div class="auctionResultRow">
-				<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
-				<div class="auctionResultCell auctionIcons">&nbsp;</div>
-				<div id="auctionItem" class="auctionSort" data-sort="name">Item</div>
-				<div class="auctionSort" data-sort="itemLevel">iLvl</div>
-				<!-- <div class="auctionSort">Owner</div> -->
-				<div class="auctionSort auctionMoney" data-sort="bid">Bid Price</div>
-				<div class="auctionSort auctionMoney" data-sort="buyout">Buyout</div></div>
+				<div class="row auctionResultRow">
+					<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
+					<div class="col-xs-1 auctionIcons"></div>
+					<div class="col-xs-6 auctionSort text-left" data-sort="name"><h4>Item</h4></div>
+					<div class="col-xs-1 auctionSort text-center" data-sort="itemLevel"><h4>iLvl</h4></div>
+					<!-- <div class="auctionSort">Owner</div> -->
+					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="bid"><h4>Bid Price</h4></div>
+					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="buyout"><h4>Buyout</h4></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<hr>
+					</div>
+				</div>
 				<auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
 			</div>
 		</div>

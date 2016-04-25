@@ -69,6 +69,9 @@ $quality7: #E6CC80;
   border-radius:5px;
   display:inline-block;
 }
+.gold, .silver, .copper {
+  margin-left: 2px;
+}
 .icon {
   width: 32px;
   height: 32px; }
@@ -150,34 +153,34 @@ $quality7: #E6CC80;
   background-color: #000; }
   #itemFilterQuality option[selected] {
     color: red; }
-.auctionResultRow{
-	display:table-row;
-}
-.auctionResultCell{
-	display:table-cell;
-  border-bottom:1px solid black;
-  padding:0 6px;
-}
-.auctionResultTable{
-	display:table;
-}
-.auctionSort{
-	display:table-cell;
-  border-bottom:1px solid black;
-	font-weight:bold;
-	font-size:1.2em;
-	text-align:center;
-}
-#auctionItem{
-  width:100%;
-}
-.auctionMoney{
-  min-width: 135px;
-}
-.auctionIcons{
-  min-width: 70px;
-}
+// .auctionResultRow{
+// 	display:table-row;
+// }
+// .auctionResultCell{
+// 	display:table-cell;
+//   padding:0 6px;
+// }
+// .auctionResultTable{
+// 	display:table;
+// }
+// .auctionSort{
+// 	display:table-cell;
+//  border-bottom:1px solid black;
+// 	font-weight:bold;
+// 	font-size:1.2em;
+// 	text-align:center;
+// }
+// #auctionItem{
+//   width:100%;
+// }
+// .auctionMoney{
+//   min-width: 135px;
+// }
+// .auctionIcons{
+//   min-width: 70px;
+// }
 .historyGraph, .watchAuction {
+  color: $darkTextColor !important;
   margin: 0 3px;
   cursor: pointer;
   font-size: 1.5em;
@@ -209,12 +212,6 @@ $quality7: #E6CC80;
 }
 .auctionHistoryBarSelected{
   fill:#ddd;
-}
-.right{
-  text-align: right;
-}
-.center{
-  text-align: center;
 }
 .input-caret{
   position:absolute;

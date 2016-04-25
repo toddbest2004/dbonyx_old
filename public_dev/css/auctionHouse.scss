@@ -8,6 +8,7 @@ $auctionItemHeight: 42px;
 
 .historyGraph, .watchAuction {
 	color: $darkTextColor;
+	@include align-middle($auctionItemHeight);
 }
 
 .itemLinkImage {

@@ -51,7 +51,8 @@ angular.module('MenuCtrls', [])
 		transclude: true,
 		scope: {
 			title: '@',
-			link: '@'
+			link: '@',
+			icon: '@'
 		},
 		link: function(scope, element, attrs, menuCtrl) {
 			menuCtrl.addMenu(scope);

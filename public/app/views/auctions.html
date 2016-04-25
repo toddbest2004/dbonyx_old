@@ -23,17 +23,26 @@
 		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
-			<div>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}
-			<div>
-			<div class="pagination" ng-click="firstPage()"><span class="glyphicon glyphicon-step-backward"></span></div>
-			<div class="pagination" ng-click="backPage()"><span class="glyphicon glyphicon-chevron-left"></span></div>
-			<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
-			<div class="pagination pagination-current"> {{currentPage}} </div>
-			<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
-			<div class="pagination" ng-click="nextPage()"><span class="glyphicon glyphicon-chevron-right"></span></div>
-			<div class="pagination" ng-click="lastPage()"><span class="glyphicon glyphicon-step-forward"></span></div>
-			</div>
-			</div>
+				<div>
+					<p>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
+					<div>
+						<div class="pagination" ng-click="firstPage()">
+							<i class="fa fw fa-lg fa-angle-double-left"></i>
+						</div>
+						<div class="pagination" ng-click="backPage()">
+							<i class="fa fw fa-lg fa-angle-left"></i>
+						</div>
+						<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
+						<div class="pagination pagination-current"> {{currentPage}} </div>
+						<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
+						<div class="pagination" ng-click="nextPage()">
+							<i class="fa fw fa-lg fa-angle-right"></i>
+						</div>
+						<div class="pagination" ng-click="lastPage()">
+							<i class="fa fw fa-lg fa-angle-double-right"></i>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="auctionResultTable table table-condensed">
 				<div class="row auctionResultRow">

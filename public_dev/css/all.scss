@@ -1,4 +1,5 @@
 /* Sitewide style colors */
+
 $darkBackgroundColor: #212121;
 $mainBackgroundColor: #303030;
 $lightBackgroundColor: #424242;
@@ -6,19 +7,23 @@ $advertBackgroundColor: rgba(255,255,255,.1);
 $accentColor: #FF8000;
 
 /* Sitewide font colors */
+
 $darkTextColor: #BDBDBD;
 $mainTextColor: #E0E0E0;
 $lightTextColor: #EEEEEE;
 $superLightTextColor: #F5F5F5;
 
 /* Anchor Colors */
+
 $linkColor: #FF8000;
 $hoverColor: darken($linkColor, 15%);
 
 /* Heights and Widths */
+
 $menuBarHeight: 48px;
 
 /* Box shadows */
+
 $btnShadow: 2px 4px 8px -4px rgba(0,0,0,0.25);
 $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
 
@@ -74,12 +79,12 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
 }
 
 @mixin input-fields(){
-  padding: 1px 8px;
-  border-radius: 1px;
-  height: 32px;
+  border-radius: 2px;
   border: 0;
-  color: $darkBackgroundColor;
-  background-color: $lightBackgroundColor;
+  color: $darkTextColor;
+  font-size: 12px;
+  background-color: $mainBackgroundColor;
+  margin-right: 0px;
 }
 
 @mixin menu-font(){
@@ -87,8 +92,9 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
   font-weight: 700;
   font-family: 'Roboto';
   text-transform: uppercase;
-  color: $darkBackgroundColor;
-  text-shadow: 0px 1px 0px rgba(0,0,0,0.1);
+  color: #000000;
+  text-shadow: 0px 2px 3px #FFF;
+  // text-shadow: 0px 1px 0px rgba(0,0,0,0.1);
 }
 
 @mixin menu-shadow(){
@@ -96,6 +102,7 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
 }
 
 /* MAIN PAGE ELEMENTS */
+
 body { 
   background-color: $darkBackgroundColor;
   color: $mainTextColor;
@@ -177,6 +184,7 @@ h4 {
 }
 
 .insetBox {
+  display: inline-block;
   padding: 3px;
   background-color: rgba(0,0,0,.25);
   border-radius: 6px;
@@ -192,7 +200,13 @@ h4 {
   outline: 0 none;
 }
 
+.form-control::-webkit-input-placeholder { color: $lightBackgroundColor; }
+.form-control:-moz-placeholder { color: $lightBackgroundColor; }
+.form-control::-moz-placeholder { color: $lightBackgroundColor; }
+.form-control:-ms-input-placeholder { color: $lightBackgroundColor; }
+
 /* TOP BAR */
+
 #brand-nav {
   background-color: $lightBackgroundColor;
   height: $menuBarHeight;
@@ -204,6 +218,7 @@ h4 {
   border-radius: 0;
   padding: 0px 15px;
   margin-bottom: 0;
+  border-bottom: solid 1px lighten($lightBackgroundColor, 8%);
 }
 
 #brand-nav .btn {
@@ -222,6 +237,10 @@ h4 {
   font-size: 12px;
   @include align-middle($menuBarHeight);
   color: $darkTextColor !important;
+}
+
+.navbar-brand:hover {
+  color: $mainTextColor !important;
 }
 
 .navbar-brand .dark {
@@ -246,18 +265,17 @@ h4 {
 }
 
 #user-login input {
-  height: 32px;
-  line-height: 32px;
-  color: gray;
-  border: 0;
   @include input-fields;
+  display: inline-block !important;
+  width: 200px;
 }
 
 #user-login, #register-button {
   display: inline-block;
 }
 
-/* MAIN NAVIGATION */
+/* MAIN MENU */
+
 #nav-container {
   background: rgba(255,255,255,1);
   background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
@@ -271,12 +289,12 @@ h4 {
   @include box-shadow($btnShadow);
 }
 
-#primary-nav ul.nav.nav-tabs.navbar-left {
-  border-bottom: 0px;
-}
-
 #primary-nav {
   padding: 0px 16px;
+}
+
+#primary-nav ul {
+  border-bottom: 0px;
 }
 
 #primary-nav ul li {
@@ -302,15 +320,22 @@ h4 {
   border: 0;
 }
 
-form.navbar-form {
+#primary-nav i {
+  margin-right: 4px;
+}
+
+#primary-nav form.navbar-form {
   @include align-middle($menuBarHeight);
   padding: 0;
   margin: 0;
 }
 
-form.navbar-form input {
+#primary-nav form.navbar-form input {
   width: 200px !important;
 }
+
+/* SUB MENU */
+
 #secondary-nav { /* Submenu */
   background-color: #777;
   position: absolute;

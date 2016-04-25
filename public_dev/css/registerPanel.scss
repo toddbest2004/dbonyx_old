@@ -17,7 +17,8 @@
 }
 
 .registerForm form input {
-  @include input-fields();
+  @include input-fields;
+  width: 200px;
 }
 
 .registerForm.ng-hide {

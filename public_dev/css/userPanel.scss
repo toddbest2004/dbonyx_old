@@ -4,9 +4,9 @@
 	-webkit-transition: all linear .25s;
 	transition: all linear .25s;
 	padding-top: 15px;
-	// -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
-	// -moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
-	// box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	-webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
 	background-size: 132px 132px;
 	background-blend-mode: multiply;
 }
@@ -21,10 +21,13 @@
 }
 
 .userName{
-  color: $mainBackgroundColor;
-  cursor: pointer;
+	margin-top: -1px; /* Fix because not a list item */
+	color: $darkTextColor;
+ 	cursor: pointer;
 }
 
 .userName:hover {
-	color: $lightBackgroundColor;
+	margin-top: -1px;
+	color: $mainTextColor;
+	border-bottom: double 1px $mainTextColor;
 }

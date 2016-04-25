@@ -53,8 +53,8 @@
             <li ng-if="!user.loggedin">
               <a ng-if="!signin" href="#" ng-click="signinActive()"><i class="fa fa-unlock-alt"></i> Sign in</a>
               <form id="user-login" ng-show="signin">
-                <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
-                <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
+                <input class="form-control" ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
+                <input class="form-control" ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
                 <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
               </form>
             </li>
@@ -70,7 +70,7 @@
     </div>
     <user-register-form ng-show="showRegisterForm"></user-register-form>
   </div>
-  <!-- LEADERBOARD -->
+  <!-- LEADERBOARD -->  
   <div class="col-xs-12">
     <div class="row">
       <div id="leaderboard" class="center-block"></div>
@@ -79,10 +79,10 @@
   <!-- MAIN NAVIGATION PANEL -->
   <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
     <menu-bar>
-      <menu title="Auction House" link="/auctions">Auction House Links</menu>
-      <menu title="Character Tools" link="/character">Character Tools</menu>
-      <menu title="Community" link="/community">Community</menu>
-      <menu title="Feedback" link="/feedback">Feedback</menu>
+      <menu title="Auction House" link="/auctions" icon="gavel">Auction House Links</menu>
+      <menu title="Character Tools" link="/character" icon="wrench">Character Tools</menu>
+      <menu title="Community" link="/community" icon="users">Community</menu>
+      <menu title="Feedback" link="/feedback" icon="comments-o">Feedback</menu>
     </menu-bar>
     <!-- MAIN CONTENT AND SIDE PANEL -->
     <div class="row" id="main-container">

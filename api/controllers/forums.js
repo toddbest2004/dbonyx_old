@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var passport = require("passport")
 
 var db = require("../../mongoose");
 
@@ -24,35 +25,84 @@ router.get('/thread/:threadId', function(req,res){
 	})
 })
 
-// router.post('/test', function(req,res){
-// 	db.onyxUser.findOne({username:'tester'}).exec(function(err, user){
-// 		db.forumCategory.findOne({name: 'Sub Category 2',}).exec(function(err, cat){
-// 			db.forumThread.findOne({
-// 				name: 'First Thread',
-// 			}, function(err, thread){
-// 				db.forumPost.create({
-// 					author:user,
-// 					thread: thread,
-// 					message: "this is message 2"
-// 				}, function(err, post){
-// 					res.json(post)
-// 				})
-// 			})
-// 		})
-// 	})
-// })
+router.post("/thread/:threadId", function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if (user) {
+			if(!user.isEmailValidated){
+				return res.status(401).json({error:"You must validate your email before you can make a post."})
+			}
+			if(!req.body.message){
+				return res.status(401).json({error:"You cannot post an empty message."})
+			}
+			db.forumThread.findOne({_id:req.params.threadId}).populate('posts').exec(function(err, thread){
+				if(err||!thread){
+					return res.status(401).json({error:"Error making post, please try again."})
+				}
+				db.forumPost.create({
+					thread: thread,
+					author: user,
+					message: req.body.message
+				}, function(err, post){
+					if(err||!post){
+						return res.status(401).json({error:"Error making post, please try again."})
+					}
+					thread.posts.push(post)
+					thread.save(function(){
+						res.json({result:"Success"})
+					})
+				})
+			})
+  		} else {
+	  		return res.status(401).json({error:"You must be logged in to post a message."})
+		}
+	})(req, res)
+})
 
-// router.post('/test', function(req, res){
-// 	db.forumThread.find().populate('category').exec(function(err, threads){
-// 		threads.forEach(function(thread){
-// 			if(thread.category.threads.indexOf(thread._id)===-1){
-// 				thread.category.threads.push(thread)
-// 				thread.category.save()
-// 			}
-
-// 		})
-// 		res.send(threads[0].category)
-// 	})
-// })
+router.post("/category/:categoryId", function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if (user) {
+			if(!user.isEmailValidated){
+				return res.status(401).json({error:"You must validate your email before you can make a post."})
+			}
+			if(!req.body.message){
+				return res.status(401).json({error:"You cannot post an empty message."})
+			}
+			if(!req.body.title){
+				return res.status(401).json({error:"You must provide a title for your post."})
+			}
+			db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
+				if(err||!cat){
+					return res.status(401).json({error:"Error making post, please try again."})
+				}
+				db.forumThread.create({
+					name: req.body.title,
+					category: cat
+				},function(err, thread){
+					if(err||!thread){
+						return res.status(401).json({error:"Error making post, please try again."})
+					}
+					db.forumPost.create({
+						thread: thread,
+						author: user,
+						message: req.body.message
+					}, function(err, post){
+						if(err||!post){
+							return res.status(401).json({error:"Error making post, please try again."})
+						}
+						thread.posts.push(post)
+						thread.save(function(){
+							cat.threads.push(thread)
+							cat.save(function(){
+								res.json({result:"Success"})
+							})
+						})
+					})
+				})
+			})
+  		} else {
+	  		return res.status(401).json({error:"You must be logged in to post a message."})
+		}
+	})(req, res)
+})
 
 module.exports = router

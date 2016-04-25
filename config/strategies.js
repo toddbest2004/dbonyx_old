@@ -13,7 +13,7 @@ module.exports = {
 	},
 	function(email, password, done) {
     email = email.toLowerCase()
-	  db.onyxUser.findOne({email: email}).exec(function(err, user) {
+	  db.onyxUser.findOne({email: email}).select('+password').exec(function(err, user) {
   		if (!err&&user) {
   		  user.comparePassword(password, function(err, result) {
     			if (err) return done(err)
@@ -37,7 +37,7 @@ module.exports = {
     }).catch(done)
   },
   jwtStrategy: new JwtStrategy(opts, function(jwt_payload, done){
-    db.onyxUser.findOne({email: jwt_payload.email}, function(err, user){
+    db.onyxUser.findOne({email: jwt_payload.email}).exec(function(err, user){
       if (err) {
         return done(err, false);
       }

@@ -20,16 +20,8 @@ router.post("/getUser", passport.authenticate('jwt', {session: false}),function(
 router.post("/login", function(req, res){
 	passport.authenticate('local', function(err, user, info) {
 		if (user) {
-	  // 		req.login(user, function(err) {
-			// 	if (err) throw err
-			// 	// req.session.username=user.username
-			// 	// req.session.email=user.email
-			// 	res.json({username:req.user.username,email:req.user.email})
-			// 	return
-			// })
 			var token = jwt.sign({email:user.email,username:user.username}, secret);
 			res.send({
-				email: user.email,
 				username: user.username,
 				token: token
 			});
@@ -108,7 +100,7 @@ router.post('/validate', function(req, res){
 		res.status(401).json({error:"Missing credentials"})
 		return
 	}
-	db.onyxUser.findOne({username:req.body.username}, function(err, user){
+	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +isEmailValidated +emailValidationCreatedDate").exec(function(err, user){
 		if(err||!user){
 			res.status(401).json({error:"User not found."})
 			return

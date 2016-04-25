@@ -5,6 +5,13 @@
 	<div ng-repeat="thread in category.threads">
 		<a href="/forums/thread/{{thread._id}}"><b>{{thread.name}}</b></a>
 	</div>
+	<div>
+		<form ng-submit="newThread()">
+			<input type="text" ng-model="title">
+			<textarea ng-model="message"></textarea>
+			<input type="submit">
+		</form>
+	</div>
 </div>
 <sidebar>
 

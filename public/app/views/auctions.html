@@ -15,32 +15,33 @@
 		<div id="auctionData">
 		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
-		<div id="auctionLoading" ng-if="loading">
-			<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
-		</div>
-		<div ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
-			<h1>No auctions match your search</h1>
-		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
+				<div class="auctionText">
+					<div class="pull-left" id="auctionLoading" ng-if="loading">
+						<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
+					</div>
+					<div class="pull-left" ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
+						<h1>No auctions match your search</h1>
+					</div>
+					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
+				</div>
+				<div class="clearfix"></div>
 				<div>
-					<p>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
-					<div>
-						<div class="pagination" ng-click="firstPage()">
-							<i class="fa fw fa-lg fa-angle-double-left"></i>
-						</div>
-						<div class="pagination" ng-click="backPage()">
-							<i class="fa fw fa-lg fa-angle-left"></i>
-						</div>
-						<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
-						<div class="pagination pagination-current"> {{currentPage}} </div>
-						<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
-						<div class="pagination" ng-click="nextPage()">
-							<i class="fa fw fa-lg fa-angle-right"></i>
-						</div>
-						<div class="pagination" ng-click="lastPage()">
-							<i class="fa fw fa-lg fa-angle-double-right"></i>
-						</div>
+					<div class="pagination" ng-click="firstPage()">
+						<i class="fa fw fa-lg fa-angle-double-left"></i>
+					</div>
+					<div class="pagination" ng-click="backPage()">
+						<i class="fa fw fa-lg fa-angle-left"></i>
+					</div>
+					<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
+					<div class="pagination pagination-current"> {{currentPage}} </div>
+					<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
+					<div class="pagination" ng-click="nextPage()">
+						<i class="fa fw fa-lg fa-angle-right"></i>
+					</div>
+					<div class="pagination" ng-click="lastPage()">
+						<i class="fa fw fa-lg fa-angle-double-right"></i>
 					</div>
 				</div>
 			</div>
@@ -76,7 +77,6 @@
 			<option value="6" class="itemQuality6">Artifact</option>
 			<option value="7" class="itemQuality7">Heirloom</option>
 		</select>
-		<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button> 
 		<ul id="itemFiltersList" class="list-unstyled">
 			<li ng-repeat="filter in filters track by $index">
 				<button class="btn-danger" ng-click="removeFilter($index)">X</button>
@@ -91,7 +91,8 @@
 				<input type="number" ng-model="filter.value">
 			</li>
 		</ul>
-		<button id="addItemFilter" ng-click="addFilter()">Add Item Filter</button>
+		<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>
+		<button id="clearItemFilterQuality" class="btn" ng-click="clearQualityFilter()">Clear</button> 
 		</div>
 		</sidebar>
 	</div>

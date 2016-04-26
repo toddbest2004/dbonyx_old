@@ -101,9 +101,28 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
   @include box-shadow(0px 1px 5px 1px rgba(0,0,0,0.50));
 }
 
+@mixin button-styles(){
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Roboto';
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0px 1px 0px #ffffff;
+  color: #000 !important;
+  font-size: 12px;
+  border: solid 1px $lightBackgroundColor !important;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,cccccc+100;Gren+3D */
+  background: rgb(238,238,238); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+  @include box-shadow(0px 5px 15px -5px rgba(0,0,0,0.5));
+}
+
 /* MAIN PAGE ELEMENTS */
 
-body { 
+body {
   background-color: $darkBackgroundColor;
   color: $mainTextColor;
   font-family: 'Merriweather Sans', 'Maven Pro';
@@ -147,29 +166,20 @@ h4 {
   text-transform: uppercase;
 }
 
-// .btn {
-//   font-family: 'Roboto';
-//   font-weight: 700;
-//   color: white !important;
-//   font-size: 12px;
-//   border: 0;
-//   text-shadow: 0px 1px 0px rgba(0,0,0,0.25);
-//   @include box-shadow($btnShadow);
-// }
+.btn, .btn:active {
+  @include button-styles();
+}
 
-.btn {
-  background-color:#ffa200;
-  border: 0 !important;
-  @include box-shadow($btnShadow);
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
-  border-radius:4px;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  font-family: 'Roboto';
-  font-size:12px;
-  text-shadow:0px 1px 0px #ff7000;
+.btn:hover {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#cccccc+0,eeeeee+100 */
+  background: rgb(204,204,204); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(204,204,204,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(204,204,204,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(204,204,204,1) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+  color: lighten(#000, 25%) !important;
+  border: solid 1px $lightBackgroundColor !important;
+  @include box-shadow(0px 5px 15px -5px rgba(0,0,0,0.25));
 }
 
 .btn:active {

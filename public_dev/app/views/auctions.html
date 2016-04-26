@@ -1,49 +1,65 @@
 <div ng-controller='AuctionCtrl'>
 
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-9" id="main-content">
 		<h1>Auction House</h1>
 		<div id="realmDiv">
 				<form action="" id="filterForm"  autocomplete="off">
 					<label for="realmInput">Select Realm:</label>
 					<auto-complete realm-input="realmInput" search="search()"></auto-complete>
 					<label for="search">Search Term:</label>
-					<input type="text" id="search" class="itemFilter" ng-model="searchTerm">
-					<button id="searchButton" ng-click="search($event)">Search</button>
+					<input type="text" id="search" class="itemFilter form-control" ng-model="searchTerm">
+					<button id="searchButton" ng-click="search($event)" class="btn">Search</button>
 				</form>
 			</div>
 		<div id="auctionData">
 		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
-		<div id="auctionLoading" ng-if="loading">
-		Loading Auctions...
-		</div>
-		<div ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
-			<h1>No auctions match your search</h1>
-		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
-			<div>Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}
-			<div>
-			<div class="pagination" ng-click="firstPage()"><span class="glyphicon glyphicon-step-backward"></span></div>
-			<div class="pagination" ng-click="backPage()"><span class="glyphicon glyphicon-chevron-left"></span></div>
-			<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
-			<div class="pagination pagination-current"> {{currentPage}} </div>
-			<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
-			<div class="pagination" ng-click="nextPage()"><span class="glyphicon glyphicon-chevron-right"></span></div>
-			<div class="pagination" ng-click="lastPage()"><span class="glyphicon glyphicon-step-forward"></span></div>
-			</div>
-			</div>
+				<div class="auctionText">
+					<div class="pull-left" id="auctionLoading" ng-if="loading">
+						<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
+					</div>
+					<div class="pull-left" ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
+						<h1>No auctions match your search</h1>
+					</div>
+					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
+				</div>
+				<div class="clearfix"></div>
+				<div>
+					<div class="pagination" ng-click="firstPage()">
+						<i class="fa fw fa-lg fa-angle-double-left"></i>
+					</div>
+					<div class="pagination" ng-click="backPage()">
+						<i class="fa fw fa-lg fa-angle-left"></i>
+					</div>
+					<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
+					<div class="pagination pagination-current"> {{currentPage}} </div>
+					<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
+					<div class="pagination" ng-click="nextPage()">
+						<i class="fa fw fa-lg fa-angle-right"></i>
+					</div>
+					<div class="pagination" ng-click="lastPage()">
+						<i class="fa fw fa-lg fa-angle-double-right"></i>
+					</div>
+				</div>
 			</div>
 			<div class="auctionResultTable table table-condensed">
-			<div class="auctionResultRow">
-				<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
-				<div class="auctionResultCell auctionIcons">&nbsp;</div>
-				<div id="auctionItem" class="auctionSort" data-sort="name">Item</div>
-				<div class="auctionSort" data-sort="itemLevel">iLvl</div>
-				<!-- <div class="auctionSort">Owner</div> -->
-				<div class="auctionSort auctionMoney" data-sort="bid" ng-click="setSortBy('bid')">Bid Price</div>
-				<div class="auctionSort auctionMoney" data-sort="buyout" ng-click="setSortBy('buyout')">Buyout</div></div>
+				<div class="row auctionResultRow">
+					<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
+					<div class="col-xs-1 auctionIcons"></div>
+					<div class="col-xs-6 auctionSort text-left" data-sort="name"><h4>Item</h4></div>
+					<div class="col-xs-1 auctionSort text-center" data-sort="itemLevel"><h4>iLvl</h4></div>
+					<!-- <div class="auctionSort">Owner</div> -->
+					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="bid" ng-click="setSortBy('bid')"><h4>Bid Price<i class="fa fa-fw fa-sort" aria-hidden="true"></i></h4></div>
+					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="buyout" ng-click="setSortBy('buyout')"><h4>Buyout<i class="fa fa-fw fa-sort" aria-hidden="true"></i></h4></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<hr>
+					</div>
+				</div>
 				<auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
 			</div>
 		</div>
@@ -61,7 +77,6 @@
 			<option value="6" class="itemQuality6">Artifact</option>
 			<option value="7" class="itemQuality7">Heirloom</option>
 		</select>
-		<button id="clearItemFilterQuality" ng-click="clearQualityFilter()">Clear</button> 
 		<ul id="itemFiltersList" class="list-unstyled">
 			<li ng-repeat="filter in filters track by $index">
 				<button class="btn-danger" ng-click="removeFilter($index)">X</button>
@@ -76,7 +91,8 @@
 				<input type="number" ng-model="filter.value">
 			</li>
 		</ul>
-		<button id="addItemFilter" ng-click="addFilter()">Add Item Filter</button>
+		<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>
+		<button id="clearItemFilterQuality" class="btn" ng-click="clearQualityFilter()">Clear</button> 
 		</div>
 		</sidebar>
 	</div>

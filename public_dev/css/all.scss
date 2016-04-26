@@ -1,0 +1,391 @@
+/* Sitewide style colors */
+
+$darkBackgroundColor: #212121;
+$mainBackgroundColor: #303030;
+$lightBackgroundColor: #424242;
+$advertBackgroundColor: rgba(255,255,255,.1);
+$accentColor: #FF8000;
+
+/* Sitewide font colors */
+
+$darkTextColor: #BDBDBD;
+$mainTextColor: #E0E0E0;
+$lightTextColor: #EEEEEE;
+$superLightTextColor: #F5F5F5;
+
+/* Anchor Colors */
+
+$linkColor: #1B9EC0;
+$hoverColor: lighten($linkColor, 15%);
+
+/* Heights and Widths */
+
+$menuBarHeight: 48px;
+
+/* Box shadows */
+
+$btnShadow: 2px 4px 8px -4px rgba(0,0,0,0.25);
+$insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
+
+/* Mixins */
+
+@mixin transition($transition...) {
+  -moz-transition:    $transition;
+  -o-transition:      $transition;
+  -webkit-transition: $transition;
+  transition:         $transition;
+}
+
+@mixin transition-property($property...) {
+  -moz-transition-property:    $property;
+  -o-transition-property:      $property;
+  -webkit-transition-property: $property;
+  transition-property:         $property;
+}
+
+@mixin transition-duration($duration...) {
+  -moz-transition-property:    $duration;
+  -o-transition-property:      $duration;
+  -webkit-transition-property: $duration;
+  transition-property:         $duration;
+}
+
+@mixin transition-timing-function($timing...) {
+  -moz-transition-timing-function:    $timing;
+  -o-transition-timing-function:      $timing;
+  -webkit-transition-timing-function: $timing;
+  transition-timing-function:         $timing;
+}
+
+@mixin transition-delay($delay...) {
+  -moz-transition-delay:    $delay;
+  -o-transition-delay:      $delay;
+  -webkit-transition-delay: $delay;
+  transition-delay:         $delay;
+}
+
+@mixin box-shadow($shadow){
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+@mixin align-middle($height) {
+  line-height: $height;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  height: $height;
+}
+
+@mixin input-fields(){
+  border-radius: 2px;
+  border: 0;
+  color: $darkTextColor;
+  font-size: 12px;
+  background-color: $mainBackgroundColor;
+  margin-right: 0px;
+}
+
+@mixin menu-font(){
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Roboto';
+  text-transform: uppercase;
+  color: #000000;
+  text-shadow: 0px 2px 3px #FFF;
+  // text-shadow: 0px 1px 0px rgba(0,0,0,0.1);
+}
+
+@mixin menu-shadow(){
+  @include box-shadow(0px 1px 5px 1px rgba(0,0,0,0.50));
+}
+
+@mixin button-styles(){
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Roboto';
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0px 1px 0px #ffffff;
+  color: #000 !important;
+  font-size: 12px;
+  border: solid 1px $lightBackgroundColor !important;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,cccccc+100;Gren+3D */
+  background: rgb(238,238,238); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+  @include box-shadow(0px 5px 15px -5px rgba(0,0,0,0.5));
+}
+
+/* MAIN PAGE ELEMENTS */
+
+body {
+  background-color: $darkBackgroundColor;
+  color: $mainTextColor;
+  font-family: 'Merriweather Sans', 'Maven Pro';
+  font-weight: 300;
+  font-size: 12px;
+} 
+
+hr {
+    border: 0;
+    height: 0;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+a, a:visited {
+  color: $linkColor;
+}
+
+a:hover {
+  color: $hoverColor;
+  border-bottom: double 1px;
+}
+
+input:focus {   
+  box-shadow: none;
+  outline: none;
+  box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
+}
+
+h1 {
+  color: $lightTextColor;
+  font-size: 28px;
+  font-family: 'Roboto'
+}
+h4 {
+  color: $darkTextColor;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn, .btn:active {
+  @include button-styles();
+}
+
+.btn:hover {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#cccccc+0,eeeeee+100 */
+  background: rgb(204,204,204); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(204,204,204,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(204,204,204,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(204,204,204,1) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+  color: lighten(#000, 25%) !important;
+  border: solid 1px $lightBackgroundColor !important;
+  @include box-shadow(0px 5px 15px -5px rgba(0,0,0,0.25));
+}
+
+.btn:active {
+  position:relative;
+  top:1px;
+}
+
+.btn:focus,.btn:active:focus,.btn.active:focus,
+.btn.focus,.btn:active.focus,.btn.active.focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.insetBox {
+  display: inline-block;
+  padding: 3px;
+  background-color: rgba(0,0,0,.25);
+  border-radius: 6px;
+  border-top: solid 1px rgba(0,0,0,.25);
+  border-left: solid 1px rgba(0,0,0,.25);
+  border-right: solid 1px rgba(0,0,0,.25);
+  border-bottom: solid 1px rgba(255,255,255,.25);
+}
+
+.form-control:focus {   
+  border-color: #ccc;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+.form-control::-webkit-input-placeholder { color: $lightBackgroundColor; }
+.form-control:-moz-placeholder { color: $lightBackgroundColor; }
+.form-control::-moz-placeholder { color: $lightBackgroundColor; }
+.form-control:-ms-input-placeholder { color: $lightBackgroundColor; }
+
+/* TOP BAR */
+
+#brand-nav {
+  background-color: $lightBackgroundColor;
+  height: $menuBarHeight;
+  min-height: $menuBarHeight;
+  line-height: $menuBarHeight;
+  vertical-align: middle;
+  @include menu-shadow();
+  border: 0;
+  border-radius: 0;
+  padding: 0px 15px;
+  margin-bottom: 0;
+  border-bottom: solid 1px lighten($lightBackgroundColor, 8%);
+}
+
+#brand-nav .btn {
+  border: solid 1px orange;
+  background-color: orange;
+  margin-top: -2px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar-brand {
+  font-family: 'Aldrich';
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  @include align-middle($menuBarHeight);
+  color: $darkTextColor !important;
+}
+
+.navbar-brand:hover {
+  color: $mainTextColor !important;
+}
+
+.navbar-brand .dark {
+  color: #000000;
+}
+
+.navbar-nav li a {
+  @include align-middle($menuBarHeight);
+  // @include transition(color .25s);
+  padding: 0px 15px;
+  color: $darkTextColor !important;
+  font-weight: normal !important;
+  font-size: 12px;
+}
+
+.navbar-nav li a:hover {
+  color: $mainTextColor !important;
+}
+
+#user-login {
+  margin-right: 15px;
+}
+
+#user-login input {
+  @include input-fields;
+  display: inline-block !important;
+  width: 200px;
+}
+
+#user-login, #register-button {
+  display: inline-block;
+}
+
+/* MAIN MENU */
+
+#nav-container {
+  background: rgba(255,255,255,1);
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );margin-bottom: 15px;
+  border-radius: 3px;
+  @include box-shadow($btnShadow);
+}
+
+#primary-nav {
+  padding: 0px 16px;
+}
+
+#primary-nav ul {
+  border-bottom: 0px;
+}
+
+#primary-nav ul li {
+  border: 0;
+  padding: 0;
+  border: 0;
+  height: $menuBarHeight;
+}
+
+#primary-nav ul li:hover {
+  @include box-shadow($insetShadow);
+}
+
+#primary-nav ul li a { /* Menu list items */
+  @include align-middle($menuBarHeight);
+  @include menu-font();
+  margin: 0px 16px;
+  border: 0;
+}
+
+#primary-nav ul li a:hover, #primary-nav ul li a:focus {
+  background-color: transparent;
+  border: 0;
+}
+
+#primary-nav i {
+  margin-right: 4px;
+}
+
+#primary-nav form.navbar-form {
+  @include align-middle($menuBarHeight);
+  padding: 0;
+  margin: 0;
+}
+
+#primary-nav form.navbar-form input {
+  width: 200px !important;
+}
+
+/* SUB MENU */
+
+#secondary-nav { /* Submenu */
+  background-color: #777;
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  z-index: 1;
+}
+
+/* CONTENT DIVS */
+
+#main-content {
+  background-color: $mainBackgroundColor;
+  border: solid 1px $lightBackgroundColor;
+  border-radius: 3px;
+  @include box-shadow($btnShadow);
+}
+
+#sub-content {
+  background-color: transparent;
+}
+
+/* ADVERTISEMENTS */
+
+#leaderboard {
+  width: 728px;
+  height: 90px;
+  margin: 30px auto;
+  background-color: $advertBackgroundColor;
+}
+
+#skyscraper {
+  width: 160px;
+  height: 600px;
+  margin: 10px auto;
+  background-color: $advertBackgroundColor;
+}
+
+/* FOOTER */
+
+#footer-container {
+  margin-top: 16px;
+  background-color: $lightBackgroundColor;
+}

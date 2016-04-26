@@ -1,0 +1,31 @@
+/* REGISTER FORM */
+.registerForm{
+	@include transition(all linear .25s);
+	padding: 15px;
+	padding-right: 30px;
+	background-color: $mainBackgroundColor;
+	height: 300px;
+	z-index: 1;
+	// background-blend-mode: multiply;
+// -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+// -moz-box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+// box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.5);
+}
+
+.registerForm form {
+  float: right;
+}
+
+.registerForm form input {
+  @include input-fields;
+  width: 200px;
+}
+
+.registerForm.ng-hide {
+	height: 0px;
+	opacity: 0;
+}
+
+.registerForm.ng-hide.ng-hide-active{
+	opacity: 1;
+}

@@ -1,28 +1,28 @@
 <div ng-controller="feedbackCtrl">
-<div class="row">
-<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-<h2>Tell us how we're doing!</h2>
-<p>We get it. There isn't much to the site yet. BUT! We're just getting started. We have so much left we want to do, and we wanted to bring you in to join us on this ride. If you have suggestions, questions, comments, etc. let us know! We want to know what you want, we want to know what you hate. We want to fix it and make this site into something you love.</p>
-<p>Don't forget to follow us on <a href="https://twitter.com/dbonyx">Twitter (@dbonyx)</a> for the latest news and updates.</p>
-<div ng-if="error">
-<h2>{{error}}</h2>
-</div>
-<div ng-if="success">
-<h2>{{success}}</h2>
-</div>
-<form ng-submit="sendFeedback()" ng-show="showForm">
-<div class="form-group">
-<label class="form-control-label" for="title">Feedback Title</label>
-<input class="form-control" type="text" id="title" ng-model="title">
-</div>
-<div class="form-group">
-<label class="form-control-label" for="message">Feedback Message</label>
-<textarea class="form-control" id="message" ng-model="message"></textarea>
-</div>
-<div class="form-group">
-<button type="submit">Send Feedback</button>
-</div>
-</form>
-</div>
-</div>
+	<div class="row">
+		<div class="col-md-9 col-sm-12 col-xs-12 col-lg-9" id="main-content">
+			<h1>Tell us how we're doing!</h1>
+			<p>We get it. There isn't much to the site yet. BUT! We're just getting started. We have so much left we want to do, and we wanted to bring you in to join us on this ride. If you have suggestions, questions, comments, etc. let us know! We want to know what you want, we want to know what you hate. We want to fix it and make this site into something you love.</p>
+			<p>Don't forget to follow us on <a href="https://twitter.com/dbonyx">Twitter (@dbonyx)</a> for the latest news and updates.</p>
+			<div ng-if="error">
+				<h2>{{error}}</h2>
+			</div>
+			<div ng-if="success">
+				<h2>{{success}}</h2>
+			</div>
+			<form ng-submit="sendFeedback()" ng-show="showForm">
+				<div class="form-group">
+					<label class="form-control-label" for="title">Feedback Title</label>
+					<input class="form-control" type="text" id="title" ng-model="title">
+				</div>
+				<div class="form-group">
+					<label class="form-control-label" for="message">Feedback Message</label>
+					<textarea class="form-control" id="message" ng-model="message"></textarea>
+				</div>
+				<div class="form-group">
+					<button type="submit">Send Feedback</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>

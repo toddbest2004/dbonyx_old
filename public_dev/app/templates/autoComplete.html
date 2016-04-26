@@ -1,7 +1,6 @@
 <div class="autocomplete-group">
-<input type="text" class="span2" id="realmInput" ng-focus="blurIn('realmInputSelected')" ng-blur="blurOut('realmInputSelected')" ng-model="realmInput" autocomplete="off" select-on-focus>
-<span class="caret input-caret"></span>
-<div class="autocomplete-dropdown" ng-if="realmInputSelected===true">
-<div class="autocomplete-row" ng-repeat="realm in realms | filter:realmInput" ng-mousedown="selectRealm(realm)" ng-mouseenter="hover(realm)" ng-mouseleave="hover(-1)" ng-class="{'autocomplete-row-selected':realm==hoverIndex}">{{realm}}</div>
-</div>
+	<input type="text" class="span2 form-control" id="realmInput" ng-focus="blurIn('realmInputSelected')" ng-change="selectRealm()" ng-model="realmInput" autocomplete="off" list="realms" placeholder="Select a realm..." select-on-focus>
+	<datalist id="realms">
+		<option value="{{realm}}" ng-repeat="realm in realms">
+	</datalist>
 </div>

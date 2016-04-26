@@ -1,23 +1,23 @@
-<div ng-show="" class="container registerForm">
+<div ng-show="" class="row registerForm">
 	<form ng-submit="register()">
 		<div class="form-group row">
 			<div class="col-xs-6"><label for="username">Username: </label></div>
-			<div class="col-xs-6"><input id="username" ng-model="username" placeholder="username" ng-focus="clearError()"></div>
+			<div class="col-xs-6"><input class="form-control" id="username" ng-model="username" placeholder="username" ng-focus="clearError()"></div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-6"><label for="email">Email: </label></div>
-			<div class="col-xs-6"><input id="email" ng-model="email" placeholder="email" ng-focus="clearError()"></div>
+			<div class="col-xs-6"><input class="form-control" id="email" ng-model="email" placeholder="email" ng-focus="clearError()"></div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-6"><label for="password1">Password: </label></div>
-			<div class="col-xs-6"><input id="password1" type="password" ng-model="password1" placeholder="password" ng-focus="clearError()"></div>
+			<div class="col-xs-6"><input class="form-control" id="password1" type="password" ng-model="password1" placeholder="password" ng-focus="clearError()"></div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-6"><label for="password2">Re-enter Password: </label></div>
-			<div class="col-xs-6"><input id="password2" type="password" ng-model="password2" placeholder="re-enter password" ng-focus="clearError()"></div>
+			<div class="col-xs-6"><input class="form-control" id="password2" type="password" ng-model="password2" placeholder="re-enter password" ng-focus="clearError()"></div>
 		</div>
 		<div class="form-group row center">
-			<input type="submit" value="Register" ng-focus="clearError()">
+			<input type="submit" value="Register" ng-focus="clearError()" class="pull-right">
 		</div>
 		<div class="warning center" ng-if="registerError">
 			<h3>{{registerError}}</h3>

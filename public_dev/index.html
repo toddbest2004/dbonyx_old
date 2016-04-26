@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app="dbonyx">
 <head>
@@ -8,25 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DB Onyx - Tools and Community for Gamers</title>
   <!-- Google Web Fonts -->
-  <link href='https://fonts.googleapis.com/css?family=Aldrich|Maven+Pro' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Aldrich|Maven+Pro|Merriweather+Sans:300|Roboto:300,300italic,700' rel='stylesheet' type='text/css'>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-    <link rel="stylesheet" media="screen" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" media="screen" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link href='https://fonts.googleapis.com/css?family=Exo+2:400|Roboto:300,300italic,400|PT+Sans' rel='stylesheet' type='text/css'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-route.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-cookies.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-resource.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-animate.js"></script>
-    <script src="app/min.js"></script>
-    <script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-route.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-cookies.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-resource.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-animate.js"></script>
+  <script src="app/min.js"></script>
+  <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -34,8 +33,7 @@
 
     ga('create', 'UA-76235362-1', 'auto');
     ga('send', 'pageview');
-
-</script>
+  </script>
 </head>
 <body>
   <!-- BRAND NAVIGATION AND USER PANEL -->
@@ -44,22 +42,25 @@
       <nav role="navigation" class="navbar navbar-default" id="brand-nav">
         <div class="container-fluid" id="proprietary-bar">
           <div class="navbar-header">
-            <a class="navbar-brand" href="/">ONYX GAMING</a>
+            <a class="navbar-brand" href="/">DB <span class="dark">ONYX</span></a>
           </div>
           <ul class="nav navbar-nav navbar-right">
             <li class="warning" ng-if="error">{{error}}</li>
             <li class="success" ng-if="success">{{success}}</li>
             <li ng-if="user.loggedin">
-              <div ng-click="toggleUserPanel()" class="userName">{{user.username}} <b class="caret"></b></div>
+              <div ng-click="toggleUserPanel()" class="userName"><i class="fa fa-lock"></i> {{user.username}} <i class="fa fa-angle-down"></i></div>
             </li>
             <li ng-if="!user.loggedin">
-              <form>
-                <input ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
-                <input ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
-                <input type="submit" value="Log In" ng-focus="clearError()" ng-click="login()">
-                <button ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
+              <a ng-if="!signin" href="#" ng-click="signinActive()"><i class="fa fa-unlock-alt"></i> Sign in</a>
+              <form id="user-login" ng-show="signin">
+                <input class="form-control" ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
+                <input class="form-control" ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
+                <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
               </form>
             </li>
+            <li ng-if="!user.loggedin">
+             <button id="register-button" class="btn" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
+             </li>
           </ul>
         </div>
       </nav>
@@ -69,7 +70,7 @@
     </div>
     <user-register-form ng-show="showRegisterForm"></user-register-form>
   </div>
-  <!-- LEADERBOARD -->
+  <!-- LEADERBOARD -->  
   <div class="col-xs-12">
     <div class="row">
       <div id="leaderboard" class="center-block"></div>
@@ -78,15 +79,15 @@
   <!-- MAIN NAVIGATION PANEL -->
   <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
     <menu-bar>
-      <menu title="Database" link="/">Databse Links</menu>
-      <menu title="Auction House" link="/auctions">Auction House Links</menu>
-      <menu title="Character Tools" link="/character">Character Tools</menu>
-      <menu title="Community" link="/community">Community</menu>
-      <menu title="Feedback" link="/feedback">Feedback</menu>
+      <menu title="Auction House" link="/auctions" icon="gavel">Auction House Links</menu>
+      <menu title="Character Tools" link="/character" icon="wrench">Character Tools</menu>
+      <menu title="Community" link="/community" icon="users">Community</menu>
+      <menu title="Feedback" link="/feedback" icon="comments-o">Feedback</menu>
     </menu-bar>
     <!-- MAIN CONTENT AND SIDE PANEL -->
     <div class="row" id="main-container">
-      <div class="col-xs-12" id="main-content">
+      <div class="col-xs-12">
+        <!-- BREAD CRUMB -->
         <!-- <div class="row">
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
@@ -95,12 +96,11 @@
           </ol>
         </div> -->
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-xs-12" id="left-content">
             <ng-view></ng-view>
           </div>
         </div>
       </div>
-      
     </div>
     <!-- SITE MAP AND FOOTER PANEL -->
     <onyx-footer></onyx-footer>

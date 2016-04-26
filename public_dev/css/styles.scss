@@ -29,50 +29,27 @@ $quality5: #FF8000;
 $quality6: #E6CC80;
 $quality7: #E6CC80;
 
-body { 
-  background-color: #303b4b;
-  color: #00010D; } 
-
-html, body {
-  height: 100%; }
-
-hr {
-    border: 0;
-    height: 0;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    border-top: 1px solid rgba(0, 0, 0, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-a, a:hover, a:visited, a:active{
-  color: #00010D;
-}
-
 .container {
   position: relative;
   height: auto !important;
   height: 100%;
   min-height: 100%; } 
-.navbar {
+  .navbar {
   text-align: center;
-  background-color: #000; }
+  background-color: $darkBackgroundColor; }
   .navbar .navbar-nav {
     display: inline-block;
     float: none;
     vertical-align: top; }
     .navbar .navbar-nav li {
       font-weight: bold; }
-#searchBarResults{ 
+#searchBarResults{
+  width: 200px;
+  top: 100%;
   position:absolute;
   z-index: 1;
   background-color: #7A7575;
   padding: 2px;
-}
-.registerForm{
-  width: 500px;
-  margin: 0 0 0 auto;
-  z-index: 1;
 }
 .money {
   display:inline-block;
@@ -92,9 +69,9 @@ a, a:hover, a:visited, a:active{
   border-radius:5px;
   display:inline-block;
 }
-
-.container {
-  background-color: #7A7575; }
+.gold, .silver, .copper {
+  margin-left: 2px;
+}
 .icon {
   width: 32px;
   height: 32px; }
@@ -176,38 +153,43 @@ a, a:hover, a:visited, a:active{
   background-color: #000; }
   #itemFilterQuality option[selected] {
     color: red; }
-.auctionResultRow{
-	display:table-row;
-}
-.auctionResultCell{
-	display:table-cell;
-  border-bottom:1px solid black;
-  padding:0 6px;
-}
-.auctionResultTable{
-	display:table;
-}
-.auctionSort{
-	display:table-cell;
-  border-bottom:1px solid black;
-	font-weight:bold;
-	font-size:1.2em;
-	text-align:center;
-}
-#auctionItem{
-  width:100%;
-}
-.auctionMoney{
-  min-width: 135px;
-}
-.auctionIcons{
-  min-width: 70px;
-}
+// .auctionResultRow{
+// 	display:table-row;
+// }
+// .auctionResultCell{
+// 	display:table-cell;
+//   padding:0 6px;
+// }
+// .auctionResultTable{
+// 	display:table;
+// }
+// .auctionSort{
+// 	display:table-cell;
+//  border-bottom:1px solid black;
+// 	font-weight:bold;
+// 	font-size:1.2em;
+// 	text-align:center;
+// }
+// #auctionItem{
+//   width:100%;
+// }
+// .auctionMoney{
+//   min-width: 135px;
+// }
+// .auctionIcons{
+//   min-width: 70px;
+// }
 .historyGraph, .watchAuction {
+  color: $darkTextColor !important;
   margin: 0 3px;
   cursor: pointer;
   font-size: 1.5em;
   float: left; }
+
+.historyGraph:hover, .watchAuction:hover {
+  color: $lightTextColor !important;
+}
+
 #auctionLoading{
   text-align: center;
 }
@@ -236,12 +218,6 @@ a, a:hover, a:visited, a:active{
 .auctionHistoryBarSelected{
   fill:#ddd;
 }
-.right{
-  text-align: right;
-}
-.center{
-  text-align: center;
-}
 .input-caret{
   position:absolute;
   top:12px;
@@ -269,16 +245,24 @@ a, a:hover, a:visited, a:active{
 	color:black;
 }
 .pagination{
+  @include button-styles();
   display:inline-block;
-  border: 1px solid black;
-  padding: 5px;
+  border-radius: 2px;
+  min-width: 16px;
+  text-align: center;
+  padding: 6px;
   margin: 0 1px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+}
+.pagination:active {
+  position: relative;
+  top: 1px;
 }
 .pagination-current{
-  font-weight: bold;
-  border:2px solid black;
-  background-color: #858585;
+  font-weight: 900;
+  border: solid 1px black !important;
 }
 .item {
   position: absolute;
@@ -439,161 +423,15 @@ a, a:hover, a:visited, a:active{
   left:100px;
   top:490px;
 }
-body {
-  font-family: 'Maven Pro';
-  font-size: 14px;
-  /*text-align: justify;*/
-}
-
-/* TOP BAR */
-
-#brand-nav {
-  height: 30px;
-  min-height: 30px;
-}
-
-#proprietary-bar {
-  background: rgb(69,72,77); /* Old browsers */
-  background: -moz-linear-gradient(top,  rgba(69,72,77,1) 0%, rgba(0,0,0,1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
-}
-
-#proprietary-bar, .navbar-collapse, .navbar-header {
-  background-color: transparent;
-  height: 30px;
-}
-
-/* MAIN NAVIGATION */
-
-#nav-container {
-  background-color: #050505;
-}
-
-#secondary-nav {
-  top: 40px;
-  width: 100%;
-  position: absolute;
-  background-color: #777;
-  z-index: 1;
-}
-
-#user-panel {
-  background-color: #777;
-}
-.userName{
-  color:#FFF;
-}
-
-form.navbar-form.navbar-right {
-  margin-top: 2px;
-  margin-right: 6px;
-}
-
-.nav-tabs li, .nav-tabs li a {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  border: 0;
-  margin-bottom: 0;
-}
-
-nav#primary-nav li a, .caret {
-  cursor: pointer;
-  font-size: 18px;
-/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+37,f1f1f1+50,e1e1e1+51,f6f6f6+100;White+Gloss+%231 */
-background: rgb(255,255,255); /* Old browsers */
-background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 37%, rgba(241,241,241,1) 50%, rgba(225,225,225,1) 51%, rgba(246,246,246,1) 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 37%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 37%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-  font-family: 'Roboto';
-  text-shadow: 1px 0px 5px rgba(150, 150, 150, .6);
-}
-
-/* PROPRIETARY LOGO */
-a.navbar-brand {
-  font-family: 'Aldrich';
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 14px;
-}
-
-a.navbar-brand {
-  color: rgba(255,255,255,.75) !important;
-}
-
-form.navbar-form {
-  padding: 0;
-  margin: 0;
-}
-
-.breadcrumb {
-  background-color: #ddd;
+.warning, .success {
+  margin: 6px;
   font-size: 12px;
+  line-height: 12px;
+  height: 24px;
+  border-radius: 12px;
+  padding: 6px 12px;
+  background-color: rgba(0,0,0,.1)
 }
-
-.navbar, .navbar-collapse, .navbar-header, .nav-tabs, .breadcrumb {
-  margin-bottom: 0;
-  border: none;
-  border-radius: 0;
-}
-.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-  margin-left: 0px;
-}
-
-a.navbar-brand,
-ul.nav.navbar-nav li a
- {
-  height: 30px;
-  padding: 0px;
-  font-size: 14px;
-  margin-right: 15px;
-  margin-left: 15px;
-  vertical-align: middle;
-  line-height: 30px;
-}
-
-ul.nav.navbar-nav li a {
-  margin-top: -1px;
-}
-/* CONTENT DIVS */
-
-#main-content {
-  background-color: #cecece;
-}
-
-#sub-content {
-  background-color: #aaa;
-}
-
-/* ADVERTISEMENTS */
-
-#leaderboard {
-  width: 728px;
-  height: 90px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  background-color: #ccc;
-}
-
-#skyscraper {
-  width: 160px;
-  height: 600px;
-  background-color: #ccc;
-  margin: 10px auto;
-}
-
-/* FOOTER */
-
-#footer-container {
-  background-color: #777;
-}
-
 .warning{
   color: red;
 }

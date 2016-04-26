@@ -331,6 +331,9 @@ h4 {
 .auctionText {
   height: 32px; }
 
+.auctionSort {
+  cursor: pointer; }
+
 nav#secondary-nav {
   height: 200px;
   color: black;

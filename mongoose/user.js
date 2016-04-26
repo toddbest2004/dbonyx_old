@@ -14,7 +14,7 @@ function toLower (v) {
 var onyxUserSchema = new Schema({
 	username: {type: String,required:true, set: capitalize},
 	password: {type: String, required: true, select: false},
-	email: {type: String, set: toLower, required: true},
+	email: {type: String, set: toLower, select: false, required: true},
 	emailValidation: {type: String, select:false},
 	isEmailValidated: {type:Boolean, default:false},
 	emailValidationCreatedDate: {type:Date, default: Date.now, select:false},

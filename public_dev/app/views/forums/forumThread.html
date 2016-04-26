@@ -2,19 +2,28 @@
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
 <a href="/forums/">Forums</a> &gt; 
 <a href="/forums/cat/{{thread.category._id}}">{{thread.category.name}}</a> 
-<h1>{{thread.name}}</h1>
-	<div style="border:1px solid black" ng-repeat="post in thread.posts">
-	{{post.message}}
-	<br>
-	{{post.author.username}}
-
-	</div>
-	<div>
-		<form ng-submit="postMessage()">
-			<textarea ng-model="message"></textarea>
-			<input type="submit" value="Post Message">
-		</form>
-	</div>
+	
+	<h1>{{thread.name}}</h1>
+		<div class="row" style="border-top:1px solid black;" ng-repeat="post in thread.posts">
+			<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3 center">
+				<h3><a href="/profile/{{post.author.username}}">{{post.author.username}}</a></h3>
+				<div>
+				<img src="">
+				</div>
+			</div>
+			<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" >
+				{{post.message}}
+				<hr ng-if="post.author.signature">
+				{{post.author.signature}}
+			</div>
+		</div>
+		<div class="row" style="border-top:1px solid black;">
+			<form ng-submit="postMessage()">
+				<textarea ng-model="message"></textarea>
+				<input type="submit" value="Post Message">
+			</form>
+		</div>
+	
 </div>
 <sidebar>
 

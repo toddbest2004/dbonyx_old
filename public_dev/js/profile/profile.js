@@ -8,6 +8,12 @@ angular.module('dbonyx')
 		$scope.error = err
 	})
 }])
-.controller('publicProfileCtrl', ['$scope','onyxUser',function($scope, onyxUser){
+.controller('publicProfileCtrl', ['$scope','$routeParams','onyxUser',function($scope, $routeParams,onyxUser){
 	$scope.user = onyxUser
+	$scope.loading = true
+	onyxUser.getPublicProfile($routeParams.username,function(err, data){
+		$scope.loading = false
+		$scope.profileData = data
+		$scope.error = err
+	})
 }])

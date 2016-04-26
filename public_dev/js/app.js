@@ -61,7 +61,7 @@ $routeProvider
 	controller: 'privateProfileCtrl',
 	templateUrl: 'app/views/privateprofile.html'
 })
-.when('/profile/:id', {
+.when('/profile/:username', {
 	controller: 'publicProfileCtrl',
 	templateUrl: 'app/views/publicprofile.html'
 })

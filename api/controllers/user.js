@@ -142,7 +142,12 @@ router.post('/feedback', function(req, res){
 })
 
 router.get('/publicProfile', function(req, res){
-	res.send({test:'test user data'})
+	if(!req.query.username||typeof(req.query.username)!=='string'){
+		return res.status(401).json({error:"Unable to read username."})
+	}
+	db.onyxUser.findOne({username:req.query.username}).exec(function(err, user){
+		res.json(user)
+	})
 })
 
 router.get('/privateProfile', function(req, res){

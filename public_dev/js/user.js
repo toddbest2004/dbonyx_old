@@ -71,7 +71,14 @@ angular.module('UserCtrls', [])
 	}
 	
 	user.getPublicProfile = function(username, callback){
-
+		$http({
+			url: '/api/user/publicProfile',
+			params: {username:username}
+		}).then(function success(response){
+			return callback(null, response.data)
+		}, function error(response){
+			return callback(response.data.error)
+		})
 	}
 
 	user.getPrivateProfile = function(callback){

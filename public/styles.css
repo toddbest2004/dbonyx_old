@@ -21,10 +21,10 @@ hr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 
 a, a:visited {
-  color: #FF8000; }
+  color: #1B9EC0; }
 
 a:hover {
-  color: #b35a00;
+  color: #43c3e5;
   border-bottom: double 1px; }
 
 input:focus {

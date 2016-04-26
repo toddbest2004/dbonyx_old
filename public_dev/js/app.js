@@ -58,8 +58,12 @@ $routeProvider
 	templateUrl: 'app/views/privacy.html'
 })
 .when('/profile', {
-	controller: 'userCtrl',
-	templateUrl: 'app/views/profile.html'
+	controller: 'privateProfileCtrl',
+	templateUrl: 'app/views/privateprofile.html'
+})
+.when('/profile/:id', {
+	controller: 'publicProfileCtrl',
+	templateUrl: 'app/views/publicprofile.html'
 })
 .when('/register', {
 	templateUrl: 'app/views/register.html'

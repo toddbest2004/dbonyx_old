@@ -70,6 +70,21 @@ angular.module('UserCtrls', [])
 		})
 	}
 	
+	user.getPublicProfile = function(username, callback){
+
+	}
+
+	user.getPrivateProfile = function(callback){
+		$http({
+			url: '/api/user/privateProfile'
+		}).then(function success(response){
+			return callback(null, response.data)
+		}, function error(response){
+			return callback(response.data.error)
+		})
+		callback(null, 'test')
+	}
+
 	user.checkLoggedInStatus()
 	return user 
 }])

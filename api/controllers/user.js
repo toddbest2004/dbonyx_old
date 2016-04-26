@@ -141,6 +141,20 @@ router.post('/feedback', function(req, res){
 	})
 })
 
+router.get('/publicProfile', function(req, res){
+	res.send({test:'test user data'})
+})
+
+router.get('/privateProfile', function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if (user) {
+			res.send(user)
+  		} else {
+	  		res.status(401).json({error:"Unable to verify user. Please try re-logging in."})
+		}
+	})(req, res)
+})
+
 module.exports = router
 
 function validateEmail(email) {

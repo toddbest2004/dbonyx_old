@@ -20,16 +20,8 @@ router.post("/getUser", passport.authenticate('jwt', {session: false}),function(
 router.post("/login", function(req, res){
 	passport.authenticate('local', function(err, user, info) {
 		if (user) {
-	  // 		req.login(user, function(err) {
-			// 	if (err) throw err
-			// 	// req.session.username=user.username
-			// 	// req.session.email=user.email
-			// 	res.json({username:req.user.username,email:req.user.email})
-			// 	return
-			// })
 			var token = jwt.sign({email:user.email,username:user.username}, secret);
 			res.send({
-				email: user.email,
 				username: user.username,
 				token: token
 			});
@@ -108,7 +100,7 @@ router.post('/validate', function(req, res){
 		res.status(401).json({error:"Missing credentials"})
 		return
 	}
-	db.onyxUser.findOne({username:req.body.username}, function(err, user){
+	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +isEmailValidated +emailValidationCreatedDate").exec(function(err, user){
 		if(err||!user){
 			res.status(401).json({error:"User not found."})
 			return
@@ -147,6 +139,25 @@ router.post('/feedback', function(req, res){
 	transporter.sendMail(feedbackMail, function(err, response){
 		res.json({success:true})
 	})
+})
+
+router.get('/publicProfile', function(req, res){
+	if(!req.query.username||typeof(req.query.username)!=='string'){
+		return res.status(401).json({error:"Unable to read username."})
+	}
+	db.onyxUser.findOne({username:req.query.username}).exec(function(err, user){
+		res.json(user)
+	})
+})
+
+router.get('/privateProfile', function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if (user) {
+			res.send(user)
+  		} else {
+	  		res.status(401).json({error:"Unable to verify user. Please try re-logging in."})
+		}
+	})(req, res)
 })
 
 module.exports = router

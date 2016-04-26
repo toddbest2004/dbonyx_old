@@ -3,14 +3,22 @@ var Schema = mongoose.Schema
 var bcrypt = require('bcrypt')
 var SALT_WORK_FACTOR = 10
 
+function capitalize (v) {
+    return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();
+}
+
+function toLower (v) {
+  return v.toLowerCase();
+}
+
 var onyxUserSchema = new Schema({
-	username: String,
-	password: String,
-	email: String,
-	emailValidation: String,
+	username: {type: String,required:true, set: capitalize},
+	password: {type: String, required: true, select: false},
+	email: {type: String, set: toLower, select: false, required: true},
+	emailValidation: {type: String, select:false},
 	isEmailValidated: {type:Boolean, default:false},
-	emailValidationCreatedDate: {type:Date, default: Date.now},
-	emailValidatedDate: Date,
+	emailValidationCreatedDate: {type:Date, default: Date.now, select:false},
+	emailValidatedDate: {type: Date, select: false},
 	userCreatedDate: {type:Date, default: Date.now}
 })
 
@@ -40,12 +48,3 @@ onyxUserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 var onyxUser = mongoose.model('onyxUser', onyxUserSchema)
 module.exports = onyxUser
-
-// User Password check example
-// onyxUser.comparePassword(req.body.password, function(err, isMatch) {
-// 	if (err||!isMatch){
-// 		res.status(404).send({result:false,error:"Username/password not found."})
-// 	}
-// 	req.session.onyxUsername=onyxUser.onyxUsername
-// 	res.send({result:true})
-// });

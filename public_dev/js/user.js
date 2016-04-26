@@ -70,6 +70,28 @@ angular.module('UserCtrls', [])
 		})
 	}
 	
+	user.getPublicProfile = function(username, callback){
+		$http({
+			url: '/api/user/publicProfile',
+			params: {username:username}
+		}).then(function success(response){
+			return callback(null, response.data)
+		}, function error(response){
+			return callback(response.data.error)
+		})
+	}
+
+	user.getPrivateProfile = function(callback){
+		$http({
+			url: '/api/user/privateProfile'
+		}).then(function success(response){
+			return callback(null, response.data)
+		}, function error(response){
+			return callback(response.data.error)
+		})
+		callback(null, 'test')
+	}
+
 	user.checkLoggedInStatus()
 	return user 
 }])
@@ -115,6 +137,8 @@ angular.module('UserCtrls', [])
 	}
 	$scope.login = function(){
 		onyxUser.login($scope.login.email, $scope.login.password, function(err, success){
+			$scope.login.email=null
+			$scope.login.password=null
 			if(err){
 				$scope.error=err
 			}

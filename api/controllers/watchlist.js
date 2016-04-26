@@ -1,21 +1,22 @@
 var express = require("express");
 var router = express.Router();
+var passport = require("passport")
 var db = require('../../mongoose')
 
 //get all
-router.get("/", function(req,res){
-	if(!req.user){
-		res.status(403).json({error:"You must be logged in."})
-		return
-	}
-	db.watchlist.find({user:req.user._id}).exec(function(err, watchlists){
-		// console.log(watchlists)
-	})
-	res.json({test:'test'})
-})
+// router.get("/", passport.authenticate('jwt', {session: false}), function(req,res){
+// 	if(!req.user){
+// 		res.status(403).json({error:"You must be logged in."})
+// 		return
+// 	}
+// 	db.watchlist.find({user:req.user._id}).exec(function(err, watchlists){
+// 		// console.log(watchlists)
+// 	})
+// 	res.json({test:'test'})
+// })
 
 //add route
-router.post("/", function(req,res){
+router.post("/", passport.authenticate('jwt', {session: false}), function(req,res){
 	var query = req.body
 	if(!req.user){
 		res.status(403).json({error:"You must be logged in."})

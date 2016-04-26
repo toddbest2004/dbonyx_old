@@ -10,6 +10,8 @@ var characterCtrl = require("./controllers/character")
 router.use("/character", characterCtrl);
 var auctionCtrl = require("./controllers/auction")
 router.use("/auction", auctionCtrl);
+var forumCtrl = require('./controllers/forums')
+router.use("/forum", forumCtrl);
 var itemCtrl = require("./controllers/item")
 router.use("/item", itemCtrl);
 var mountCtrl = require("./controllers/mount")

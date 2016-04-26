@@ -5,7 +5,9 @@ var watch = require('gulp-watch')
 var batch = require('gulp-batch')
 var sass = require('gulp-sass')
 
-gulp.task('default', function() {
+gulp.task('default', ['js','sass','copy','watch'])
+
+gulp.task('js', function() {
 	return gulp.src('public_dev/**/*.js')
 		.pipe(concat('min.js'))
 		.pipe(uglify())
@@ -26,7 +28,7 @@ gulp.task('copy', function(){
 
 gulp.task('watch', function () {
 	watch('public_dev/**/*.js', batch(function (events, done) {
-		gulp.start('default', done)
+		gulp.start('js', done)
 	}))
 	watch('public_dev/**/*.scss', batch(function (events, done) {
 		gulp.start('sass', done)

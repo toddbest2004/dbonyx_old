@@ -221,16 +221,16 @@ function parseFilters(filters){
 }
 
 function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems){
-		var auctionQuery = db.auction.find({region:region,slugName:slugName})
-		auctionQuery.populate({path:'item'}).skip(offset).sort(sort).limit(limit)
-		if(filteredItems.length>0){
-			auctionQuery.where('item').in(filteredItems)
-		}
-		auctionQuery.exec(function(err, auctions){
-			auctionQuery.limit(0).skip(0).count(function(err, count){
-				res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
-			})
+	var auctionQuery = db.auction.find({region:region,slugName:slugName})
+	auctionQuery.populate({path:'item'}).sort(sort).skip(offset).limit(limit)
+	if(filteredItems.length>0){
+		auctionQuery.where('item').in(filteredItems)
+	}
+	auctionQuery.exec(function(err, auctions){
+		auctionQuery.limit(0).skip(0).count(function(err, count){
+			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
 		})
+	})
 }
 
 function processFilter(filter, itemQuery){

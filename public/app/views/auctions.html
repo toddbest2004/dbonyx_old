@@ -46,6 +46,7 @@
 				</div>
 			</div>
 			<div class="auctionResultTable table table-condensed">
+<<<<<<< HEAD
 				<div class="row auctionResultRow">
 					<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
 					<div class="col-xs-1 auctionIcons"></div>
@@ -60,6 +61,16 @@
 						<hr>
 					</div>
 				</div>
+=======
+			<div class="auctionResultRow">
+				<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
+				<div class="auctionResultCell auctionIcons">&nbsp;</div>
+				<div id="auctionItem" class="auctionSort" data-sort="name">Item</div>
+				<div class="auctionSort" data-sort="itemLevel">iLvl</div>
+				<!-- <div class="auctionSort">Owner</div> -->
+				<div class="auctionSort auctionMoney" data-sort="bid" ng-click="setSortBy('bid')">Bid Price</div>
+				<div class="auctionSort auctionMoney" data-sort="buyout" ng-click="setSortBy('buyout')">Buyout</div></div>
+>>>>>>> master
 				<auction-result ng-repeat="auction in auctionResults.auctions"></auction-result>
 			</div>
 		</div>

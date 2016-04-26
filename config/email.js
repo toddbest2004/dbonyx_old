@@ -1,13 +1,19 @@
 var nodemailer = require('nodemailer')
-var smtpConfig = {
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // use SSL 
+
+var xoauth2 = require('xoauth2');
+ 
+// login 
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        xoauth2: xoauth2.createXOAuth2Generator({
+		    user: process.env.EMAIL_CLIENT_USER,
+		    clientId: process.env.EMAIL_CLIENT_ID,
+		    clientSecret: process.env.EMAIL_CLIENT_SECRET,
+		    refreshToken: process.env.EMAIL_REFRESH_TOKEN
+        })
     }
-}
-var transporter = nodemailer.createTransport(smtpConfig)
+});
+
 
 module.exports = transporter

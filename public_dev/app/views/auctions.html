@@ -65,34 +65,25 @@
 		</div>
 		</div>
 		<sidebar>
-		Traditional | Advanced
 		<div id="itemFilterDiv">
-		<select id="itemFilterQuality" class="itemFilter" multiple size='8' ng-model="qualities.values" ng-change="firstPage()">
-			<option value="0" class="itemQuality0">Poor</option>
-			<option value="1" class="itemQuality1">Common</option>
-			<option value="2" class="itemQuality2">Uncommon</option>
-			<option value="3" class="itemQuality3">Rare</option>
-			<option value="4" class="itemQuality4">Epic</option>
-			<option value="5" class="itemQuality5">Legendary</option>
-			<option value="6" class="itemQuality6">Artifact</option>
-			<option value="7" class="itemQuality7">Heirloom</option>
-		</select>
-		<ul id="itemFiltersList" class="list-unstyled">
-			<li ng-repeat="filter in filters track by $index">
-				<button class="btn-danger" ng-click="removeFilter($index)">X</button>
-				<select ng-model="filter.type">
-					<option ng-repeat="option in validFilters" value="{{option}}">{{option}}</option>
-				</select>
-				<select ng-model="filter.comparator">
-					<option>&gt;</option>
-					<option>=</option>
-					<option>&lt;</option>
-				</select>
-				<input type="number" ng-model="filter.value">
-			</li>
-		</ul>
-		<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>
-		<button id="clearItemFilterQuality" class="btn" ng-click="clearQualityFilter()">Clear</button> 
+			<h1>Filter By Quality</h1>
+			<oi-select placeholder="ex. Poor, Uncommon" ng-model="qualities.values" oi-options="quality.id as quality.name for quality in itemQualities track by quality.id" multiple multiple-placeholder="Add more.." ng-change="firstPage()"></oi-select>
+			<h1>Additional Filters</h1>
+			<ul id="itemFiltersList" class="list-unstyled">
+				<li ng-repeat="filter in filters track by $index">
+					<button class="btn-danger" ng-click="removeFilter($index)">X</button>
+					<select ng-model="filter.type">
+						<option ng-repeat="option in validFilters" value="{{option}}">{{option}}</option>
+					</select>
+					<select ng-model="filter.comparator">
+						<option>&gt;</option>
+						<option>=</option>
+						<option>&lt;</option>
+					</select>
+					<input type="number" ng-model="filter.value">
+				</li>
+			</ul>
+			<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>
 		</div>
 		</sidebar>
 	</div>

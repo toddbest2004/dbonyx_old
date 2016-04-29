@@ -1,11 +1,45 @@
-angular.module('AuctionCtrls', [])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService',function($scope, $http, $location, $routeParams, onyxPersistence, auctionService) {
+angular.module('AuctionCtrls', ['oi.select'])
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService', 'oiSelect', function($scope, $http, $location, $routeParams, onyxPersistence, auctionService, oiSelect) {
 	var searchValues = $location.search()
 	$scope.searchTerm=searchValues.s||''
 	$scope.realmInput=searchValues.r||onyxPersistence.getRealm()||''
 
 	$scope.validFilters = ['Item Level','Required Level']
-
+	$scope.itemQualities = [
+		{
+			name: 'Poor',
+			id: '0'
+		},
+		{
+			name: 'Common',
+			id: '1'
+		},
+		{
+			name: 'Uncommon',
+			id: '2'
+		},
+		{
+			name: 'Rare',
+			id: '3'
+		},
+		{
+			name: 'Epic',
+			id: '4'
+		},
+		{
+			name: 'Legendary',
+			id: '5'
+		},
+		{
+			name: 'Artifact',
+			id: '6'
+		},
+		{
+			name: 'Heirloom',
+			id: '7'
+		}
+	]
+	$scope.selectedQuality = '';
 	$scope.realms=[]
 	$scope.auctionResults = auctionService.auctionResults
 	$scope.loading=false
@@ -49,10 +83,6 @@ angular.module('AuctionCtrls', [])
 	$scope.lastPage = function(){
 		auctionService.lastPage()
 		$scope.search()
-	}
-	$scope.clearQualityFilter=function(){
-		$scope.qualities=[]
-		$scope.firstPage()
 	}
 	$scope.setSortBy=function(sort){
 		// console.log(sort)

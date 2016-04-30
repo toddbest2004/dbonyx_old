@@ -19,7 +19,8 @@ var onyxUserSchema = new Schema({
 	isEmailValidated: {type:Boolean, default:false},
 	emailValidationCreatedDate: {type:Date, default: Date.now, select:false},
 	emailValidatedDate: {type: Date, select: false},
-	userCreatedDate: {type:Date, default: Date.now}
+	userCreatedDate: {type:Date, default: Date.now},
+	profilePic: String,
 })
 
 onyxUserSchema.pre('save', function(next) {

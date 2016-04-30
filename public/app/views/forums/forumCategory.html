@@ -2,14 +2,32 @@
 <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9">
 <a href="/forums">Forums</a>
 	<h1>{{category.name}}</h1>
-	<div ng-repeat="thread in category.threads">
-		<a href="/forums/thread/{{thread._id}}"><b>{{thread.name}}</b></a>
+	<div class="row">
+		<div class="col-md-7 col-sm-7 col-xs-7 col-lg-7"><h3>Subject</h3></div>
+		<div class="col-md-2 col-sm-2 col-xs-2 col-lg-2"><h3>Author</h3></div>
+		<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3"><h3>Last Message</h3></div>
+	</div>
+	<div class="row" ng-repeat="thread in category.threads">
+		<a href="/forums/thread/{{thread._id}}">
+		<div class="col-md-7 col-sm-7 col-xs-7 col-lg-7"><b>{{thread.name}}</b></div>
+		<div class="col-md-2 col-sm-2 col-xs-2 col-lg-2">{{thread.startedBy.username}}</div>
+		<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">{{thread.lastMessage}}</div>
+		</a>
 	</div>
 	<div>
+	<h1>Create New Thread</h1>
+		<div class="warning" ng-if="error">
+			{{error}}
+		</div>
+		<div class="warning" ng-if="!user.loggedin">
+			You must be logged in to make a post.
+		</div>
 		<form ng-submit="newThread()">
-			<input type="text" ng-model="title">
-			<textarea ng-model="message"></textarea>
-			<input type="submit">
+			<label for="forumTitle">Title: </label>
+			<input id="forumTitle" class="form-control" type="text" ng-model="title" ng-disabled="!user.loggedin">
+			<label for="forumMessage">Message: </label>
+			<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+			<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
 		</form>
 	</div>
 </div>

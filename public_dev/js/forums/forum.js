@@ -2,42 +2,53 @@ angular.module('dbonyx')
 .controller('forumCtrl', ['$scope', 'forumService', function($scope, forumService){
 	forumService.getCategories(function(err, data){
 		if(err){
-
+			$scope.error = err
 		}else{
 			$scope.categories=data
 		}
 	})
 
 }])
-.controller('forumCatCtrl', ['$scope', '$routeParams', 'forumService', function($scope, $routeParams, forumService){
+.controller('forumCatCtrl', ['$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($scope, $routeParams, $route, forumService, onyxUser){
 	$scope.categoryId = $routeParams.categoryId
+	$scope.user = onyxUser
 	forumService.getCategory($scope.categoryId, function(err, data){
 		if(err){
-
+			$scope.error = err
 		}else{
 			$scope.category=data
+			$scope.category.threads.forEach(function(thread){
+				thread.lastMessage=new Date(thread.posts[thread.posts.length-1].createdOn).toLocaleString()
+			})
 		}
 	})
 	$scope.newThread = function(){
+		$scope.error = false
 		forumService.newThread($scope.categoryId, $scope.title, $scope.message, function(err, result){
-			console.log(err)
-			console.log(result)
+			if(err)
+				$scope.error = err
+			if(result)
+				$route.reload()
 		})
 	}
 }])
-.controller('forumThreadCtrl', ['$scope', '$routeParams', 'forumService', function($scope, $routeParams, forumService){
+.controller('forumThreadCtrl', ['$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($scope, $routeParams, $route,forumService, onyxUser){
 	$scope.threadId = $routeParams.threadId
+	$scope.user = onyxUser
 	forumService.getThread($scope.threadId, function(err, data){
 		if(err){
-
+			$scope.error = err
 		}else{
 			$scope.thread=data
 		}
 	})
 	$scope.postMessage = function(){
+		$scope.error = false
 		forumService.postMessage($scope.threadId, $scope.message, function(err, result){
-			console.log(err)
-			console.log(result)
+			if(err)
+				$scope.error = err
+			if(result)
+				$route.reload()
 		})
 	}
 }])
@@ -50,7 +61,7 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
-			cb(response.data)
+			cb(response.data.error)
 		})
 	}
 
@@ -60,7 +71,7 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
-			cb(response.data)
+			cb(response.data.error)
 		})
 	}
 
@@ -70,7 +81,7 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
-			cb(response.data)
+			cb(response.data.error)
 		})
 	}
 
@@ -85,7 +96,7 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
-			cb(response.data)
+			cb(response.data.error)
 		})
 	}
 
@@ -99,7 +110,7 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
-			cb(response.data)
+			cb(response.data.error)
 		})
 	}
 

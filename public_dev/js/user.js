@@ -23,7 +23,6 @@ angular.module('UserCtrls', [])
 			url: '/api/user/validate',
 			data: {username:username,validateString:validateString}
 		}).then(function success(response){
-			console.log("Success!")
 			return response
 		},function error(response){
 			return cb("There was an error validating your email.")
@@ -31,20 +30,17 @@ angular.module('UserCtrls', [])
 	}
 
 	user.login=function(email, password, cb){
-		console.log('a');
 		$http({
 			method: 'POST',
 			url: '/api/user/login',
 			data: {email:email,password:password}
 		}).then(function success(response){
-			console.log(response)
 			Auth.saveToken(response.data.token);
 			user.username=response.data.username
 			user.email=response.data.email
 			user.loggedin=true
 			cb(null, true)
 		},function error(response){
-			console.log(response);
 			cb(response.data.error, false)
 		})
 	}

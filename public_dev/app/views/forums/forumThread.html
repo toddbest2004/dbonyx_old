@@ -18,9 +18,16 @@
 			</div>
 		</div>
 		<div class="row" style="border-top:1px solid black;">
+			<div class="warning" ng-if="error">
+				{{error}}
+			</div>
+			<div class="warning" ng-if="!user.loggedin">
+				You must be logged in to make a post.
+			</div>
 			<form ng-submit="postMessage()">
-				<textarea ng-model="message"></textarea>
-				<input type="submit" value="Post Message">
+				<label for="forumMessage">Message: </label>
+				<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+				<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
 			</form>
 		</div>
 	

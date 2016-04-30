@@ -11,7 +11,7 @@ router.get('/categories',function(req, res){
 })
 
 router.get('/category/:categoryId', function(req, res){
-	db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
+	db.forumCategory.findOne({_id:req.params.categoryId}).populate({path: 'threads', populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost'}]}).exec(function(err, cat){
 		res.json(cat)
 	})
 	// db.forumThread.find({category:req.params.categoryId}).exec(function(err, threads){
@@ -47,6 +47,7 @@ router.post("/thread/:threadId", function(req, res){
 						return res.status(401).json({error:"Error making post, please try again."})
 					}
 					thread.posts.push(post)
+					thread.lastPost = post
 					thread.save(function(){
 						res.json({result:"Success"})
 					})
@@ -76,7 +77,8 @@ router.post("/category/:categoryId", function(req, res){
 				}
 				db.forumThread.create({
 					name: req.body.title,
-					category: cat
+					category: cat,
+					startedBy: user,
 				},function(err, thread){
 					if(err||!thread){
 						return res.status(401).json({error:"Error making post, please try again."})
@@ -90,6 +92,7 @@ router.post("/category/:categoryId", function(req, res){
 							return res.status(401).json({error:"Error making post, please try again."})
 						}
 						thread.posts.push(post)
+						thread.lastPost = post
 						thread.save(function(){
 							cat.threads.push(thread)
 							cat.save(function(){

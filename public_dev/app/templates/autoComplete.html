@@ -1,5 +1,5 @@
 <div class="autocomplete-group">
-	<input type="text" class="span2 form-control" id="realmInput" ng-focus="blurIn('realmInputSelected')" ng-change="selectRealm()" ng-model="realmInput" autocomplete="off" list="realms" placeholder="Select a realm..." select-on-focus>
+	<input type="text" class="span2 form-control realmInput" ng-focus="blurIn('realmInputSelected')" ng-change="selectRealm()" ng-model="realmInput" autocomplete="off" list="realms" placeholder="Select a realm..." select-on-focus>
 	<datalist id="realms">
 		<option value="{{realm}}" ng-repeat="realm in realms">
 	</datalist>

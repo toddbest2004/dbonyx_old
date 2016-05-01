@@ -31,3 +31,54 @@ $auctionItemHeight: 42px;
 .auctionSort {
 	cursor: pointer;
 }
+
+oi-select .select-search {
+	border: none !important;
+	border-radius: 0px !important;
+}
+li.select-search-list-item.select-search-list-item_input {
+	width: 100%;
+	margin: 0 !important;
+}
+li.select-search-list-item.select-search-list-item_input input {
+	background-color: transparent;
+	// @include input-fields();
+	border-bottom: solid 1px $lightBackgroundColor;
+	padding: 6px 0px;
+	&:focus {
+		box-shadow: none !important;
+	}
+}
+
+li.select-dropdown-optgroup-option {
+	background-color: white;
+	color: $lightBackgroundColor;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+oi-select .select-dropdown {
+	border: solid 1px red !important;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	border-radius: 0px !important;
+	background-color: transparent !important;
+}
+
+oi-select.focused .select-search {
+	border: 0 !important;
+	border-radius: 0 !important;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+ul.select-search-list {
+	background-color: $mainBackgroundColor;
+	border: 0 !important;
+	outline: 0 !important;
+	padding: 0 !important;
+}
+

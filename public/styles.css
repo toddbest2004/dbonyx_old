@@ -734,7 +734,8 @@ oi-select.loading:not(.multiple) .select-search:after {
   background-color: #858585;
   position: absolute;
   z-index: 1;
-  padding: 10px 30px; }
+  padding: 10px 30px;
+  min-width: 300px; }
 
 .auctionHistory {
   width: 540px; }

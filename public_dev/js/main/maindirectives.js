@@ -32,10 +32,10 @@ angular.module('dbonyx')
             });
         }
     };
-}]).directive('autoComplete', function(){
-	var autoCompleteCtrl = ['onyxPersistence', '$scope', '$http', function(onyxPersistence, $scope, $http){
+}]).directive('autoComplete', [function(){
+	var autoCompleteCtrl = ['onyxPersistence', '$scope', 'realmService',function(onyxPersistence, $scope, realmService){
 		$scope.realmInputSelected=false
-		$scope.realms=[]
+		$scope.realms=realmService.realms
 		$scope.blurIn=function(element){
 			if($scope.realms.length==0){
 				$scope.getRealms()
@@ -46,14 +46,9 @@ angular.module('dbonyx')
 			$scope[element]=false
 		}
 		$scope.getRealms=function(){
-			$scope.realms=['Loading Realms']
-			$http({
-				method: 'GET',
-				url: '/api/realms'
-			}).then(function success(response){
-				$scope.realms = response.data
-			}, function error(response){
-				$scope.realms=['Unable to Load Realms']
+			// $scope.realms=['Loading Realms']
+			realmService.getRealms(function(){
+				$scope.realms=realmService.realms
 			})
 		}
 		$scope.selectRealm = function(){
@@ -61,9 +56,6 @@ angular.module('dbonyx')
 				onyxPersistence.setRealm($scope.realmInput)
 				setTimeout($scope.search,0)
 			}
-		}
-		$scope.hover=function(index){
-			$scope.hoverIndex=index
 		}
 	}]
 	return {
@@ -76,7 +68,7 @@ angular.module('dbonyx')
 		templateUrl: 'app/templates/autoComplete.html',
 		controller: autoCompleteCtrl
 	}
-})
+}])
 .directive('money', function(){
 	var moneyCtrl = ['$scope', function($scope){
 		$scope.amount = parseInt($scope.amount)

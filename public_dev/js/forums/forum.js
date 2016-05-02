@@ -52,6 +52,10 @@ angular.module('dbonyx')
 		})
 	}
 }])
+.controller('forumAdminCtrl', ['$scope', 'onyxUser', function($scope, onyxUser){
+	$scope.user=onyxUser
+	
+}])
 .factory('forumService', ['$http', 'Auth',function($http, Auth){
 	var forum = {}
 

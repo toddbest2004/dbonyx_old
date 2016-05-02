@@ -25,6 +25,7 @@ router.get('/thread/:threadId', function(req,res){
 	})
 })
 
+//create post in thread
 router.post("/thread/:threadId", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		if (user) {
@@ -59,6 +60,7 @@ router.post("/thread/:threadId", function(req, res){
 	})(req, res)
 })
 
+//create thread in category
 router.post("/category/:categoryId", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		if (user) {
@@ -71,12 +73,17 @@ router.post("/category/:categoryId", function(req, res){
 			if(!req.body.title){
 				return res.status(401).json({error:"You must provide a title for your post."})
 			}
+			var title = req.body.title
+			var message = req.body.message
 			db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
+				if(cat.permissions.createThread.indexOf(user.userLevel)===-1){
+					return res.status(401).json({error:"You do not have the permissions to create a thread in this forum."})
+				}
 				if(err||!cat){
 					return res.status(401).json({error:"Error making post, please try again."})
 				}
 				db.forumThread.create({
-					name: req.body.title,
+					name: title,
 					category: cat,
 					startedBy: user,
 				},function(err, thread){
@@ -86,7 +93,7 @@ router.post("/category/:categoryId", function(req, res){
 					db.forumPost.create({
 						thread: thread,
 						author: user,
-						message: req.body.message
+						message: message
 					}, function(err, post){
 						if(err||!post){
 							return res.status(401).json({error:"Error making post, please try again."})

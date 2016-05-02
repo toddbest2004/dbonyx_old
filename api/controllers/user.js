@@ -96,11 +96,13 @@ router.post("/register", function(req, res){
 })
 
 router.post('/validate', function(req, res){
+	console.log(req.body.username)
+	console.log(req.body.validateString)
 	if(!req.body.username||!req.body.validateString||typeof(req.body.username)!=='string'||typeof(req.body.validateString)!=='string'){
 		res.status(401).json({error:"Missing credentials"})
 		return
 	}
-	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +isEmailValidated +emailValidationCreatedDate").exec(function(err, user){
+	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +emailValidationCreatedDate").exec(function(err, user){
 		if(err||!user){
 			res.status(401).json({error:"User not found."})
 			return

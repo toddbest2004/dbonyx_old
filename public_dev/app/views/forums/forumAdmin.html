@@ -1,1 +1,16 @@
-{{user}}
+<div class="row">
+	<input class="form-control" type="text" placeholder="New Category" ng-model="topCategory">
+	<button class="btn" ng-click="createTopCategory()">Add</button>
+</div>
+<div class="row" ng-repeat="cat in categories">
+	<h1>{{cat.name}}</h1>
+	<div class="container">
+		<div class="row" ng-repeat="sub in cat.subCategories">
+			<h3>{{sub.name}}</h3>
+		</div>
+		<div class="row">
+			<input class="form-control" type="text" placeholder="New Sub Category" ng-model="subCategory[$index]">
+			<button class="btn" ng-click="createSubCategory(cat._id, $index)">Add</button>
+		</div>
+	</div>
+</div>

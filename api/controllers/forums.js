@@ -115,4 +115,75 @@ router.post("/category/:categoryId", function(req, res){
 	})(req, res)
 })
 
+router.post('/category', function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if(err||!user){
+			return res.status(401).json({error:"You must be logged in to create a category."})	
+		}
+		if(user.userLevel!==1){
+			return res.status(401).json({error:"You do not have permission to create a category"})
+		}
+		if(!req.body||!req.body.name){
+			return res.status(400).json({error:"You must give the category a name."})
+		}
+		db.forumCategory.create({
+			name: req.body.name,
+			parentCategory: null,
+			subCategories: [],
+			threads: [],
+			permissions: {
+				createThread: [0,1],
+				createPost: [0,1]
+			}
+		}, function(err, cat){
+			if(err||!cat){
+				return res.status(500).json({error:"There was an error creating new category"})
+			}
+			return res.json({result: 'success'})
+		})
+	})(req, res)
+})
+
+router.post('/subcategory', function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		if(err||!user){
+			return res.status(401).json({error:"You must be logged in to create a category."})	
+		}
+		if(user.userLevel!==1){
+			return res.status(401).json({error:"You do not have permission to create a category"})
+		}
+		if(!req.body||!req.body.name||typeof(req.body.name)!=='string'){
+			return res.status(400).json({error:"You must give the category a name."})
+		}
+		if(!req.body.id||typeof(req.body.id)!=='string'){
+			return res.status(400).json({error:"You must specify parent category's id."})
+		}
+		db.forumCategory.findOne({
+			_id:req.body.id
+		}).exec(function(err, parent){
+			if(err||!parent){
+				return res.status(500).json({error:"There was an error creating new category"})
+			}
+			db.forumCategory.create({
+				name: req.body.name,
+				parentCategory: parent,
+				subCategories: [],
+				threads: [],
+				permissions: {
+					createThread: [0,1],
+					createPost: [0,1]
+				}
+			}, function(err, cat){
+				if(err||!cat){
+					return res.status(500).json({error:"There was an error creating new category"})
+				}
+				parent.subCategories.push(cat)
+				parent.save(function(){
+					return res.json({result: 'success'})
+				})
+			})
+		})
+	})(req, res)
+})
+
 module.exports = router

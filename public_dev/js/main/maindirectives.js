@@ -51,12 +51,14 @@ angular.module('dbonyx')
 				$scope.realms=realmService.realms
 			})
 		}
-		$scope.selectRealm = function(){
-			if ($scope.realms.indexOf($scope.realmInput) !== -1) {
-				onyxPersistence.setRealm($scope.realmInput)
-				setTimeout($scope.search,0)
-			}
+		$scope.selectRealm = function(realm){
+			$scope.realmInput=realm
+			onyxPersistence.setRealm(realm)
+			setTimeout($scope.search,0)
 		}
+ 		$scope.hover=function(index){
+ 			$scope.hoverIndex=index
+ 		}
 	}]
 	return {
 		restrict: 'E',

@@ -100,7 +100,7 @@ router.post('/validate', function(req, res){
 		res.status(401).json({error:"Missing credentials"})
 		return
 	}
-	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +isEmailValidated +emailValidationCreatedDate").exec(function(err, user){
+	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +emailValidationCreatedDate").exec(function(err, user){
 		if(err||!user){
 			res.status(401).json({error:"User not found."})
 			return

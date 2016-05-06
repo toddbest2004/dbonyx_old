@@ -35,10 +35,10 @@ angular.module('ItemCtrls', [])
 				id:id
 			}
 		}).then(function success(response){
-			alert('test1')
+			// alert('test1')
 			callback(true)
 		}, function error(response){
-			alert('test2')
+			// alert('test2')
 			callback(false)
 		})
 	}
@@ -52,15 +52,17 @@ angular.module('ItemCtrls', [])
 		$scope.item="Loading"
 		$scope.loading=true
 		itemService.getItem($scope.id, {}, function(item){
-			console.log(item)
+			// console.log(item)
 			$scope.item=item
 			$scope.loading=false
 		})
 	}
 	$scope.getAuctionDetails = function(){
-		console.log($scope)
+		// console.log($scope)
 		$scope.auctionLoading = true
-		itemAuctionService.getItemAuctionDetails($scope.id, $scope.realmInput, function(res){alert(res)})
+		itemAuctionService.getItemAuctionDetails($scope.id, $scope.realmInput, function(res){
+			// alert(res)
+		})
 	}
 	$scope.getItem()
 }]).directive('itemDisplay', function(){

@@ -304,7 +304,14 @@ h4 {
 /* FOOTER */
 #footer-container {
   margin-top: 16px;
-  background-color: #424242; }
+  padding: 16px 0px; }
+
+#site-map {
+  margin: 16px 0px;
+  padding: 0px; }
+
+.footer {
+  margin: 32px 0px; }
 
 .auctionResultCell {
   line-height: 42px;
@@ -685,10 +692,11 @@ oi-select.loading:not(.multiple) .select-search:after {
   background-color: black;
   color: white;
   font-size: 0.5em;
-  position: absolute;
   padding: 0 1px;
-  bottom: 2px;
-  right: 2px; }
+  line-height: initial;
+  position: absolute;
+  right: 3px;
+  bottom: 7px; }
 
 .itemLinkImage {
   position: relative;

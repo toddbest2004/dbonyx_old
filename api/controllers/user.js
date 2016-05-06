@@ -96,6 +96,8 @@ router.post("/register", function(req, res){
 })
 
 router.post('/validate', function(req, res){
+	console.log(req.body.username)
+	console.log(req.body.validateString)
 	if(!req.body.username||!req.body.validateString||typeof(req.body.username)!=='string'||typeof(req.body.validateString)!=='string'){
 		res.status(401).json({error:"Missing credentials"})
 		return

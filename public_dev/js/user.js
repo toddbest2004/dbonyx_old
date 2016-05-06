@@ -85,7 +85,6 @@ angular.module('UserCtrls', [])
 		}, function error(response){
 			return callback(response.data.error)
 		})
-		callback(null, 'test')
 	}
 
 	user.checkLoggedInStatus()

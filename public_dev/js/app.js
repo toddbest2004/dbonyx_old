@@ -86,6 +86,10 @@ $routeProvider
 	controller: 'forumThreadCtrl',
 	templateUrl: 'app/views/forums/forumThread.html'
 })
+.when('/forums/admin', {
+	controller: 'forumAdminCtrl',
+	templateUrl: 'app/views/forums/forumAdmin.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })

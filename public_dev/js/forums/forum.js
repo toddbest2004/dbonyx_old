@@ -52,6 +52,42 @@ angular.module('dbonyx')
 		})
 	}
 }])
+.controller('forumAdminCtrl', ['$scope', '$location', '$route', 'onyxUser', 'forumService',function($scope, $location, $route, onyxUser, forumService){
+	onyxUser.getPrivateProfile(function(err, user){
+		if(err||!user||user.userLevel!==1){
+			$location.path('/forums')
+		}
+		$scope.user = user
+	})
+	forumService.getCategories(function(err, cats){
+		if(err||!cats){
+			$scope.categories=false
+		}else{
+			$scope.categories = cats
+		}
+	})
+	$scope.subCategory = []
+	$scope.createTopCategory=function(){
+		var name = $scope.topCategory
+		forumService.createTopCategory(name, function(err, result){
+			if(err){
+				$scope.error = err
+				return
+			}
+			$route.reload()
+		})
+	}
+	$scope.createSubCategory=function(id, index){
+		var name = $scope.subCategory[index]||''
+		forumService.createSubCategory(name, id, function(err, result){
+			if(err){
+				$scope.error = err
+				return
+			}
+			$route.reload()
+		})
+	}
+}])
 .factory('forumService', ['$http', 'Auth',function($http, Auth){
 	var forum = {}
 
@@ -110,6 +146,37 @@ angular.module('dbonyx')
 		}).then(function success(response){
 			cb(null, response.data)
 		},function error(response){
+			cb(response.data.error)
+		})
+	}
+
+	forum.createTopCategory = function(name, cb){
+		$http({
+			method: 'POST',
+			url: '/api/forum/category/',
+			data: {
+				name: name
+			}
+		}).then(function success(response){
+			cb(null, response.data)
+		},function error(response){
+			cb(response.data.error)
+		})
+	}
+
+	forum.createSubCategory = function(name, categoryId, cb){
+		$http({
+			method: 'POST',
+			url: '/api/forum/subcategory/',
+			data: {
+				name: name,
+				id: categoryId
+			}
+		}).then(function success(response){
+			console.log(response)
+			cb(null, response.data)
+		},function error(response){
+			console.log(response)
 			cb(response.data.error)
 		})
 	}

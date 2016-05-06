@@ -21,6 +21,7 @@ var onyxUserSchema = new Schema({
 	emailValidatedDate: {type: Date, select: false},
 	userCreatedDate: {type:Date, default: Date.now},
 	profilePic: String,
+	userLevel: {type:Number, default:0}, //permission level of user. 0: regular user, 1:admin
 })
 
 onyxUserSchema.pre('save', function(next) {

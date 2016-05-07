@@ -38,15 +38,15 @@ router.post("/logout", function(req, res){
 
 router.post("/register", function(req, res){
 	if(!req.body.username||!req.body.email||!req.body.password1||!req.body.password2){
-		res.status(401).json({error:"Missing one or more requried fields"})
-		return
-	}
-	if(req.body.password1.length<8||req.body.password2.length<8){
-		res.status(401).json({error:"Passwords must be at least 8 characters."})
+		res.status(401).json({error:"Missing one or more required fields."})
 		return
 	}
 	if(req.body.password1!==req.body.password2){
 		res.status(401).json({error:"Passwords do not match."})
+		return
+	}
+	if(req.body.password1.length<8||req.body.password2.length<8){
+		res.status(401).json({error:"Passwords must be at least 8 characters."})
 		return
 	}
 	if(!validateEmail(req.body.email)){
@@ -58,20 +58,22 @@ router.post("/register", function(req, res){
 		res.status(401).json({error:"Invalid username. Name must start with a letter and can only contain letters, numbers and - and _"})
 		return
 	}
-	db.onyxUser.findOne({email:req.body.email}).exec(function(err, userCheck){
+	var email = req.body.email.toLowerCase()
+	db.onyxUser.findOne({email:email}).exec(function(err, userCheck){
 		if(err||userCheck){
-			res.status(401).json({error:"Email already in use"})
+			res.status(401).json({error:"Email already in use."})
 			return
 		}
-		db.onyxUser.findOne({username:req.body.username}).exec(function(err, user){
+		var username = req.body.username.capitalize()
+		db.onyxUser.findOne({username:username}).exec(function(err, user){
 			if(err||user){
 				res.status(401).json({error:"Username already in use."})
 				return
 			}
 			var validationString = makeRandomString()
 			db.onyxUser.create({
-				username:req.body.username, 
-				email:req.body.email, 
+				username: username, 
+				email:email, 
 				password:req.body.password1,
 				emailValidation:validationString
 			},function(err, newUser){
@@ -88,7 +90,7 @@ router.post("/register", function(req, res){
 					html: '<a href="http://www.dbonyx.com/validate/'+newUser.username+'/'+validationString+'">Click here to validate your email</a>'
 				}
 				transporter.sendMail(testMail, function(err, response){
-					res.json({username:req.body.username, email:req.body.email})
+					res.json({username:newUser.username, email:newUser.email})
 				})
 			})
 		})
@@ -96,10 +98,10 @@ router.post("/register", function(req, res){
 })
 
 router.post('/validate', function(req, res){
-	console.log(req.body.username)
-	console.log(req.body.validateString)
+	// console.log(req.body.username)
+	// console.log(req.body.validateString)
 	if(!req.body.username||!req.body.validateString||typeof(req.body.username)!=='string'||typeof(req.body.validateString)!=='string'){
-		res.status(401).json({error:"Missing credentials"})
+		res.status(401).json({error:"Missing credentials."})
 		return
 	}
 	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +emailValidationCreatedDate").exec(function(err, user){

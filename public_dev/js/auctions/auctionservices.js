@@ -1,5 +1,5 @@
 angular.module('AuctionCtrls')
-.factory('auctionService', ['$http','itemConstants',function($http,itemConstants){
+.factory('auctionService', ['$http',function($http){
 	var auction = {
 		searchTerm: '',
 		realmInput: '',

@@ -5,9 +5,9 @@
 
 var express = require("express");
 var router = express.Router();
-
 var db = require("../../mongoose");
 
+var itemConstants = require('./itemConstants')
 var validComparators = {'>':'$gt', '=':'$eq','<':'$lt'}
 var validFilters = {
 	'Item Level':'itemLevel',
@@ -226,8 +226,15 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 	if(filteredItems.length>0){
 		auctionQuery.where('item').in(filteredItems)
 	}
-	auctionQuery.exec(function(err, auctions){
+	auctionQuery.lean().exec(function(err, auctions){
 		auctionQuery.limit(0).skip(0).count(function(err, count){
+			auctions.map(function(auction){
+				auction.item=auction.item||{name:"Unknown Item"}
+				if(auction.rand){
+					auction.item.suffix=itemConstants.randIds[auction.rand]?itemConstants.randIds[auction.rand].suffix:" of unknown Enchant"
+				}
+				return auction
+			})
 			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit})
 		})
 	})

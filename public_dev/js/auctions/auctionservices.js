@@ -1,5 +1,5 @@
 angular.module('AuctionCtrls')
-.factory('auctionService', ['$http',function($http){
+.factory('auctionService', ['$http','itemConstants',function($http,itemConstants){
 	var auction = {
 		searchTerm: '',
 		realmInput: '',
@@ -49,7 +49,7 @@ angular.module('AuctionCtrls')
 			}
 		}).then(function success(response){
 			auction.loading=false
-			console.log(auction.auctionResults=response.data)
+			auction.auctionResults=response.data
 			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)
 			auction.resultLow = (auction.currentPage-1)*auction.limit
 			auction.resultHigh = auction.resultLow+auction.auctionResults.auctions.length 

@@ -3,15 +3,22 @@
 	<div class="row" id="content-column-wrapper">
 		<div id="main-content">
 		<h1>Auction House</h1>
-		<div id="realmDiv">
-				<form action="" id="filterForm"  autocomplete="off">
-					<label for="realmInput">Select Realm:</label>
-					<auto-complete realm-input="realmInput" search="search()"></auto-complete>
-					<label for="search">Search Term:</label>
-					<input type="text" id="search" class="itemFilter form-control" ng-model="searchTerm">
-					<button id="searchButton" ng-click="search($event)" class="btn">Search</button>
-				</form>
-			</div>
+		<div id="realmDiv" class="row">
+			<form action="" id="filterForm"  autocomplete="off">
+				<div class="col-md-4 col-xs-12">
+				<label for="realmInput">Select Realm:</label>
+				<auto-complete realm-input="realmInput" search="search()"></auto-complete>
+				</div>
+				<div class="col-md-4 col-xs-12">
+				<label for="search">Search Term:</label>
+				<input type="text" id="search" class="itemFilter form-control" ng-model="searchTerm">
+				</div>
+				<div class="col-md-4 col-xs-12">
+				<label for="searchButton">&nbsp;</label>
+				<button id="searchButton" ng-click="search($event)" class="btn form-control">Search</button>
+				</div>
+			</form>
+		</div>
 		<div id="auctionData">
 		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
@@ -50,7 +57,7 @@
 					<!-- <div class="auctionSort" data-sort="quantity">Quantity</div> -->
 					<div class="col-xs-1 auctionIcons"></div>
 					<div class="col-xs-6 auctionSort text-left" data-sort="name"><h4>Item</h4></div>
-					<div class="col-xs-1 auctionSort text-center" data-sort="itemLevel"><h4>iLvl</h4></div>
+					<!-- <div class="col-xs-1 auctionSort text-center" data-sort="itemLevel"><h4>iLvl</h4></div> -->
 					<!-- <div class="auctionSort">Owner</div> -->
 					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="bid" ng-click="setSortBy('bid')"><h4>Bid Price<i class="fa fa-fw fa-sort" aria-hidden="true"></i></h4></div>
 					<div class="col-xs-2 auctionSort auctionMoney text-right" data-sort="buyout" ng-click="setSortBy('buyout')"><h4>Buyout<i class="fa fa-fw fa-sort" aria-hidden="true"></i></h4></div>
@@ -72,15 +79,15 @@
 			<ul id="itemFiltersList" class="list-unstyled">
 				<li ng-repeat="filter in filters track by $index">
 					<button class="btn-danger" ng-click="removeFilter($index)">X</button>
-					<select ng-model="filter.type">
+					<select ng-model="filter.type" class="form-control">
 						<option ng-repeat="option in validFilters" value="{{option}}">{{option}}</option>
 					</select>
-					<select ng-model="filter.comparator">
+					<select ng-model="filter.comparator" class="form-control">
 						<option>&gt;</option>
 						<option>=</option>
 						<option>&lt;</option>
 					</select>
-					<input type="number" ng-model="filter.value">
+					<input type="number" ng-model="filter.value" class="form-control">
 				</li>
 			</ul>
 			<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>

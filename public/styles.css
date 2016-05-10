@@ -1063,6 +1063,9 @@ oi-select.loading:not(.multiple) .select-search:after {
 .float-right {
   float: right; }
 
+#realmInput {
+  display: inline-block; }
+
 #user-panel {
   height: 200px;
   background: #212121;

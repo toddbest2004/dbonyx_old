@@ -29,3 +29,5 @@ db.items.aggregate([{$unwind:"$bonusStats"},{$group:{_id:null,stats:{$addToSet:"
 db.items.aggregate([{$unwind:"$itemSpells"},{$group:{_id:null,triggers:{$addToSet:"$itemSpells.trigger"}}}])
 
 db.items.aggregate([{$unwind:"$itemSpells"},{$group:{_id:null,categories:{$addToSet:"$itemSpells.categoryId"}}}])
+
+db.auctions.aggregate([{$group:{_id:null,rands:{$addToSet:"$rand"}}}])

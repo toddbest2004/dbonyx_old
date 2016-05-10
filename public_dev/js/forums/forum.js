@@ -67,8 +67,9 @@ angular.module('dbonyx')
 		}
 	})
 	$scope.subCategory = []
+	$scope.topCategory = {name:''}
 	$scope.createTopCategory=function(){
-		var name = $scope.topCategory
+		var name = $scope.topCategory.name
 		forumService.createTopCategory(name, function(err, result){
 			if(err){
 				$scope.error = err
@@ -151,6 +152,7 @@ angular.module('dbonyx')
 	}
 
 	forum.createTopCategory = function(name, cb){
+		console.log(name)
 		$http({
 			method: 'POST',
 			url: '/api/forum/category/',

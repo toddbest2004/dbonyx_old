@@ -3,9 +3,12 @@
 <a href="/forums">Forums</a>
 	<h1>{{category.name}}</h1>
 	<div class="row">
-		<div class="col-md-7 col-sm-7 col-xs-7 col-lg-7"><h3>Subject</h3></div>
+		<div class="col-md-7 col-sm-7 col-xs-7 col-lg-7"><h3>Title</h3></div>
 		<div class="col-md-2 col-sm-2 col-xs-2 col-lg-2"><h3>Author</h3></div>
 		<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3"><h3>Last Message</h3></div>
+	</div>
+	<div class="row" ng-if="!category.threads.length">
+	<div class="col-xs-12 center"><h3>No Threads Yet</h3></div>
 	</div>
 	<div class="row" ng-repeat="thread in category.threads">
 		<a href="/forums/thread/{{thread._id}}">

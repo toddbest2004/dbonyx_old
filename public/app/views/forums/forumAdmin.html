@@ -1,5 +1,6 @@
+<div ng-if="user">
 <div class="row" id="main-content">
-	<input class="form-control" type="text" placeholder="New Category" ng-model="topCategory">
+	<input class="form-control" type="text" placeholder="New Category" ng-model="topCategory.name">
 	<button class="btn" ng-click="createTopCategory()">Add</button>
 </div>
 <div class="row" ng-repeat="cat in categories">
@@ -13,4 +14,5 @@
 			<button class="btn" ng-click="createSubCategory(cat._id, $index)">Add</button>
 		</div>
 	</div>
+</div>
 </div>

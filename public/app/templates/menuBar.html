@@ -4,7 +4,7 @@
     <ul class="nav nav-tabs navbar-left">
       <li><a href="/"><i class="fa fa-diamond fa-fw fa-lg" aria-hidden="true"></i></a></li>
       <li ng-repeat="menu in menus" ng-mouseover="select(menu)" ng-mouseleave="off(menu)">
-        <a href="{{menu.link}}"><i class="fa fa-fw fa-{{menu.icon}}" aria-hidden="true"></i>{{menu.title}} <i class="fa fa-angle-down"></i></a>
+        <a href="{{menu.link}}"><i class="fa fa-fw fa-{{menu.icon}}" aria-hidden="true" ng-if="menu.icon"></i>{{menu.title}} <i class="fa fa-angle-down"></i></a>
       </li>
     </ul>
     <form role="search" class="navbar-form navbar-right" ng-controller="searchBarCtrl">

@@ -2,8 +2,8 @@ $auctionItemHeight: 42px;
 
 .auctionResultCell {
 	@include align-middle($auctionItemHeight);
-	height: $auctionItemHeight;
-	font-size: 12px !important;
+	min-height: $auctionItemHeight;
+	font-size: 10px !important;
 }
 
 .historyGraph, .watchAuction {

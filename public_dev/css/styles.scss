@@ -85,7 +85,11 @@ $quality7: #E6CC80;
   display: inline-block;
   /*font-family: 'Aldrich';*/
   font-size: 1.2em;
-  font-weight: bold; }
+  font-weight: bold; 
+  a, a:visited, a:active, a:hover{
+    text-decoration:none;
+  }
+}
 .itemQuantity{
   font-family: 'Arial';
   background-color: black;

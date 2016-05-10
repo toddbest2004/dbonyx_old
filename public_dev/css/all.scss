@@ -75,7 +75,7 @@ $insetShadow: inset 1px 3px 8px 0px rgba(0,0,0,0.2s5);
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: $height;
+  min-height: $height;
 }
 
 @mixin input-fields(){
@@ -361,6 +361,11 @@ h4 {
   border: solid 1px $lightBackgroundColor;
   border-radius: 3px;
   @include box-shadow($btnShadow);
+  flex-grow: none;
+  flex-basis:100%;
+  flex:3;
+  padding: 10px;
+  display:inline-block;
 }
 
 #sub-content {
@@ -368,6 +373,18 @@ h4 {
   border: solid 1px $lightBackgroundColor;
   border-radius: 3px;
   @include box-shadow($btnShadow);
+  flex-grow: none;
+  flex-basis:100%;
+  flex: 1;
+  padding: 10px;
+  display:inline-block;
+}
+
+#content-column-wrapper{
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: stretch;
 }
 
 /* ADVERTISEMENTS */

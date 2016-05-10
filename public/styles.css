@@ -155,7 +155,7 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 48px;
+  min-height: 48px;
   color: #BDBDBD !important; }
 
 .navbar-brand:hover {
@@ -169,7 +169,7 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 48px;
+  min-height: 48px;
   padding: 0px 15px;
   color: #BDBDBD !important;
   font-weight: normal !important;
@@ -233,7 +233,7 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 48px;
+  min-height: 48px;
   font-size: 14px;
   font-weight: 700;
   font-family: 'Roboto';
@@ -255,7 +255,7 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 48px;
+  min-height: 48px;
   padding: 0;
   margin: 0; }
 
@@ -278,7 +278,12 @@ h4 {
   border-radius: 3px;
   -webkit-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
-  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25); }
+  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  flex-grow: none;
+  flex-basis: 100%;
+  flex: 3;
+  padding: 10px;
+  display: inline-block; }
 
 #sub-content {
   background-color: #303030;
@@ -286,7 +291,18 @@ h4 {
   border-radius: 3px;
   -webkit-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
-  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25); }
+  box-shadow: 2px 4px 8px -4px rgba(0, 0, 0, 0.25);
+  flex-grow: none;
+  flex-basis: 100%;
+  flex: 1;
+  padding: 10px;
+  display: inline-block; }
+
+#content-column-wrapper {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: stretch; }
 
 /* ADVERTISEMENTS */
 #leaderboard {
@@ -318,9 +334,9 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 42px;
-  height: 42px;
-  font-size: 12px !important; }
+  min-height: 42px;
+  min-height: 42px;
+  font-size: 10px !important; }
 
 .historyGraph, .watchAuction {
   color: #BDBDBD;
@@ -328,7 +344,7 @@ h4 {
   vertical-align: middle;
   padding: 0;
   margin: 0;
-  height: 42px; }
+  min-height: 42px; }
 
 .itemLinkImage {
   margin-right: 12px; }
@@ -686,6 +702,8 @@ oi-select.loading:not(.multiple) .select-search:after {
   /*font-family: 'Aldrich';*/
   font-size: 1.2em;
   font-weight: bold; }
+  .itemLink a, .itemLink a:visited, .itemLink a:active, .itemLink a:hover {
+    text-decoration: none; }
 
 .itemQuantity {
   font-family: 'Arial';

@@ -4,7 +4,8 @@
 <a href="/forums/cat/{{thread.category._id}}">{{thread.category.name}}</a> 
 	
 	<h1>{{thread.name}}</h1>
-		<div class="row" style="border-top:1px solid black;" ng-repeat="post in thread.posts">
+		<div class="row" ng-repeat="post in thread.posts">
+		<div class="col-xs-12"><hr></div>
 			<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3 center">
 				<h3><a href="/profile/{{post.author.username}}">{{post.author.username}}</a></h3>
 				<div>
@@ -17,18 +18,21 @@
 				{{post.author.signature}}
 			</div>
 		</div>
-		<div class="row" style="border-top:1px solid black;">
+		<div class="row">
 			<div class="warning" ng-if="error">
 				{{error}}
 			</div>
 			<div class="warning" ng-if="!user.loggedin">
 				You must be logged in to make a post.
 			</div>
-			<form ng-submit="postMessage()">
-				<label for="forumMessage">Message: </label>
-				<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
-				<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
-			</form>
+			<div class="col-xs-12">
+				<hr>
+				<form ng-submit="postMessage()">
+					<label for="forumMessage">Message: </label>
+					<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+					<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
+				</form>
+			</div>
 		</div>
 	
 </div>

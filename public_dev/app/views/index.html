@@ -14,5 +14,12 @@
 			<li><b><a href="/community">Community Functionality</a></b> (Comments, Forums, User Profile Pages)</li>
 			<li>Even More</li>
 		</ul>
+		<div class="row" ng-controller="siteNewsCtrl">
+			<div class="col-xs-12" ng-repeat="thread in news.threads">
+			<hr>
+				<h1>{{thread.name}}</h1><h5>{{thread.startedBy.username}}</h5>
+				{{thread.posts[0].message}}
+			</div>
+		</div>
 	</div>
 </div>

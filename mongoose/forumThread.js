@@ -9,6 +9,7 @@ var forumThreadSchema = new Schema({
 	// stickyId: Number, //For ordering stickied posts outside of date
 	locked: {type: Boolean, default: false},
 	important: {type: Boolean, default: false},
+	firstPostTime: {type: Date, default: Date.now},
 	// lastPost: {type: Schema.Types.ObjectId, ref:'forumPost'},
 	watchedBy: [{type: Schema.Types.ObjectId, ref:'user'}],
 	startedBy: {type: Schema.Types.ObjectId, ref: 'user'},

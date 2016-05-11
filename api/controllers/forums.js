@@ -25,6 +25,12 @@ router.get('/thread/:threadId', function(req,res){
 	})
 })
 
+router.get('/sitenews', function(req,res){
+	db.forumCategory.findOne({name:'Front Page News'}).populate({path: 'threads',options:{sort:{'firstPostTime':-1},limit:5}, populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost', options:{limit:1}}]}).exec(function(err, cat){
+		res.json(cat)
+	})
+})
+
 //create post in thread
 router.post("/thread/:threadId", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {

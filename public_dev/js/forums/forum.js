@@ -89,6 +89,15 @@ angular.module('dbonyx')
 		})
 	}
 }])
+.controller('siteNewsCtrl', ['$scope','forumService',function($scope, forumService){
+	forumService.getSiteNews(function(err, news){
+		if(err||!news){
+			$scope.error=err
+		}else{
+			$scope.news = news
+		}
+	})
+}])
 .factory('forumService', ['$http', 'Auth',function($http, Auth){
 	var forum = {}
 
@@ -175,6 +184,17 @@ angular.module('dbonyx')
 				id: categoryId
 			}
 		}).then(function success(response){
+			console.log(response)
+			cb(null, response.data)
+		},function error(response){
+			console.log(response)
+			cb(response.data.error)
+		})
+	}
+
+	forum.getSiteNews = function(cb){
+		$http({url:'/api/forum/sitenews/'})
+		.then(function success(response){
 			console.log(response)
 			cb(null, response.data)
 		},function error(response){

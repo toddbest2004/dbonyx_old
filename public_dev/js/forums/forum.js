@@ -164,7 +164,6 @@ angular.module('dbonyx')
 	}
 
 	forum.createTopCategory = function(name, cb){
-		console.log(name)
 		$http({
 			method: 'POST',
 			url: '/api/forum/category/',
@@ -187,10 +186,8 @@ angular.module('dbonyx')
 				id: categoryId
 			}
 		}).then(function success(response){
-			console.log(response)
 			cb(null, response.data)
 		},function error(response){
-			console.log(response)
 			cb(response.data.error)
 		})
 	}
@@ -198,10 +195,8 @@ angular.module('dbonyx')
 	forum.getSiteNews = function(cb){
 		$http({url:'/api/forum/sitenews/'})
 		.then(function success(response){
-			console.log(response)
 			cb(null, response.data)
 		},function error(response){
-			console.log(response)
 			cb(response.data.error)
 		})
 	}

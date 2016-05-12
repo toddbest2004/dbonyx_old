@@ -1092,6 +1092,10 @@ oi-select.loading:not(.multiple) .select-search:after {
 .forumPostEditCount {
   font-size: 0.8em; }
 
+.frontPageForumLinks {
+  text-align: center;
+  margin: 10px 0; }
+
 #user-panel {
   height: 200px;
   background: #212121;

@@ -95,6 +95,9 @@ angular.module('dbonyx')
 			$scope.error=err
 		}else{
 			$scope.news = news
+			$scope.news.threads.forEach(function(thread){
+				thread.replyCount = thread.posts.length-1
+			})
 		}
 	})
 }])

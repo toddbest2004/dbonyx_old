@@ -1066,6 +1066,32 @@ oi-select.loading:not(.multiple) .select-search:after {
 #realmInput {
   display: inline-block; }
 
+/*Forum Styling*/
+.forumPostAuthor {
+  vertical-align: top; }
+
+.forumPostOption {
+  float: right;
+  margin: 0 10px; }
+
+.forumPostTopBar {
+  background-color: #212121; }
+
+.forumPostTimestamp {
+  float: left;
+  margin: 0 10px; }
+
+.forumPostId {
+  float: right;
+  font-size: 2em;
+  margin: 0 10px; }
+
+.forumPostContent {
+  margin: 10px 0; }
+
+.forumPostEditCount {
+  font-size: 0.8em; }
+
 #user-panel {
   height: 200px;
   background: #212121;

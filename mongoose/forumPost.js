@@ -8,7 +8,7 @@ var forumPostSchema = new Schema({
 	createdOn: {type: Date, default: Date.now},
 	lastEditedBy: {type: Schema.Types.ObjectId, ref: 'onyxUser'},
 	lastEditedOn: Date,
-	isEdited: {type: Boolean, default: false},
+	editCount: {type: Number, default: 0},
 	// flags: [{}],
 	flagCount: {type: Number, default: 0},
 	hidden: {type: Boolean, default: false},

@@ -26,7 +26,7 @@ router.get('/thread/:threadId', function(req,res){
 })
 
 router.get('/sitenews', function(req,res){
-	db.forumCategory.findOne({name:'Front Page News'}).populate({path: 'threads',options:{sort:{'firstPostTime':-1},limit:5}, populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost', options:{limit:1}}]}).exec(function(err, cat){
+	db.forumCategory.findOne({name:'Front Page News'}).populate({path: 'threads',options:{sort:{'firstPostTime':-1},limit:5}, populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost', options:{limit:50}}]}).exec(function(err, cat){
 		res.json(cat)
 	})
 })

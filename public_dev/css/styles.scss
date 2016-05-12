@@ -450,3 +450,31 @@ $quality7: #E6CC80;
 #realmInput{
   display:inline-block; 
 }
+/*Forum Styling*/
+.forumPostAuthor{
+  vertical-align: top;
+}
+.forumPostOptions{
+}
+.forumPostOption{
+  float:right;
+  margin: 0 10px;
+}
+.forumPostTopBar{
+  background-color: $darkBackgroundColor;
+}
+.forumPostTimestamp{
+  float:left;
+  margin: 0 10px;
+}
+.forumPostId{
+  float:right;
+  font-size:2em;
+  margin: 0 10px;
+}
+.forumPostContent{
+  margin: 10px 0;
+}
+.forumPostEditCount{
+  font-size: 0.8em;
+}

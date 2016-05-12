@@ -1,32 +1,48 @@
 <div class="row" id="content-column-wrapper">
-<div id="main-content">
+<div id="main-content" class="container">
 <a href="/forums/">Forums</a> &gt; 
 <a href="/forums/cat/{{thread.category._id}}">{{thread.category.name}}</a> 
 	
 	<h1>{{thread.name}}</h1>
 		<div class="row" ng-repeat="post in thread.posts">
-		<div class="col-xs-12"><hr></div>
-			<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3 center">
+			<div class="col-xs-12">
+				<div class="forumPostTopBar clearfix">
+					<div class="forumPostTimestamp">{{post.createdOn}}</div>
+					<div class="forumPostId">#{{$index+1}}</div>
+				</div>
+			</div>
+			<div class="col-xs-3 forumPostAuthor">
 				<h3><a href="/profile/{{post.author.username}}">{{post.author.username}}</a></h3>
 				<div>
-				<img src="http://render-api-us.worldofwarcraft.com/static-render/us/internal-record-3694/152/113385368-avatar.jpg">
+				<!-- <img src="http://render-api-us.worldofwarcraft.com/static-render/us/internal-record-3694/152/113385368-avatar.jpg"> -->
 				</div>
 			</div>
 			<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" >
-				{{post.message}}
-				<hr ng-if="post.author.signature">
+				
+				<div class="forumPostContent">
+					{{post.message}}
+				</div>
+				<div class="forumPostEditCount" ng-if="post.editCount">
+					This post has been edited {{post.editCount}} times.
+				</div>
+				<div ng-if="post.author.signature">
+				<hr>
 				{{post.author.signature}}
+				</div>
+				<div class="forumPostOptions clearfix" ng-if="user.username===post.author.username">
+					<div class="forumPostOption"><a href="#">Edit Post</a></div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="warning" ng-if="error">
-				{{error}}
-			</div>
-			<div class="warning" ng-if="!user.loggedin">
-				You must be logged in to make a post.
-			</div>
 			<div class="col-xs-12">
 				<hr>
+				<div class="warning" ng-if="error">
+					{{error}}
+				</div>
+				<div class="warning" ng-if="!user.loggedin">
+					You must be logged in to make a post.
+				</div>
 				<form ng-submit="postMessage()">
 					<label for="forumMessage">Message: </label>
 					<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>

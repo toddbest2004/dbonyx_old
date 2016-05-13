@@ -192,4 +192,29 @@ router.post('/subcategory', function(req, res){
 	})(req, res)
 })
 
+router.post("/post/:id", function(req, res){
+	passport.authenticate('jwt', function(err, user, info) {
+		var postId = req.params.id
+		var postText = req.body.text
+		db.forumPost.findOne({_id:postId}).exec(function(err, post){
+			if(err||!post){
+				return res.status(404).json({error:"Unable to find post, please make sure it exists."})
+			}
+			if(post.author.toString()!==user._id.toString()&&user.userLevel!==1){
+				return res.status(400).json({error:"You do not have permission to edit this post."})
+			}
+			post.message = postText
+			post.editCount++
+			post.lastEditedOn = Date.now()
+			post.lastEditedBy = user
+			post.save(function(err){
+				if(err)
+					console.log(err)
+				res.json({result:"success"})
+			})
+		})
+
+	})(req, res)
+})
+
 module.exports = router

@@ -18,19 +18,27 @@
 				</div>
 			</div>
 			<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" >
-				
-				<div class="forumPostContent">
-					{{post.message}}
+				<div ng-show="post.editing">
+					<button class="btn-danger" ng-click="editOff($index)">X</button>
+					<form>
+						<textarea ng-model="post.editText" class="form-control" rows="10"></textarea>
+						<button class="btn form-control" ng-click="submitEdit($index)">Submit</button>
+					</form>
 				</div>
-				<div class="forumPostEditCount" ng-if="post.editCount">
-					This post has been edited {{post.editCount}} times.
-				</div>
-				<div ng-if="post.author.signature">
-				<hr>
-				{{post.author.signature}}
-				</div>
-				<div class="forumPostOptions clearfix" ng-if="user.username===post.author.username">
-					<div class="forumPostOption"><a href="#">Edit Post</a></div>
+				<div ng-hide="post.editing">
+					<div class="forumPostContent">
+						{{post.message}}
+					</div>
+					<div class="forumPostEditCount" ng-if="post.editCount">
+						This post has been edited {{post.editCount}} times.
+					</div>
+					<div ng-if="post.author.signature">
+					<hr>
+					{{post.author.signature}}
+					</div>
+					<div class="forumPostOptions clearfix" ng-if="user.username===post.author.username">
+						<div class="forumPostOption"><a href="#" ng-click="editOn($index)">Edit Post</a></div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -51,6 +51,21 @@ angular.module('dbonyx')
 				$route.reload()
 		})
 	}
+	$scope.editOn = function(index){
+		var post = $scope.thread.posts[index]
+		post.editText = post.message
+		post.editing=true
+	}
+	$scope.editOff = function(index){
+		$scope.thread.posts[index].editing=false
+	}
+	$scope.submitEdit = function(index){
+		var post = $scope.thread.posts[index]
+		forumService.editPost(post._id, post.editText, function(err, result){
+			post.editing = false;
+			$route.reload()
+		})
+	}
 }])
 .controller('forumAdminCtrl', ['$scope', '$location', '$route', 'onyxUser', 'forumService',function($scope, $location, $route, onyxUser, forumService){
 	onyxUser.getPrivateProfile(function(err, user){
@@ -197,6 +212,22 @@ angular.module('dbonyx')
 		.then(function success(response){
 			cb(null, response.data)
 		},function error(response){
+			cb(response.data.error)
+		})
+	}
+
+	forum.editPost = function(id, text, cb){
+		console.log()
+		$http({
+			url:'/api/forum/post/'+id,
+			method: 'POST',
+			data: {
+				text:text
+			}
+		}).then(function success(response){
+			cb(null, response.data)
+		}, function error(response){
+			console.log(response.data.error)
 			cb(response.data.error)
 		})
 	}

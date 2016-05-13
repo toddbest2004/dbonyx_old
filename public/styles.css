@@ -251,11 +251,7 @@ h4 {
   margin-right: 4px; }
 
 #primary-nav form.navbar-form {
-  line-height: 48px;
-  vertical-align: middle;
-  padding: 0;
-  margin: 0;
-  min-height: 48px;
+  /*@include align-middle($menuBarHeight);*/
   padding: 0;
   margin: 0; }
 
@@ -429,7 +425,6 @@ nav#secondary-nav {
   padding: 15px;
   padding-right: 30px;
   background-color: #303030;
-  height: 300px;
   z-index: 1; }
 
 .registerForm form {
@@ -648,16 +643,18 @@ oi-select.loading:not(.multiple) .select-search:after {
   min-height: 100%; }
 
 .navbar {
-  text-align: center;
+  text-align: right;
   background-color: #212121; }
 
 .navbar .navbar-nav {
   display: inline-block;
-  float: none;
   vertical-align: top; }
 
 .navbar .navbar-nav li {
   font-weight: bold; }
+
+.nav > li {
+  display: inline-block; }
 
 #searchBarResults {
   width: 200px;

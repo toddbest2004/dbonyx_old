@@ -122,15 +122,17 @@ angular.module('UserCtrls', [])
 	//validates user's email (by clicking link created and sent to email)
 	onyxUser.validateUser($routeParams.user, $routeParams.validateString, function(response){$scope.error=response})
 }])
-.controller('userCtrl', ['onyxUser','$scope','$http','$location', function(onyxUser,$scope,$http,$location){
+.controller('userCtrl', ['onyxUser','$scope','$http','$location', '$window', function(onyxUser,$scope,$http,$location,$window){
 	$scope.user=onyxUser
 	$scope.showRegisterForm=false
 	$scope.showUserPanel=false
 	$scope.showRegisterForm=false
 	$scope.toggleRegister=function(){
 		$scope.showRegisterForm=!$scope.showRegisterForm
+		$scope.signin=false
 	}
 	$scope.login = function(){
+		$scope.signin=false
 		onyxUser.login($scope.login.email, $scope.login.password, function(err, success){
 			$scope.login.email=null
 			$scope.login.password=null
@@ -150,6 +152,8 @@ angular.module('UserCtrls', [])
 	}
 	$scope.signinActive = function(){
 		$scope.signin=true
+		$scope.showRegisterForm=false
+		$scope.narrow = $window.innerWidth<750?true:false;
 		document.getElementById('email').focus();
 	}
 	$scope.register=function(){

@@ -35,14 +35,17 @@ $quality7: #E6CC80;
   height: 100%;
   min-height: 100%; } 
   .navbar {
-  text-align: center;
+  text-align: right;
   background-color: $darkBackgroundColor; }
   .navbar .navbar-nav {
     display: inline-block;
-    float: none;
     vertical-align: top; }
     .navbar .navbar-nav li {
       font-weight: bold; }
+.nav > li {
+  display: inline-block;
+}
+
 #searchBarResults{
   width: 200px;
   top: 100%;

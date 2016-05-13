@@ -41,26 +41,26 @@
     <div class="row">
       <nav role="navigation" class="navbar navbar-default" id="brand-nav">
         <div class="container-fluid" id="proprietary-bar">
-          <div class="navbar-header">
+          
             <a class="navbar-brand" href="/">DB <span class="dark">ONYX</span></a>
-          </div>
+          
           <ul class="nav navbar-nav navbar-right">
-            <li class="warning" ng-if="error">{{error}}</li>
-            <li class="success" ng-if="success">{{success}}</li>
-            <li ng-if="user.loggedin">
+            <li class="warning nav-item" ng-if="error">{{error}}</li>
+            <li class="success nav-item" ng-if="success">{{success}}</li>
+            <li ng-if="user.loggedin" class="nav-item">
               <div ng-click="toggleUserPanel()" class="userName"><i class="fa fa-lock"></i> {{user.username}} <i class="fa fa-angle-down"></i></div>
             </li>
-            <li ng-if="!user.loggedin">
-              <a ng-if="!signin" href="#" ng-click="signinActive()"><i class="fa fa-unlock-alt"></i> Sign in</a>
-              <form id="user-login" ng-show="signin">
-                <input class="form-control" ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
-                <input class="form-control" ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
+            <li ng-if="!user.loggedin" class="nav-item">
+              <a ng-if="!signin||narrow" href="#" ng-click="signinActive()"><i class="fa fa-unlock-alt"></i> Sign in</a>
+              <form id="user-login" ng-show="signin&&!narrow">
+                <input class="form-control navbar-item" ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
+                <input class="form-control navbar-item" ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
                 <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
               </form>
             </li>
-            <li ng-if="!user.loggedin">
+            <li ng-if="!user.loggedin" class="nav-item">
              <button id="register-button" class="btn" ng-click="toggleRegister()" ng-focus="clearError()">Register</button>
-             </li>
+            </li>
           </ul>
         </div>
       </nav>
@@ -69,6 +69,13 @@
       <user-panel></user-panel>
     </div>
     <user-register-form ng-show="showRegisterForm"></user-register-form>
+    <div class="row registerForm" ng-show="signin&&narrow">
+      <form>
+        Email: <input class="form-control navbar-item" ng-model="login.email" ng-focus="clearError()" placeholder="Email Address">
+        Password: <input class="form-control navbar-item" ng-model="login.password" ng-focus="clearError()" type="password" placeholder="Password">
+        <button type="submit" class="btn" ng-focus="clearError()" ng-click="login()">Go</button>
+      </form>
+    </div>
   </div>
   <!-- LEADERBOARD -->  
   <div class="col-xs-12">

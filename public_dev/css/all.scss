@@ -335,7 +335,7 @@ h4 {
 }
 
 #primary-nav form.navbar-form {
-  @include align-middle($menuBarHeight);
+  /*@include align-middle($menuBarHeight);*/
   padding: 0;
   margin: 0;
 }

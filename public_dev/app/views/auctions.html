@@ -22,15 +22,16 @@
 		<div id="auctionData">
 		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
 		</div>
+		<div class="pull-left" ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
+			<h1>No auctions match your search</h1>
+		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
 				<div class="auctionText">
 					<div class="pull-left" id="auctionLoading" ng-if="loading">
 						<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
 					</div>
-					<div class="pull-left" ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
-						<h1>No auctions match your search</h1>
-					</div>
+
 					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
 				</div>
 				<div class="clearfix"></div>

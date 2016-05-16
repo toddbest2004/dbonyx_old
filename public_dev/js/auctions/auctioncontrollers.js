@@ -5,40 +5,7 @@ angular.module('AuctionCtrls', ['oi.select'])
 	$scope.realmInput=searchValues.r||onyxPersistence.getRealm()||''
 
 	$scope.validFilters = ['Item Level','Required Level']
-	$scope.itemQualities = [
-		{
-			name: 'Poor',
-			id: '0'
-		},
-		{
-			name: 'Common',
-			id: '1'
-		},
-		{
-			name: 'Uncommon',
-			id: '2'
-		},
-		{
-			name: 'Rare',
-			id: '3'
-		},
-		{
-			name: 'Epic',
-			id: '4'
-		},
-		{
-			name: 'Legendary',
-			id: '5'
-		},
-		{
-			name: 'Artifact',
-			id: '6'
-		},
-		{
-			name: 'Heirloom',
-			id: '7'
-		}
-	]
+	$scope.itemQualities = ['Poor','Common','Uncommon','Rare','Epic','Legendary','Artifact','Heirloom']
 	$scope.selectedQuality = '';
 	$scope.realms=[]
 	$scope.auctionResults = auctionService.auctionResults
@@ -111,7 +78,11 @@ angular.module('AuctionCtrls', ['oi.select'])
 		}
 		$scope.loading=true
 
-		auctionService.qualities=$scope.qualities.values
+		auctionService.qualities=$scope.qualities.values.map(function(a, b){
+			if(a)
+				return b.toString()
+			return null
+		}).filter(function(a){return a})
 		auctionService.filters=$scope.filters
 		auctionService.setSearchTerm($scope.searchTerm)
 		auctionService.setRealm($scope.realmInput)

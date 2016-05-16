@@ -75,7 +75,11 @@
 		<sidebar>
 		<div id="itemFilterDiv">
 			<h1>Filter By Quality</h1>
-			<oi-select placeholder="ex. Poor, Uncommon" ng-model="qualities.values" oi-options="quality.id as quality.name for quality in itemQualities track by quality.id" multiple multiple-placeholder="Add more.." ng-change="firstPage()"></oi-select>
+			<fieldset ng-repeat="quality in itemQualities">
+				<label style="width:100%"><input type="checkbox" id="uncommonCheck" value="{{quality}}" ng-model="qualities.values[$index]" ng-change="search()">
+				<span class="itemQuality{{$index}}">{{quality}}</span>
+				</label>
+			</fieldset>
 			<h1>Additional Filters</h1>
 			<ul id="itemFiltersList" class="list-unstyled">
 				<li ng-repeat="filter in filters track by $index">

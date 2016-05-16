@@ -53,7 +53,7 @@
 				</div>
 				<form ng-submit="postMessage()">
 					<label for="forumMessage">Message: </label>
-					<textarea id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+					<textarea rows="10" id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
 					<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
 				</form>
 			</div>

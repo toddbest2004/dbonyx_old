@@ -18,7 +18,9 @@
 			<div class="col-xs-12" ng-repeat="thread in news.threads">
 				<hr>
 				<div>
-				<h1>{{thread.name}}</h1><h5>{{thread.startedBy.username}}</h5>
+				<h1>{{thread.name}}</h1>
+				<h5><a href="/profile/{{thread.startedBy.username}}">{{thread.startedBy.username}}</a> <small>- {{thread.postDate}}</small></h5>
+
 				{{thread.posts[0].message}}
 				</div>
 				<div class="frontPageForumLinks">

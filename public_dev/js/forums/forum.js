@@ -112,6 +112,7 @@ angular.module('dbonyx')
 			$scope.news = news
 			$scope.news.threads.forEach(function(thread){
 				thread.replyCount = thread.posts.length-1
+				thread.postDate = new Date(thread.posts[0].createdOn).toDateString()
 			})
 		}
 	})

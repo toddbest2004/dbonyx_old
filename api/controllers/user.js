@@ -149,7 +149,7 @@ router.get('/publicProfile', function(req, res){
 	if(!req.query.username||typeof(req.query.username)!=='string'){
 		return res.status(401).json({error:"Unable to read username."})
 	}
-	db.onyxUser.findOne({username:req.query.username}).exec(function(err, user){
+	db.onyxUser.findOne({username:req.query.username.capitalize()}).exec(function(err, user){
 		res.json(user)
 	})
 })

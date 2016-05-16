@@ -1,23 +1,23 @@
 <div class="row" id="nav-container">
   <!-- MAIN MENU -->
   <nav id="primary-nav">
-    <ul class="nav nav-tabs navbar-left">
-      <li><a href="/"><i class="fa fa-diamond fa-fw fa-lg" aria-hidden="true"></i></a></li>
-      <li ng-repeat="menu in menus" ng-mouseover="select(menu)" ng-mouseleave="off(menu)">
-        <a href="{{menu.link}}"><i class="fa fa-fw fa-{{menu.icon}}" aria-hidden="true" ng-if="menu.icon"></i>{{menu.title}} <i class="fa fa-angle-down"></i></a>
-      </li>
-    </ul>
-    <form role="search" class="navbar-form navbar-right" ng-controller="searchBarCtrl">
-      <div class="form-group input-group">
-        <input type="text" ng-model="searchTerm" ng-change="search()" ng-blur="hide()" ng-focus="search()" class="form-control" placeholder="Search the database" aria-describedby="dbsearch-addon">
-        <div id="searchBarResults" ng-if="results.length">
-          <div ng-repeat="result in results">
-            <item-link item="result" ng-click="clear()"></item-link>
+      <ul class="nav pull-left">
+        <li class="hidden-xs hidden-sm"><a href="/"><i class="fa fa-diamond fa-fw fa-lg" aria-hidden="true"></i></a></li>
+        <li ng-repeat="menu in menus" ng-mouseover="select(menu)" ng-mouseleave="off(menu)">
+          <a href="{{menu.link}}"><i class="fa fa-fw fa-{{menu.icon}}" aria-hidden="true" ng-if="menu.icon"></i>{{menu.title}} <i class="fa fa-angle-down"></i></a>
+        </li>
+      </ul>
+      <form role="search" class="navbar-form pull-right" ng-controller="searchBarCtrl">
+        <div id="main-search" class="form-group input-group">
+          <input type="text" ng-model="searchTerm" ng-change="search()" ng-blur="hide()" ng-focus="search()" class="form-control" placeholder="Search the database" aria-describedby="dbsearch-addon">
+          <div id="searchBarResults" ng-if="results.length">
+            <div ng-repeat="result in results">
+              <item-link item="result" ng-click="clear()"></item-link>
+            </div>
           </div>
+          <span class="input-group-addon" id="dbsearch-addon"><i class="fa fa-search"></i></span>
         </div>
-        <span class="input-group-addon" id="dbsearch-addon"><i class="fa fa-search"></i></span>
-      </div>
-    </form>
+      </form>
   </nav>
   <!-- SUB MENU -->
   <nav id="secondary-nav" ng-transclude ng-show="menuSelected" ng-mouseenter="rehover()" ng-mouseleave="off()"></nav>

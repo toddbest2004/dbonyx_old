@@ -260,7 +260,7 @@ h4 {
 .navbar-nav li a {
   @include align-middle($menuBarHeight);
   // @include transition(color .25s);
-  padding: 0px 15px;
+  padding: 0px 5px;
   color: $darkTextColor !important;
   font-weight: normal !important;
   font-size: 12px;
@@ -300,7 +300,7 @@ h4 {
 }
 
 #primary-nav {
-  padding: 0px 16px;
+  padding: 0px 0px;
 }
 
 #primary-nav ul {
@@ -321,7 +321,7 @@ h4 {
 #primary-nav ul li a { /* Menu list items */
   @include align-middle($menuBarHeight);
   @include menu-font();
-  margin: 0px 16px;
+  margin: 0px 8px;
   border: 0;
 }
 
@@ -341,9 +341,25 @@ h4 {
 }
 
 #primary-nav form.navbar-form input {
-  width: 200px !important;
+  width: 190px !important;
 }
 
+@media screen and (max-width: 767px) {
+  #primary-nav ul li a {
+    font-size:10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  #primary-nav ul li a {
+    font-size:12px;
+    margin: 0 4px;
+  }
+}
+
+#main-search{
+  padding: 8px 0;
+}
 /* SUB MENU */
 
 #secondary-nav { /* Submenu */
@@ -365,7 +381,6 @@ h4 {
   flex-basis:100%;
   flex:3;
   padding: 10px;
-  display:inline-block;
 }
 
 #sub-content {
@@ -377,7 +392,6 @@ h4 {
   flex-basis:100%;
   flex: 1;
   padding: 10px;
-  display:inline-block;
 }
 
 #content-column-wrapper{

@@ -45,6 +45,7 @@
             <a class="navbar-brand" href="/">DB <span class="dark">ONYX</span></a>
           
           <ul class="nav navbar-nav navbar-right">
+
             <li class="warning nav-item" ng-if="error">{{error}}</li>
             <li class="success nav-item" ng-if="success">{{success}}</li>
             <li ng-if="user.loggedin" class="nav-item">
@@ -78,7 +79,7 @@
     </div>
   </div>
   <!-- LEADERBOARD -->  
-  <div class="col-xs-12">
+  <div class="col-xs-12 hidden-xs">
     <div class="row">
       <div id="leaderboard" class="center-block"></div>
     </div>

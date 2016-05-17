@@ -83,18 +83,17 @@
 			<h1>Additional Filters</h1>
 			<ul id="itemFiltersList" class="list-unstyled">
 				<li ng-repeat="filter in filters track by $index">
-					<button class="btn-danger" ng-click="removeFilter($index)">X</button>
-					<select ng-model="filter.type" class="form-control">
-						<option ng-repeat="option in validFilters" value="{{option}}">{{option}}</option>
-					</select>
-					<select ng-model="filter.comparator" class="form-control">
-						<option>&gt;</option>
-						<option>=</option>
-						<option>&lt;</option>
-					</select>
-					<input type="number" ng-model="filter.value" class="form-control">
+					<button class="btn-danger" ng-click="removeFilter($index)">X</button>{{filter.type}} {{filter.comparator}} {{filter.value}}
 				</li>
 			</ul>
+
+			<select ng-model="newfilter.type" class="form-control" ng-change="updateFilter()">
+				<option ng-repeat="option in validFilters" value="{{$index}}">{{option.name}}</option>
+			</select>
+			<select ng-if="validComparators" ng-model="newfilter.comparator" class="form-control">
+				<option ng-repeat="comp in validComparators" value="{{comp}}">{{comp}}</option>
+			</select>
+			<input ng-if="showFilterValue" type="number" ng-model="newfilter.value" class="form-control">
 			<button id="addItemFilter" class="btn" ng-click="addFilter()">Add Item Filter</button>
 		</div>
 		</sidebar>

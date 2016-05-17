@@ -8,11 +8,12 @@ var router = express.Router();
 var db = require("../../mongoose");
 
 var itemConstants = require('./itemConstants')
-var validComparators = {'>':'$gt', '=':'$eq','<':'$lt'}
+var validComparators = {number:{'>':'$gt', '=':'$eq','<':'$lt'},boolean:{'True':true,'False':false}}
 var validFilters = {
-	'Item Level':'itemLevel',
-	'Required Level':'requiredLevel',
-	'Agility':{'bonusStats.stat':3}
+	'Item Level':{name:'itemLevel',type:'number'},
+	'Required Level':{name:'requiredLevel',type:'number'},
+	'Is Equippable':{name:'equippable',type:'boolean'}
+	// 'Agility':{'bonusStats.stat':3}
 }
 var realmArray ={}
 
@@ -101,7 +102,6 @@ router.get("/fetchauctions", function(req, res){
 			})
 		}
 		itemsFiltered=true
-		
 	}
 	if(itemsFiltered){
 		itemQuery.exec(function(err, items){
@@ -242,20 +242,43 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 
 function processFilter(filter, itemQuery){
 	var tmpFilter = JSON.parse(filter)
-	var tmpWhere = {}
-	if(validFilters[tmpFilter.type]){
-		var filterType = validFilters[tmpFilter.type]
-		tmpWhere[filterType]={}
-		if(validComparators[tmpFilter.comparator]){
-			var comparatorType = validComparators[tmpFilter.comparator]
-			if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
-				tmpWhere[filterType][comparatorType]=parseInt(tmpFilter.value)
-				itemQuery.where(tmpWhere)
-				// itemQuery.where({'bonusStats.stat':4,'bonusStats.amount':{$lte:10}})
-				// itemQuery.where({'bonusStats.amount':{$lte:10}})
-				// itemQuery.populate({path:'bonusStat', match:{stat:4,amount:{$lte:10}}})
-			}
+	var filterData
+	if(typeof(tmpFilter.type)!=='string'){
+		return
+	}
+	if(filterData = validFilters[tmpFilter.type]){
+		if(filterData.type==='number'){
+			processNumberFilter(filterData,tmpFilter,itemQuery)
+		}else if(filterData.type==='boolean'){
+			processBooleanFilter(filterData,tmpFilter,itemQuery)
 		}
 	}	
-	return filter
+	return
+}
+
+function processNumberFilter(filterData,tmpFilter,itemQuery){
+	var comparatorType
+	var tmpWhere={}
+	tmpWhere[filterData.name]={}
+	if(comparatorType = validComparators.number[tmpFilter.comparator]){
+		if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
+			tmpWhere[filterData.name][comparatorType]=parseInt(tmpFilter.value)
+			itemQuery.where(tmpWhere)
+			console.log(tmpWhere)
+			// itemQuery.where({'bonusStats.stat':4,'bonusStats.amount':{$lte:10}})
+			// itemQuery.where({'bonusStats.amount':{$lte:10}})
+			// itemQuery.populate({path:'bonusStat', match:{stat:4,amount:{$lte:10}}})
+		}
+	}
+}
+
+function processBooleanFilter(filterData,tmpFilter,itemQuery){
+	var tmpWhere={}
+	if(typeof(validComparators.boolean[tmpFilter.comparator])==='boolean'){
+		tmpWhere[filterData.name]=validComparators.boolean[tmpFilter.comparator]
+		itemQuery.where(tmpWhere)
+	}
+	// if(typeof(validComparators.number[tmpFilter.comparator])){
+
+	// }
 }

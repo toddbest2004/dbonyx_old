@@ -9,6 +9,7 @@ var start = new Date()
 var realmcount = 0; //counts how many auctions were loaded
 var auctionConcurrency = 1;
 var pauseInterval = 120000 //number of miliseconds to wait after an auctionimport
+var daysToRetain = 15
 
 var auctionQueue = async.queue(function(task, callback){
 	if(!task){
@@ -156,7 +157,6 @@ function countSold(slug, region, touch, callback){
 			}
 			auctionLog('Updating selling details of '+data.length+' items')
 			bulkHistory.execute(function(err, historyData){
-				console.log("____")
 				console.log("Sold count: "+auctionCount)
 				countExpired(slug, region, touch, callback)
 			})
@@ -192,6 +192,16 @@ function removeOldAuctions(slug, region, touch, callback){
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))
+		removeOldAuctionHistories(slug, region, touch, callback)
+	})
+}
+
+function removeOldAuctionHistories(slug, region, touch, callback){
+	var today = new Date()
+	var oldDate = new Date(new Date().setDate(today.getDate()-daysToRetain))
+
+	db.auctionhistory.remove({date:{$lt:oldDate}}).exec(function(err, data){
+		console.log(data.result.n +" auction histories removed.")
 		checkWatchlists(slug, region, touch, callback)
 	})
 }
@@ -217,6 +227,8 @@ function checkWatchlists(slug, region, touch, callback){
 			})
 		})
 		auctionLog("Watchlist Check Finished")
+		auctionLog("Realm Finished")
+		auctionLog("______________")
 		callback()
 	})
 }

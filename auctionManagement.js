@@ -10,6 +10,7 @@ var realmcount = 0; //counts how many auctions were loaded
 var auctionConcurrency = 1;
 var pauseInterval = 120000 //number of miliseconds to wait after an auctionimport
 var daysToRetain = 10
+var lastPurge = 0
 
 var auctionQueue = async.queue(function(task, callback){
 	if(!task){
@@ -192,19 +193,25 @@ function removeOldAuctions(slug, region, touch, callback){
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))
-		// removeOldAuctionHistories(slug, region, touch, callback)
-		checkWatchlists(slug,region,touch,callback)
+		removeOldAuctionHistories(slug, region, touch, callback)
+		// checkWatchlists(slug,region,touch,callback)
 	})
 }
 
 function removeOldAuctionHistories(slug, region, touch, callback){
-	var today = new Date()
-	var oldDate = new Date(new Date().setDate(today.getDate()-daysToRetain))
+	if(Date.now()-lastPurge>1000*60*60*24){ //one day for purge
+		lastPurge = Date.now()
+		var today = new Date()
+		var oldDate = new Date(new Date().setDate(today.getDate()-daysToRetain))
 
-	db.auctionhistory.remove({date:{$lt:oldDate}}).exec(function(err, data){
-		console.log(data.result.n +" auction histories removed.")
+		db.auctionhistory.remove({date:{$lt:oldDate}}).exec(function(err, data){
+			auctionLog(data.result.n +" auction histories removed.")
+			checkWatchlists(slug, region, touch, callback)
+		})
+	}else{
+		auctionLog("Skipping auction history purge")
 		checkWatchlists(slug, region, touch, callback)
-	})
+	}
 }
 
 function checkWatchlists(slug, region, touch, callback){

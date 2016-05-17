@@ -9,7 +9,7 @@ var start = new Date()
 var realmcount = 0; //counts how many auctions were loaded
 var auctionConcurrency = 1;
 var pauseInterval = 120000 //number of miliseconds to wait after an auctionimport
-var daysToRetain = 15
+var daysToRetain = 10
 
 var auctionQueue = async.queue(function(task, callback){
 	if(!task){

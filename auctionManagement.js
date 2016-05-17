@@ -192,7 +192,8 @@ function removeOldAuctions(slug, region, touch, callback){
 		if(err)
 			auctionLog(err)
 		auctionLog("Old auctions removed in "+(new Date()-start))
-		removeOldAuctionHistories(slug, region, touch, callback)
+		// removeOldAuctionHistories(slug, region, touch, callback)
+		checkWatchlists(slug,region,touch,callback)
 	})
 }
 
@@ -228,7 +229,7 @@ function checkWatchlists(slug, region, touch, callback){
 		})
 		auctionLog("Watchlist Check Finished")
 		auctionLog("Realm Finished")
-		auctionLog("______________")
+		console.log("______________")
 		callback()
 	})
 }

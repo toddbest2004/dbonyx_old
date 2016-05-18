@@ -8,10 +8,11 @@ angular.module('ItemCtrls', [])
 			callback(item)
 			return
 		}
+		console.log(modifiers)
 		$http({
 			method: 'GET',
 			url: '/api/item/pretty/'+id,
-			modifiers: modifiers
+			params: modifiers||{}
 		}).then(function success(response){
 			var item=response.data.item
 			callback(item)
@@ -48,10 +49,14 @@ angular.module('ItemCtrls', [])
 	$scope.id = $routeParams.id
 	$scope.auctionData = null
 	$scope.realmInput = ''
+	$scope.modifiers = {}
+	if($routeParams.rand){
+		$scope.modifiers.rand=parseInt($routeParams.rand)
+	}
 	$scope.getItem = function(){
 		$scope.item="Loading"
 		$scope.loading=true
-		itemService.getItem($scope.id, {}, function(item){
+		itemService.getItem($scope.id, $scope.modifiers, function(item){
 			// console.log(item)
 			$scope.item=item
 			$scope.loading=false
@@ -67,11 +72,10 @@ angular.module('ItemCtrls', [])
 	$scope.getItem()
 }]).directive('itemDisplay', function(){
 	var controller = ['$scope', 'itemService',function($scope, itemService){
-		
 		$scope.getItem = function(){
 			$scope.item="Loading"
 			$scope.loading=true
-			itemService.getItem($scope.itemId, {}, function(item){
+			itemService.getItem($scope.itemId, $scope.modifiers, function(item){
 				$scope.item=item
 				$scope.loading=false
 			})
@@ -83,7 +87,8 @@ angular.module('ItemCtrls', [])
 		restrict: 'E',
 		replace: true,
 		scope: {
-			itemId:"@"
+			itemId:"@",
+			modifiers:"="
 		},
 		templateUrl: 'app/templates/itemDisplay.html'
 	}

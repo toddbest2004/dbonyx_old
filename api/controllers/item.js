@@ -20,6 +20,7 @@ router.get('/search/:term', function(req, res){
 
 router.get("/pretty/:id", function(req, res){
 	var id = parseInt(req.params.id)
+	var modifiers = req.query
 	if(!id){
 		res.status(400).send({error:"Invalid id."})
 		return
@@ -33,7 +34,7 @@ router.get("/pretty/:id", function(req, res){
 			res.status(404).send({error:"Item not found."})
 			return
 		}
-		item=prettify(item)
+		item=prettify(item, modifiers)
 		res.send({item:item})
 		return
 	})
@@ -63,7 +64,7 @@ router.get("/:id", function(req, res){
 
 module.exports = router
 
-function prettify(item){
+function prettify(item, modifiers){
 
 	item.itemSubClass = itemConstants.classes[item.itemClass].subclasses[item.itemSubClass]
 	item.itemClass = itemConstants.classes[item.itemClass].name
@@ -111,6 +112,10 @@ function prettify(item){
 		}
 	}
 	// console.log(item.itemSet)
+	var rand
+	if(rand = parseInt(modifiers.rand)){
+		item.name+=itemConstants.randIds[rand].suffix ||' of Unknown Enchant'
+	}
 
 	return item
 }

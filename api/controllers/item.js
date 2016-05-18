@@ -114,7 +114,7 @@ function prettify(item, modifiers){
 	// console.log(item.itemSet)
 	var rand
 	if(rand = parseInt(modifiers.rand)){
-		item.name+=itemConstants.randIds[rand].suffix ||' of Unknown Enchant'
+		item.name+=itemConstants.randIds[rand]?itemConstants.randIds[rand].suffix:' of Unknown Enchant'
 	}
 
 	return item

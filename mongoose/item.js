@@ -44,6 +44,8 @@ var itemSchema = new Schema({
 	nameDescriptionColor: String,
 	upgradable: Boolean,
 	heroicTooltip: Boolean,
+	hasRandomEnchants: Boolean,
+	knownRandomEnchants: [Number],
 	context: String,
 	bonusLists: [],
 	avalableContexts: [String],

@@ -90,6 +90,22 @@ angular.module('ItemCtrls', [])
 })
 .directive('itemLink', [function(){
 	var controller = ['$scope',function($scope){
+		$scope.itemLinkPath = "/item/"+($scope.item.itemId||0)
+
+		var options = []
+		if($scope.rand!=='0'){
+			options.push('rand='+$scope.rand)
+		}
+
+		if(options.length){
+			$scope.itemLinkPath+='?'
+			options.forEach(function(option, index){
+				$scope.itemLinkPath+=option
+				if(index<options.length-1)
+					$scope.itemLinkPath+='&'
+			})
+		}
+
 		if($scope.quantity&&parseInt($scope.quantity)!==1){
 			$scope.showQuantity=true
 		}
@@ -98,7 +114,8 @@ angular.module('ItemCtrls', [])
 		controller: controller,
 		scope: {
 			item: '=',
-			quantity: '@'
+			quantity: '@',
+			rand: '@'
 		},
 		replace: true,
 		templateUrl: 'app/templates/itemLink.html'

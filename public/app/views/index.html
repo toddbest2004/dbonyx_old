@@ -15,17 +15,19 @@
 			<li>Even More</li>
 		</ul>
 		<div class="row" ng-controller="siteNewsCtrl">
+			<div class="col-xs-12"><hr></div>
 			<div class="col-xs-12" ng-repeat="thread in news.threads">
-				<hr>
+				
 				<div>
 				<h1>{{thread.name}}</h1>
 				<h5><a href="/profile/{{thread.startedBy.username}}">{{thread.startedBy.username}}</a> <small>- {{thread.postDate}}</small></h5>
 
 				{{thread.posts[0].message}}
 				</div>
-				<div class="frontPageForumLinks">
-					<a href="/forums/thread/{{thread._id}}">View More ({{thread.replyCount}} Comments)</a>
-				</div>
+				
+					<a href="/forums/thread/{{thread._id}}">
+					<div class="frontPageForumLinks">View More ({{thread.replyCount}} Comments)</div>
+					</a>
 			</div>
 		</div>
 	</div>

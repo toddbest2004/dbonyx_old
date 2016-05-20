@@ -61,17 +61,17 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
 			var lastModified = body.files[0].lastModified;
-			// if(lastModified>touch){
+			if(lastModified>touch){
 				realm.auctiontouch = lastModified
 				realm.save()
 				var task = {body:body.files[0].url,slug:slug,region:region,lastModified:lastModified/1000}
 				auctionQueue.push(task, function(){realmcount++})
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
 				auctionLog(slug+": "+lastModified);
-			// }else{
-			// 	console.log(touch, lastModified)
-			// 	auctionQueue.push(false, function(){auctionLog(slug+": up to date.")})
-			// }
+			}else{
+				console.log(touch, lastModified)
+				auctionQueue.push(false, function(){auctionLog(slug+": up to date.")})
+			}
 		}else{
 			auctionQueue.push(false, function(){auctionLog("No status code: "+slug)})
 		}

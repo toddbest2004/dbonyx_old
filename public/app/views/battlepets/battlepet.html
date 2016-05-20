@@ -1,12 +1,27 @@
 <div class="row" id="content-column-wrapper">
-<div id="main-content">
-<div>
-
-
-</div>
-</div>
-<sidebar>
-<div>
-</div>
-</sidebar>
+	<div id="main-content">
+		<div ng-if="loading">
+			Loading Battlepet...
+		</div>
+		<div ng-if="error">
+			{{error}}
+		</div>
+		<div ng-if="pet">
+			<h1 class="itemQuality{{pet.stats.petQualityId}}">
+			<img src="/images/icons/{{pet.icon}}.png" class="icon itemIcon borderQuality{{pet.stats.petQualityId}}">{{pet.name}} <small>{{pet.family}}</small>
+			</h1>
+			Health: {{pet.stats.health}} Power: {{pet.stats.power}} Speed: {{pet.stats.speed}}
+			<div class="row">
+				<div class="col-xs-4" ng-repeat="ability in pet.abilities | orderBy: 'order'">
+				<h3><img src="/images/icons/{{ability.details.icon}}.png" class="icon">{{ability.details.name}}</h3>
+				Required Level: {{ability.requiredLevel}}
+				{{petFamilies[ability.details.petTypeId]}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<sidebar>
+		<div>
+		</div>
+	</sidebar>
 </div>

@@ -69,6 +69,7 @@ function checkServerForUpdatedAuctions(url, slug, region, touch, realm){
 				// importAuctionDataFromServer(body.files[0].url, slug, region, lastModified)
 				auctionLog(slug+": "+lastModified);
 			}else{
+				console.log(touch, lastModified)
 				auctionQueue.push(false, function(){auctionLog(slug+": up to date.")})
 			}
 		}else{

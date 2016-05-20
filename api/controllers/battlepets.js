@@ -37,7 +37,7 @@ router.get("/", function(req, res){
 	})
 })
 
-router.get("/species/:id", function(req, res){
+router.get("/:id", function(req, res){
 	var id = parseInt(req.params.id)
 	if(!id)
 		return res.status(400).json({error:"Improper id supplied."})

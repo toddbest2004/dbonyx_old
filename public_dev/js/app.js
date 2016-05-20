@@ -90,6 +90,18 @@ $routeProvider
 	controller: 'forumAdminCtrl',
 	templateUrl: 'app/views/forums/forumAdmin.html'
 })
+.when('/battlepets', {
+	controller: 'allpetsCtrl',
+	templateUrl: 'app/views/battlepets/allpets.html'
+})
+.when('/battlepet', {
+	controller: 'allpetsCtrl',
+	templateUrl: 'app/views/battlepets/allpets.html'
+})
+.when('/battlepet/:id', {
+	controller: 'battlepetCtrl',
+	templateUrl: 'app/views/battlepets/battlepet.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })

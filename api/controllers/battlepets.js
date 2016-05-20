@@ -20,10 +20,10 @@ router.get("/", function(req, res){
 			var familyArray = []
 			for(var i=0;i<petFamilies.length;i++){
 				if(filters.families[i])
-					familyArray.push(petFamilies[i])
+					familyArray.push(i)
 			}
 			if(familyArray.length>0)
-				battlepetQuery.where({family:{$in:familyArray}})
+				battlepetQuery.where({petTypeId:{$in:familyArray}})
 		}
 	}
 	if(limit>50)

@@ -8,7 +8,7 @@
 		</div>
 
 		<div ng-repeat="pet in pets">
-			<h1>{{pet.name}}</h1>
+			<h1><a href="/battlepet/{{pet._id}}" class="itemQuality{{pet.qualityId}}">{{pet.name}}</a></h1>
 			<div ng-repeat="ability in pet.abilities">
 			{{ability.details.name}}
 			</div>

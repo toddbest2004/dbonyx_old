@@ -1,7 +1,16 @@
 <div class="row" id="content-column-wrapper">
 <div id="main-content">
-<div>
-
+<div ng-if="loading">
+Loading...
+</div>
+<div ng-if="error">
+{{error}}
+</div>
+<div ng-repeat="pet in pets">
+<h1>{{pet.name}}</h1>
+<div ng-repeat="ability in pet.abilities">
+{{ability}}
+</div>
 </div>
 </div>
 <sidebar>

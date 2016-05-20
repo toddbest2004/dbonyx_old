@@ -51,6 +51,7 @@ function getBattlepetDetails(speciesId, callback){
 				pet.description = body.description
 				pet.source = body.source
 				for(var i=0;i<body.abilities.length;i++){
+					body.abilities[i].details = body.abilities[i].id
 					body.abilities[i]._id = body.abilities[i].id
 					db.battlepetAbility.create(body.abilities[i], function(err, ability){
 					})

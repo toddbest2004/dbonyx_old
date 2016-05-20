@@ -1,20 +1,27 @@
 <div class="row" id="content-column-wrapper">
-<div id="main-content">
-<div ng-if="loading">
-Loading...
-</div>
-<div ng-if="error">
-{{error}}
-</div>
-<div ng-repeat="pet in pets">
-<h1>{{pet.name}}</h1>
-<div ng-repeat="ability in pet.abilities">
-{{ability}}
-</div>
-</div>
-</div>
+	<div id="main-content">
+		<div ng-if="loading">
+		Loading...
+		</div>
+		<div ng-if="error">
+		{{error}}
+		</div>
+
+		<div ng-repeat="pet in pets">
+			<h1>{{pet.name}}</h1>
+			<div ng-repeat="ability in pet.abilities">
+			{{ability.details.name}}
+			</div>
+		</div>
+	</div>
 <sidebar>
-<div>
-</div>
+	<div>
+		<h1>Filters</h1>
+		<fieldset ng-repeat="family in petFamilies">
+			<label style="width:100%"><input type="checkbox" value="{{family}}" ng-model="filters.families[$index]" ng-change="search()">
+			<span>{{family}}</span>
+			</label>
+		</fieldset>
+	</div>
 </sidebar>
 </div>

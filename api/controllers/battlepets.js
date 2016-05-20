@@ -3,12 +3,32 @@ var router = express.Router();
 
 var db = require("../../mongoose");
 
+var petFamilies = ['humanoid','dragonkin','flying','undead','critter','magical','elemental','beast','water','mechanical']
+
 router.get("/", function(req, res){
 	var offset = parseInt(req.query.offset)||0
 	var limit = parseInt(req.query.limit)||25
+	var filters
+	try{
+		filters = JSON.parse(req.query.filters) || null
+	}catch(err){
+		filters = null
+	}
+	var battlepetQuery = db.battlepet.find().skip(offset).limit(limit).populate('abilities.details')
+	if(filters){
+		if(filters.families&&Array.isArray(filters.families)){
+			var familyArray = []
+			for(var i=0;i<petFamilies.length;i++){
+				if(filters.families[i])
+					familyArray.push(petFamilies[i])
+			}
+			if(familyArray.length>0)
+				battlepetQuery.where({family:{$in:familyArray}})
+		}
+	}
 	if(limit>50)
 		limit = 25
-	db.battlepet.find().skip(offset).limit(limit).populate('abilities.details').exec(function(err, pets){
+	battlepetQuery.exec(function(err, pets){
 		if(err||!pets){
 			console.log(err)
 			return res.status(404).json({error:"Unable to find pets."})

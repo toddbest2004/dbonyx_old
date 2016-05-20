@@ -76,7 +76,7 @@
 		<div id="itemFilterDiv">
 			<h1>Filter By Quality</h1>
 			<fieldset ng-repeat="quality in itemQualities">
-				<label style="width:100%"><input type="checkbox" id="uncommonCheck" value="{{quality}}" ng-model="qualities.values[$index]" ng-change="search()">
+				<label style="width:100%"><input type="checkbox" value="{{quality}}" ng-model="qualities.values[$index]" ng-change="search()">
 				<span class="itemQuality{{$index}}">{{quality}}</span>
 				</label>
 			</fieldset>

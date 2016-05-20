@@ -9,23 +9,27 @@ angular.module('dbonyx')
 }])
 .controller('allpetsCtrl', ['$scope','$location','battlepetService',function($scope,$location,battlepetService){
 	var searchValues = $location.search()
-
+	$scope.petFamilies = ['Humanoid','Dragonkin','Flying','Undead','Critter','Magical','Elemental','Beast','Aquatic','Mechanical']
 	$scope.offset=parseInt(searchValues.o)||0
 	$scope.limit=parseInt(searchValues.l)||25
-	$scope.filters={}
+	$scope.filters={families:[]}
 	$scope.loading=true
-	battlepetService.getAll($scope.offset,$scope.limit,$scope.filters, function(err, data){
-		$scope.loading=false
-		if(err)
-			return $scope.error = err
-		$scope.pets = data
-	})
 	
+	$scope.search = function(){
+		battlepetService.filters=$scope.filters
+		battlepetService.getAll($scope.offset,$scope.limit, function(err, data){
+			$scope.loading=false
+			if(err)
+				return $scope.error = err
+			$scope.pets = data
+		})
+	}
+	$scope.search()
 }])
 .factory('battlepetService', ['$http', function($http){
 	var battlepet = {}
-
-	battlepet.getAll = function(offset, limit, filters, cb){
+	battlepet.filters = {}
+	battlepet.getAll = function(offset, limit, cb){
 		$http({
 
 			method: 'GET',
@@ -33,13 +37,11 @@ angular.module('dbonyx')
 			params: {
 				offset: offset,
 				limit: limit,
-				filters: filters
+				filters: battlepet.filters
 			}
 		}).then(function success(response){
-			console.log(response)
 			cb(null, response.data)
 		}, function error(response){
-			console.log(response)
 			cb(response.error)
 		})
 	}

@@ -241,7 +241,12 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 }
 
 function processFilter(filter, itemQuery){
-	var tmpFilter = JSON.parse(filter)
+	var tmpFilter
+	try{
+		tmpFilter = JSON.parse(filter)
+	}catch(err){
+		return
+	}
 	var filterData
 	if(typeof(tmpFilter.type)!=='string'){
 		return

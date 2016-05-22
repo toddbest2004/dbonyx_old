@@ -25,7 +25,8 @@ var battlepetSchema = new Schema({
 		slot: Number,
 		order: Number,
 		requiredLevel: Number,
-		details: {type: Number, ref: 'battlepetAbility'}
+		details: {type: Number, ref: 'battlepetAbility'},
+		_id: Number
 	}]
 
 })

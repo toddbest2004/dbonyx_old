@@ -28,6 +28,7 @@ function getBattlepets(){
 
 function processPet(body){
 	var pet = body
+	// console.log(body)
 	pet._id = pet.stats.speciesId
 	pet.speciesId = pet.stats.speciesId
 	db.battlepet.create(pet, function(err, newpet){
@@ -57,12 +58,33 @@ function getBattlepetDetails(speciesId, callback){
 					})
 				}
 				pet.abilities = body.abilities
-				pet.save()
-				callback()
+				getBattlepetStats(pet, callback)
+				
 			})
 		}else{
 			console.log("error: "+response.statusCode)
 			callback()
 		}
+	})
+}
+
+
+function getBattlepetStats(pet, callback){
+	var url = "https://us.api.battle.net/wow/pet/stats/"+pet._id+"?level=20&breedId=3&qualityId=0&locale=en_US&apikey="+process.env.API
+	request({uri:url,json:true},function(error, response, body){
+		if(!error && response.statusCode===200){
+			var health = (body.health-150)/20
+			var power = (body.power-10)/20
+			var speed = (body.speed-10)/20
+			pet.stats = {health:health,power:power,speed:speed}
+		}else{
+			console.log("NO STATS")
+			pet.stats={}
+		}
+		pet.save(pet,function(err, pet){
+			// console.log(pet)
+			callback()
+		})
+		// callback()
 	})
 }

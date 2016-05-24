@@ -7,10 +7,12 @@
 			{{error}}
 		</div>
 		<div ng-if="pet">
-			<h1 class="itemQuality{{pet.stats.petQualityId}}">
-			<img src="/images/icons/{{pet.icon}}.png" class="icon itemIcon borderQuality{{pet.stats.petQualityId}}">{{pet.name}} <small>{{pet.family}}</small>
+			<h1 class="itemQuality{{pet.quality}}">
+			<img src="/images/icons/{{pet.icon}}.png" class="icon itemIcon borderQuality{{pet.quality}}">{{pet.name}} <small>{{pet.family}}</small>
 			</h1>
-			Health: {{pet.stats.health}} Power: {{pet.stats.power}} Speed: {{pet.stats.speed}}
+			<input type="range" min="1" max="25" ng-model="pet.level" ng-change="computeStats()">
+			<div>Level: {{pet.level}} Breed: {{pet.breedId}}</div>
+			<div>Health: {{pet.computed.health}} Power: {{pet.computed.power}} Speed: {{pet.computed.speed}}</div>
 			<div class="row">
 				<div class="col-xs-4" ng-repeat="ability in pet.abilities | orderBy: 'order'">
 				<h3><img src="/images/icons/{{ability.details.icon}}.png" class="icon">{{ability.details.name}}</h3>

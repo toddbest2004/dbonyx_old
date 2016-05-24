@@ -3,10 +3,29 @@ angular.module('dbonyx')
 	$scope.id = $routeParams.id
 	$scope.petFamilies = battlepetService.petFamilies
 	var searchValues = $location.search()
-	// q=quality
-	// l=level
-	// b=breed
 	// o=owner?
+
+	$scope.applyChanges = function(){
+		if(!$scope.pet.breedId)
+			$scope.pet.breedId=parseInt(searchValues.b)||3
+		if(!$scope.pet.level)
+			$scope.pet.level=parseInt(searchValues.l)||1
+		if(!$scope.pet.quality)
+			$scope.pet.quality=parseInt(searchValues.q)||$scope.pet.qualityId||0
+	}
+
+	$scope.computeStats = function(){
+		if(!$scope.pet.computed)
+			$scope.pet.computed={}
+		var qualityMultiplier = (1+$scope.pet.quality/10)
+		var breed = battlepetService.breeds[$scope.pet.breedId]||battlepetService.breeds[0]
+		var level = $scope.pet.level
+		$scope.pet.computed.health = Math.round(100+($scope.pet.stats.health+breed.h*10)*level*qualityMultiplier)
+		$scope.pet.computed.power = Math.round(($scope.pet.stats.power+breed.p*2)*level*qualityMultiplier)
+		$scope.pet.computed.speed = Math.round(($scope.pet.stats.speed+breed.s*2)*level*qualityMultiplier)
+
+	}
+
 	$scope.getPet = function(){
 		$scope.loading=true
 		battlepetService.getOne($scope.id,{},function(err, pet){
@@ -14,6 +33,8 @@ angular.module('dbonyx')
 			if(err)
 				return $scope.error = err
 			$scope.pet = pet
+			$scope.applyChanges()
+			$scope.computeStats()
 		})
 	}
 	$scope.getPet()
@@ -41,6 +62,7 @@ angular.module('dbonyx')
 	var battlepet = {}
 	battlepet.petFamilies = ['Humanoid','Dragonkin','Flying','Undead','Critter','Magical','Elemental','Beast','Aquatic','Mechanical']
 	battlepet.breeds = {
+		0:{h:0,p:0,s:0,n:"Unknown Breed"},
 		3:{h:.25,p:.25,s:.25,n:"B/B"},
 		4:{h:0,p:1,s:0,n:"P/P"},
 		5:{h:0,p:0,s:1,n:"S/S"},

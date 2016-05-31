@@ -32,6 +32,10 @@ passport.use(strategies.jwtStrategy)
 var apiCtrl = require("./api/")
 app.use("/api", apiCtrl)
 
+app.get('/robots.txt', function(req, res){
+	res.sendFile(path.join(__dirname,'public/robots.txt'))
+})
+
 app.get('/*', function(req,res){
 	res.sendFile(path.join(__dirname, 'public/index.html'))
 })

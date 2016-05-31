@@ -19,6 +19,7 @@ var breeds = {
 }
 
 router.get("/", function(req, res){
+	console.log('phantomTest')
 	var offset = parseInt(req.query.offset)||0
 	var limit = parseInt(req.query.limit)||25
 	var filters

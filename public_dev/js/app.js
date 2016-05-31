@@ -102,6 +102,10 @@ $routeProvider
 	controller: 'battlepetCtrl',
 	templateUrl: 'app/views/battlepets/battlepet.html'
 })
+.when('/import', {
+	controller: 'importCtrl',
+	templateUrl: 'app/views/import.html'
+})
 .otherwise({
 	templateUrl: 'app/views/404.html'
 })

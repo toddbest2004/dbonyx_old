@@ -12,6 +12,8 @@ var auctionCtrl = require("./controllers/auction")
 router.use("/auction", auctionCtrl);
 var battlepetCtrl = require("./controllers/battlepets")
 router.use("/battlepet", battlepetCtrl)
+var dataCtrl = require("./controllers/data")
+router.use("/data", dataCtrl)
 var forumCtrl = require('./controllers/forums')
 router.use("/forum", forumCtrl);
 var itemCtrl = require("./controllers/item")

@@ -10,7 +10,6 @@ var strategies = require('./config/strategies.js')
 var app = express();
 
 var phantom = require('phantom')
-var trackedBots = ['googlebot']
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
@@ -41,7 +40,7 @@ app.get('/robots.txt', function(req, res){
 
 app.get('/', function(req, res){
 // console.log(req.query)
-// console.log('asdf')
+console.log('asdf')
 	if(req.query._escaped_fragment_===''){
 		req.query._escaped_fragment_='/'
 	}

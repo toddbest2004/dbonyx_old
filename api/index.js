@@ -3,8 +3,6 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var db = require("../mongoose");
 
-var phantom = require('phantom')
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,29 +30,16 @@ router.get("/realms", function(req, res){
 	})
 })
 
-// var _page
+// // var _page
 
-router.get("/test", function(req, res){
-	if(req.query.test===''){
-		// _page.load('http://google.com')
-		res.send('1')
+// router.get("/test", function(req, res){
+// 	if(req.query.test===''){
+// 		// _page.load('http://google.com')
+// 		res.send('1')
 
-	}else{
-		res.send('other')
-	}
-})
-		phantom.create(['--ignore-ssl-errors=yes']).then(function(ph){
-			ph.createPage().then(function(page){
-				// var testVar = phInstance.createOutObject()
-				// testVar.test='1'
-				// page.property('onResourceRequested', function(requestData,networkRequest,out){
-					page.open('//localhost:8080/api/battlepet/',function(status){
+// 	}else{
+// 		res.send('other')
+// 	}
+// })
 
-						// console.log(page.content) 
-					})
-				// }).then(function(){
-					ph.exit()
-				// })
-			})
-		})
 module.exports = router;

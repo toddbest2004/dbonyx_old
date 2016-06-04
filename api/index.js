@@ -32,4 +32,16 @@ router.get("/realms", function(req, res){
 	})
 })
 
+// // var _page
+
+// router.get("/test", function(req, res){
+// 	if(req.query.test===''){
+// 		// _page.load('http://google.com')
+// 		res.send('1')
+
+// 	}else{
+// 		res.send('other')
+// 	}
+// })
+
 module.exports = router;

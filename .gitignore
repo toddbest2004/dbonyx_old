@@ -3,3 +3,4 @@ management
 public/images/characters
 npm-debug.log
 .env
+onyxLooter*.lua

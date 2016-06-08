@@ -36,7 +36,6 @@ app.use("/api", apiCtrl)
 
 app.get('/', function(req, res){
 // console.log(req.query)
-console.log('asdf')
 	if(req.query._escaped_fragment_===''){
 		req.query._escaped_fragment_='/'
 	}
@@ -44,7 +43,7 @@ console.log('asdf')
 		phantom.create().then(function(ph) {
 		  ph.createPage().then(function(page) {
 		    page.open('https://www.dbonyx.com'+req.query._escaped_fragment_).then(function(status) {
-		      console.log(status);
+		      // console.log(status);
 		      page.property('content').then(function(content) {
 		        // console.log(content);
 		        res.send(content)
@@ -60,7 +59,27 @@ console.log('asdf')
 })
 app.use(express.static(path.join(__dirname, 'public')))
 app.get('/*', function(req,res){
-	res.sendFile(path.join(__dirname, 'public/index.html'))
+	if(req.query._escaped_fragment_===''){
+		req.query._escaped_fragment_='/'
+	}
+	if(req.query._escaped_fragment_){
+		phantom.create().then(function(ph) {
+		  ph.createPage().then(function(page) {
+		  	var url = 'https://www.dbonyx.com'+req.path+req.query._escaped_fragment_
+		    page.open(url).then(function(status) {
+		      // console.log(status);
+		      page.property('content').then(function(content) {
+		        res.send(content)
+		        page.close();
+		        ph.exit();
+		      });
+		    });
+		  });
+		});
+	}else{
+		res.sendFile(path.join(__dirname, 'public/index.html'))
+	}
+	// res.sendFile(path.join(__dirname, 'public/index.html'))
 })
 
 

@@ -218,11 +218,15 @@ function findMultipleCharacters(name, res){
 
 function importCharacter(name, realm, region, callback){
 	console.log("Importing Character: "+name)
-	var url = "http://"+region+".battle.net/api/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	console.log(name, realm, region)
+	console.log(process.env.API)
+	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	console.log(url)
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
+		// console.log(response)
 		if(!error && response.statusCode===200){
 			processCharacter(name, realm, region, body, callback)
 		}else{
@@ -293,7 +297,7 @@ function processCharacter(name, realm, region, body, callback){
 function importCharacterImages(thumbnail, callback){
 	var uri = "http://us.battle.net/static-render/us/"+thumbnail
 	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"")
-
+	console.log(uri)
 	download(uri+"avatar.jpg",filename+"avatar.jpg")
 	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback)
 	download(uri+"inset.jpg",filename+"inset.jpg")

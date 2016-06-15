@@ -8,7 +8,6 @@ angular.module('ItemCtrls', [])
 			callback(item)
 			return
 		}
-		console.log(modifiers)
 		$http({
 			method: 'GET',
 			url: '/api/item/pretty/'+id,
@@ -124,5 +123,34 @@ angular.module('ItemCtrls', [])
 		},
 		replace: true,
 		templateUrl: 'app/templates/itemLink.html'
+	}
+}])
+.directive('itemHover', ['$compile','$window',function($compile,$window){
+	return {
+		restrict: "A",
+		link: function(scope, element, attributes){
+			var itemDisplay
+
+			element.bind('mouseover', function(e){
+				if(itemDisplay){
+					itemDisplay.remove()
+				}
+				var el = angular.element("<div class='itemHover'>")
+				itemDisplay = el.append($compile('<item-display item-id="'+scope.item.itemId+'">')(scope))
+				angular.element(document.body).append(itemDisplay)
+
+				var css = {
+					left: (e.clientX+$window.scrollX+5) + 'px',
+					top: (e.clientY+$window.scrollY) + 'px'
+				}
+				itemDisplay.css(css)
+			})
+
+			element.bind('mouseleave', function(){
+				if(itemDisplay){
+					itemDisplay.remove()
+				}
+			})
+		}
 	}
 }])

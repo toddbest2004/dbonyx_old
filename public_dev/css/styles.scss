@@ -93,6 +93,10 @@ $quality7: #E6CC80;
     text-decoration:none;
   }
 }
+.itemHover {
+  z-index: 100;
+  position: absolute;
+}
 .itemQuantity{
   font-family: 'Arial';
   background-color: black;

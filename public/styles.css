@@ -712,6 +712,10 @@ oi-select.loading:not(.multiple) .select-search:after {
   .itemLink a, .itemLink a:visited, .itemLink a:active, .itemLink a:hover {
     text-decoration: none; }
 
+.itemHover {
+  z-index: 100;
+  position: absolute; }
+
 .itemQuantity {
   font-family: 'Arial';
   background-color: black;

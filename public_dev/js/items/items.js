@@ -133,12 +133,13 @@ angular.module('ItemCtrls', [])
 
 			element.bind('mouseover', function(e){
 				var item = scope.item||scope.$parent.item
+				var itemId = item.id||item._id||item.itemId
 				if(itemDisplay){
 					itemDisplay.remove()
 				}
-				console.log(scope)
+				console.log(item)
 				var el = angular.element("<div class='itemHover'>")
-				itemDisplay = el.append($compile('<item-display item-id="'+item.itemId+'">')(scope))
+				itemDisplay = el.append($compile('<item-display item-id="'+itemId+'">')(scope))
 				angular.element(document.body).append(itemDisplay)
 
 				var css = {

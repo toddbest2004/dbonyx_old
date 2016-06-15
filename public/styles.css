@@ -1105,6 +1105,14 @@ oi-select.loading:not(.multiple) .select-search:after {
   padding: 5px 0;
   border-radius: 4px; }
 
+.mount-display {
+  text-align: center; }
+
+.mount-icon {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 8px; }
+
 #user-panel {
   height: 200px;
   background: #212121;

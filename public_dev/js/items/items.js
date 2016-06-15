@@ -132,7 +132,7 @@ angular.module('ItemCtrls', [])
 			var itemDisplay
 
 			element.bind('mouseover', function(e){
-				var item = scope.item||scope.parent().item
+				var item = scope.item||scope.$parent.item
 				if(itemDisplay){
 					itemDisplay.remove()
 				}

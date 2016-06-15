@@ -1109,7 +1109,7 @@ oi-select.loading:not(.multiple) .select-search:after {
   text-align: center; }
 
 .mount-icon {
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
   border-radius: 8px; }
 

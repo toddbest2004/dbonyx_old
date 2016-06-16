@@ -137,7 +137,7 @@ angular.module('ItemCtrls', [])
 				if(itemDisplay){
 					itemDisplay.remove()
 				}
-				console.log(item)
+				
 				var el = angular.element("<div class='itemHover'>")
 				itemDisplay = el.append($compile('<item-display item-id="'+itemId+'">')(scope))
 				angular.element(document.body).append(itemDisplay)
@@ -150,10 +150,18 @@ angular.module('ItemCtrls', [])
 			})
 
 			element.bind('mouseleave', function(){
+				destroy()
+			})
+
+			element.on('$destroy', function(){
+				destroy()
+			})
+
+			var destroy = function(){
 				if(itemDisplay){
 					itemDisplay.remove()
 				}
-			})
+			}
 		}
 	}
 }])

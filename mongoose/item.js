@@ -47,15 +47,20 @@ var itemSchema = new Schema({
 	hasRandomEnchants: Boolean,
 	knownRandomEnchants: [Number],
 	context: String,
-	bonusLists: [],
+	bonusLists: [Number],
 	avalableContexts: [String],
 	itemSet: {id:Number, name: String, items:[{type: Number, ref: 'item'}], setBonuses:[{description:String,threshold:Number}]},
-	bonusSummary: {defaultBonusLists:[], chancebonusLists:[Number], 
-		bonusChances:[{chanceType:String,
+	bonusSummary: {
+		defaultBonusLists:[Number], 
+		chanceBonusLists:[Number], 
+		bonusChances:[{
+			chanceType:String,
 			upgrade:{upgradeType:String,name:String,id:Number},
 			stats:[{statid:String,delta:Number}],
 			sockets:[{socketType:String}]
 		}]},
+	hasItemBonusLists:Boolean,
+	bonusListProcessed: Boolean,
 	itemSpells:[{}]
 })
 

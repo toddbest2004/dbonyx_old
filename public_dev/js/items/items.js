@@ -75,6 +75,8 @@ angular.module('ItemCtrls', [])
 			$scope.item="Loading"
 			$scope.loading=true
 			itemService.getItem($scope.itemId, $scope.modifiers, function(item){
+				console.log(item)
+				console.log($scope.modifiers)
 				$scope.item=item
 				$scope.loading=false
 			})

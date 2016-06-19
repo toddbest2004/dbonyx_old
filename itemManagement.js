@@ -56,7 +56,7 @@ function findItem(id, context){
 	//console.log("loading")
 	var url
 	if(context){
-		url = "https://us.api.battle.net/wow/item/"+id+"/"+context+"?locale=en_US&apikey="+process.env.API
+		url = "https://us.api.battle.net/wow/item/"+id+"/"+context+"?bl=-1&locale=en_US&apikey="+process.env.API
 	}else{
 		url = "https://us.api.battle.net/wow/item/"+id+"?locale=en_US&apikey="+process.env.API
 	}
@@ -109,19 +109,18 @@ function processItem(item, body, callback){
 	// console.log(item)
 	if(body.bonusStats.length>0){
 		// console.log("stats")
-		for(var i=0; i<body.bonusStats.length; i++){
+		// for(var i=0; i<body.bonusStats.length; i++){
 			// addStats(item, i);
 			item.hasItemStats = true
-		}
+		// }
 	}
-	//TODO: Currently an error with adding spells. not sure why.
 	if(body.itemSpells.length>0){
 		// console.log("spells")
 		// item.itemSpells=[]
 		item.hasItemSpells = true
-		// for(var i=0; i<body.itemSpells.length; i++){
-		// 	// console.log(body.itemSpells[i])
-		// }
+		for(var i=0; i<body.itemSpells.length; i++){
+			// console.log(body.itemSpells[i])
+		}
 	}
 	if(body.weaponInfo){
 		// console.log("weapon")
@@ -143,8 +142,11 @@ function processItem(item, body, callback){
 	if(item.availableContexts && item.availableContexts !== "" && item.availableContexts.length>0){
 		//TODO: Handle multiple contexts
 	}
-	if(item.bonusSummary.defaultBonusLists.length!==0){
+	item.hasItemBonusLists = false;
+	if(item.bonusSummary.chanceBonusLists.length>0||item.bonusSummary.defaultBonusLists.length>0||item.bonusSummary.bonusChances.length>0){
+		item.bonusSummary = body.bonusSummary;
 		item.hasItemBonusLists = true;
+		item.bonusListProcessed = false;
 	}
 	item.save(function(err){
 		console.log("saved")
@@ -156,20 +158,4 @@ function processItem(item, body, callback){
 	})
 }
 
-//These are not currently called
-//
 
-
-
-function addSpells(item, i){
-	db.spell.findOrCreate({where:{spellId:item.itemSpells[i].spellId}}).spread(function(spell, created){
-		spell.name = item.itemSpells[i].spell.name
-		spell.icon = item.itemSpells[i].spell.icon
-		spell.description = item.itemSpells[i].spell.description
-		spell.castTime = item.itemSpells[i].spell.castTime
-		spell.save()
-		item.addSpell(spell, {nCharges:item.itemSpells[i].nCharges, consumable:item.itemSpells[i].consumable, categoryId:item.itemSpells[i].categoryId, triggerType:item.itemSpells[i].trigger}).then(function(){
-			
-		})
-	})
-}

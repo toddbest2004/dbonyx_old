@@ -50,7 +50,8 @@ itemConstants.bonusStats = {
 	54: {name: 'Shadow Resistance', class: 1},
 	55: {name: 'Nature Resistance', class: 1},
 	56: {name: 'Arcane Resistance', class: 1},
-	57: {name: 'PvP Power', class: 2}
+	57: {name: 'PvP Power', class: 2},
+	59: {name: 'Multistrike', class: 2}
 }
 
 itemConstants.randIds = { //{suffix:"",stats:[]}

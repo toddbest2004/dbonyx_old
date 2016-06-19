@@ -60,10 +60,21 @@ router.get("/items", function(req, res){
 		res.status(400).json({error:"Improper query string."})
 		return
 	}
-	db.character.findOne({name:name, region:region, realm:realm}, function(err, character){
+	db.character.findOne({name:name, region:region, realm:realm}).lean().exec(function(err, character){
 		if(err||!character){
 			res.status(404).json({error:"Character not found."})
 			return
+		}
+		// console.log(character.items)
+		for(key in character.items){
+			// console.log(key)
+			if(character.items[key].stats){
+				console.log(key)
+				character.items[key].stats.forEach(function(stat){
+					console.log(stat)
+				})
+				console.log('_____')
+			}
 		}
 		res.json({items:character.items})
 	})

@@ -115,17 +115,12 @@ function processItem(item, body, callback){
 		// }
 	}
 	if(body.itemSpells.length>0){
-		// console.log("spells")
-		// item.itemSpells=[]
 		item.hasItemSpells = true
-		for(var i=0; i<body.itemSpells.length; i++){
-			// console.log(body.itemSpells[i])
-		}
 	}
 	if(body.weaponInfo){
-		// console.log("weapon")
 		item.weaponInfo = body.weaponInfo
-		// addWeaponInfo(item)
+		item.isWeapon = true
+
 	}
 	if(body.hasSockets){
 		item.socketInfo.sockets=[]
@@ -136,11 +131,12 @@ function processItem(item, body, callback){
 			// console.log(item.socketInfo.sockets[i])
 		}
 	}
-	// if(item.itemSet){
-	// 	item.itemSet = item.itemSet.id	
-	// }
-	if(item.availableContexts && item.availableContexts !== "" && item.availableContexts.length>0){
-		//TODO: Handle multiple contexts
+	if(item.itemSet){
+		item.hasItemSet = true;
+	}
+	item.availableContexts = [];
+	if(body.availableContexts && body.availableContexts !== "" && body.availableContexts[0]!==''){
+		item.availableContexts = body.availableContexts;
 	}
 	item.hasItemBonusLists = false;
 	if(item.bonusSummary.chanceBonusLists.length>0||item.bonusSummary.defaultBonusLists.length>0||item.bonusSummary.bonusChances.length>0){

@@ -108,11 +108,7 @@ function processItem(item, body, callback){
 	}
 	// console.log(item)
 	if(body.bonusStats.length>0){
-		// console.log("stats")
-		// for(var i=0; i<body.bonusStats.length; i++){
-			// addStats(item, i);
 			item.hasItemStats = true
-		// }
 	}
 	if(body.itemSpells.length>0){
 		item.hasItemSpells = true
@@ -131,18 +127,27 @@ function processItem(item, body, callback){
 			// console.log(item.socketInfo.sockets[i])
 		}
 	}
-	if(item.itemSet){
+	if(item.itemSet&&item.itemSet.id){
 		item.hasItemSet = true;
 	}
 	item.availableContexts = [];
-	if(body.availableContexts && body.availableContexts !== "" && body.availableContexts[0]!==''){
+	if(body.availableContexts && body.availableContexts !== ""){
 		item.availableContexts = body.availableContexts;
-	}
-	item.hasItemBonusLists = false;
-	if(item.bonusSummary.chanceBonusLists.length>0||item.bonusSummary.defaultBonusLists.length>0||item.bonusSummary.bonusChances.length>0){
-		item.bonusSummary = body.bonusSummary;
-		item.hasItemBonusLists = true;
-		item.bonusListProcessed = false;
+		item.contextDetails = {}
+		body.availableContexts.forEach(function(context){
+			console.log(context)
+			item.contextDetails[context]={}
+			var details = item.contextDetails[context];
+			if(context === body.context){
+				details.bonusLists = body.bonusSummary.chanceBonusLists;
+				details.defaultBonusLists = body.bonusSummary.defaultBonusLists;
+				details.bonusStats = item.bonusStats
+				details.bonusListDetails = {}
+			}
+		})
+		if(body.availableContexts.length>1){
+			item.contextComplete=false;
+		}
 	}
 	item.save(function(err){
 		console.log("saved")

@@ -16,7 +16,7 @@ var itemSchema = new Schema({
 	icon: String,
 	stackable: Number,
 	itemBind: Number,
-	bonusStats: [bonusStat],
+	// bonusStats: [bonusStat],
 	buyPrice: Number,
 	itemClass: Number,
 	itemSubClass: Number,
@@ -47,10 +47,11 @@ var itemSchema = new Schema({
 	hasRandomEnchants: {type: Boolean, default: false},
 	knownRandomEnchants: [Number],
 	context: String,
-	bonusLists: [Number],
+	// bonusLists: [Number],
 	weaponInfo: {},
 	isWeapon: {type: Boolean, default: false},
 	availableContexts: [String],
+	contextComplete: {type: Boolean, default: true},
 	contextDetails: {/*
 		"raid-mythic":{
 			bonusLists:[Number],
@@ -65,17 +66,17 @@ var itemSchema = new Schema({
 	*/},
 	itemSet: {id:Number, name: String, items:[{type: Number, ref: 'item'}], setBonuses:[{description:String,threshold:Number}]},
 	hasItemSet: {type: Boolean, default: false},
-	bonusSummary: {
-		defaultBonusLists:[Number], 
-		chanceBonusLists:[Number], 
-		bonusChances:[{
-			chanceType:String,
-			upgrade:{upgradeType:String,name:String,id:Number},
-			stats:[{statid:String,delta:Number}],
-			sockets:[{socketType:String}]
-		}]},
+	// bonusSummary: {
+	// 	defaultBonusLists:[Number], 
+	// 	chanceBonusLists:[Number], 
+	// 	bonusChances:[{
+	// 		chanceType:String,
+	// 		upgrade:{upgradeType:String,name:String,id:Number},
+	// 		stats:[{statid:String,delta:Number}],
+	// 		sockets:[{socketType:String}]
+	// 	}]},
 	hasItemBonusLists:Boolean,
-	bonusListProcessed: Boolean,
+	// bonusListProcessed: Boolean,
 	itemSpells:[{}]
 })
 

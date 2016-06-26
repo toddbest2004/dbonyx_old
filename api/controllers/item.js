@@ -73,16 +73,17 @@ function prettify(item, modifiers){
 	
 	item.itemBind = itemConstants.itemBinds[item.itemBind]
 	//prettify item stats
-	if(item.bonusStats.length>0){
+	var bonusStats = item.contextDetails[item.context].bonusStats
+	if(bonusStats.length>0){
 		item.stats=[]
-		for(var i=0;i<item.bonusStats.length;i++){
+		for(var i=0;i<bonusStats.length;i++){
 			//Get the bonus stat information from itemConstants.js			
-			var mystat = itemConstants.bonusStats[item.bonusStats[i].stat]||{}
+			var mystat = itemConstants.bonusStats[bonusStats[i].stat]||{}
 			var stat = {}
 			stat.name = mystat.name||'UNKNOWN STAT'
 			stat.class = itemConstants.bonusStatClasses[mystat.class||0]
-			stat.order = item.bonusStats[i].stat
-			stat.amount = item.bonusStats[i].amount
+			stat.order = bonusStats[i].stat
+			stat.amount = bonusStats[i].amount
 			item.stats.push(stat)
 		}
 	}

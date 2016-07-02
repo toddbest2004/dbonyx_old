@@ -58,7 +58,7 @@ function findItems(){
 		console.log("Query count: "+queryCount)
 		console.log("Query threshold reached, sleeping for 1 hour.")
 		clearInterval(intervalId)
-		setTimeout(startImport, 3600000)
+		setTimeout(startImport, 1200000)
 	}
 }
 

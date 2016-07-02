@@ -32,7 +32,7 @@ function start(){
 			}else{
 				console.log("Query count: "+queryCount)
 				console.log("Query threshold reached, sleeping for 1 hour.")
-				setTimeout(start, 3600000)
+				setTimeout(start, 1200000)
 			}
 		}
 	})

@@ -78,13 +78,14 @@ function prettify(item, modifiers){
 		item.context=modifiers.context
 	}
 	item.stats = item.contextDetails[item.context].bonusStats||item.stats
-
+	// console.log(item.stats)
 	//modifiers
+	var bonusStats = {}
+	item.stats.forEach(function(stat){
+		bonusStats[stat.stat]=stat.amount
+	})
 	if(modifiers.bonusLists){
-		var bonusStats = {}
-		item.stats.forEach(function(stat){
-			bonusStats[stat.stat]=stat.amount
-		})
+		console.log('bonusLists')
 		modifiers.bonusLists.forEach(function(bonusId){
 			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
 
@@ -102,13 +103,12 @@ function prettify(item, modifiers){
 				}
 			}
 		})
-		item.statDetails = []
-		for(key in bonusStats){
-			item.statDetails.push({stat:parseInt(key), amount:bonusStats[key]}) 
-		}
 	}
-
-	console.log(modifiers)
+	item.statDetails = []
+	for(key in bonusStats){
+		item.statDetails.push({stat:parseInt(key), amount:bonusStats[key]}) 
+	}
+	// console.log(modifiers)
 
 	item.itemSubClass = itemConstants.classes[item.itemClass].subclasses[item.itemSubClass]
 	item.itemClass = itemConstants.classes[item.itemClass].name
@@ -117,13 +117,15 @@ function prettify(item, modifiers){
 	
 	item.itemBind = itemConstants.itemBinds[item.itemBind]
 	//prettify item stats
-	var bonusStats = item.statDetails
+	var bonusStats = item.statDetails||[]
 	if(bonusStats.length>0){
+		console.log("bonusStats")
 		item.stats=[]
 		for(var i=0;i<bonusStats.length;i++){
 			//Get the bonus stat information from itemConstants.js			
 			var mystat = itemConstants.bonusStats[bonusStats[i].stat]||{}
 			var stat = {}
+			console.log(bonusStats)
 			stat.name = mystat.name||'UNKNOWN STAT'
 			stat.class = itemConstants.bonusStatClasses[mystat.class||0]
 			stat.order = bonusStats[i].stat
@@ -131,6 +133,9 @@ function prettify(item, modifiers){
 			item.stats.push(stat)
 		}
 	}
+
+	console.log(item.stats)
+	console.log(item.statdetails)
 	//weapon stats
 	if(item.weaponInfo){
 		item.weaponInfo.weaponSpeed = item.weaponInfo.weaponSpeed.toFixed(2)

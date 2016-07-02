@@ -7,23 +7,34 @@ var myCount = 0
 var intervalId = 0
 var increment = 20
 var callCount = 0
+var queryCount = 0
 
 var ignoredKeys = ['id','bonusSummary', 'bonusLists', 'bonusStats', 'context','availableContexts', 'itemSpells', 'itemSource']
 // setTimeout(start, 1000)
 
-setTimeout(function(){startSpecific(128054)},1000)
+setTimeout(function(){start()},2000)
 
 function start(){
+	var itemsToProcess=false
 	db.item.find({contextComplete:false}).limit(10).exec(function(err, items){
 		if(err|!items||items.length===0){
 			console.log("no items")
 			return
 		}
 		items.forEach(function(item){
+			itemsToProcess=true
 			console.log(item.itemId)
 			processItem(item)
 		})
-		itemQueue.drain = function(){console.log("itemQueue drained")}
+		itemQueue.drain = function(){
+			if(queryCount<30000){
+				start()
+			}else{
+				console.log("Query count: "+queryCount)
+				console.log("Query threshold reached, sleeping for 1 hour.")
+				setTimeout(start, 3600000)
+			}
+		}
 	})
 }
 
@@ -39,7 +50,7 @@ var itemQueue = async.queue(function(task, callback){
 })
 
 var contextQueue = async.queue(function(task, callback){
-	console.log("context")
+	// console.log("context")
 	getContextItem(task.item, task.context, function(newItem){
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
@@ -67,15 +78,16 @@ var bonusListQueue = async.queue(function(task, callback){
 function processItem(item){
 	item.contextComplete = true;
 	itemQueue.push({item:item}, function(item){db.item.findOneAndUpdate({itemId:item.itemId},item,function(){
-		console.log(item)
+		console.log(queryCount)
 		console.log("________")
-		console.log(callCount)
 
 	})})
 }
 
 function processContexts(item, cb){
 	var empty = true
+
+	console.log("Starting item: "+item.itemId)
 	for(context in item.contextDetails){
 		// console.log(context)
 		// if(!item.contextDetails[context].bonusStats){
@@ -101,7 +113,7 @@ function getContextItem(item, context, cb){
 		uri: url,
 		json: true
 	}, function(error, response, body){
-		callCount++
+		queryCount = response.headers["x-plan-quota-current"]
 		if(!error && response.statusCode===200){
 			var details = item.contextDetails[context];
 			details.bonusLists = body.bonusSummary.chanceBonusLists;
@@ -128,7 +140,7 @@ function getBonusDetails(task, cb){
 		uri: url,
 		json: true
 	}, function(error, response, body){
-		callCount++
+		queryCount = response.headers["x-plan-quota-current"]
 		if(!error && response.statusCode===200){
 			if(!body.bonusLists||body.bonusLists[0]!==task.bonusId){
 				console.log('NO MATCH: '+task.bonusId)

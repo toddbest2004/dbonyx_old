@@ -5,7 +5,8 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 20
+var increment = 40
+var queryCount = 0
 
 console.log(process.argv[2])
 
@@ -47,8 +48,17 @@ function findItems(){
 	 	findItem(i, null)
 	}
 	myCount+=increment
-	if(myCount > startCount + 10000){
+	if(myCount > 150000){
+		console.log("Item id: "+myCount)
+		console.log("Maximum id reached. Ending.")
 		clearInterval(intervalId)
+		return
+	}
+	if(queryCount > 30000){
+		console.log("Query count: "+queryCount)
+		console.log("Query threshold reached, sleeping for 1 hour.")
+		clearInterval(intervalId)
+		setTimeout(startImport, 3600000)
 	}
 }
 
@@ -66,16 +76,17 @@ function findItem(id, context){
 		json: true
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
-			itemQueue.push({body:body}, function(){console.log("item: done.")})
+			queryCount = response.headers["x-plan-quota-current"]
+			itemQueue.push({body:body}, function(){console.log(id+ ": done.")})
 		}else{
 			// if(response.statusCode!=404)
-				console.log(id, body)
+				// console.log(id, body)
 		}
 	})	
 }
 
 function insertItem(body, callback){
-	console.log("****"+body.id)
+	// console.log("****"+body.id)
 	db.item.findOne({_id:body.id}).exec(function(err, item){
 		if(err){
 			console.log(err)
@@ -135,7 +146,7 @@ function processItem(item, body, callback){
 		item.availableContexts = body.availableContexts;
 		item.contextDetails = {}
 		body.availableContexts.forEach(function(context){
-			console.log(context)
+			// console.log(context)
 			item.contextDetails[context]={}
 			var details = item.contextDetails[context];
 			if(context === body.context){
@@ -150,7 +161,7 @@ function processItem(item, body, callback){
 		}
 	}
 	item.save(function(err){
-		console.log("saved")
+		// console.log("saved")
 		if(err){
 			console.log(err)
 		}

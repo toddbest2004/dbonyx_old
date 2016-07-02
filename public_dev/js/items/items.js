@@ -11,7 +11,7 @@ angular.module('ItemCtrls', [])
 		$http({
 			method: 'GET',
 			url: '/api/item/pretty/'+id,
-			params: modifiers||{}
+			params: {modifiers:modifiers||{}}
 		}).then(function success(response){
 			var item=response.data.item
 			callback(item)
@@ -75,8 +75,6 @@ angular.module('ItemCtrls', [])
 			$scope.item="Loading"
 			$scope.loading=true
 			itemService.getItem($scope.itemId, $scope.modifiers, function(item){
-				console.log(item)
-				console.log($scope.modifiers)
 				$scope.item=item
 				$scope.loading=false
 			})
@@ -132,7 +130,6 @@ angular.module('ItemCtrls', [])
 		restrict: "A",
 		link: function(scope, element, attributes){
 			var itemDisplay
-
 			element.bind('mouseover', function(e){
 				var item = scope.item||scope.$parent.item
 				var itemId = item.id||item._id||item.itemId
@@ -141,7 +138,7 @@ angular.module('ItemCtrls', [])
 				}
 				
 				var el = angular.element("<div class='itemHover'>")
-				itemDisplay = el.append($compile('<item-display item-id="'+itemId+'">')(scope))
+				itemDisplay = el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
 				angular.element(document.body).append(itemDisplay)
 
 				var css = {

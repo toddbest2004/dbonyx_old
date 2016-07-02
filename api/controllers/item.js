@@ -20,7 +20,12 @@ router.get('/search/:term', function(req, res){
 
 router.get("/pretty/:id", function(req, res){
 	var id = parseInt(req.params.id)
-	var modifiers = req.query
+	var modifiers = req.query.modifiers
+	try{
+		modifiers = JSON.parse(modifiers)
+	}catch(e){
+		modifiers = {}
+	}
 	if(!id){
 		res.status(400).send({error:"Invalid id."})
 		return
@@ -65,6 +70,45 @@ router.get("/:id", function(req, res){
 module.exports = router
 
 function prettify(item, modifiers){
+	//todo: track equipped itemset items
+	//todo: update based on bonuslists/contexts
+	//
+
+	if(modifiers.context&&item.availableContexts.indexOf(modifiers.context)!==-1){
+		item.context=modifiers.context
+	}
+	item.stats = item.contextDetails[item.context].bonusStats||item.stats
+
+	//modifiers
+	if(modifiers.bonusLists){
+		var bonusStats = {}
+		item.stats.forEach(function(stat){
+			bonusStats[stat.stat]=stat.amount
+		})
+		modifiers.bonusLists.forEach(function(bonusId){
+			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
+
+			for(key in bonuses){
+				if(key==='statDeltas'){
+
+					for(stat in bonuses[key]){
+						bonusStats[stat]=bonusStats[stat]||0
+						bonusStats[stat]+=bonuses[key][stat]
+					}
+				}else if(key==='nameDescription'){
+					item.nameDescription += " " + bonuses[key]
+				}else{
+					item[key]=bonuses[key]
+				}
+			}
+		})
+		item.statDetails = []
+		for(key in bonusStats){
+			item.statDetails.push({stat:parseInt(key), amount:bonusStats[key]}) 
+		}
+	}
+
+	console.log(modifiers)
 
 	item.itemSubClass = itemConstants.classes[item.itemClass].subclasses[item.itemSubClass]
 	item.itemClass = itemConstants.classes[item.itemClass].name
@@ -73,7 +117,7 @@ function prettify(item, modifiers){
 	
 	item.itemBind = itemConstants.itemBinds[item.itemBind]
 	//prettify item stats
-	var bonusStats = item.contextDetails[item.context].bonusStats
+	var bonusStats = item.statDetails
 	if(bonusStats.length>0){
 		item.stats=[]
 		for(var i=0;i<bonusStats.length;i++){
@@ -117,6 +161,8 @@ function prettify(item, modifiers){
 	if(rand = parseInt(modifiers.rand)){
 		item.name+=itemConstants.randIds[rand]?itemConstants.randIds[rand].suffix:' of Unknown Enchant'
 	}
+
+	// console.log(item)
 
 	return item
 }

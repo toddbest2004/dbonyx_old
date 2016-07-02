@@ -9,7 +9,9 @@ var increment = 20
 var callCount = 0
 
 var ignoredKeys = ['id','bonusSummary', 'bonusLists', 'bonusStats', 'context','availableContexts', 'itemSpells', 'itemSource']
-setTimeout(start, 1000)
+// setTimeout(start, 1000)
+
+setTimeout(function(){startSpecific(128054)},1000)
 
 function start(){
 	db.item.find({contextComplete:false}).limit(10).exec(function(err, items){
@@ -25,11 +27,19 @@ function start(){
 	})
 }
 
+function startSpecific(id){
+	db.item.findOne({itemId:id}, function(err, item){
+		console.log(item.itemId)
+		processItem(item)
+	})
+}
+
 var itemQueue = async.queue(function(task, callback){
 	processContexts(task.item, callback)
 })
 
 var contextQueue = async.queue(function(task, callback){
+	console.log("context")
 	getContextItem(task.item, task.context, function(newItem){
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
@@ -81,7 +91,12 @@ function processContexts(item, cb){
 }
 
 function getContextItem(item, context, cb){
-	var url = "https://us.api.battle.net/wow/item/"+item.itemId+"/"+context+"?bl=-1&locale=en_US&apikey="+process.env.API
+	var url = "https://us.api.battle.net/wow/item/"+item.itemId
+	if(context!==""){
+		url+="/"+context
+	}
+	url+="?bl=-1&locale=en_US&apikey="+process.env.API
+
 	request({
 		uri: url,
 		json: true
@@ -102,7 +117,13 @@ function getContextItem(item, context, cb){
 }
 
 function getBonusDetails(task, cb){
-	var url = "https://us.api.battle.net/wow/item/"+task.item.itemId+"/"+task.context+"?bl="+task.bonusId+"&locale=en_US&apikey="+process.env.API
+	var url = "https://us.api.battle.net/wow/item/"+task.item.itemId
+	if(task.context!==""){
+		url+="/"+task.context
+	}
+	url+="?bl="+task.bonusId+"&locale=en_US&apikey="+process.env.API
+
+
 	request({
 		uri: url,
 		json: true
@@ -137,6 +158,7 @@ function getBonusDetails(task, cb){
 				cb(task.item)
 			}
 		}else{
+			console.log(response)
 			// if(response.statusCode!=404)
 			cb(task.item)
 		}

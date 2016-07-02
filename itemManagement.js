@@ -58,7 +58,7 @@ function findItem(id, context){
 	if(context){
 		url = "https://us.api.battle.net/wow/item/"+id+"/"+context+"?bl=-1&locale=en_US&apikey="+process.env.API
 	}else{
-		url = "https://us.api.battle.net/wow/item/"+id+"?locale=en_US&apikey="+process.env.API
+		url = "https://us.api.battle.net/wow/item/"+id+"?bl=-1&locale=en_US&apikey="+process.env.API
 	}
 	// console.log(url)
 	request({

@@ -69,11 +69,11 @@ router.get("/items", function(req, res){
 		for(key in character.items){
 			// console.log(key)
 			if(character.items[key].stats){
-				console.log(key)
+				// console.log(key)
 				character.items[key].stats.forEach(function(stat){
-					console.log(stat)
+					// console.log(stat)
 				})
-				console.log('_____')
+				// console.log('_____')
 			}
 		}
 		res.json({items:character.items})

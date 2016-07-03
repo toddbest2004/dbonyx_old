@@ -22,6 +22,7 @@ startImport(parseInt(process.argv[2])||null)
 // findItem(929)
 
 function startImport(start){
+	queryCount=0
 	if(start){
 		startCount = start
 		myCount = start

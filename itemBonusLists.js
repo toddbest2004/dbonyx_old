@@ -12,7 +12,15 @@ var queryCount = 0
 var ignoredKeys = ['id','bonusSummary', 'bonusLists', 'bonusStats', 'context','availableContexts', 'itemSpells', 'itemSource']
 // setTimeout(start, 1000)
 
-setTimeout(function(){start()},2000)
+setTimeout(setup,2000)
+
+function setup(){
+	db.item.update({contextComplete:true,availableContexts:[""],'contextDetails..bonusLists':{$ne:[],$exists:true}},{$set:{contextComplete:false}},{multi:true}).exec(function(err, count){
+		console.log(err)
+		console.log(count)
+		start()
+	})
+}
 
 function start(){
 	var itemsToProcess=false

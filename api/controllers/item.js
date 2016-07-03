@@ -39,6 +39,7 @@ router.get("/pretty/:id", function(req, res){
 			res.status(404).send({error:"Item not found."})
 			return
 		}
+
 		item=prettify(item, modifiers)
 		res.send({item:item})
 		return
@@ -84,8 +85,8 @@ function prettify(item, modifiers){
 	item.stats.forEach(function(stat){
 		bonusStats[stat.stat]=stat.amount
 	})
+
 	if(modifiers.bonusLists){
-		console.log('bonusLists')
 		modifiers.bonusLists.forEach(function(bonusId){
 			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
 
@@ -98,12 +99,15 @@ function prettify(item, modifiers){
 					}
 				}else if(key==='nameDescription'){
 					item.nameDescription += " " + bonuses[key]
+				}else if(key==='itemSet'){
+					//ignore
 				}else{
 					item[key]=bonuses[key]
 				}
 			}
 		})
 	}
+		// console.log(item.itemSet)
 	item.statDetails = []
 	for(key in bonusStats){
 		item.statDetails.push({stat:parseInt(key), amount:bonusStats[key]}) 
@@ -119,13 +123,11 @@ function prettify(item, modifiers){
 	//prettify item stats
 	var bonusStats = item.statDetails||[]
 	if(bonusStats.length>0){
-		console.log("bonusStats")
 		item.stats=[]
 		for(var i=0;i<bonusStats.length;i++){
 			//Get the bonus stat information from itemConstants.js			
 			var mystat = itemConstants.bonusStats[bonusStats[i].stat]||{}
 			var stat = {}
-			console.log(bonusStats)
 			stat.name = mystat.name||'UNKNOWN STAT'
 			stat.class = itemConstants.bonusStatClasses[mystat.class||0]
 			stat.order = bonusStats[i].stat
@@ -134,23 +136,27 @@ function prettify(item, modifiers){
 		}
 	}
 
-	console.log(item.stats)
-	console.log(item.statdetails)
 	//weapon stats
 	if(item.weaponInfo){
 		item.weaponInfo.weaponSpeed = item.weaponInfo.weaponSpeed.toFixed(2)
 		item.weaponInfo.dps = item.weaponInfo.dps.toFixed(2)
 	}
 
-	//itemSets
-	if(item.itemSet){
+		console.log(modifiers)
+	//Item Sets
+	if(modifiers.tooltipParams&&modifiers.tooltipParams.set){
+		// console.log(modifiers)
 		item.itemSet.equipped=0
 		for(var i=0; i<item.itemSet.items.length;i++){
-			//TODO: test against equipped modifiers
 			item.itemSet.items[i].equipped=false
+			if(modifiers.tooltipParams.set.indexOf(item.itemSet.items[i].itemId)!==-1){
+				item.itemSet.items[i].equipped=true
+				item.itemSet.equipped++
+			}
 		}
 	}
 
+	//Item Spells
 	if(item.itemSpells){
 		for(var i=0; i<item.itemSpells.length;i++){
 			var spell=item.itemSpells[i]
@@ -161,7 +167,8 @@ function prettify(item, modifiers){
 
 		}
 	}
-	// console.log(item.itemSet)
+
+	//Item Random Enchants
 	var rand
 	if(rand = parseInt(modifiers.rand)){
 		item.name+=itemConstants.randIds[rand]?itemConstants.randIds[rand].suffix:' of Unknown Enchant'

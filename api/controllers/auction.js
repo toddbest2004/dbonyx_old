@@ -252,6 +252,7 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 							auction.item.name="Cage: "+battlepetNames[modifier.value];
 						}
 					});
+					auction.item.quality=auction.item.petQualityId;
 				}
 				return auction;
 			});

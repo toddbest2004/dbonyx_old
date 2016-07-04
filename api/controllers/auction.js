@@ -16,7 +16,14 @@ var validFilters = {
 	'Is Equippable':{name:'equippable',type:'boolean'}
 	// 'Agility':{'bonusStats.stat':3}
 };
+var battlepetNames = {};
 var realmArray = {};
+
+db.battlepet.find({},function(err, battlepets){
+	battlepets.forEach(function(pet){
+		battlepetNames[pet._id]=pet.name;
+	});
+});
 
 db.realm.find({}).populate('masterSlug').exec(function(err, realms){
 	realms.forEach(function(realm){
@@ -229,9 +236,22 @@ function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems)
 	auctionQuery.lean().exec(function(err, auctions){
 		auctionQuery.limit(0).skip(0).count(function(err, count){
 			auctions.map(function(auction){
-				auction.item=auction.item||{name:"Unknown Item"};
+				auction.item=auction.item||{name:"Unknown Item",_id:0,itemId:0};
 				if(auction.rand){
 					auction.item.suffix=itemConstants.randIds[auction.rand]?itemConstants.randIds[auction.rand].suffix:" of unknown Enchant";
+				}
+				for(var key in auction){
+					// console.log(key);
+					if(key!=='item'&&key!=='_id'){
+						auction.item[key]=auction[key];
+					}
+				}
+				if(auction.item._id===82800){
+					auction.item.modifiers.forEach(function(modifier){
+						if(modifier.type===3){
+							auction.item.name="Cage: "+battlepetNames[modifier.value];
+						}
+					});
 				}
 				return auction;
 			});

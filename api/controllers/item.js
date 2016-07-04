@@ -40,8 +40,8 @@ router.get("/pretty/:id", function(req, res){
 			return
 		}
 
-		item=prettify(item, modifiers)
-		res.send({item:item})
+		item=prettify(item, modifiers, res);
+		// res.send({item:item})
 		return
 	})
 })
@@ -70,10 +70,24 @@ router.get("/:id", function(req, res){
 
 module.exports = router
 
-function prettify(item, modifiers){
+function prettify(item, modifiers, res){
 	//todo: track equipped itemset items
 	//todo: update based on bonuslists/contexts
-	//
+
+	//auction modifiers
+	if(modifiers.modifiers){
+		if(Array.isArray(modifiers.modifiers)){
+			modifiers.modifiers.forEach(function(modifier){
+				// console.log(modifier)
+			})
+		}
+	}
+
+	//special handling of caged battlepets
+	if(item.itemId===82800){
+		prettifyPet(item, modifiers, res);
+		return;
+	}
 
 	if(modifiers.context&&item.availableContexts.indexOf(modifiers.context)!==-1){
 		item.context=modifiers.context
@@ -88,6 +102,11 @@ function prettify(item, modifiers){
 
 	if(modifiers.bonusLists){
 		modifiers.bonusLists.forEach(function(bonusId){
+			//auctionhouse conversion
+			if(bonusId.bonusListId){
+				bonusId=bonusId.bonusListId;
+			}
+
 			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
 
 			for(key in bonuses){
@@ -142,7 +161,7 @@ function prettify(item, modifiers){
 		item.weaponInfo.dps = item.weaponInfo.dps.toFixed(2)
 	}
 
-		console.log(modifiers)
+		// console.log(modifiers)
 	//Item Sets
 	if(modifiers.tooltipParams&&modifiers.tooltipParams.set){
 		// console.log(modifiers)
@@ -176,5 +195,35 @@ function prettify(item, modifiers){
 
 	// console.log(item)
 
-	return item
+	res.send({item:item});
+}
+
+function prettifyPet(item, modifiers, res){
+	//Item Spells
+	if(item.itemSpells){
+		for(var i=0; i<item.itemSpells.length;i++){
+			var spell=item.itemSpells[i]
+			if(spell.spell.description===''&&spell.trigger=="ON_USE"){
+				spell.spell.description=item.description
+			}
+			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger]
+
+		}
+	}
+	if(modifiers&&modifiers.modifiers&&Array.isArray(modifiers.modifiers)){
+		var petId, petLevel;
+		modifiers.modifiers.forEach(function(modifier){
+			if(modifier.type===3){
+				petId = modifier.value;
+			}
+			if(modifier.type===5){
+				petLevel = modifier.value;
+			}
+		})
+		db.battlepet.findOne({_id:petId}, function(err, battlepet){
+			item.name=battlepet.name;
+			item.icon=battlepet.icon;
+			res.send({item:item});
+		})
+	}
 }

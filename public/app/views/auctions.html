@@ -27,14 +27,6 @@
 		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
-				<div class="auctionText">
-					<div class="pull-left" id="auctionLoading" ng-if="loading">
-						<h4><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h4>
-					</div>
-
-					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
-				</div>
-				<div class="clearfix"></div>
 				<div>
 					<div class="pagination" ng-click="firstPage()">
 						<i class="fa fw fa-lg fa-angle-double-left"></i>
@@ -52,6 +44,16 @@
 						<i class="fa fw fa-lg fa-angle-double-right"></i>
 					</div>
 				</div>
+				<div class="auctionText">
+					<div class="pull-left" id="auctionLoading" ng-if="loading">
+						<h3><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h3>
+					</div>
+
+					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
+				</div>
+
+
+				<div class="clearfix"></div>
 			</div>
 			<div class="auctionResultTable table table-condensed">
 				<div class="row auctionResultRow">

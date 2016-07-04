@@ -5,7 +5,8 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 20
+var increment = 40
+var queryCount = 0
 
 console.log(process.argv[2])
 
@@ -21,6 +22,7 @@ startImport(parseInt(process.argv[2])||null)
 // findItem(929)
 
 function startImport(start){
+	queryCount=0
 	if(start){
 		startCount = start
 		myCount = start
@@ -47,8 +49,17 @@ function findItems(){
 	 	findItem(i, null)
 	}
 	myCount+=increment
-	if(myCount > startCount + 10000){
+	if(myCount > 150000){
+		console.log("Item id: "+myCount)
+		console.log("Maximum id reached. Ending.")
 		clearInterval(intervalId)
+		return
+	}
+	if(queryCount > 30000){
+		console.log("Query count: "+queryCount)
+		console.log("Query threshold reached, sleeping for 1 hour.")
+		clearInterval(intervalId)
+		setTimeout(startImport, 1200000)
 	}
 }
 
@@ -56,9 +67,9 @@ function findItem(id, context){
 	//console.log("loading")
 	var url
 	if(context){
-		url = "https://us.api.battle.net/wow/item/"+id+"/"+context+"?locale=en_US&apikey="+process.env.API
+		url = "https://us.api.battle.net/wow/item/"+id+"/"+context+"?bl=-1&locale=en_US&apikey="+process.env.API
 	}else{
-		url = "https://us.api.battle.net/wow/item/"+id+"?locale=en_US&apikey="+process.env.API
+		url = "https://us.api.battle.net/wow/item/"+id+"?bl=-1&locale=en_US&apikey="+process.env.API
 	}
 	// console.log(url)
 	request({
@@ -66,16 +77,17 @@ function findItem(id, context){
 		json: true
 	}, function(error, response, body){
 		if(!error && response.statusCode===200){
-			itemQueue.push({body:body}, function(){console.log("item: done.")})
+			queryCount = response.headers["x-plan-quota-current"]
+			itemQueue.push({body:body}, function(){console.log(id+ ": done.")})
 		}else{
 			// if(response.statusCode!=404)
-				console.log(id, body)
+				// console.log(id, body)
 		}
 	})	
 }
 
 function insertItem(body, callback){
-	console.log("****"+body.id)
+	// console.log("****"+body.id)
 	db.item.findOne({_id:body.id}).exec(function(err, item){
 		if(err){
 			console.log(err)
@@ -108,25 +120,15 @@ function processItem(item, body, callback){
 	}
 	// console.log(item)
 	if(body.bonusStats.length>0){
-		// console.log("stats")
-		for(var i=0; i<body.bonusStats.length; i++){
-			// addStats(item, i);
 			item.hasItemStats = true
-		}
 	}
-	//TODO: Currently an error with adding spells. not sure why.
 	if(body.itemSpells.length>0){
-		// console.log("spells")
-		// item.itemSpells=[]
 		item.hasItemSpells = true
-		// for(var i=0; i<body.itemSpells.length; i++){
-		// 	// console.log(body.itemSpells[i])
-		// }
 	}
 	if(body.weaponInfo){
-		// console.log("weapon")
 		item.weaponInfo = body.weaponInfo
-		// addWeaponInfo(item)
+		item.isWeapon = true
+
 	}
 	if(body.hasSockets){
 		item.socketInfo.sockets=[]
@@ -137,17 +139,30 @@ function processItem(item, body, callback){
 			// console.log(item.socketInfo.sockets[i])
 		}
 	}
-	// if(item.itemSet){
-	// 	item.itemSet = item.itemSet.id	
-	// }
-	if(item.availableContexts && item.availableContexts !== "" && item.availableContexts.length>0){
-		//TODO: Handle multiple contexts
+	if(item.itemSet&&item.itemSet.id){
+		item.hasItemSet = true;
 	}
-	if(item.bonusSummary.defaultBonusLists.length!==0){
-		item.hasItemBonusLists = true;
+	item.availableContexts = [];
+	if(body.availableContexts && body.availableContexts !== ""){
+		item.availableContexts = body.availableContexts;
+		item.contextDetails = {}
+		body.availableContexts.forEach(function(context){
+			// console.log(context)
+			item.contextDetails[context]={}
+			var details = item.contextDetails[context];
+			if(context === body.context){
+				details.bonusLists = body.bonusSummary.chanceBonusLists;
+				details.defaultBonusLists = body.bonusSummary.defaultBonusLists;
+				details.bonusStats = item.bonusStats
+				details.bonusListDetails = {}
+			}
+		})
+		if(body.availableContexts.length>1){
+			item.contextComplete=false;
+		}
 	}
 	item.save(function(err){
-		console.log("saved")
+		// console.log("saved")
 		if(err){
 			console.log(err)
 		}
@@ -156,20 +171,4 @@ function processItem(item, body, callback){
 	})
 }
 
-//These are not currently called
-//
 
-
-
-function addSpells(item, i){
-	db.spell.findOrCreate({where:{spellId:item.itemSpells[i].spellId}}).spread(function(spell, created){
-		spell.name = item.itemSpells[i].spell.name
-		spell.icon = item.itemSpells[i].spell.icon
-		spell.description = item.itemSpells[i].spell.description
-		spell.castTime = item.itemSpells[i].spell.castTime
-		spell.save()
-		item.addSpell(spell, {nCharges:item.itemSpells[i].nCharges, consumable:item.itemSpells[i].consumable, categoryId:item.itemSpells[i].categoryId, triggerType:item.itemSpells[i].trigger}).then(function(){
-			
-		})
-	})
-}

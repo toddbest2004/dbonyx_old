@@ -64,9 +64,6 @@ describe("Forums", function(){
 	describe("Categories", function(){
 		it("should allow admins to create categories", function(done){
 			request.post({url:base_url+"/api/forum/category", form:{name:"top category"},headers:{Authorization: "JWT "+admin}}, function(err, response, body){
-				console.log(err)
-				console.log(response.request.headers)
-				console.log(body)
 				done()
 			})
 		})

@@ -20,7 +20,12 @@ router.get('/search/:term', function(req, res){
 
 router.get("/pretty/:id", function(req, res){
 	var id = parseInt(req.params.id)
-	var modifiers = req.query
+	var modifiers = req.query.modifiers
+	try{
+		modifiers = JSON.parse(modifiers)
+	}catch(e){
+		modifiers = {}
+	}
 	if(!id){
 		res.status(400).send({error:"Invalid id."})
 		return
@@ -34,8 +39,9 @@ router.get("/pretty/:id", function(req, res){
 			res.status(404).send({error:"Item not found."})
 			return
 		}
-		item=prettify(item, modifiers)
-		res.send({item:item})
+
+		item=prettify(item, modifiers, res);
+		// res.send({item:item})
 		return
 	})
 })
@@ -64,7 +70,68 @@ router.get("/:id", function(req, res){
 
 module.exports = router
 
-function prettify(item, modifiers){
+function prettify(item, modifiers, res){
+	//todo: track equipped itemset items
+	//todo: update based on bonuslists/contexts
+
+	//auction modifiers
+	if(modifiers.modifiers){
+		if(Array.isArray(modifiers.modifiers)){
+			modifiers.modifiers.forEach(function(modifier){
+				// console.log(modifier)
+			})
+		}
+	}
+
+	//special handling of caged battlepets
+	if(item.itemId===82800){
+		prettifyPet(item, modifiers, res);
+		return;
+	}
+
+	if(modifiers.context&&item.availableContexts.indexOf(modifiers.context)!==-1){
+		item.context=modifiers.context
+	}
+	item.stats = item.contextDetails[item.context].bonusStats||item.stats
+	// console.log(item.stats)
+	//modifiers
+	var bonusStats = {}
+	item.stats.forEach(function(stat){
+		bonusStats[stat.stat]=stat.amount
+	})
+
+	if(modifiers.bonusLists){
+		modifiers.bonusLists.forEach(function(bonusId){
+			//auctionhouse conversion
+			if(bonusId.bonusListId){
+				bonusId=bonusId.bonusListId;
+			}
+
+			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
+
+			for(key in bonuses){
+				if(key==='statDeltas'){
+
+					for(stat in bonuses[key]){
+						bonusStats[stat]=bonusStats[stat]||0
+						bonusStats[stat]+=bonuses[key][stat]
+					}
+				}else if(key==='nameDescription'){
+					item.nameDescription += " " + bonuses[key]
+				}else if(key==='itemSet'){
+					//ignore
+				}else{
+					item[key]=bonuses[key]
+				}
+			}
+		})
+	}
+		// console.log(item.itemSet)
+	item.statDetails = []
+	for(key in bonusStats){
+		item.statDetails.push({stat:parseInt(key), amount:bonusStats[key]}) 
+	}
+	// console.log(modifiers)
 
 	item.itemSubClass = itemConstants.classes[item.itemClass].subclasses[item.itemSubClass]
 	item.itemClass = itemConstants.classes[item.itemClass].name
@@ -73,34 +140,42 @@ function prettify(item, modifiers){
 	
 	item.itemBind = itemConstants.itemBinds[item.itemBind]
 	//prettify item stats
-	if(item.bonusStats.length>0){
+	var bonusStats = item.statDetails||[]
+	if(bonusStats.length>0){
 		item.stats=[]
-		for(var i=0;i<item.bonusStats.length;i++){
+		for(var i=0;i<bonusStats.length;i++){
 			//Get the bonus stat information from itemConstants.js			
-			var mystat = itemConstants.bonusStats[item.bonusStats[i].stat]||{}
+			var mystat = itemConstants.bonusStats[bonusStats[i].stat]||{}
 			var stat = {}
 			stat.name = mystat.name||'UNKNOWN STAT'
 			stat.class = itemConstants.bonusStatClasses[mystat.class||0]
-			stat.order = item.bonusStats[i].stat
-			stat.amount = item.bonusStats[i].amount
+			stat.order = bonusStats[i].stat
+			stat.amount = bonusStats[i].amount
 			item.stats.push(stat)
 		}
 	}
+
 	//weapon stats
 	if(item.weaponInfo){
 		item.weaponInfo.weaponSpeed = item.weaponInfo.weaponSpeed.toFixed(2)
 		item.weaponInfo.dps = item.weaponInfo.dps.toFixed(2)
 	}
 
-	//itemSets
-	if(item.itemSet){
+		// console.log(modifiers)
+	//Item Sets
+	if(modifiers.tooltipParams&&modifiers.tooltipParams.set){
+		// console.log(modifiers)
 		item.itemSet.equipped=0
 		for(var i=0; i<item.itemSet.items.length;i++){
-			//TODO: test against equipped modifiers
 			item.itemSet.items[i].equipped=false
+			if(modifiers.tooltipParams.set.indexOf(item.itemSet.items[i].itemId)!==-1){
+				item.itemSet.items[i].equipped=true
+				item.itemSet.equipped++
+			}
 		}
 	}
 
+	//Item Spells
 	if(item.itemSpells){
 		for(var i=0; i<item.itemSpells.length;i++){
 			var spell=item.itemSpells[i]
@@ -111,11 +186,44 @@ function prettify(item, modifiers){
 
 		}
 	}
-	// console.log(item.itemSet)
+
+	//Item Random Enchants
 	var rand
 	if(rand = parseInt(modifiers.rand)){
 		item.name+=itemConstants.randIds[rand]?itemConstants.randIds[rand].suffix:' of Unknown Enchant'
 	}
 
-	return item
+	// console.log(item)
+
+	res.send({item:item});
+}
+
+function prettifyPet(item, modifiers, res){
+	//Item Spells
+	if(item.itemSpells){
+		for(var i=0; i<item.itemSpells.length;i++){
+			var spell=item.itemSpells[i]
+			if(spell.spell.description===''&&spell.trigger=="ON_USE"){
+				spell.spell.description=item.description
+			}
+			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger]
+
+		}
+	}
+	if(modifiers&&modifiers.modifiers&&Array.isArray(modifiers.modifiers)){
+		var petId, petLevel;
+		modifiers.modifiers.forEach(function(modifier){
+			if(modifier.type===3){
+				petId = modifier.value;
+			}
+			if(modifier.type===5){
+				petLevel = modifier.value;
+			}
+		})
+		db.battlepet.findOne({_id:petId}, function(err, battlepet){
+			item.name=battlepet.name;
+			item.icon=battlepet.icon;
+			res.send({item:item});
+		})
+	}
 }

@@ -93,6 +93,10 @@ $quality7: #E6CC80;
     text-decoration:none;
   }
 }
+.itemHover {
+  z-index: 100;
+  position: absolute;
+}
 .itemQuantity{
   font-family: 'Arial';
   background-color: black;
@@ -486,4 +490,12 @@ $quality7: #E6CC80;
   text-align: center;
   padding:5px 0;
   border-radius: 4px;
+}
+.mount-display{
+  text-align:center;
+}
+.mount-icon{
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 8px;
 }

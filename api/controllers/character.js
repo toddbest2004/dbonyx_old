@@ -1,90 +1,101 @@
+'use strict';
 var express = require("express");
 var request = require("request");
-var fs = require("fs")
+var fs = require("fs");
 var router = express.Router();
 
-var realmArray
-var regionArray = ['us', 'eu']
+var realmArray;
+var regionArray = ['us', 'eu'];
 
 var db = require("../../mongoose");
 // var characterData = require("../strangerogue.json")
 // var itemPositions = require("../static/itemPositions")
 // var util = require("./modules/util")
 db.realm.find({}, function(err, realms){
-	realmArray = realms.map(function(realm){return realm.name.toLowerCase()})
-})
+	realmArray = realms.map(function(realm){return realm.name.toLowerCase();});
+});
 
 
 
 router.get("/load", function(req, res){
 	if(!req.query.name){
-		res.status(400).json({error:"No name provided."})
-		return
+		res.status(400).json({error:"No name provided."});
+		return;
 	}
 	if(req.query.realm){
-		findCharacter(req.query.realm,req.query.name.capitalize(),res)
+		findCharacter(req.query.realm,req.query.name.capitalize(),res);
 	}else{
-		findMultipleCharacters(req.query.name.capitalize(), res)
-	}
-	
-})
+		findMultipleCharacters(req.query.name.capitalize(), res);
+	}	
+});
 
-router.post("/", function(req, res){
-})
+// router.post("/", function(req, res){
+// });
 
-router.get("/importing", function(req, res){
-})
+// router.get("/importing", function(req, res){
+// })
 
 router.get("/professions", function(req, res){
-	var name = req.query.name.capitalize()
-	var realm = req.query.realm
-	var region = req.query.region.toLowerCase()
+	var name = req.query.name.capitalize();
+	var realm = req.query.realm;
+	var region = req.query.region.toLowerCase();
 	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."})
-		return
+		res.status(400).json({error:"Improper query string."});
+		return;
 	}
 	db.character.findOne({name:name, region:region, realm:realm}).exec(function(err, character){
 		if(err||!character){
-			res.status(404).json({error:"Character not found."})
-			return
+			res.status(404).json({error:"Character not found."});
+			return;
 		}
-		res.json({professions:character.professions})
-	})
-})
+		res.json({professions:character.professions});
+	});
+});
 
 router.get("/items", function(req, res){
-	var name = req.query.name.capitalize()
-	var realm = req.query.realm
-	var region = req.query.region.toLowerCase()
+	var name = req.query.name.capitalize();
+	var realm = req.query.realm;
+	var region = req.query.region.toLowerCase();
 	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."})
-		return
+		res.status(400).json({error:"Improper query string."});
+		return;
 	}
-	db.character.findOne({name:name, region:region, realm:realm}, function(err, character){
+	db.character.findOne({name:name, region:region, realm:realm}).lean().exec(function(err, character){
 		if(err||!character){
-			res.status(404).json({error:"Character not found."})
-			return
+			res.status(404).json({error:"Character not found."});
+			return;
 		}
-		res.json({items:character.items})
-	})
-})
+		// console.log(character.items)
+		// for(var key in character.items){
+		// 	// console.log(key)
+		// 	if(character.items[key].stats){
+		// 		// console.log(key)
+		// 		character.items[key].stats.forEach(function(stat){
+		// 			// console.log(stat)
+		// 		});
+		// 		// console.log('_____')
+		// 	}
+		// }
+		res.json({items:character.items});
+	});
+});
 
 router.get("/achievements", function(req, res){
-	var name = req.query.name.capitalize()
-	var realm = req.query.realm
-	var region = req.query.region.toLowerCase()
+	var name = req.query.name.capitalize();
+	var realm = req.query.realm;
+	var region = req.query.region.toLowerCase();
 	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."})
-		return
+		res.status(400).json({error:"Improper query string."});
+		return;
 	}
 	db.character.findOne({name:name,realm:realm,region:region}).populate('achievements.id').exec(function(err, character){
 		if(err||!character){
 
 		}
 		// console.log(character.achievements)
-		res.json({status:"success",achievements:character.achievements})
-	})
-})
+		res.json({status:"success",achievements:character.achievements});
+	});
+});
 
 router.get("/mounts", function(req, res){
 	var name = req.query.name.capitalize()
@@ -218,11 +229,15 @@ function findMultipleCharacters(name, res){
 
 function importCharacter(name, realm, region, callback){
 	console.log("Importing Character: "+name)
-	var url = "http://"+region+".battle.net/api/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	console.log(name, realm, region)
+	console.log(process.env.API)
+	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	console.log(url)
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
+		// console.log(response)
 		if(!error && response.statusCode===200){
 			processCharacter(name, realm, region, body, callback)
 		}else{
@@ -293,7 +308,7 @@ function processCharacter(name, realm, region, body, callback){
 function importCharacterImages(thumbnail, callback){
 	var uri = "http://us.battle.net/static-render/us/"+thumbnail
 	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"")
-
+	console.log(uri)
 	download(uri+"avatar.jpg",filename+"avatar.jpg")
 	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback)
 	download(uri+"inset.jpg",filename+"inset.jpg")

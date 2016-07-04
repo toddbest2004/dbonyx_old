@@ -1,28 +1,23 @@
 <div ng-controller="characterMain">
 <div class="row" id="content-column-wrapper">
-<div id="main-content">
-<div class="row" ng-if="!character.loading">
-<h1>{{character.name}}</h1>
-<h3>&lt;{{character.guildName}}&gt;</h3>
-<h5>Level {{character.level}}</h5>
-</div>
-<div class="row">
-<div ng-repeat='mount in character.mounts' class="col-md-3 col-sm-3 col-xs-3 col-lg-3" style="display:inline-block;text-align:center;">
-<a href="/mount/{{mount._id}}"><img src="/images/icons/{{mount.icon}}.png">
-<h5>{{mount.name}}</h5></a>
-</div>
-</div>
-</div>
-<sidebar>
-<ul>
-<li><a href="/character/main">Profile</a></li>
-<li><a href="/character/reputation">Reputation</a></li>
-<li><a href="/character/achievements">Achievements</a></li>
-<li><a href="/character/mounts">Mounts</a></li>
-<li><a href="/character/battlepets">Battlepets</a></li>
-<li><a href="/character/professions">Professions</a></li>
-<li><a href="/character/pvp">PvP</a></li>
-</ul>
-</sidebar>
+	<div id="main-content">
+		<div ng-if="!character.loading">
+			<h1>{{character.name}}</h1>
+			<h3>&lt;{{character.guildName}}&gt;</h3>
+			<h5>Level {{character.level}}</h5>
+		</div>
+		<div class="row">
+			<div ng-repeat='mount in character.mounts'>
+				<div class="col-xs-3 mount-display">
+					<a href="/mount/{{mount._id}}"><img src="/images/icons/{{mount.icon}}.png" class="borderQuality{{mount.qualityId}} mount-icon">
+					<h5>{{mount.name}}</h5></a>
+				</div>
+				<div class="clearfix" ng-if="$index%4===3"></div>
+			</div>
+		</div>
+	</div>
+	<sidebar>
+		<character-links></character-links>
+	</sidebar>
 </div>
 </div>

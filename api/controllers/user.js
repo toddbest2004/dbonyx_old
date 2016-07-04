@@ -83,15 +83,19 @@ router.post("/register", function(req, res){
 					return
 				}
 				//Character account successfully created
-				var testMail = {
-					from: 'admin@dbonyx.com',
-					to: newUser.email,
-					subject: 'Welcome to DBOnyx!',
-					html: '<a href="http://www.dbonyx.com/validate/'+newUser.username+'/'+validationString+'">Click here to validate your email</a>'
-				}
-				transporter.sendMail(testMail, function(err, response){
+				if(newUser.email!=="testemail@dbonyx.com"){
+					var testMail = {
+						from: 'admin@dbonyx.com',
+						to: newUser.email,
+						subject: 'Welcome to DBOnyx!',
+						html: '<a href="http://www.dbonyx.com/validate/'+newUser.username+'/'+validationString+'">Click here to validate your email</a>'
+					}
+					transporter.sendMail(testMail, function(err, response){
+						res.json({username:newUser.username, email:newUser.email})
+					})
+				}else{
 					res.json({username:newUser.username, email:newUser.email})
-				})
+				}
 			})
 		})
 	})

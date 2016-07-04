@@ -712,6 +712,10 @@ oi-select.loading:not(.multiple) .select-search:after {
   .itemLink a, .itemLink a:visited, .itemLink a:active, .itemLink a:hover {
     text-decoration: none; }
 
+.itemHover {
+  z-index: 100;
+  position: absolute; }
+
 .itemQuantity {
   font-family: 'Arial';
   background-color: black;
@@ -1104,6 +1108,14 @@ oi-select.loading:not(.multiple) .select-search:after {
   text-align: center;
   padding: 5px 0;
   border-radius: 4px; }
+
+.mount-display {
+  text-align: center; }
+
+.mount-icon {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 8px; }
 
 #user-panel {
   height: 200px;

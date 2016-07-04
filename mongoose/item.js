@@ -16,7 +16,7 @@ var itemSchema = new Schema({
 	icon: String,
 	stackable: Number,
 	itemBind: Number,
-	bonusStats: [bonusStat],
+	// bonusStats: [bonusStat],
 	buyPrice: Number,
 	itemClass: Number,
 	itemSubClass: Number,
@@ -36,26 +36,47 @@ var itemSchema = new Schema({
 	socketInfo: {sockets:[{type:String}],socketBonus:String},
 	itemSource: {sourceId:Number, sourceType:String},
 	baseArmor: Number,
-	hasSockets: Boolean,
-	isAuctionable: Boolean,
+	hasSockets: {type: Boolean, default: false},
+	isAuctionable: {type: Boolean, default: false},
 	armor: Number,
 	displayInfoId: Number,
 	nameDescription: String,
 	nameDescriptionColor: String,
-	upgradable: Boolean,
-	heroicTooltip: Boolean,
-	hasRandomEnchants: Boolean,
+	upgradable: {type: Boolean, default: false},
+	heroicTooltip: {type: Boolean, default: false},
+	hasRandomEnchants: {type: Boolean, default: false},
 	knownRandomEnchants: [Number],
 	context: String,
-	bonusLists: [],
-	avalableContexts: [String],
+	// bonusLists: [Number],
+	weaponInfo: {},
+	isWeapon: {type: Boolean, default: false},
+	availableContexts: [String],
+	contextComplete: {type: Boolean, default: true},
+	contextDetails: {/*
+		"raid-mythic":{
+			bonusLists:[Number],
+			bonusListDetails:{
+				529: {type: 'stat', stat: 2, amount: 4},
+				530: {type: 'quality', quality: 4},
+				531: {type: 'suffix', name: 'Fireflash'},
+				532: {type: 'description', nameDescription: 'Warforged'}
+			},
+			bonusStats: [bonusStat]
+		}
+	*/},
 	itemSet: {id:Number, name: String, items:[{type: Number, ref: 'item'}], setBonuses:[{description:String,threshold:Number}]},
-	bonusSummary: {defaultBonusLists:[], chancebonusLists:[Number], 
-		bonusChances:[{chanceType:String,
-			upgrade:{upgradeType:String,name:String,id:Number},
-			stats:[{statid:String,delta:Number}],
-			sockets:[{socketType:String}]
-		}]},
+	hasItemSet: {type: Boolean, default: false},
+	// bonusSummary: {
+	// 	defaultBonusLists:[Number], 
+	// 	chanceBonusLists:[Number], 
+	// 	bonusChances:[{
+	// 		chanceType:String,
+	// 		upgrade:{upgradeType:String,name:String,id:Number},
+	// 		stats:[{statid:String,delta:Number}],
+	// 		sockets:[{socketType:String}]
+	// 	}]},
+	hasItemBonusLists:Boolean,
+	// bonusListProcessed: Boolean,
 	itemSpells:[{}]
 })
 

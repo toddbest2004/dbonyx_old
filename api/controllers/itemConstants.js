@@ -1,7 +1,8 @@
-var itemConstants = {}
+'use strict';
+var itemConstants = {};
 
-itemConstants.inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun']
-itemConstants.itemBinds = ['', 'Binds when picked up', 'Binds when equipped', 'Binds when used','']
+itemConstants.inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun'];
+itemConstants.itemBinds = ['', 'Binds when picked up', 'Binds when equipped', 'Binds when used',''];
 itemConstants.classes = [
 		{name:"Consumable", subclasses:["Consumable", 'Potion', 'Elixir','Flask', 'Scroll', 'Food & Drink','Item Enhancement','Bandage','Other']},
 		{name:'Container', subclasses:['Bag','Soul Bag', 'Herb Bag', 'Enchanting Bag','Engineering Bag','Gem Bag','Mining Bag','Leatherworking Bag','Inscription Bag','Tackle Box','Cooking Bag']},
@@ -21,9 +22,9 @@ itemConstants.classes = [
 		{name:'Miscellaneous', subclasses:['Junk','Reagent','Companion Pets','Holiday','Other','Mount']},
 		{name:'Glyph', subclasses:['','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid']},
 		{name:'Battle Pets', subclasses:['BattlePet']},
-		{name:'WoW Token', subclasses:['WoW Token']}]
+		{name:'WoW Token', subclasses:['WoW Token']}];
 
-itemConstants.bonusStatClasses = ['itemUnusedProperty', 'itemPrimaryProperty','itemSecondaryProperty']
+itemConstants.bonusStatClasses = ['itemUnusedProperty', 'itemPrimaryProperty','itemSecondaryProperty'];
 itemConstants.bonusStats = {
 	0: {name: 'Unused', class: 0},
 	1: {name: 'Health', class: 0},
@@ -52,7 +53,7 @@ itemConstants.bonusStats = {
 	56: {name: 'Arcane Resistance', class: 1},
 	57: {name: 'PvP Power', class: 2},
 	59: {name: 'Multistrike', class: 2}
-}
+};
 
 itemConstants.randIds = { //{suffix:"",stats:[]}
 	'-5': {suffix:" of the Monkey", stats:[]},
@@ -149,7 +150,7 @@ itemConstants.randIds = { //{suffix:"",stats:[]}
 	'-156': {suffix:"",stats:[]},//Panther or Wraith
 	'-157': {suffix:" of the Panther",stats:[]},//: (upgrade)
 	'-158': {suffix:" of the Wind",stats:[]},//: (upgrade)
-}
+};
 
 itemConstants.itemSpellTriggers = {
 	ON_PROC:"Chance On Hit",
@@ -157,5 +158,5 @@ itemConstants.itemSpellTriggers = {
 	ON_USE:"Use:",
 	ON_PICKUP:"",
 	ON_LEARN:""
-}
-module.exports = itemConstants
+};
+module.exports = itemConstants;

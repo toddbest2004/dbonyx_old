@@ -22,8 +22,8 @@ var npcSchema = new Schema({
 	givesQuest:[Number],
 	endsQuest:[Number],
 	//loots
-	lootCount:Number,
-	drops:[{itemId:{type:Number,ref:'item'},totalCount:Number}],
+	lootCount:{type:Number, default:0},
+	drops:[{_id:{type:Number,ref:'item'},totalCount:Number}],
 })
 
 var npc = mongoose.model('npc', npcSchema)

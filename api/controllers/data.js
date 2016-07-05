@@ -48,8 +48,9 @@ function processObject(obj){
 	for(var key in obj){
 		console.log(key);
 	}
-	processUnits(obj.units);
-	processEvents(obj.events);
+	// processUnits(obj.units);
+	// processEvents(obj.events);
+	processQuests(obj.quests);
 }
 
 function processUnits(units){
@@ -166,9 +167,14 @@ function createLootEvent(id, details, callback){
 	// console.log(details);
 }
 
-// function processQuests(quets){
-
-// }
+function processQuests(quests){
+	if(!quests){
+		return;
+	}
+	for(var id in quests){
+		console.log(quests[id])
+	}
+}
 
 // function processProfessions(profs){
 

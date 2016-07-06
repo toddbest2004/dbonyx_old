@@ -167,14 +167,61 @@ function createLootEvent(id, details, callback){
 	// console.log(details);
 }
 
+var questQueue = async.queue(function(task, callback){
+	updateQuest(task.quest, callback);
+});
+
 function processQuests(quests){
 	if(!quests){
 		return;
 	}
 	for(var id in quests){
-		// console.log(quests[id])
-		console.log(id);
+		var cur = quests[id];
+		var quest = {};
+		quest._id = parseInt(id);
+		if(cur.alliance){
+			quest.isAlliance = true;
+		}
+		if(cur.horde){
+			quest.isHorde = true;
+		}
+		if(cur.description&&typeof(cur.description)==='string'){
+			quest.description = cur.description;
+		}
+		if(cur.questObjectives&&typeof(cur.questObjectives)==='string'){
+			quest.questObjectives = cur.questObjectives;
+		}
+		if(cur.title&&typeof(cur.title)==='string'){
+			quest.title = cur.title;
+		}
+		if(typeof(cur.frequency)==='number'){
+			quest.frequency=parseInt(cur.frequency);
+		}
+		quest.itemRewards = [];
+		if(cur.rewards&&Array.isArray(cur.rewards)){
+			cur.rewards.forEach(function(reward){
+				quest.itemRewards.push({itemId:parseInt(reward.id),quantity:parseInt(reward.numItems)});
+			});
+		}
+		quest.itemChoices = [];
+		if(cur.itemChoices&&Array.isArray(cur.itemChoices)){
+			cur.itemChoices.forEach(function(reward){
+				quest.itemChoices.push({itemId:parseInt(reward.id),quantity:parseInt(reward.numItems)});
+			});
+		}
+
+		questQueue.push({quest:quest},function(){console.log("quest done");});
+		// console.log(id);
+		// console.log(quests[id]);
+		// console.log(quest);
 	}
+}
+
+function updateQuest(quest, cb){
+	db.quest.findOneAndUpdate({_id:quest._id,title:quest.title}, {$set:quest}).exec(function(){
+		console.log(quest._id, quest.title);
+		cb();
+	});
 }
 
 // function processProfessions(profs){

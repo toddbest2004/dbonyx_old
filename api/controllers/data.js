@@ -172,7 +172,8 @@ function processQuests(quests){
 		return;
 	}
 	for(var id in quests){
-		console.log(quests[id])
+		// console.log(quests[id])
+		console.log(id);
 	}
 }
 

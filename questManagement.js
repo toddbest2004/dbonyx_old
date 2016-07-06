@@ -25,7 +25,7 @@ function startImport(start){
 		myCount = start;
 		setTimer();
 	}else{	
-		db.quest.findOne({}).sort({itemId:-1}).exec(function(err, count){
+		db.quest.findOne({}).sort({_id:-1}).exec(function(err, count){
 			// console.log(count)
 			startCount=0;
 			if(count){

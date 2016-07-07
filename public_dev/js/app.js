@@ -65,6 +65,14 @@ $routeProvider
 	controller: 'publicProfileCtrl',
 	templateUrl: 'app/views/publicprofile.html'
 })
+.when('/quests', {
+	// controller: 'allQuestsCtrl'
+	templateUrl: 'app/views/quests.html'
+})
+.when('/quests/:questId', {
+	controller: 'questCtrl',
+	templateUrl: 'app/views/quest.html'
+})
 .when('/register', {
 	templateUrl: 'app/views/register.html'
 })

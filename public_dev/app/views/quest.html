@@ -1,0 +1,11 @@
+<div class="row" id="content-column-wrapper">
+	<div id="main-content">
+		<h1>{{quest.title}}</h1>
+		<h3><small>{{quest.category}}</small></h3>
+		<p>{{quest.description}}</p>
+		<div ng-repeat="item in quest.itemRewards">
+			<item-link item="item.itemId"></item-link>
+		</div>
+	</div>
+	<sidebar></sidebar>
+</div>

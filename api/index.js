@@ -21,6 +21,8 @@ var itemCtrl = require("./controllers/item");
 router.use("/item", itemCtrl);
 var mountCtrl = require("./controllers/mount");
 router.use("/mount", mountCtrl);
+var questCtrl = require("./controllers/quest");
+router.use("/quest", questCtrl);
 var userCtrl = require("./controllers/user");
 router.use("/user", userCtrl);
 var watchlistCtrl = require("./controllers/watchlist");

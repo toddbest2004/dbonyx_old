@@ -66,7 +66,7 @@ $routeProvider
 	templateUrl: 'app/views/publicprofile.html'
 })
 .when('/quests', {
-	// controller: 'allQuestsCtrl'
+	controller: 'allQuestsCtrl',
 	templateUrl: 'app/views/quests.html'
 })
 .when('/quests/:questId', {

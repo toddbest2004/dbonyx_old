@@ -4,7 +4,10 @@ var db = require("../../mongoose");
 var router = express.Router();
 
 router.get("/", function(req, res){
-
+	console.log(req.query);
+	db.quest.find({}).limit(50).exec(function(err, quests){
+		res.json({quests:quests});
+	});
 });
 
 router.get("/:id", function(req, res){

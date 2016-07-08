@@ -136,6 +136,10 @@ angular.module('ItemCtrls', [])
 		link: function(scope, element, attributes){
 			var itemDisplay
 			element.bind('mouseover', function(e){
+				var css = {
+					left: (e.clientX+$window.scrollX+5) + 'px',
+					top: (e.clientY+$window.scrollY) + 'px'
+				}
 				if(!scope.el){
 					var item = scope.item||scope.$parent.item
 					var itemId = item.id||item._id||item.itemId
@@ -146,13 +150,11 @@ angular.module('ItemCtrls', [])
 					scope.el = angular.element("<div class='itemHover'>")
 					itemDisplay = scope.el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
 					angular.element(document.body).append(itemDisplay)
-					var css = {
-						left: (e.clientX+$window.scrollX+5) + 'px',
-						top: (e.clientY+$window.scrollY) + 'px'
-					}
+					
 					itemDisplay.css(css)
 				}else{
 					angular.element(document.body).append(scope.el)
+					scope.el.css(css)
 				}
 			})
 

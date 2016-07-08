@@ -1,0 +1,10 @@
+<div class="row" id="content-column-wrapper">
+	<div id="main-content">
+		<h1>Browse Quests</h1>
+
+		<div ng-repeat="quest in quests track by $index">
+			<a href="/quests/{{quest._id}}">{{quest.title}}</a>
+		</div>
+	</div>
+	<sidebar></sidebar>
+</div>

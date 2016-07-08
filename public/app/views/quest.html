@@ -2,7 +2,12 @@
 	<div id="main-content">
 		<h1>{{quest.title}}</h1>
 		<h3><small>{{quest.category}}</small></h3>
-		<p>{{quest.description}}</p>
+		<p style="white-space:pre-wrap;">{{quest.description}}</p>
+		<div ng-if="quest.questObjectives">
+			<ul>
+				<li>{{quest.questObjectives}}</li>
+			</ul>
+		</div>
 		<div ng-if="quest.itemRewards.length">
 			<h3>You Will Recieve:</h3>
 			<div ng-repeat="item in quest.itemRewards">

@@ -3,8 +3,17 @@
 		<h1>{{quest.title}}</h1>
 		<h3><small>{{quest.category}}</small></h3>
 		<p>{{quest.description}}</p>
-		<div ng-repeat="item in quest.itemRewards">
-			<item-link item="item.itemId"></item-link>
+		<div ng-if="quest.itemRewards.length">
+			<h3>You Will Recieve:</h3>
+			<div ng-repeat="item in quest.itemRewards">
+				<item-link item="item.itemId" quantity="{{item.quantity}}"></item-link>
+			</div>
+		</div>
+		<div ng-if="quest.itemChoices.length">
+			<h3>You May Choose:</h3>
+			<div ng-repeat="item in quest.itemChoices">
+				<item-link item="item.itemId" quantity="{{item.quantity}}"></item-link>
+			</div>
 		</div>
 	</div>
 	<sidebar></sidebar>

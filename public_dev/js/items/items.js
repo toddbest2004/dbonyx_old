@@ -94,10 +94,13 @@ angular.module('ItemCtrls', [])
 })
 .directive('itemLink', [function(){
 	var controller = ['$scope',function($scope){
-		$scope.itemLinkPath = "/item/"+($scope.item.itemId||0)
+		if(!$scope.item){ //defaults if item isn't passed properly
+			$scope.item={name:"Unknown Item", itemId:0,_id:0};
+		}
+		$scope.itemLinkPath = "/item/"+$scope.item.itemId;
 
 		var options = []
-		if($scope.rand!=='0'){
+		if($scope.rand!=='0'&&$scope.rand!==undefined){
 			options.push('rand='+$scope.rand)
 		}
 
@@ -113,6 +116,8 @@ angular.module('ItemCtrls', [])
 		if($scope.quantity&&parseInt($scope.quantity)!==1){
 			$scope.showQuantity=true
 		}
+
+
 	}]
 	return {
 		controller: controller,
@@ -131,21 +136,24 @@ angular.module('ItemCtrls', [])
 		link: function(scope, element, attributes){
 			var itemDisplay
 			element.bind('mouseover', function(e){
-				var item = scope.item||scope.$parent.item
-				var itemId = item.id||item._id||item.itemId
-				if(itemDisplay){
-					itemDisplay.remove()
+				if(!scope.el){
+					var item = scope.item||scope.$parent.item
+					var itemId = item.id||item._id||item.itemId
+					if(itemDisplay){
+						itemDisplay.remove()
+					}
+					
+					scope.el = angular.element("<div class='itemHover'>")
+					itemDisplay = scope.el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
+					angular.element(document.body).append(itemDisplay)
+					var css = {
+						left: (e.clientX+$window.scrollX+5) + 'px',
+						top: (e.clientY+$window.scrollY) + 'px'
+					}
+					itemDisplay.css(css)
+				}else{
+					angular.element(document.body).append(scope.el)
 				}
-				
-				var el = angular.element("<div class='itemHover'>")
-				itemDisplay = el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
-				angular.element(document.body).append(itemDisplay)
-
-				var css = {
-					left: (e.clientX+$window.scrollX+5) + 'px',
-					top: (e.clientY+$window.scrollY) + 'px'
-				}
-				itemDisplay.css(css)
 			})
 
 			element.bind('mouseleave', function(){

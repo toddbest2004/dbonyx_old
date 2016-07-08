@@ -12,7 +12,7 @@ router.get("/:id", function(req, res){
 	if(!id){
 		return res.status(400).json({error:"Improper id provided."});
 	}
-	db.quest.findOne({_id:id}).populate('itemRewards.itemId').exec(function(err, quest){
+	db.quest.findOne({_id:id}).populate('itemRewards.itemId itemChoices.itemId').exec(function(err, quest){
 		if(err){return res.status(400).json({error:"Error reading from the database."});}
 		if(!quest){return res.status(404).json({error:"Unable to find quest"});}
 		res.json(quest);

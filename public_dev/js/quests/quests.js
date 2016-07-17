@@ -2,60 +2,84 @@
 angular.module('dbonyx')
 .controller('questCtrl', ['$scope', '$routeParams', 'questService', function($scope, $routeParams, questService){
 	$scope.questId = $routeParams.questId;
+	$scope.loading=questService.loading;
+	$scope.error=questService.error;
+	$scope.quest=questService.quest;
 	var getQuest = function(){
-		$scope.loading = true;
-		questService.getQuest($scope.questId, function(err, quest){
-			$scope.loading = false;
-			if(err){
-				$scope.error=err;
-				return;
-			}
-			$scope.quest = quest;
+		questService.getQuest($scope.questId, function(){
+			$scope.quest=questService.quest;
+			$scope.error=questService.error;
 		});
 	};
 	getQuest();
 }])
-.controller('allQuestsCtrl', ['$scope','questService',function($scope, questService){
+.controller('allQuestsCtrl', ['$scope','allQuestService',function($scope, allQuestService){
 	$scope.modifiers = [];
+	$scope.loading=allQuestService.loading;
+	$scope.error=allQuestService.error;
+	$scope.quests=allQuestService.allQuests;
 	var getQuests = function(){
-		$scope.loading = true;
-		questService.getQuests($scope.modifiers, function(err, quests){
-			$scope.loading = false;
-			if(err){
-				$scope.error = err;
-				return;
-			}
-			$scope.quests = quests;
+		allQuestService.getQuests($scope.modifiers, function(){
+			$scope.quests=allQuestService.allQuests;
+			$scope.error=allQuestService.error;
 		});
 	};
 	getQuests();
 }])
 .factory('questService', ['$http', function($http){
 	var quest = {};
+	quest.loading=false;
+	quest.error=null;
+	quest.quest=null;
 
-	quest.getQuest = function(questId, cb){
+	quest.getQuest = function(questId,cb){
+		quest.loading=true;
+		quest.error=null;
+		quest.quest=null;
 		questId = parseInt(questId);
 		$http({
 			url: '/api/quest/'+questId
 		}).then(function success(response){
-			cb(null, response.data);
+			quest.loading=false;
+			quest.quest=response.data;
+			cb();
 		}, function error(response){
-			cb(response.data.error);
+			quest.loading=false;
+			quest.error=response.data.error;
+			cb();
 		});
 	};
 
-	quest.getQuests = function(modifiers, cb){
+	return quest;
+}])
+.factory('allQuestService', ['$http',function($http){
+	var quest = {};
+	quest.loading=false;
+	quest.error=null;
+	quest.allQuests=null;
+
+	//modifiers
+	quest.limit=50;
+	quest.offset=0;
+
+	quest.getQuests = function(modifiers,cb){
+		quest.loading=true;
+		quest.error=null;
+		quest.allQuests=null;
 		$http({
 			url: '/api/quest',
 			params: {
 				modifiers:modifiers
 			}
 		}).then(function success(response){
-			cb(null, response.data.quests);
+			quest.loading=false;
+			quest.allQuests=response.data.quests;
+			cb();
 		},function error(response){
-			cb(response.data.error);
+			quest.error=response.data.error;
+			quest.loading=false;
+			cb();
 		});
 	};
-
 	return quest;
 }]);

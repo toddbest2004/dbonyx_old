@@ -48,7 +48,6 @@ angular.module('AuctionCtrls')
 				sortOrder:auction.sortOrder
 			}
 		}).then(function success(response){
-			console.log(response.data)
 			auction.loading=false
 			auction.auctionResults=response.data
 			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)

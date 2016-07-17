@@ -27,29 +27,11 @@
 		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
-				<div>
-					<div class="pagination" ng-click="firstPage()">
-						<i class="fa fw fa-lg fa-angle-double-left"></i>
-					</div>
-					<div class="pagination" ng-click="backPage()">
-						<i class="fa fw fa-lg fa-angle-left"></i>
-					</div>
-					<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
-					<div class="pagination pagination-current"> {{currentPage}} </div>
-					<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
-					<div class="pagination" ng-click="nextPage()">
-						<i class="fa fw fa-lg fa-angle-right"></i>
-					</div>
-					<div class="pagination" ng-click="lastPage()">
-						<i class="fa fw fa-lg fa-angle-double-right"></i>
-					</div>
-				</div>
+				<onyx-pagination total="auctionResults.count" offset="auctionResults.offset" limit="auctionResults.limit" update="search()" paginate="auctionService"></onyx-pagination>
 				<div class="auctionText">
 					<div class="pull-left" id="auctionLoading" ng-if="loading">
 						<h3><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h3>
 					</div>
-
-					<p class="pull-right">Showing auctions {{low+1}}-{{high}} of {{auctionResults.count}}</p>
 				</div>
 
 

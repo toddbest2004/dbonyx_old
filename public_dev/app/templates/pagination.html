@@ -1,7 +1,18 @@
-<div>page:{{page}} max:{{max}} limit:{{limit}}
-{{low}}-{{high}} of {{max}} 
 <div>
-<span ng-repeat="page in backPages track by $index"> {{page}} </span><span ng-repeat="page in nextPages"> {{page}} </span>
-</div>
-<button ng-click="updatePage(3)">asdfadsf</button>
+	<div class="pagination" ng-click="firstPage()">
+		<i class="fa fw fa-lg fa-angle-double-left"></i>
+	</div>
+	<div class="pagination" ng-click="backPage()">
+		<i class="fa fw fa-lg fa-angle-left"></i>
+	</div>
+	<div class="pagination" ng-repeat="page in backPages track by $index" ng-click="updatePage(page)"> {{page}} </div>
+	<div class="pagination pagination-current"> {{currentPage}} </div>
+	<div class="pagination" ng-repeat="page in nextPages" ng-click="updatePage(page)"> {{page}} </div>
+	<div class="pagination" ng-click="nextPage()">
+		<i class="fa fw fa-lg fa-angle-right"></i>
+	</div>
+	<div class="pagination" ng-click="lastPage()">
+		<i class="fa fw fa-lg fa-angle-double-right"></i>
+	</div>
+	<p>Showing auctions {{low+1}}-{{high}} of {{total}}</p>
 </div>

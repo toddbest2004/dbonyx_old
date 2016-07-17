@@ -1,6 +1,7 @@
 angular.module('AuctionCtrls', ['oi.select'])
 .controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService', 'oiSelect', function($scope, $http, $location, $routeParams, onyxPersistence, auctionService, oiSelect) {
 	var searchValues = $location.search()
+	$scope.auctionService = auctionService;
 	$scope.searchTerm=searchValues.s||''
 	$scope.realmInput=searchValues.r||onyxPersistence.getRealm()||''
 
@@ -16,43 +17,11 @@ angular.module('AuctionCtrls', ['oi.select'])
 	$scope.qualities={values:[]}
 	// $scope.hoverIndex=''
 
-	$scope.updatePages=function(){
-		$scope.backPages = []
-		$scope.nextPages = []
-		$scope.low = auctionService.resultLow
-		$scope.high = auctionService.resultHigh
-		for(var i = auctionService.currentPage-5;i<auctionService.currentPage;i++){
-			if(i>0){
-				$scope.backPages.push(i)
-			}
-		}
-		for(var i=auctionService.currentPage+1;i<=auctionService.currentPage+5;i++){
-			if(i<=auctionService.resultPages){
-				$scope.nextPages.push(i)
-			}
-		}
-		$scope.currentPage=auctionService.currentPage
-	}
-	$scope.updatePage = function(page){
-		auctionService.updatePage(page)
-		$scope.search()
-	}
-	$scope.firstPage = function(){
-		auctionService.firstPage()
-		$scope.search()
-	}
-	$scope.nextPage = function(){
-		auctionService.nextPage()
-		$scope.search()
-	}
-	$scope.backPage = function(){
-		auctionService.backPage()
-		$scope.search()
-	}
-	$scope.lastPage = function(){
-		auctionService.lastPage()
-		$scope.search()
-	}
+	//start pagination
+
+
+	//end pagination
+
 	$scope.setSortBy=function(sort){
 		// console.log(sort)
 		auctionService.setSortBy(sort)
@@ -90,7 +59,8 @@ angular.module('AuctionCtrls', ['oi.select'])
 	var auctionUpdate = function(success){
 		$scope.loading = false
 		$scope.auctionResults = auctionService.auctionResults
-		$scope.updatePages()
+		// console.log($scope.auctionResults)
+		// $scope.updatePages()
 	}
 	// $scope.selectRealm
 	$scope.search=function(e){
@@ -113,3 +83,56 @@ angular.module('AuctionCtrls', ['oi.select'])
 		$scope.search()
 	}
 }])
+.directive('onyxPagination', [function(){
+	var controller = ['$scope', function($scope){
+		$scope.updatePages=function(){
+			$scope.backPages = []
+			$scope.nextPages = []
+			$scope.total = $scope.paginate.auctionResults.count;
+			$scope.low = $scope.paginate.resultLow
+			$scope.high = $scope.paginate.resultHigh
+			for(var i = $scope.paginate.currentPage-5;i<$scope.paginate.currentPage;i++){
+				if(i>0){
+					$scope.backPages.push(i)
+				}
+			}
+			for(var i=$scope.paginate.currentPage+1;i<=$scope.paginate.currentPage+5;i++){
+				if(i<=$scope.paginate.resultPages){
+					$scope.nextPages.push(i)
+				}
+			}
+			$scope.currentPage=$scope.paginate.currentPage
+		}
+
+		$scope.firstPage = function(){
+			$scope.paginate.firstPage();
+			$scope.updatePages();
+			$scope.update();
+		}
+		$scope.nextPage = function(){
+			$scope.paginate.nextPage();
+			$scope.updatePages();
+			$scope.update();
+		}
+		$scope.backPage = function(){
+			$scope.paginate.backPage();
+			$scope.updatePages();
+			$scope.update();
+		}
+		$scope.lastPage = function(){
+			$scope.paginate.lastPage();
+			$scope.updatePages();
+			$scope.update();
+		}
+		$scope.updatePages();
+	}];
+	return {
+		restrict: 'E',
+		controller: controller,
+		scope:{
+			paginate:'=', //the service...
+			update:'&' //function to change pages (usually on click)
+		},
+		templateUrl: 'app/templates/pagination.html'
+	}
+}]);

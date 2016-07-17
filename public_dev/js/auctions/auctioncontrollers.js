@@ -62,6 +62,7 @@ angular.module('AuctionCtrls', ['oi.select'])
 		$scope.auctionResults = auctionService.auctionResults
 		// console.log($scope.auctionResults)
 		// $scope.updatePages()
+		$scope.$broadcast("paginateUpdate");
 	}
 	// $scope.selectRealm
 	$scope.search=function(e){

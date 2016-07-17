@@ -14,17 +14,19 @@ angular.module('dbonyx')
 	getQuest();
 }])
 .controller('allQuestsCtrl', ['$scope','allQuestService',function($scope, allQuestService){
-	$scope.modifiers = allQuestService.modifiers;
+	$scope.settings = allQuestService.settings;
 	$scope.loading=allQuestService.loading;
 	$scope.error=allQuestService.error;
 	$scope.quests=allQuestService.allQuests;
-	var getQuests = function(){
+	$scope.getQuests = function(){
 		allQuestService.getQuests(function(){
 			$scope.quests=allQuestService.allQuests;
 			$scope.error=allQuestService.error;
+			$scope.settings=allQuestService.settings;
+			$scope.$broadcast("paginateUpdate");
 		});
 	};
-	getQuests();
+	$scope.getQuests();
 }])
 .factory('questService', ['$http', function($http){
 	var quest = {};
@@ -58,10 +60,8 @@ angular.module('dbonyx')
 	quest.error=null;
 	quest.allQuests=null;
 
-	quest.totalQuestCount=0;
-	quest.returnedQuestCount=0;
 	//modifiers
-	quest.modifiers={limit:50,offset:0};
+	quest.settings={limit:50,offset:0,count:0};
 
 	quest.getQuests = function(cb){
 		quest.loading=true;
@@ -70,18 +70,20 @@ angular.module('dbonyx')
 		$http({
 			url: '/api/quest',
 			params: {
-				modifiers:quest.modifiers
+				limit:quest.settings.limit,
+				offset:quest.settings.offset
 			}
 		}).then(function success(response){
 			quest.loading=false;
 			quest.allQuests=response.data.quests;
-			quest.returnedQuestCount=response.data.quests.length;
-			quest.totalQuestCount=response.data.totalCount;
-			cb();
+			quest.settings.count=response.data.count;
+			if(cb)
+				cb();
 		},function error(response){
 			quest.error=response.data.error;
 			quest.loading=false;
-			cb();
+			if(cb)
+				cb();
 		});
 	};
 	return quest;

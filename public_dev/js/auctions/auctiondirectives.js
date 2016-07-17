@@ -129,8 +129,16 @@ angular.module('AuctionCtrls')
 	//update(): A function to be called whenever a page change is requested
 	//  will be called AFTER the new offset has been determined.
 
-	var controller = ['$scope', function($scope){
+	var controller = ['$scope', '$timeout', function($scope, $timeout){
+		var oldLimit, oldOffset, oldCount
 		$scope.updatePages=function(){
+			var change=false;
+			if(oldLimit!==$scope.paginate.limit||oldOffset!==$scope.paginate.offset||oldCount!==$scope.paginate.count){
+				oldLimit=$scope.paginate.limit;
+				oldOffset=$scope.paginate.offset;
+				oldCount=$scope.paginate.count;
+				change=true;
+			}
 			$scope.backPages = []
 			$scope.nextPages = []
 			$scope.total = $scope.paginate.count;
@@ -148,17 +156,18 @@ angular.module('AuctionCtrls')
 					$scope.nextPages.push(i)
 				}
 			}
+			if(change){
+				$scope.update();
+			}
 		}
 
 		$scope.setPage = function(page){
 			$scope.paginate.offset = (page-1)*$scope.paginate.limit;
 			$scope.updatePages();
-			$scope.update();
 		}
 		$scope.firstPage = function(){
 			$scope.paginate.offset=0;
 			$scope.updatePages();
-			$scope.update();
 		}
 		$scope.nextPage = function(){
 			$scope.paginate.offset+=$scope.paginate.limit;
@@ -166,7 +175,6 @@ angular.module('AuctionCtrls')
 				$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
 			}
 			$scope.updatePages();
-			$scope.update();
 		}
 		$scope.backPage = function(){
 			$scope.paginate.offset-=$scope.paginate.limit;
@@ -174,12 +182,10 @@ angular.module('AuctionCtrls')
 				$scope.paginate.offset=0;
 			}
 			$scope.updatePages();
-			$scope.update();
 		}
 		$scope.lastPage = function(){
 			$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
 			$scope.updatePages();
-			$scope.update();
 		}
 		$scope.updatePages();
 	}];
@@ -190,6 +196,11 @@ angular.module('AuctionCtrls')
 			paginate:'=', //the service...
 			term: '@',
 			update:'&', //function to change pages (usually on click)
+		},
+		link: function(scope){
+			scope.$on("paginateUpdate", function(){
+				scope.updatePages();
+			})
 		},
 		templateUrl: 'app/templates/pagination.html'
 	}

@@ -67,7 +67,7 @@ $routeProvider
 })
 .when('/quests', {
 	controller: 'allQuestsCtrl',
-	templateUrl: 'app/views/quests.html'
+	templateUrl: 'app/views/quests.html',
 })
 .when('/quests/:questId', {
 	controller: 'questCtrl',

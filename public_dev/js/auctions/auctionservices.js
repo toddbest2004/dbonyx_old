@@ -7,12 +7,16 @@ angular.module('AuctionCtrls')
 		qualities:[],
 		sortBy: 'buyout',
 		sortOrder: -1,
-		resultPages: 0,
-		currentPage: 1,
-		resultHigh:0,
-		resultLow:0,
-		limit: 25,
+		// resultPages: 0,
+		// currentPage: 1,
+		// resultHigh:0,
+		// resultLow:0,
+		// limit: 25,
 		loading: false,
+		settings: {
+			limit: 25,
+			offset: 0
+		},
 		auctionResults: false
 	}
 	auction.setSearchTerm = function(term){
@@ -24,9 +28,7 @@ angular.module('AuctionCtrls')
 	auction.noMatch=function(){
 		auction.loading=false
 		auction.auctionResults=[]
-		auction.resultPages = 0
-		auction.resultLow = 0
-		auction.resultHigh = 0
+		auction.settings.count=0;
 	}
 	auction.search = function(callback){
 		if(!auction.realmInput.length){
@@ -42,17 +44,15 @@ angular.module('AuctionCtrls')
 				'filters[]':auction.filters,
 				searchTerm:auction.searchTerm, 
 				realm:auction.realmInput,
-				offset:(auction.currentPage-1)*auction.limit,
-				limit:auction.limit,
+				offset:auction.settings.offset,
+				limit:auction.settings.limit,
 				sortBy:auction.sortBy,
 				sortOrder:auction.sortOrder
 			}
 		}).then(function success(response){
 			auction.loading=false
 			auction.auctionResults=response.data
-			auction.resultPages = Math.ceil(auction.auctionResults.count/auction.limit)
-			auction.resultLow = (auction.currentPage-1)*auction.limit
-			auction.resultHigh = auction.resultLow+auction.auctionResults.auctions.length 
+			auction.settings.count=response.data.count;
 			callback(true)
 		}, function error(response){
 			auction.noMatch()
@@ -67,31 +67,9 @@ angular.module('AuctionCtrls')
 			auction.sortBy=sort
 			auction.sortOrder=-1
 		}
-	}
-	auction.updatePage = function(page){
-		page=parseInt(page)
-		if(page>auction.resultPages){
-			page=auction.resultPages
-		}
-		if(page<1){
-			page=1
-		}
-		auction.currentPage=page
-	}
-	auction.firstPage = function(){ 
-		auction.updatePage(1)
-	}
-	auction.backPage = function(){
-		auction.updatePage(auction.currentPage-1)
-	}
-	auction.nextPage = function(){
-		auction.updatePage(auction.currentPage+1)
-	}
-	auction.lastPage = function(){
-		auction.updatePage(auction.resultPages)
-	}
+	};
 
-	return auction
+	return auction;
 }])
 .factory('auctionHistory',['$http',function($http){
 	var history = {}

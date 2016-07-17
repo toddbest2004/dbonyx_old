@@ -27,7 +27,7 @@
 		</div>
 		<div ng-if="auctionResults.auctions.length">
 			<div id="auctionNav" ng-if="auctionResults">
-				<onyx-pagination total="auctionResults.count" offset="auctionResults.offset" limit="auctionResults.limit" update="search()" paginate="auctionService"></onyx-pagination>
+				<onyx-pagination term="auctions" update="search()" paginate="auctionSettings"></onyx-pagination>
 				<div class="auctionText">
 					<div class="pull-left" id="auctionLoading" ng-if="loading">
 						<h3><i class="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"></i> Loading Auctions...</h3>

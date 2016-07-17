@@ -15,6 +15,7 @@ angular.module('AuctionCtrls', ['oi.select'])
 	$scope.newfilter={}
 	$scope.validComparators = null
 	$scope.qualities={values:[]}
+	$scope.auctionSettings = auctionService.settings;
 	// $scope.hoverIndex=''
 
 	//start pagination
@@ -83,56 +84,3 @@ angular.module('AuctionCtrls', ['oi.select'])
 		$scope.search()
 	}
 }])
-.directive('onyxPagination', [function(){
-	var controller = ['$scope', function($scope){
-		$scope.updatePages=function(){
-			$scope.backPages = []
-			$scope.nextPages = []
-			$scope.total = $scope.paginate.auctionResults.count;
-			$scope.low = $scope.paginate.resultLow
-			$scope.high = $scope.paginate.resultHigh
-			for(var i = $scope.paginate.currentPage-5;i<$scope.paginate.currentPage;i++){
-				if(i>0){
-					$scope.backPages.push(i)
-				}
-			}
-			for(var i=$scope.paginate.currentPage+1;i<=$scope.paginate.currentPage+5;i++){
-				if(i<=$scope.paginate.resultPages){
-					$scope.nextPages.push(i)
-				}
-			}
-			$scope.currentPage=$scope.paginate.currentPage
-		}
-
-		$scope.firstPage = function(){
-			$scope.paginate.firstPage();
-			$scope.updatePages();
-			$scope.update();
-		}
-		$scope.nextPage = function(){
-			$scope.paginate.nextPage();
-			$scope.updatePages();
-			$scope.update();
-		}
-		$scope.backPage = function(){
-			$scope.paginate.backPage();
-			$scope.updatePages();
-			$scope.update();
-		}
-		$scope.lastPage = function(){
-			$scope.paginate.lastPage();
-			$scope.updatePages();
-			$scope.update();
-		}
-		$scope.updatePages();
-	}];
-	return {
-		restrict: 'E',
-		controller: controller,
-		scope:{
-			paginate:'=', //the service...
-			update:'&' //function to change pages (usually on click)
-		},
-		templateUrl: 'app/templates/pagination.html'
-	}
-}]);

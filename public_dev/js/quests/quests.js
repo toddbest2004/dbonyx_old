@@ -14,12 +14,12 @@ angular.module('dbonyx')
 	getQuest();
 }])
 .controller('allQuestsCtrl', ['$scope','allQuestService',function($scope, allQuestService){
-	$scope.modifiers = [];
+	$scope.modifiers = allQuestService.modifiers;
 	$scope.loading=allQuestService.loading;
 	$scope.error=allQuestService.error;
 	$scope.quests=allQuestService.allQuests;
 	var getQuests = function(){
-		allQuestService.getQuests($scope.modifiers, function(){
+		allQuestService.getQuests(function(){
 			$scope.quests=allQuestService.allQuests;
 			$scope.error=allQuestService.error;
 		});
@@ -58,22 +58,25 @@ angular.module('dbonyx')
 	quest.error=null;
 	quest.allQuests=null;
 
+	quest.totalQuestCount=0;
+	quest.returnedQuestCount=0;
 	//modifiers
-	quest.limit=50;
-	quest.offset=0;
+	quest.modifiers={limit:50,offset:0};
 
-	quest.getQuests = function(modifiers,cb){
+	quest.getQuests = function(cb){
 		quest.loading=true;
 		quest.error=null;
 		quest.allQuests=null;
 		$http({
 			url: '/api/quest',
 			params: {
-				modifiers:modifiers
+				modifiers:quest.modifiers
 			}
 		}).then(function success(response){
 			quest.loading=false;
 			quest.allQuests=response.data.quests;
+			quest.returnedQuestCount=response.data.quests.length;
+			quest.totalQuestCount=response.data.totalCount;
 			cb();
 		},function error(response){
 			quest.error=response.data.error;

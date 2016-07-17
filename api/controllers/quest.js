@@ -4,8 +4,23 @@ var db = require("../../mongoose");
 var router = express.Router();
 
 router.get("/", function(req, res){
-	console.log(req.query);
-	db.quest.find({}).limit(50).exec(function(err, quests){
+	var modifiers;
+	var limit = 50;
+	var offset = 0;
+	try{
+		modifiers = JSON.parse(req.query.modifiers);
+	}catch(err){
+		return res.status(500).json({error:"Error reading search parameters."});
+	}
+	if(modifiers){
+		limit = parseInt(modifiers.limit||50);
+		offset = parseInt(modifiers.offset||0);
+	}
+	if(limit>100){
+		limit=50;
+	}
+	console.log(limit);
+	db.quest.find({}).limit(limit).skip(offset).exec(function(err, quests){
 		res.json({quests:quests});
 	});
 });

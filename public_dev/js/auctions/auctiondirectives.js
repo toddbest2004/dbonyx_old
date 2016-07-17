@@ -130,15 +130,7 @@ angular.module('AuctionCtrls')
 	//  will be called AFTER the new offset has been determined.
 
 	var controller = ['$scope', '$timeout', function($scope, $timeout){
-		var oldLimit, oldOffset, oldCount
-		$scope.updatePages=function(){
-			var change=false;
-			if(oldLimit!==$scope.paginate.limit||oldOffset!==$scope.paginate.offset||oldCount!==$scope.paginate.count){
-				oldLimit=$scope.paginate.limit;
-				oldOffset=$scope.paginate.offset;
-				oldCount=$scope.paginate.count;
-				change=true;
-			}
+		$scope.updatePages=function(change){
 			$scope.backPages = []
 			$scope.nextPages = []
 			$scope.total = $scope.paginate.count;
@@ -163,31 +155,31 @@ angular.module('AuctionCtrls')
 
 		$scope.setPage = function(page){
 			$scope.paginate.offset = (page-1)*$scope.paginate.limit;
-			$scope.updatePages();
+			$scope.updatePages(true);
 		}
 		$scope.firstPage = function(){
 			$scope.paginate.offset=0;
-			$scope.updatePages();
+			$scope.updatePages(true);
 		}
 		$scope.nextPage = function(){
 			$scope.paginate.offset+=$scope.paginate.limit;
 			if($scope.paginate.offset>$scope.paginate.count){
 				$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
 			}
-			$scope.updatePages();
+			$scope.updatePages(true);
 		}
 		$scope.backPage = function(){
 			$scope.paginate.offset-=$scope.paginate.limit;
 			if($scope.paginate.offset<0){
 				$scope.paginate.offset=0;
 			}
-			$scope.updatePages();
+			$scope.updatePages(true);
 		}
 		$scope.lastPage = function(){
 			$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
 			$scope.updatePages();
 		}
-		$scope.updatePages();
+		$scope.updatePages(true);
 	}];
 	return {
 		restrict: 'E',
@@ -199,7 +191,7 @@ angular.module('AuctionCtrls')
 		},
 		link: function(scope){
 			scope.$on("paginateUpdate", function(){
-				scope.updatePages();
+				scope.updatePages(false);
 			})
 		},
 		templateUrl: 'app/templates/pagination.html'

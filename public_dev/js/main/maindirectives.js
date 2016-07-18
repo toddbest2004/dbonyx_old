@@ -89,3 +89,85 @@ angular.module('dbonyx')
 		controller: moneyCtrl
 	}
 })
+.directive('onyxPagination', [function(){
+	//<onyx-pagination>
+	//takes three arguments:
+	//
+	//paginate: a link to an object containing:
+	//  count: the total number of items (NOT pages) to paginate
+	//  limit: the number of items expected to be shown per page
+	//  offset: the current index of the first item of the page
+	//
+	//term: Showing {{term}} 1-50 of 100
+	//
+	//update(): A function to be called whenever a page change is requested
+	//  will be called AFTER the new offset has been determined.
+
+	var controller = ['$scope', '$timeout', function($scope, $timeout){
+		$scope.updatePages=function(change){
+			$scope.backPages = []
+			$scope.nextPages = []
+			$scope.total = $scope.paginate.count;
+			$scope.resultPages = Math.ceil($scope.total/$scope.paginate.limit);
+			$scope.currentPage = $scope.paginate.offset/$scope.paginate.limit+1;
+			$scope.low = $scope.paginate.offset;
+			$scope.high = Math.min($scope.paginate.offset+$scope.paginate.limit,$scope.total);
+			for(var i = $scope.currentPage-5;i<$scope.currentPage;i++){
+				if(i>0){
+					$scope.backPages.push(i)
+				}
+			}
+			for(var i=$scope.currentPage+1;i<=$scope.currentPage+5;i++){
+				if(i<=$scope.resultPages){
+					$scope.nextPages.push(i)
+				}
+			}
+			if(change){
+				$scope.update();
+			}
+		}
+
+		$scope.setPage = function(page){
+			$scope.paginate.offset = (page-1)*$scope.paginate.limit;
+			$scope.updatePages(true);
+		}
+		$scope.firstPage = function(){
+			$scope.paginate.offset=0;
+			$scope.updatePages(true);
+		}
+		$scope.nextPage = function(){
+			$scope.paginate.offset+=$scope.paginate.limit;
+			if($scope.paginate.offset>$scope.paginate.count){
+				$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
+			}
+			$scope.updatePages(true);
+		}
+		$scope.backPage = function(){
+			$scope.paginate.offset-=$scope.paginate.limit;
+			if($scope.paginate.offset<0){
+				$scope.paginate.offset=0;
+			}
+			$scope.updatePages(true);
+		}
+		$scope.lastPage = function(){
+			$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
+			$scope.updatePages(true);
+		}
+		$scope.updatePages(true);
+	}];
+	return {
+		restrict: 'E',
+		controller: controller,
+		scope:{
+			paginate:'=', //the service...
+			term: '@',
+			update:'&', //function to change pages (usually on click)
+		},
+		link: function(scope){
+			scope.$on("paginateUpdate", function(){
+				scope.updatePages(false);
+			})
+		},
+		templateUrl: 'app/templates/pagination.html'
+	}
+}]);

@@ -105,11 +105,14 @@ angular.module('dbonyx')
 
 	var controller = ['$scope', '$timeout', function($scope, $timeout){
 		$scope.updatePages=function(change){
+			if($scope.paginate.offset>$scope.paginate.count){
+				$scope.paginate.offset = Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
+			}
 			$scope.backPages = []
 			$scope.nextPages = []
 			$scope.total = $scope.paginate.count;
 			$scope.resultPages = Math.ceil($scope.total/$scope.paginate.limit);
-			$scope.currentPage = $scope.paginate.offset/$scope.paginate.limit+1;
+			$scope.currentPage = Math.floor($scope.paginate.offset/$scope.paginate.limit)+1;
 			$scope.low = $scope.paginate.offset;
 			$scope.high = Math.min($scope.paginate.offset+$scope.paginate.limit,$scope.total);
 			for(var i = $scope.currentPage-5;i<$scope.currentPage;i++){

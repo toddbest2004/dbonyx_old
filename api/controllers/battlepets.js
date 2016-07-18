@@ -43,11 +43,13 @@ router.get("/", function(req, res){
 	if(limit>50)
 		limit = 25;
 	battlepetQuery.exec(function(err, pets){
-		if(err||!pets){
-			console.log(err);
-			return res.status(404).json({error:"Unable to find pets."});
-		}
-		res.send(pets);
+		battlepetQuery.skip(0).limit(0).count(function(err, count){
+			if(err||!pets){
+				console.log(err);
+				return res.status(404).json({error:"Unable to find pets."});
+			}
+			res.send({pets:pets,count:count});		
+		});
 	});
 });
 

@@ -177,7 +177,7 @@ angular.module('AuctionCtrls')
 		}
 		$scope.lastPage = function(){
 			$scope.paginate.offset=Math.floor($scope.paginate.count/$scope.paginate.limit)*$scope.paginate.limit;
-			$scope.updatePages();
+			$scope.updatePages(true);
 		}
 		$scope.updatePages(true);
 	}];

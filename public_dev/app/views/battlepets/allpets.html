@@ -6,7 +6,7 @@
 		<div ng-if="error">
 		{{error}}
 		</div>
-
+		<onyx-pagination term="battlepets" update="search()" paginate="settings"></onyx-pagination>
 		<div ng-repeat="pet in pets track by $index">
 			<h1><a href="/battlepet/{{pet._id}}" class="itemQuality{{pet.qualityId}}">{{pet.name}}</a></h1>
 			<div ng-repeat="ability in pet.abilities">

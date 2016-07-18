@@ -41,15 +41,17 @@ angular.module('dbonyx')
 }])
 .controller('allpetsCtrl', ['$scope','$location','battlepetService',function($scope,$location,battlepetService){
 	var searchValues = $location.search()
+	$scope.settings = battlepetService.settings;
 	$scope.petFamilies = battlepetService.petFamilies
-	$scope.offset=parseInt(searchValues.o)||0
-	$scope.limit=parseInt(searchValues.l)||25
+	$scope.settings.offset=parseInt(searchValues.o)||$scope.settings.offset||0
+	$scope.settings.limit=parseInt(searchValues.l)||$scope.settings.limit||25
 	$scope.filters={families:[]}
 	$scope.loading=true
 	
 	$scope.search = function(){
 		battlepetService.filters=$scope.filters
 		battlepetService.getAll($scope.offset,$scope.limit, function(err, data){
+			$scope.$broadcast('paginateUpdate')
 			$scope.loading=false
 			if(err)
 				return $scope.error = err
@@ -60,6 +62,11 @@ angular.module('dbonyx')
 }])
 .factory('battlepetService', ['$http', function($http){
 	var battlepet = {}
+	battlepet.settings={
+		limit: 25,
+		offset:0,
+		count:0
+	}
 	battlepet.petFamilies = ['Humanoid','Dragonkin','Flying','Undead','Critter','Magical','Elemental','Beast','Aquatic','Mechanical']
 	battlepet.breeds = {
 		0:{h:0,p:0,s:0,n:"Unknown Breed"},
@@ -81,13 +88,15 @@ angular.module('dbonyx')
 			method: 'GET',
 			url: '/api/battlepet/',
 			params: {
-				offset: offset,
-				limit: limit,
+				offset: battlepet.settings.offset,
+				limit: battlepet.settings.limit,
 				filters: battlepet.filters
 			}
 		}).then(function success(response){
-			cb(null, response.data)
+			battlepet.settings.count=response.data.count;
+			cb(null, response.data.pets)
 		}, function error(response){
+			battlepet.settings.count=response.data.count;
 			cb(response.error)
 		})
 	}

@@ -17,6 +17,22 @@
                 return "</em>";
             }
         },
+        s: {
+            open: function() {
+                return "<del>";
+            },
+            close: function() {
+                return "</del>";
+            }
+        },
+        u: {
+            open: function() {
+                return "<u>";
+            },
+            close: function() {
+                return "</u>";
+            }
+        },
         item: { //item link
             open: function(attributes, id) {
                 return "<item-link itemid='"+ id +"'>";
@@ -74,7 +90,7 @@ document = d:comment* {
     return "<comment-text>"+d+"</comment-text>";
 }
 
-comment = d:(list / open_tag / close_tag / text / newline / invalidTag)+ {
+comment = d:(open_tag / close_tag / text / newline / invalidTag)+ {
     return d.join("");
 }
 
@@ -99,8 +115,8 @@ tagAttribute = "|" key:property "=" value:property
 		return key+":"+value
     }
 
-open_tag = "[" tag:validTagName id:(id)? attributes:tagAttribute* "]" { return open(tag, attributes, id); }
-    / "[" tag:validTagName id:(id)? attributes:tagAttribute* "/]" { return selfClose(tag, attributes, id); }
+open_tag = "[" tag:validTagName id:(id)? attributes:tagAttribute* "]" ("\r\n" / "\n")? { return open(tag, attributes, id); }
+    / "[" tag:validTagName id:(id)? attributes:tagAttribute* "/]" ("\r\n" / "\n")? { return selfClose(tag, attributes, id); }
 
 close_tag = "[/" t:validTagName "]" ("\r\n" / "\n")? {
     return close(t);
@@ -110,10 +126,10 @@ id = "=" id:(number) {return id;}
 
 number = n:[0-9]* { return n.join("") }
 
-list = "[list]" contents:(whitespace / listLine)* "[/list]" ("\r\n" / "\n")? {return "<ul>"+contents.join("")+"</ul>"}
-listLine = "[*]" contents:(comment)* "[/*]"? {return "<li>"+contents.join("")+"</li>";}
+//list = "[list]" contents:(whitespace / listLine)* "[/list]" ("\r\n" / "\n")? {return "<ul>"+contents.join("")+"</ul>"}
+//listLine = "[*]" contents:(comment)* "[/*]"? {return "<li>"+contents.join("")+"</li>";}
 
-validTagName "valid tag name" = ("item" / "b" / "i" / "list" / "*")
+validTagName "valid tag name" = ("item" / "b" / "i" / "s" / "u" / "list" / "*")
 
 
 invalidTag = "[" (!validTagName) {return "[";}

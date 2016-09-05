@@ -1,4 +1,16 @@
 <div class="row">
+tags can be open and close: [b]text[/b] or self closing: [item=1234/]
+valid tags are:
+<ul>
+<li>[item=#####] numbers are required (try 6672, 8223, and 128671)</li>
+<li>[b]bold text[/b]</li>
+<li>[i]italics[/i]</li>
+<li>[list]Start a bulleted list</li>
+<li>  [*]Bulleted list item</li>
+<li>[/list]</li>
+</ul>
+</div>
+<div class="row">
 	<div class="col-xs-6">
 		<textarea ng-model="parsetext" class="form-control" rows="10"></textarea>
 		<button ng-click="parse()" class="form-control">parse</button>
@@ -7,5 +19,6 @@
 		<div>Results:</div>
 		<div id="errorDiv" style="color:red"></div>
 		<div id="testDiv" ></div>
+		<div><textarea ng-model="parsedtext"></textarea></div>
 	</div>
 </div>

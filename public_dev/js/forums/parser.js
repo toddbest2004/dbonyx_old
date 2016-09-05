@@ -10,8 +10,10 @@ angular.module('dbonyx')
 			data: {input:$scope.parsetext}
 		}).then(function success(response){
 			var el = $compile("<div>"+response.data+"</div>")($scope);
+			$scope.parsedtext = response.data;
 			angular.element( document.getElementById('testDiv')).html("").append(el);
 		},function error(response){
+			$scope.parsedtext = response.data;
 			angular.element( document.getElementById('errorDiv')).html("").append(response.data);
 		});
 	};

@@ -1,29 +1,40 @@
+'use strict';
 var express = require("express");
 var router = express.Router();
-var passport = require("passport")
+var passport = require("passport");
 
+var peg = require("pegjs"); //parser module
+var parser = require("../parsers/forum.js");
+// console.log(parser)
 var db = require("../../mongoose");
+
+router.post("/parser", function(req, res) {
+	var inputText = req.body.input;
+	inputText = inputText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	inputText = parser.parse(inputText);
+	res.send(inputText);
+});
 
 router.get('/categories',function(req, res){
 	db.forumCategory.find({parentCategory:null}).populate('subCategories').sort({orderIndex:1}).exec(function(err, categories){
-		res.json(categories)
-	})
-})
+		res.json(categories);
+	});
+});
 
 router.get('/category/:categoryId', function(req, res){
 	db.forumCategory.findOne({_id:req.params.categoryId}).populate({path: 'threads', populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost'}]}).exec(function(err, cat){
-		res.json(cat)
-	})
+		res.json(cat);
+	});
 	// db.forumThread.find({category:req.params.categoryId}).exec(function(err, threads){
 	// 	res.json(threads)
 	// })
-})
+});
 
 router.get('/thread/:threadId', function(req,res){
 	db.forumThread.findOne({_id:req.params.threadId}).populate({path:'posts category', populate: {path: 'author', select:'username'}}).exec(function(err, thread){
-		res.json(thread)
-	})
-})
+		res.json(thread);
+	});
+});
 
 router.get('/sitenews', function(req,res){
 	db.forumCategory.findOne({name:'Front Page News'}).populate({path: 'threads',options:{sort:{'firstPostTime':-1},limit:5}, populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost', options:{limit:50}}]}).exec(function(err, cat){

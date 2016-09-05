@@ -110,6 +110,10 @@ $routeProvider
 	controller: 'battlepetCtrl',
 	templateUrl: 'app/views/battlepets/battlepet.html'
 })
+.when("/parsertest", {
+	controller: 'parserCtrl',
+	templateUrl: 'app/views/parsertest.html'
+})
 // .when('/import', {
 // 	controller: 'importCtrl',
 // 	templateUrl: 'app/views/import.html'

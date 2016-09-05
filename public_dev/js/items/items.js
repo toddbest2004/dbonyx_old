@@ -93,36 +93,48 @@ angular.module('ItemCtrls', [])
 	}
 })
 .directive('itemLink', [function(){
-	var controller = ['$scope',function($scope){
+	var controller = ['$scope', 'itemService', function($scope, itemService) {
+		if($scope.itemid) {
+			itemService.getItem($scope.itemid, {}, function(item) {
+				if(item){
+					$scope.item=item;
+					wireItem();
+				}
+			});
+		}
 		if(!$scope.item){ //defaults if item isn't passed properly
 			$scope.item={name:"Unknown Item", itemId:0,_id:0};
-		}
-		$scope.itemLinkPath = "/item/"+$scope.item.itemId;
-
-		var options = []
-		if($scope.rand!=='0'&&$scope.rand!==undefined){
-			options.push('rand='+$scope.rand)
+			wireItem();
 		}
 
-		if(options.length){
-			$scope.itemLinkPath+='?'
-			options.forEach(function(option, index){
-				$scope.itemLinkPath+=option
-				if(index<options.length-1)
-					$scope.itemLinkPath+='&'
-			})
-		}
+		function wireItem() {
+			$scope.itemLinkPath = "/item/"+$scope.item.itemId;
 
-		if($scope.quantity&&parseInt($scope.quantity)!==1){
-			$scope.showQuantity=true
-		}
+			var options = []
+			if($scope.rand!=='0'&&$scope.rand!==undefined){
+				options.push('rand='+$scope.rand)
+			}
 
+			if(options.length){
+				$scope.itemLinkPath+='?'
+				options.forEach(function(option, index){
+					$scope.itemLinkPath+=option
+					if(index<options.length-1)
+						$scope.itemLinkPath+='&'
+				})
+			}
+
+			if($scope.quantity&&parseInt($scope.quantity)!==1){
+				$scope.showQuantity=true
+			}
+		}
 
 	}]
 	return {
 		controller: controller,
 		scope: {
 			item: '=',
+			itemid: '=',
 			quantity: '@',
 			rand: '@'
 		},

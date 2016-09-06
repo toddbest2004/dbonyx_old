@@ -104,10 +104,12 @@ angular.module('ItemCtrls', [])
 		}
 		if(!$scope.item){ //defaults if item isn't passed properly
 			$scope.item={name:"Unknown Item", itemId:0,_id:0};
-			wireItem();
 		}
 
+		wireItem();
+
 		function wireItem() {
+			console.log($scope.item)
 			$scope.itemLinkPath = "/item/"+$scope.item.itemId;
 
 			var options = []

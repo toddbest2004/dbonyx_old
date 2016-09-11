@@ -1,6 +1,6 @@
 var express = require("express")
 var router = express.Router()
-var itemConstants = require('./itemConstants')
+var itemConstants = require('../util/itemConstants')
 var db = require("../../mongoose")
 
 router.get('/search/:term', function(req, res){

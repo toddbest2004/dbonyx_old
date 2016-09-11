@@ -8,7 +8,7 @@ var express = require("express");
 var router = express.Router();
 var db = require("../../mongoose");
 
-var itemConstants = require('./itemConstants');
+var itemConstants = require('../util/itemConstants');
 var validComparators = {number:{'>':'$gt', '=':'$eq','<':'$lt'},boolean:{'True':true,'False':false}};
 var validFilters = {
 	'Item Level':{name:'itemLevel',type:'number'},

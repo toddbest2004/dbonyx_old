@@ -7,6 +7,7 @@ var router = express.Router();
 var realmArray;
 var regionArray = ['us', 'eu'];
 
+var characterUtil = require("../util/characterUtil");
 var db = require("../../mongoose");
 // var characterData = require("../strangerogue.json")
 // var itemPositions = require("../static/itemPositions")

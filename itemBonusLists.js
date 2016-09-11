@@ -92,13 +92,16 @@ var bonusListQueue = async.queue(function(task, callback){
 })
 
 function processItem(item){
-	item.contextComplete = true;
 	itemQueue.push({item:item}, function(item){
+		console.log(item);
 		if(item){
+			item.contextComplete = true;
 			db.item.findOneAndUpdate({itemId:item.itemId},item,function(){
 			console.log(queryCount)
 			console.log("________")
-
+		console.log("^^^^^^^")
+			console.log(item.contextComplete)
+		console.log("__________")
 			})
 		}
 	})

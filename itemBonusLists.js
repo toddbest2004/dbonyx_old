@@ -35,6 +35,7 @@ function start(){
 			processItem(item)
 		})
 		itemQueue.drain = function(){
+			console.log("item queue drained");
 			if(queryCount<30000){
 				start()
 			}else{
@@ -164,6 +165,7 @@ function getBonusDetails(task, cb){
 		uri: url,
 		json: true
 	}, function(error, response, body){
+		console.log("request response");
 		queryCount = response.headers["x-plan-quota-current"]
 		if(!error && response.statusCode===200){
 			console.log("getBonusDetails: good url response")

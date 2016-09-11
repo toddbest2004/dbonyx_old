@@ -58,7 +58,7 @@ var itemQueue = async.queue(function(task, callback){
 })
 
 var contextQueue = async.queue(function(task, callback){
-	// console.log("context")
+	console.log("context")
 	getContextItem(task.item, task.context, function(newItem){
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
@@ -116,13 +116,14 @@ function getContextItem(item, context, cb){
 		url+="/"+context
 	}
 	url+="?bl=-1&locale=en_US&apikey="+process.env.API
-
+console.log(url);
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
 		queryCount = response.headers["x-plan-quota-current"]
 		if(!error && response.statusCode===200){
+			console.log(body.name);
 			var details = item.contextDetails[context];
 			details.bonusLists = body.bonusSummary.chanceBonusLists;
 			details.defaultBonusLists = body.bonusSummary.defaultBonusLists;
@@ -137,6 +138,7 @@ function getContextItem(item, context, cb){
 }
 
 function getBonusDetails(task, cb){
+	console.log("bonus details")
 	var url = "https://us.api.battle.net/wow/item/"+task.item.itemId
 	if(task.context!==""){
 		url+="/"+task.context

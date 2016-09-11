@@ -59,20 +59,26 @@ var itemQueue = async.queue(function(task, callback){
 
 var contextQueue = async.queue(function(task, callback){
 	console.log("context")
+	console.log(task.context)
 	getContextItem(task.item, task.context, function(newItem){
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
 			empty = false
+			console.log("bonusList pushed to queue")
 			bonusListQueue.push({item:newItem,context:task.context,bonusId:bonusId},function(item){newItem = item})
 		})
 		newItem.contextDetails[context].defaultBonusLists.forEach(function(bonusId){
 			empty = false
+			console.log("defaultBonusList pushed to queue")
 			bonusListQueue.push({item:newItem,context:task.context,bonusId:bonusId},function(item){newItem = item})
 		})
 		if(empty){
+			console.log("No context bonus lists");
 			callback(newItem)
 		}else{
+			console.log("Context bonus lists found");
 			bonusListQueue.drain = function(){
+				console.log("bonusListQueue drained");
 				callback(newItem)
 			}
 		}
@@ -80,6 +86,7 @@ var contextQueue = async.queue(function(task, callback){
 })
 
 var bonusListQueue = async.queue(function(task, callback){
+	console.log("bonusListQueue fired");
 	getBonusDetails(task, callback)
 })
 
@@ -97,16 +104,21 @@ function processContexts(item, cb){
 
 	console.log("Starting item: "+item.itemId)
 	for(context in item.contextDetails){
-		// console.log(context)
-		// if(!item.contextDetails[context].bonusStats){
+		console.log(context)
+		if(!item.contextDetails[context].bonusStats){
 			empty = false
 			contextQueue.push({item:item,context:context},function(newItem){item=newItem})
-		// }
+		}
 	}
 	if(empty){
+		console.log("No contexts")
 		cb(item)
 	}else{
-		contextQueue.drain=function(){cb(item)};
+		console.log("Contexts found, creating drain.");
+		contextQueue.drain=function() {
+			console.log("contextQueue drained.");
+			cb(item)
+		};
 	}
 }
 
@@ -147,13 +159,14 @@ function getBonusDetails(task, cb){
 	}
 	url+="?bl="+task.bonusId+"&locale=en_US&apikey="+process.env.API
 
-
+	console.log(url)
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
 		queryCount = response.headers["x-plan-quota-current"]
 		if(!error && response.statusCode===200){
+			console.log("getBonusDetails: good url response")
 			if(!body.bonusLists||body.bonusLists[0]!==task.bonusId){
 				console.log('NO MATCH: '+task.bonusId)
 				cb()
@@ -179,12 +192,14 @@ function getBonusDetails(task, cb){
 					}
 				}
 				bonus.statDeltas = statDeltas
+				console.log("getBonusDetails: firing cb")
 				cb(task.item)
 			}
 		}else{
 			console.log("getBonusDetails error: ");
 			console.log(response.statusCode);
 			console.log(item.itemId);
+			console.log("firing bad url cb");
 			// if(response.statusCode!=404)
 			cb(task.item)
 		}

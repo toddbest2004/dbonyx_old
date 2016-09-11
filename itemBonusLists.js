@@ -204,7 +204,7 @@ function getBonusDetails(task, cb){
 		}else{
 			console.log("getBonusDetails error: ");
 			console.log(response.statusCode);
-			console.log(item.itemId);
+			console.log(item);
 			console.log("firing bad url cb");
 			// if(response.statusCode!=404)
 			cb(task.item)

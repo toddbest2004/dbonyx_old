@@ -2,6 +2,8 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var characterSchema = new Schema({
+	lastModified: Number,
+	lastChecked: Number,
 	name: String,
 	realm: String,
 	region: String,

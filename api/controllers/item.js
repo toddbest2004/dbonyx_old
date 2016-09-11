@@ -96,9 +96,11 @@ function prettify(item, modifiers, res){
 	// console.log(item.stats)
 	//modifiers
 	var bonusStats = {}
-	item.stats.forEach(function(stat){
-		bonusStats[stat.stat]=stat.amount
-	})
+	if(item.stats){
+		item.stats.forEach(function(stat){
+			bonusStats[stat.stat]=stat.amount
+		})
+	}
 
 	if(modifiers.bonusLists){
 		modifiers.bonusLists.forEach(function(bonusId){
@@ -176,7 +178,7 @@ function prettify(item, modifiers, res){
 	}
 
 	//allowable classes
-	if(item.allowableClasses.length > 0){
+	if(item.allowableClasses&&item.allowableClasses.length > 0){
 		var classes = [];
 		for(var i=0; i<item.allowableClasses.length; i++){
 			classes.push(itemConstants.characterClasses[item.allowableClasses[i]]);

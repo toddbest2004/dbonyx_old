@@ -98,12 +98,12 @@ router.get("/achievements", function(req, res){
 });
 
 router.get("/mounts", function(req, res){
-	var name = req.query.name.capitalize()
-	var realm = req.query.realm
-	var region = req.query.region.toLowerCase()
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."})
-		return
+	var name = req.query.name.capitalize();
+	var realm = req.query.realm;
+	var region = req.query.region.toLowerCase();
+	if (!verifyRealm(realm, region)) {
+		res.status(400).json({error:"Improper query string."});
+		return;
 	}
 	db.character.findOne({name:name,realm:realm,region:region}).populate('mounts').exec(function(err, character){
 		if(err||!character){
@@ -162,16 +162,16 @@ function findCharacter(realm, name, res){
 	}
 	var region = realmSplit[1].toLowerCase()
 	var realmName = realmSplit[0]
-	db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
-		if(err){
-			res.status(400).json({error:"Error reading database."})
-			return
-		}
-		if(!character){
+	// db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
+	// 	if(err){
+	// 		res.status(400).json({error:"Error reading database."});
+	// 		return;
+	// 	}
+	// 	if(!character){
 			importCharacter(name,realmName,region,function(result){
 				if(!result){
-					res.status(404).json({error:"Not Found.", result:false})
-					return
+					res.status(404).json({error:"Not Found.", result:false});
+					return;
 				}
 				db.character.findOne({name:name, realm:realmName, region:region}, function(err, character){
 					res.json({status:"success", count:1, character:{
@@ -181,20 +181,20 @@ function findCharacter(realm, name, res){
 						level:character.level,
 						faction:character.faction,
 						thumbnail:character.thumbnail,
-						guildName:character.guildName}})
-				})
-			})
-		}else{
-			res.json({status:"success", count:1, character:{
-						name:character.name,
-						realm:character.realm,
-						region:character.region.toUpperCase(),
-						level:character.level,
-						faction:character.faction,
-						thumbnail:character.thumbnail,
-						guildName:character.guildName}})
-		}
-	})
+						guildName:character.guildName}});
+				});
+			});
+		// }else{
+		// 	res.json({status:"success", count:1, character:{
+		// 				name:character.name,
+		// 				realm:character.realm,
+		// 				region:character.region.toUpperCase(),
+		// 				level:character.level,
+		// 				faction:character.faction,
+		// 				thumbnail:character.thumbnail,
+		// 				guildName:character.guildName}})
+	// 	}
+	// });
 }
 
 function findMultipleCharacters(name, res){
@@ -230,9 +230,7 @@ function findMultipleCharacters(name, res){
 function importCharacter(name, realm, region, callback){
 	console.log("Importing Character: "+name)
 	console.log(name, realm, region)
-	console.log(process.env.API)
 	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
-	console.log(url)
 	request({
 		uri: url,
 		json: true
@@ -249,66 +247,76 @@ function importCharacter(name, realm, region, callback){
 function processCharacter(name, realm, region, body, callback){
 	db.character.findOne({name:name,realm:realm,region:region}, function(err, character){
 		if(err){
-			callback(false)
-			return
+			callback(false);
+			return;
 		}
 		if(!character){
-			body.thumbnail = body.thumbnail.replace("avatar.jpg","")
 			db.character.create({name:name,realm:realm,region:region, importing:true}, function(err, character){
-				character.class=body.class
-				character.race=body.race
-				character.gender=body.gender
-				character.level=body.level
-				character.achievementPoints=body.achievementPoints
-				character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","")
-				character.calcClass=body.calcClass
-				character.faction=body.faction
-				character.guildName=body.guild.name
-				character.quests=body.quests
-				character.titles=body.titles
-				character.mounts=body.mounts.collected.map(function(mount){
-					return mount.spellId
-				})
-				character.criteria=[]
-				for(var i=0; i<body.achievements.criteria.length;i++){
-					character.criteria.push({
-						id:body.achievements.criteria[i],
-						quantity:body.achievements.criteriaQuantity[i],
-						timestamp:body.achievements.criteriaTimestamp[i],
-						created:body.achievements.criteriaCreated[i]
-					})
-				}
-				character.achievements=[]
-				for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
-					character.achievements.push({
-						id:body.achievements.achievementsCompleted[i],
-						timestamp:body.achievements.achievementsCompletedTimestamp[i]
-					})
-				}
-				character.reputation=body.reputation
-				character.appearance=body.appearance
-				character.items=body.items
-				character.stats=body.stats
-				character.professions=body.professions
-				character.progression=body.progression
-				character.talents=body.talents
-				character.pvp=body.pvp
-				character.save(function(err){
-					importCharacterImages(body.thumbnail, callback)
-				})
+				updateCharacter(character, body, callback);
 			})
 		}else{
-			callback(true)
-			//TODO: Update character information
-			console.log("character exists")
+			if(!character.lastModified||character.lastModified<body.lastModified){
+				updateCharacter(character, body, callback);
+			}else {
+				//character up to date
+				callback(true)
+			}
 		}
 	})
+}
+
+function updateCharacter(character, body, callback) {
+	body.thumbnail = body.thumbnail.replace("avatar.jpg","");
+	character.lastModified=body.lastModified;
+	character.lastChecked=Date.now();
+	character.class=body.class
+	character.race=body.race
+	character.gender=body.gender
+	character.level=body.level
+	character.achievementPoints=body.achievementPoints
+	character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","")
+	character.calcClass=body.calcClass
+	character.faction=body.faction
+	if(body.guild) {
+		character.guildName=body.guild.name
+	}
+	character.quests=body.quests
+	character.titles=body.titles
+	character.mounts=body.mounts.collected.map(function(mount){
+		return mount.spellId
+	})
+	character.criteria=[]
+	for(var i=0; i<body.achievements.criteria.length;i++){
+		character.criteria.push({
+			id:body.achievements.criteria[i],
+			quantity:body.achievements.criteriaQuantity[i],
+			timestamp:body.achievements.criteriaTimestamp[i],
+			created:body.achievements.criteriaCreated[i]
+		})
+	}
+	character.achievements=[]
+	for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
+		character.achievements.push({
+			id:body.achievements.achievementsCompleted[i],
+			timestamp:body.achievements.achievementsCompletedTimestamp[i]
+		})
+	}
+	character.reputation=body.reputation
+	character.appearance=body.appearance
+	character.items=body.items
+	character.stats=body.stats
+	character.professions=body.professions
+	character.progression=body.progression
+	character.talents=body.talents
+	character.pvp=body.pvp
+	character.save(function(err){
+		importCharacterImages(body.thumbnail, callback)
+	})	
 }
 
 function importCharacterImages(thumbnail, callback){
 	var uri = "http://us.battle.net/static-render/us/"+thumbnail
 	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"")
-	console.log(uri)
 	download(uri+"avatar.jpg",filename+"avatar.jpg")
 	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback)
 	download(uri+"inset.jpg",filename+"inset.jpg")

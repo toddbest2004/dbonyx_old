@@ -105,10 +105,10 @@ function processContexts(item, cb){
 	console.log("Starting item: "+item.itemId)
 	for(context in item.contextDetails){
 		console.log(context)
-		if(!item.contextDetails[context].bonusStats){
+		// if(!item.contextDetails[context].bonusStats){
 			empty = false
 			contextQueue.push({item:item,context:context},function(newItem){item=newItem})
-		}
+		// }
 	}
 	if(empty){
 		console.log("No contexts")

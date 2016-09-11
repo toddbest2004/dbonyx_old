@@ -159,4 +159,6 @@ itemConstants.itemSpellTriggers = {
 	ON_PICKUP:"",
 	ON_LEARN:""
 };
+
+itemConstants.characterClasses = ['','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'];
 module.exports = itemConstants;

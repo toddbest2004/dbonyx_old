@@ -175,6 +175,15 @@ function prettify(item, modifiers, res){
 		}
 	}
 
+	//allowable classes
+	if(item.allowableClasses.length > 0){
+		var classes = [];
+		for(var i=0; i<item.allowableClasses.length; i++){
+			classes.push(itemConstants.characterClasses[item.allowableClasses[i]]);
+		}
+		item.allowableClasses = classes;
+	}
+
 	//Item Spells
 	if(item.itemSpells){
 		for(var i=0; i<item.itemSpells.length;i++){

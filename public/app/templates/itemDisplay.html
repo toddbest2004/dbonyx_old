@@ -23,13 +23,14 @@
 <li ng-if="item.hasSockets">&nbsp;</li>
 
 <li ng-if="item.maxDurability">Durability: {{item.maxDurability}}/{{item.maxDurability}}</li> 
-<!-- <li ng-if="item.allowableClasses">Classes: [list classes]</li> -->
+<li ng-if="item.allowableClasses.length">Classes: <span ng-repeat="class in item.allowableClasses"> {{class}}</span></li>
+<li ng-if="item.allowableRaces.length">Races: <span ng-repeat="race in item.allowableRaces"> {{race}}</span></li>
+<li ng-if="item.requiredLevel">Requires Level {{item.requiredLevel}}</li>
 <!-- Spells-->
 <li ng-repeat="spell in item.itemSpells" class="itemSpell">{{spell.trigger}} {{spell.spell.description}} <span ng-if="spell.spell.cooldown">({{spell.spell.cooldown}})</span>
 <div ng-if="spell.nCharges>1" class="white">{{spell.nCharges}} Charges</div>
 </li>
 
-<li ng-if="item.requiredLevel">Requires Level {{item.requiredLevel}}</li>
 
 <li ng-if="item.itemSet.items.length">&nbsp;</li>
 <li ng-if="item.itemSet.items.length" class="itemSetName">{{item.itemSet.name}} ({{item.itemSet.equipped}}/{{item.itemSet.items.length}})</li>

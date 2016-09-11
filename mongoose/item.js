@@ -15,6 +15,8 @@ var itemSchema = new Schema({
 	name: String,
 	icon: String,
 	stackable: Number,
+	allowableClasses: [Number],
+	allowableRaces: [Number],
 	itemBind: Number,
 	// bonusStats: [bonusStat],
 	buyPrice: Number,

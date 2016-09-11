@@ -109,22 +109,28 @@ function prettify(item, modifiers, res){
 				bonusId=bonusId.bonusListId;
 			}
 
-			var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
+			if(!item.contextDetails){
+				var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
 
-			for(key in bonuses){
-				if(key==='statDeltas'){
+				for(key in bonuses){
+					if(key==='statDeltas'){
 
-					for(stat in bonuses[key]){
-						bonusStats[stat]=bonusStats[stat]||0
-						bonusStats[stat]+=bonuses[key][stat]
+						for(stat in bonuses[key]){
+							bonusStats[stat]=bonusStats[stat]||0
+							bonusStats[stat]+=bonuses[key][stat]
+						}
+					}else if(key==='nameDescription'){
+						item.nameDescription += " " + bonuses[key]
+					}else if(key==='itemSet'){
+						//ignore
+					}else{
+						item[key]=bonuses[key]
 					}
-				}else if(key==='nameDescription'){
-					item.nameDescription += " " + bonuses[key]
-				}else if(key==='itemSet'){
-					//ignore
-				}else{
-					item[key]=bonuses[key]
 				}
+			}else{
+				console.log("No item context details for item: "+item._id);
+				console.log("item context: "+item.context);
+				console.log("item bonusId: "+bonusId);
 			}
 		})
 	}

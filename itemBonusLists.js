@@ -131,6 +131,8 @@ console.log(url);
 			details.bonusListDetails = {}
 			cb(item)
 		}else{
+			console.log(error);
+			console.log(response.statusCode);
 			// if(response.statusCode!=404)
 				cb(item)
 		}
@@ -180,7 +182,9 @@ function getBonusDetails(task, cb){
 				cb(task.item)
 			}
 		}else{
-			console.log(response)
+			console.log("getBonusDetails error: ");
+			console.log(response.statusCode);
+			console.log(item.itemId);
 			// if(response.statusCode!=404)
 			cb(task.item)
 		}

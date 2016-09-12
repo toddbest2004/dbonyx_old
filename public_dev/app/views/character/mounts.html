@@ -1,0 +1,23 @@
+<div ng-controller="characterMain">
+<div class="row" id="content-column-wrapper">
+	<div id="main-content">
+		<div ng-if="!character.loading">
+			<h1>{{character.name}}</h1>
+			<h3>&lt;{{character.guildName}}&gt;</h3>
+			<h5>Level {{character.level}}</h5>
+		</div>
+		<div class="row">
+			<div ng-repeat='mount in character.mounts'>
+				<div class="col-xs-3 mount-display">
+					<a href="/mount/{{mount._id}}"><img src="/images/icons/{{mount.icon}}.png" class="borderQuality{{mount.qualityId}} mount-icon">
+					<h5>{{mount.name}}</h5></a>
+				</div>
+				<div class="clearfix" ng-if="$index%4===3"></div>
+			</div>
+		</div>
+	</div>
+	<sidebar>
+		<character-links></character-links>
+	</sidebar>
+</div>
+</div>

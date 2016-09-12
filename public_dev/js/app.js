@@ -16,32 +16,32 @@ $routeProvider
 	templateUrl: 'app/views/database.html'
 })
 .when('/character', {
-	templateUrl: 'app/views/character.html'
+	templateUrl: 'app/views/character/lookup.html'
 })
-.when('/character/main',{
-	templateUrl: 'app/views/characterMain.html'
+.when('/c/:name/:server/',{
+	templateUrl: 'app/views/character/profile.html'
 })
-.when('/character/reputation',{
-	templateUrl: 'app/views/characterReputation.html'
+.when('/c/:name/:server/reputation',{
+	templateUrl: 'app/views/character/reputation.html'
 })
-.when('/character/achievements',{
-	templateUrl: 'app/views/characterAchievements.html'
+.when('/c/:name/:server/achievements',{
+	templateUrl: 'app/views/character/achievements.html'
 })
-.when('/character/mounts',{
-	templateUrl: 'app/views/characterMounts.html'
+.when('/c/:name/:server/mounts',{
+	templateUrl: 'app/views/character/mounts.html'
 })
-.when('/character/battlepets',{
-	templateUrl: 'app/views/characterBattlepets.html'
+.when('/c/:name/:server/battlepets',{
+	templateUrl: 'app/views/character/battlepets.html'
 })
-.when('/character/professions',{
-	templateUrl: 'app/views/characterProfessions.html'
+.when('/c/:name/:server/professions',{
+	templateUrl: 'app/views/character/professions.html'
 })
-.when('/character/pvp',{
-	templateUrl: 'app/views/characterPvp.html'
+.when('/c/:name/:server/pvp',{
+	templateUrl: 'app/views/character/pvp.html'
 })
-.when('/character/:characterName', {
-	templateUrl: 'app/views/character.html'
-})
+// .when('/character/:characterName', {
+// 	templateUrl: 'app/views/character.html'
+// })
 .when('/community', {
 	templateUrl: 'app/views/community.html' 
 })

@@ -1,0 +1,39 @@
+<div ng-controller="characterMain">
+<div class="row" id="content-column-wrapper">
+<div id="main-content">
+	<div ng-if="!character.loading">
+		<h1>{{character.name}}</h1>
+		<h3>&lt;{{character.guildName}}&gt;</h3>
+		<h5>Level {{character.level}}</h5>
+	</div>
+	<div>
+		<h1>Primary Professions</h1>
+		<div ng-repeat="profession in character.professions.primary">
+			<h2>{{profession.name}}:</h2> {{profession.rank}}/{{profession.max}}
+			<div ng-if="profession.recipes.length">
+				<button  ng-click="expandToggle($index)">+</button>Recipes: {{profession.recipes.length}}
+				<ul ng-if="expandRecipes[$index]">
+					<li ng-repeat="recipe in profession.recipes">{{recipe}}</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div>
+		<h1>Secondary Professions</h1>
+		<div ng-repeat="profession in character.professions.secondary">
+			<h2>{{profession.name}}:</h2> {{profession.rank}}/{{profession.max}}
+			<div ng-if="profession.recipes.length">
+				<button  ng-click="expandToggle($index+2)">+</button>Recipes: {{profession.recipes.length}}
+				<ul ng-if="expandRecipes[$index+2]">
+					<li ng-repeat="recipe in profession.recipes">{{recipe}}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<sidebar>
+	<character-links></character-links>
+</sidebar>
+</div>
+</div>

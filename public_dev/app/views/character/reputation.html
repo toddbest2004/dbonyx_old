@@ -1,0 +1,22 @@
+<div ng-controller="characterMain">
+<div class="row" id="content-column-wrapper">
+<div id="main-content">
+	<div ng-if="!character.loading">
+		<h1>{{character.name}}</h1>
+		<h3>&lt;{{character.guildName}}&gt;</h3>
+		<h5>Level {{character.level}}</h5>
+	</div>
+	<div class="row" ng-repeat="rep in character.reputation" style="margin:3px;">
+		<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">{{rep.name}}:</div>
+		<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9 center">
+			<div class="reputationBarBack reputation{{rep.standing}}" style="width:{{rep.value/rep.max*100}}%;" ng-if="rep.value">&nbsp;</div>
+			<div class="reputationBarText">{{rep.value}}/{{rep.max}}</div>
+			
+		</div>
+	</div>
+</div>
+<sidebar>
+	<character-links></character-links>
+</sidebar>
+</div>
+</div>

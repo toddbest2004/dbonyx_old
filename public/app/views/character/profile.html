@@ -1,0 +1,20 @@
+<div ng-controller="characterMain">
+<div class="row" id="content-column-wrapper">
+<div id="main-content">
+	<div ng-if="!character.loading">
+		<h1>{{character.name}}</h1>
+		<h3>&lt;{{character.guildName}}&gt;</h3>
+		<h5>Level {{character.level}}</h5>
+	</div>
+	<div id="characterProfileDiv">
+		<img src="/images/characters/{{character.thumbnail}}profilemain.jpg">
+		<div ng-repeat="(key, item) in character.items" ng-if="item.icon" class="profileItemDiv profileItem{{key}}" item-hover="{{item}}">
+			<a href="/item/{{item.id}}"><img src="/images/icons/{{item.icon}}.png" class="profileItemImg borderQuality{{item.quality}}"></a>
+		</div>
+	</div>
+</div>
+<sidebar>
+	<character-links></character-links>
+</sidebar>
+</div>
+</div>

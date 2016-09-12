@@ -1,9 +1,3 @@
 <ul>
-	<li><a href="/character/main">Profile</a></li>
-	<li><a href="/character/reputation">Reputation</a></li>
-	<li><a href="/character/achievements">Achievements</a></li>
-	<li><a href="/character/mounts">Mounts</a></li>
-	<li><a href="/character/battlepets">Battlepets</a></li>
-	<li><a href="/character/professions">Professions</a></li>
-	<li><a href="/character/pvp">PvP</a></li>
+	<li ng-repeat="link in links"><a href="/c/{{character.name}}/{{character.realm}}-{{character.region}}/{{link.suffix}}">{{link.title}}</a></li>
 </ul>

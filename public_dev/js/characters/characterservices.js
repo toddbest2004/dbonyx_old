@@ -17,6 +17,7 @@ angular.module('dbonyx')
 	}
 
 	character.search=function(name, realmInput, callback){
+		console.log("searching", name, realmInput)
 		character.loading=true
 		if(!name){
 			character.loading=false
@@ -33,9 +34,9 @@ angular.module('dbonyx')
 			params: params
 		}).then(function success(response){
 			if(response.data.count===1){
-				onyxPersistence.set('characterName',name)
-				onyxPersistence.set("characterRealm",response.data.character.realm)
-				onyxPersistence.set("characterRegion",response.data.character.region)
+				// onyxPersistence.set('characterName',name)
+				// onyxPersistence.set("characterRealm",response.data.character.realm)
+				// onyxPersistence.set("characterRegion",response.data.character.region)
 				character.setCharacter(response.data.character)
 				character.loading=false
 				character.loaded=true
@@ -87,6 +88,6 @@ angular.module('dbonyx')
 		}
 	}
 
-	character.init()
+	// character.init()
 	return character
 }])

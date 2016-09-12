@@ -1,0 +1,18 @@
+<div ng-controller="characterMain">
+<div class="row" id="content-column-wrapper">
+	<div id="main-content" class="container">
+		<div ng-if="!character.loading">
+			<h1>{{character.name}}</h1>
+			<h3>&lt;{{character.guildName}}&gt;</h3>
+			<h5>Level {{character.level}}</h5>
+		</div>
+		<div ng-repeat='achievement in character.achievements'>
+			<h3>{{achievement.id.title}} ({{achievement.id.points}}) </h3>
+			{{achievement.id.description}}
+		</div>
+	</div>
+	<sidebar>
+	<character-links></character-links>
+	</sidebar>
+</div>
+</div>

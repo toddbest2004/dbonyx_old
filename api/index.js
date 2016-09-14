@@ -17,6 +17,8 @@ router.use("/battlepet", battlepetCtrl);
 // router.use("/data", dataCtrl);
 var forumCtrl = require('./controllers/forums');
 router.use("/forum", forumCtrl);
+var guildCtrl = require("./controllers/guild");
+router.use("/guild", guildCtrl);
 var itemCtrl = require("./controllers/item");
 router.use("/item", itemCtrl);
 var mountCtrl = require("./controllers/mount");

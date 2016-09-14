@@ -1,0 +1,13 @@
+<div class="row" id="content-column-wrapper">
+<div id="main-content">
+	GUILD STUFF
+	{{guildName}}
+	{{guildServer}}
+	<div ng-repeat="member in guild.members">
+	<a href="/c/{{member.character.name}}/{{member.character.realm}}-US/">{{member.character.name}}</a>
+	</div>
+</div>
+<sidebar>
+	GUILD LINKS HERE
+</sidebar>
+</div>

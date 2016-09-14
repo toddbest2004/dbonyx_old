@@ -39,6 +39,10 @@ $routeProvider
 .when('/c/:name/:server/pvp',{
 	templateUrl: 'app/views/character/pvp.html'
 })
+.when("/g/:name/:server", {
+	controller: "guildCtrl",
+	templateUrl: "app/views/guild/profile.html"
+})
 // .when('/character/:characterName', {
 // 	templateUrl: 'app/views/character.html'
 // })

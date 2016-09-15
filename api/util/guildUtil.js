@@ -44,7 +44,7 @@ var importGuild = function(name, realm, region, callback) {
 					callback(err);
 					return;
 				}
-				callback(false, guild);
+				callback(false, body); //send body instead of guild. Guild is null when newly created here
 				return;
 			});
 		} else {

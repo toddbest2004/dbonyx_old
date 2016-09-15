@@ -8,6 +8,8 @@ var guildSchema = new Schema({
 	name: String,
 	nameSlug: String, //lowercase normalized name for searching
 	realm: String,
+	realmSlug: String,
+	region: String,
 	battlegroup: String,
 	level: Number,
 	side: Number,

@@ -5,20 +5,23 @@ var db = require("../../mongoose");
 var guildUtil = {};
 
 guildUtil.importGuild = function(name, realm, region, callback) {
-	db.guild.findOneAndUpdate({nameSlug:name.toLowerCase(), realm:realm.toLowerCase()}, {$set:{lastChecked:Date.now()}}, function(err, guild) {
+	db.guild.findOneAndUpdate({nameSlug:name.toLowerCase(), realmSlug:realm.toLowerCase(), region:region.toLowerCase()}, {$set:{lastChecked:Date.now()}}, function(err, guild) {
 		if(err) {
 			callback(err);
 			return;
 		}
 		if(!guild) {
+			console.log("New guild, creating");
 			importGuild(name, realm, region, callback);
 			return;
 		}
 		var oneDay = 1000*60*60*24;
 		if(Date.now() - guild.lastChecked > oneDay) {
+			console.log("Guild exists. Updating with fresh data.");
 			importGuild(name, realm, region, callback);
 			return;
 		}
+		console.log("Guild exists. No update.");
 		callback(false, guild);
 	});
 };
@@ -32,10 +35,12 @@ var importGuild = function(name, realm, region, callback) {
 	}, function(error, response, body){
 		if (!error && response.statusCode===200) {
 			body.lastChecked = Date.now();
-			body.realm = body.realm.toLowerCase();
+			body.realmSlug = body.realm.toLowerCase();
 			body.nameSlug = name.toLowerCase();
-			db.guild.create(body, function(err, guild) {
-				if(err||!guild) {
+			body.region = region;
+			// console.log(body);
+			db.guild.findOneAndUpdate({nameSlug:name.toLowerCase(), realmSlug:realm.toLowerCase(), region:region.toLowerCase()}, {$set:body}, {upsert: true}, function(err, guild) {
+				if(err) {
 					callback(err);
 					return;
 				}
@@ -43,7 +48,8 @@ var importGuild = function(name, realm, region, callback) {
 				return;
 			});
 		} else {
-			callback(response.statusCode);
+			console.log("Guild doesn't seem to exist.");
+			callback("Guild doesn't seem to exist.");
 		}
 	});
 };

@@ -3,6 +3,7 @@ var express = require("express");
 var request = require("request");
 var fs = require("fs");
 var router = express.Router();
+var encodeUrl = require('encodeurl')
 
 var realmArray;
 var regionArray = ['us', 'eu'];
@@ -232,6 +233,7 @@ function importCharacter(name, realm, region, callback){
 	console.log("Importing Character: "+name)
 	console.log(name, realm, region)
 	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API
+	url = encodeUrl(url);
 	request({
 		uri: url,
 		json: true
@@ -240,6 +242,10 @@ function importCharacter(name, realm, region, callback){
 		if(!error && response.statusCode===200){
 			processCharacter(name, realm, region, body, callback)
 		}else{
+			// console.log(response.statusCode);
+			// console.log(body);
+			// console.log(url);
+			// console.log(encodeUrl(url));
 			callback(false)
 		}
 	})

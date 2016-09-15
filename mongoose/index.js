@@ -28,5 +28,4 @@ fs
     var model = require(path.join(__dirname, file));
     db[model.modelName] = model;
   });
-
 module.exports = db;

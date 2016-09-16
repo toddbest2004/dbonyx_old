@@ -82,7 +82,8 @@ function updateCharacter(character, body, callback) {
 	character.calcClass=body.calcClass;
 	character.faction=body.faction;
 	if(body.guild) {
-		character.guildName=body.guild.name;
+		character.guildName = body.guild.name;
+		character.guildRealm = body.guild.realm;
 	}
 	character.quests=body.quests;
 	character.titles=body.titles;

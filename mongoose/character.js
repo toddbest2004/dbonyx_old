@@ -1,5 +1,6 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+"use strict";
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var characterSchema = new Schema({
 	lastModified: Number,
@@ -20,6 +21,7 @@ var characterSchema = new Schema({
 	calcClass: String,
 	faction: Number,
 	guildName: String,
+	guildRealm: String,
 	// guild: {type: Schema.Types.ObjectId, ref: 'Guild'},
 	// feed:
 	appearance:{faceVariation:Number,skinColor:Number,hairVariation:Number,hairColor:Number,featureVariation:Number,showHelm:Boolean,showCloak:Boolean},
@@ -37,6 +39,7 @@ var characterSchema = new Schema({
 		back:{},
 		chest:{},
 		tabard:{},
+		shirt:{},
 		wrist:{},
 		hands:{},
 		waist:{},
@@ -74,7 +77,7 @@ var characterSchema = new Schema({
 		created:Number}],
 	achievements:[{id:{type:Number,ref:'achievement'},timestamp:Number}],
 	titles:[{id:Number,name:String}]
-})
+});
 
-var character = mongoose.model('character', characterSchema)
-module.exports = character
+var character = mongoose.model('character', characterSchema);
+module.exports = character;

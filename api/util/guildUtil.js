@@ -12,13 +12,13 @@ guildUtil.importGuild = function(name, realm, region, callback) {
 		}
 		if(!guild) {
 			console.log("New guild, creating");
-			importGuild(name, realm, region, callback);
+			importGuildFromServer(name, realm, region, callback);
 			return;
 		}
 		var oneDay = 1000*60*60*24;
 		if(Date.now() - guild.lastChecked > oneDay) {
 			console.log("Guild exists. Updating with fresh data.");
-			importGuild(name, realm, region, callback);
+			importGuildFromServer(name, realm, region, callback);
 			return;
 		}
 		console.log("Guild exists. No update.");
@@ -26,7 +26,7 @@ guildUtil.importGuild = function(name, realm, region, callback) {
 	});
 };
 
-var importGuild = function(name, realm, region, callback) {
+var importGuildFromServer = function(name, realm, region, callback) {
 	console.log("Importing guild");
 	var url = "https://"+region+".api.battle.net/wow/guild/"+realm+"/"+name+"?fields=ranks,members,achievements&locale=en_US&apikey="+process.env.API;
 	request({

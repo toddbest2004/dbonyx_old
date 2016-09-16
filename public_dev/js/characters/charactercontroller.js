@@ -19,14 +19,10 @@ angular.module('dbonyx')
 
 		$scope.character.search(name, realm, function(result) {
 			if(result){
-				if(result.count===1){
-					var name = result.character.name,
-						realm = result.character.realm,
-						region = result.character.region;
-					$location.url('/c/'+name+'/'+realm+'-'+region+'/');
-				}else{
-					$scope.results=result;
-				}
+				var name = result.character.name,
+					realm = result.character.realm,
+					region = result.character.region;
+				$location.url('/c/'+name+'/'+realm+'-'+region+'/');
 			}else{
 				//TODO: handle character not found
 				$scope.error="Unable to find character.";
@@ -39,9 +35,6 @@ angular.module('dbonyx')
 			realm = $scope.results[index].realm,
 			region = $scope.results[index].region.toUpperCase();
 		onyxCharacter.setCharacter($scope.results[index]);
-		// onyxPersistence.set("characterName",name);
-		// onyxPersistence.set("characterRealm",realm);
-		// onyxPersistence.set("characterRegion",region);
 		$location.url('/c/'+name+'/'+realm+'-'+region+'/');
 	};
 
@@ -59,7 +52,7 @@ angular.module('dbonyx')
 			console.log("loaded");
 		});
 	}
-			$scope.character=onyxCharacter;
+	$scope.character=onyxCharacter;
 	$scope.character.get('items');
 	$scope.character.get('mounts');
 	$scope.character.get('achievements');

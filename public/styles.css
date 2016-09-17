@@ -701,7 +701,7 @@ oi-select.loading:not(.multiple) .select-search:after {
 
 .itemIcon {
   border-width: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
   border-style: solid; }
 
 .itemLink {
@@ -982,7 +982,7 @@ oi-select.loading:not(.multiple) .select-search:after {
   height: 48px;
   border-width: 2px;
   border-style: solid;
-  border-radius: 4px; }
+  border-radius: 8px; }
 
 .profileItemhead {
   left: 40px;

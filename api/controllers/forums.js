@@ -95,7 +95,7 @@ router.post("/category/:categoryId", function(req, res){
 			}
 			var title = req.body.title
 			var message = req.body.message
-			var parsedContent = parserMessage(message);
+			var parsedContent = parseMessage(message);
 			db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
 				if(err||!cat){
 					return res.status(401).json({error:"Error making post, please try again."})

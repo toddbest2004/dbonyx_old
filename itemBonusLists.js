@@ -65,12 +65,7 @@ var contextQueue = async.queue(function(task, callback){
 		// 	callback(newItem)
 		// 	return;
 		// }
-		var context = task.context;
-		console.log("3333333333333333")
-		console.log(context);
-		console.log(task.context)
-		console.log(newItem.contextDetails[context])
-		console.log("444444444444")
+		// var context = task.context;
 		var empty = true
 		newItem.contextDetails[task.context].bonusLists.forEach(function(bonusId){
 			empty = false
@@ -122,7 +117,7 @@ function processContexts(item, cb){
 	var empty = true
 
 	console.log("Starting item: "+item.itemId)
-	for(context in item.contextDetails){
+	for(var context in item.contextDetails){
 		console.log(context)
 		// if(!item.contextDetails[context].bonusStats){
 			empty = false

@@ -4,60 +4,67 @@
 <a href="/forums/cat/{{thread.category._id}}">{{thread.category.name}}</a> 
 	
 	<h1>{{thread.name}}</h1>
-		<div class="row" ng-repeat="post in thread.posts">
-			<div class="col-xs-12">
-				<div class="forumPostTopBar clearfix">
-					<div class="forumPostTimestamp">{{post.createdOn}}</div>
-					<div class="forumPostId">#{{$index+1}}</div>
-				</div>
-			</div>
-			<div class="col-xs-3 forumPostAuthor">
-				<h3><a href="/profile/{{post.author.username}}">{{post.author.username}}</a></h3>
-				<div>
-				<!-- <img src="http://render-api-us.worldofwarcraft.com/static-render/us/internal-record-3694/152/113385368-avatar.jpg"> -->
-				</div>
-			</div>
-			<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" >
-				<div ng-show="post.editing">
-					<button class="btn-danger" ng-click="editOff($index)">X</button>
-					<form>
-						<textarea ng-model="post.editText" class="form-control" rows="10"></textarea>
-						<button class="btn form-control" ng-click="submitEdit($index)">Submit</button>
-					</form>
-				</div>
-				<div ng-hide="post.editing">
-					<div ng-bind-html="post.compiled" class="forumPostContent">
-					</div>
-					<div class="forumPostEditCount" ng-if="post.editCount">
-						This post has been edited {{post.editCount}} times.
-					</div>
-					<div ng-if="post.author.signature">
-					<hr>
-					{{post.author.signature}}
-					</div>
-					<div class="forumPostOptions clearfix" ng-if="user.username===post.author.username">
-						<div class="forumPostOption"><a href="#" ng-click="editOn($index)">Edit Post</a></div>
-					</div>
-				</div>
+	<div class="row" ng-repeat="post in thread.posts">
+		<div class="col-xs-12">
+			<div class="forumPostTopBar clearfix">
+				<div class="forumPostTimestamp">{{post.createdOn}}</div>
+				<div class="forumPostId">#{{$index+1}}</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<hr>
-				<div class="warning" ng-if="error">
-					{{error}}
-				</div>
-				<div class="warning" ng-if="!user.loggedin">
-					You must be logged in to make a post.
-				</div>
-				<form ng-submit="postMessage()">
-					<label for="forumMessage">Message: </label>
-					<textarea rows="10" id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
-					<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
+		<div class="col-xs-3 forumPostAuthor">
+			<h3><a href="/profile/{{post.author.username}}">{{post.author.username}}</a></h3>
+			<div>
+			<!-- <img src="http://render-api-us.worldofwarcraft.com/static-render/us/internal-record-3694/152/113385368-avatar.jpg"> -->
+			</div>
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" >
+			<div ng-show="post.editing">
+				<button class="btn-danger" ng-click="editOff($index)">X</button>
+				<form>
+					<textarea ng-model="post.editText" class="form-control" rows="10"></textarea>
+					<button class="btn form-control" ng-click="previewEdit($index)">Preview</button>
+					<button class="btn form-control" ng-click="submitEdit($index)">Submit</button>
 				</form>
+				<div ng-if="post.preview">
+					<strong>Preview:</strong>
+					<div ng-bind-html="post.preview" class="forumPostContent"></div>
+				</div>
+			</div>
+			<div ng-hide="post.editing">
+				<div ng-bind-html="post.compiled" class="forumPostContent">
+				</div>
+				<div class="forumPostEditCount" ng-if="post.editCount">
+					This post has been edited {{post.editCount}} times.
+				</div>
+				<div ng-if="post.author.signature">
+				<hr>
+				{{post.author.signature}}
+				</div>
+				<div class="forumPostOptions clearfix" ng-if="user.username===post.author.username">
+					<div class="forumPostOption"><a href="#" ng-click="editOn($index)">Edit Post</a></div>
+				</div>
 			</div>
 		</div>
-	
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr>
+			<div class="warning" ng-if="error">
+				{{error}}
+			</div>
+			<div class="warning" ng-if="!user.loggedin">
+				You must be logged in to make a post.
+			</div>
+			<label for="forumMessage">Message: </label>
+			<textarea rows="10" id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+			<button class="btn form-control" ng-click="previewPost($event)" ng-disabled="!user.loggedin">Preview</button>
+			<button class="form-control btn" ng-click="postMessage()" ng-disabled="!user.loggedin">Post Message</button>
+			<div ng-if="preview">
+			<strong>Preview:</strong>
+			<div ng-bind-html="preview" class="forumPostContent"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <sidebar>
 

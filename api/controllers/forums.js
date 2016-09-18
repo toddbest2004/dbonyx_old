@@ -8,11 +8,10 @@ var parser = require("../parsers/forum.js");
 // console.log(parser)
 var db = require("../../mongoose");
 
-router.post("/parser", function(req, res) {
-	var inputText = req.body.input;
-	inputText = inputText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-	inputText = parser.parse(inputText);
-	res.send(inputText);
+router.post("/preview", function(req, res) {
+	var preview = req.body.message;
+	preview = parseMessage(preview);
+	res.json({preview: preview});
 });
 
 router.get('/categories',function(req, res){
@@ -54,7 +53,7 @@ router.post("/thread/:threadId", function(req, res){
 			if(!req.body.message){
 				return res.status(401).json({error:"You cannot post an empty message."});
 			}
-			var parsedContent = parser.parse(req.body.message);
+			var parsedContent = parseMessage(req.body.message);
 			db.forumThread.findOne({_id:req.params.threadId}).populate('posts').exec(function(err, thread){
 				if(err||!thread){
 					return res.status(401).json({error:"Error making post, please try again."});
@@ -96,7 +95,7 @@ router.post("/category/:categoryId", function(req, res){
 			}
 			var title = req.body.title
 			var message = req.body.message
-			var parsedContent = parser.parse(message);
+			var parsedContent = parserMessage(message);
 			db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
 				if(err||!cat){
 					return res.status(401).json({error:"Error making post, please try again."})
@@ -236,3 +235,9 @@ router.post("/post/:id", function(req, res){
 })
 
 module.exports = router
+
+function parseMessage(message) {
+	message = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	message = parser.parse(message);
+	return message;
+}

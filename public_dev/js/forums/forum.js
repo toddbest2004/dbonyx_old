@@ -57,19 +57,31 @@ angular.module('dbonyx')
 		})
 	}
 	$scope.editOn = function(index){
-		var post = $scope.thread.posts[index]
-		post.editText = post.message
-		post.editing=true
-	}
+		var post = $scope.thread.posts[index];
+		post.editText = post.message;
+		post.editing=true;
+	};
 	$scope.editOff = function(index){
-		$scope.thread.posts[index].editing=false
-	}
+		$scope.thread.posts[index].editing=false;
+	};
 	$scope.submitEdit = function(index){
-		var post = $scope.thread.posts[index]
+		var post = $scope.thread.posts[index];
 		forumService.editPost(post._id, post.editText, function(err, result){
 			post.editing = false;
-			$route.reload()
-		})
+			$route.reload();
+		});
+	};
+	$scope.previewPost = function(evt) {
+		evt.preventDefault();
+		forumService.previewPost($scope.message, function(err, preview) {
+			$scope.preview = $sce.trustAsHtml(preview);
+		});
+	};
+	$scope.previewEdit = function(index) {
+		var post = $scope.thread.posts[index];
+		forumService.previewPost(post.editText, function(err, preview){
+			post.preview = $sce.trustAsHtml(preview);
+		});
 	}
 }])
 .controller('forumAdminCtrl', ['$scope', '$location', '$route', 'onyxUser', 'forumService',function($scope, $location, $route, onyxUser, forumService){
@@ -224,7 +236,6 @@ angular.module('dbonyx')
 	}
 
 	forum.editPost = function(id, text, cb){
-		console.log()
 		$http({
 			url:'/api/forum/post/'+id,
 			method: 'POST',
@@ -235,6 +246,21 @@ angular.module('dbonyx')
 			cb(null, response.data)
 		}, function error(response){
 			console.log(response.data.error)
+			cb(response.data.error)
+		})
+	}
+
+	forum.previewPost = function(message, cb) {
+		console.log(message)
+		$http({
+			url:'/api/forum/preview',
+			method: 'POST',
+			data: {
+				message:message
+			}
+		}).then(function success(response) {
+			cb(null, response.data.preview)
+		}, function error(response) {
 			cb(response.data.error)
 		})
 	}

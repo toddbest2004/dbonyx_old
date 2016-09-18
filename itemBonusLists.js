@@ -13,7 +13,6 @@ var ignoredKeys = ['id','bonusSummary', 'bonusLists', 'bonusStats', 'context','a
 // setTimeout(start, 1000)
 
 setTimeout(setup,2000)
-
 function setup(){
 	// db.item.update({contextComplete:true,availableContexts:[""],'contextDetails..bonusLists':{$ne:[],$exists:true}},{$set:{contextComplete:false}},{multi:true}).exec(function(err, count){
 	// 	console.log(err)

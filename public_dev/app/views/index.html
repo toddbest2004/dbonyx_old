@@ -22,7 +22,7 @@
 				<h1>{{thread.name}}</h1>
 				<h5><a href="/profile/{{thread.startedBy.username}}">{{thread.startedBy.username}}</a> <small>- {{thread.postDate}}</small></h5>
 
-				{{thread.posts[0].message}}
+				<div ng-bind-html="thread.compiled" class="forumPostContent"></div>
 				</div>
 				
 					<a href="/forums/thread/{{thread._id}}">

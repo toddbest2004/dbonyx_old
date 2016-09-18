@@ -1,47 +1,52 @@
+"use strict";
 angular.module('dbonyx')
 .controller('forumCtrl', ['$scope', 'forumService', function($scope, forumService){
 	forumService.getCategories(function(err, data){
 		if(err){
-			$scope.error = err
+			$scope.error = err;
 		}else{
-			$scope.categories=data
+			$scope.categories = data;
 		}
-	})
-
+	});
 }])
 .controller('forumCatCtrl', ['$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($scope, $routeParams, $route, forumService, onyxUser){
-	$scope.categoryId = $routeParams.categoryId
-	$scope.user = onyxUser
+	$scope.categoryId = $routeParams.categoryId;
+	$scope.user = onyxUser;
 	forumService.getCategory($scope.categoryId, function(err, data){
 		if(err){
-			$scope.error = err
+			$scope.error = err;
 		}else{
-			$scope.category=data
+			$scope.category = data;
 			$scope.category.threads.forEach(function(thread){
-				thread.lastMessage=new Date(thread.posts[thread.posts.length-1].createdOn).toLocaleString()
-			})
+				thread.lastMessage=new Date(thread.posts[thread.posts.length-1].createdOn).toLocaleString();
+			});
 		}
-	})
+	});
 	$scope.newThread = function(){
-		$scope.error = false
-		forumService.newThread($scope.categoryId, $scope.title, $scope.message, function(err, result){
-			if(err)
-				$scope.error = err
-			if(result)
-				$route.reload()
-		})
-	}
+		$scope.error = false;
+		forumService.newThread($scope.categoryId, $scope.title, $scope.message, function(err, result) {
+			if(err) {
+				$scope.error = err;
+			}
+			if(result) {
+				$route.reload();
+			}
+		});
+	};
 }])
-.controller('forumThreadCtrl', ['$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($scope, $routeParams, $route,forumService, onyxUser){
-	$scope.threadId = $routeParams.threadId
-	$scope.user = onyxUser
-	forumService.getThread($scope.threadId, function(err, data){
+.controller('forumThreadCtrl', ['$sce' ,'$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($sce, $scope, $routeParams, $route,forumService, onyxUser){
+	$scope.threadId = $routeParams.threadId;
+	$scope.user = onyxUser;
+	forumService.getThread($scope.threadId, function(err, data) {
 		if(err){
-			$scope.error = err
+			$scope.error = err;
 		}else{
-			$scope.thread=data
+			$scope.thread = data;
+			$scope.thread.posts.forEach(function(post) {
+				post.compiled = $sce.trustAsHtml(post.parsedContent);
+			});
 		}
-	})
+	});
 	$scope.postMessage = function(){
 		$scope.error = false
 		forumService.postMessage($scope.threadId, $scope.message, function(err, result){
@@ -104,7 +109,7 @@ angular.module('dbonyx')
 		})
 	}
 }])
-.controller('siteNewsCtrl', ['$scope','forumService',function($scope, forumService){
+.controller('siteNewsCtrl', ['$sce','$scope','forumService',function($sce, $scope, forumService){
 	forumService.getSiteNews(function(err, news){
 		if(err||!news){
 			$scope.error=err
@@ -113,6 +118,7 @@ angular.module('dbonyx')
 			$scope.news.threads.forEach(function(thread){
 				thread.replyCount = thread.posts.length-1
 				thread.postDate = new Date(thread.posts[0].createdOn).toDateString()
+				thread.compiled = $sce.trustAsHtml(thread.posts[0].parsedContent);
 			})
 		}
 	})

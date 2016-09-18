@@ -9,6 +9,14 @@
                 return "</strong>";
             }
         },
+        bk: {
+            open: function() {
+                return "FOOOOO"
+            },
+            close: function() {
+                return "/FOOOO"
+            }
+        },
         i: { //italics
             open: function() {
                 return "<em>";
@@ -115,7 +123,7 @@ tagAttribute = "|" key:property "=" value:property
 		return key+":"+value
     }
 
-open_tag = "[" tag:validTagName id:(id)? attributes:tagAttribute* "]" ("\r\n" / "\n")? { return open(tag, attributes, id); }
+open_tag = "[" tag:validTagName text? id:(id)? attributes:tagAttribute* "]" ("\r\n" / "\n")? { return open(tag, attributes, id); }
     / "[" tag:validTagName id:(id)? attributes:tagAttribute* "/]" ("\r\n" / "\n")? { return selfClose(tag, attributes, id); }
 
 close_tag = "[/" t:validTagName "]" ("\r\n" / "\n")? {
@@ -129,6 +137,9 @@ number = n:[0-9]* { return n.join("") }
 //list = "[list]" contents:(whitespace / listLine)* "[/list]" ("\r\n" / "\n")? {return "<ul>"+contents.join("")+"</ul>"}
 //listLine = "[*]" contents:(comment)* "[/*]"? {return "<li>"+contents.join("")+"</li>";}
 
+
+//ALWAYS longer or more specific tags first
+// "item" before "i"
 validTagName "valid tag name" = ("item" / "b" / "i" / "s" / "u" / "list" / "*")
 
 

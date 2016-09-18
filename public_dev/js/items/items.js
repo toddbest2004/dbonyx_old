@@ -164,7 +164,7 @@ angular.module('ItemCtrls', [])
 					scope.el = angular.element("<div class='itemHover'>")
 					itemDisplay = scope.el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
 					angular.element(document.body).append(itemDisplay)
-					
+					console.log(item)
 					itemDisplay.css(css)
 				}else{
 					angular.element(document.body).append(scope.el)

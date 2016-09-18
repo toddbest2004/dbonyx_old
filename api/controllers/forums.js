@@ -38,46 +38,50 @@ router.get('/thread/:threadId', function(req,res){
 
 router.get('/sitenews', function(req,res){
 	db.forumCategory.findOne({name:'Front Page News'}).populate({path: 'threads',options:{sort:{'firstPostTime':-1},limit:5}, populate:[{path:'startedBy', model:'onyxUser', select:'username'},{path:'posts', model:'forumPost', options:{limit:50}}]}).exec(function(err, cat){
-		res.json(cat)
-	})
-})
+		res.json(cat);
+	});
+});
 
-//create post in thread
+//create post in thread (reply to thread)
 router.post("/thread/:threadId", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		if (user) {
 			if(!user.isEmailValidated){
-				return res.status(401).json({error:"You must validate your email before you can make a post."})
+				return res.status(401).json({error:"You must validate your email before you can make a post."});
 			}
+			//if(!user.has permissions)
+			//
 			if(!req.body.message){
-				return res.status(401).json({error:"You cannot post an empty message."})
+				return res.status(401).json({error:"You cannot post an empty message."});
 			}
+			var parsedContent = parser.parse(req.body.message);
 			db.forumThread.findOne({_id:req.params.threadId}).populate('posts').exec(function(err, thread){
 				if(err||!thread){
-					return res.status(401).json({error:"Error making post, please try again."})
+					return res.status(401).json({error:"Error making post, please try again."});
 				}
 				db.forumPost.create({
 					thread: thread,
 					author: user,
-					message: req.body.message
+					message: req.body.message,
+					parsedContent: parsedContent
 				}, function(err, post){
 					if(err||!post){
-						return res.status(401).json({error:"Error making post, please try again."})
+						return res.status(401).json({error:"Error making post, please try again."});
 					}
-					thread.posts.push(post)
-					thread.lastPost = post
-					thread.save(function(){
-						res.json({result:"Success"})
-					})
-				})
-			})
+					thread.posts.push(post);
+					thread.lastPost = post;
+					thread.save(function() {
+						res.json({result:"Success"});
+					});
+				});
+			});
   		} else {
-	  		return res.status(401).json({error:"You must be logged in to post a message."})
+	  		return res.status(401).json({error:"You must be logged in to post a message."});
 		}
-	})(req, res)
-})
+	})(req, res);
+});
 
-//create thread in category
+//create new thread in category
 router.post("/category/:categoryId", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		if (user) {
@@ -92,17 +96,18 @@ router.post("/category/:categoryId", function(req, res){
 			}
 			var title = req.body.title
 			var message = req.body.message
+			var parsedContent = parser.parse(message);
 			db.forumCategory.findOne({_id:req.params.categoryId}).populate('threads').exec(function(err, cat){
-				if(cat.permissions.createThread.indexOf(user.userLevel)===-1){
-					return res.status(401).json({error:"You do not have the permissions to create a thread in this forum."})
-				}
 				if(err||!cat){
 					return res.status(401).json({error:"Error making post, please try again."})
+				}
+				if(cat.permissions.createThread.indexOf(user.userLevel)===-1){
+					return res.status(401).json({error:"You do not have the permissions to create a thread in this forum."})
 				}
 				db.forumThread.create({
 					name: title,
 					category: cat,
-					startedBy: user,
+					startedBy: user
 				},function(err, thread){
 					if(err||!thread){
 						return res.status(401).json({error:"Error making post, please try again."})
@@ -110,7 +115,8 @@ router.post("/category/:categoryId", function(req, res){
 					db.forumPost.create({
 						thread: thread,
 						author: user,
-						message: message
+						message: message,
+						parsedContent: parsedContent
 					}, function(err, post){
 						if(err||!post){
 							return res.status(401).json({error:"Error making post, please try again."})
@@ -203,6 +209,7 @@ router.post('/subcategory', function(req, res){
 	})(req, res)
 })
 
+//edit existing post
 router.post("/post/:id", function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		var postId = req.params.id

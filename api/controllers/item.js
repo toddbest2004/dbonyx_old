@@ -30,6 +30,8 @@ router.get("/pretty/:id", function(req, res){
 		res.status(400).send({error:"Invalid id."})
 		return
 	}
+	console.log(id);
+	console.log(modifiers)
 	db.item.findOne({_id:id}).populate('itemSet.items').lean().exec(function(err, item){
 		if(err){
 			res.status(400).send({error:"Invalid id."})
@@ -73,15 +75,15 @@ module.exports = router
 function prettify(item, modifiers, res){
 	//todo: track equipped itemset items
 	//todo: update based on bonuslists/contexts
-
+// console.log(modifiers)
 	//auction modifiers
-	if(modifiers.modifiers){
-		if(Array.isArray(modifiers.modifiers)){
-			modifiers.modifiers.forEach(function(modifier){
-				// console.log(modifier)
-			})
-		}
-	}
+	// if(modifiers.modifiers){
+	// 	if(Array.isArray(modifiers.modifiers)){
+	// 		modifiers.modifiers.forEach(function(modifier){
+	// 			// console.log(modifier)
+	// 		})
+	// 	}
+	// }
 
 	//special handling of caged battlepets
 	if(item.itemId===82800){
@@ -105,13 +107,22 @@ function prettify(item, modifiers, res){
 	if(modifiers.bonusLists){
 		modifiers.bonusLists.forEach(function(bonusId){
 			//auctionhouse conversion
+			console.log(bonusId)
 			if(bonusId.bonusListId){
 				bonusId=bonusId.bonusListId;
 			}
-
-			if(!item.contextDetails){
+console.log(item)
+console.log("-----")
+console.log(modifiers)
+			if(modifiers.bonusLists) {
+				modifiers.bonusLists.forEach(function(bonusId) {
+					console.log(item.contextDetails[''].bonusStats) 
+				});
+			}
+//			old item prettify stuff
+			if(item.contextDetails){
 				var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
-
+console.log(bonuses)
 				for(key in bonuses){
 					if(key==='statDeltas'){
 

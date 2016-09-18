@@ -21,7 +21,7 @@ angular.module('dbonyx')
 	};
 
 	character.search=function(name, realmInput, callback){
-		console.log("searching", name, realmInput);
+		// console.log("searching", name, realmInput);
 		character.loading=true;
 		if(!name){
 			character.loading=false;
@@ -75,10 +75,10 @@ angular.module('dbonyx')
 				url: '/api/character/'+key,
 				params: params
 			}).then(function success(response){
-				console.log(response.data);
+				// console.log(response.data);
 				character[key]=response.data[key];
 			},function error(response){
-				conosle.log(response);
+				// conosle.log(response);
 				//todo: error handling
 			});
 		}

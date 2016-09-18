@@ -26,8 +26,7 @@
 					</form>
 				</div>
 				<div ng-hide="post.editing">
-					<div class="forumPostContent">
-						{{post.message}}
+					<div ng-bind-html="post.compiled" class="forumPostContent">
 					</div>
 					<div class="forumPostEditCount" ng-if="post.editCount">
 						This post has been edited {{post.editCount}} times.

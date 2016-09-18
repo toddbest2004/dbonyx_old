@@ -60,7 +60,11 @@ var itemQueue = async.queue(function(task, callback){
 var contextQueue = async.queue(function(task, callback){
 	console.log("context")
 	console.log(task.context)
-	getContextItem(task.item, task.context, function(newItem){
+	getContextItem(task.item, task.context, function(newItem, error){
+		if(error) {
+			callback(newItem)
+			return;
+		}
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
 			empty = false
@@ -150,10 +154,10 @@ console.log(url);
 			details.bonusListDetails = {}
 			cb(item)
 		}else{
-			console.log(error);
+			console.log(body);
 			console.log(response.statusCode);
 			// if(response.statusCode!=404)
-				cb(item)
+				cb(item, true)
 		}
 	})	
 }

@@ -179,6 +179,8 @@ function getBonusDetails(task, cb){
 				console.log('NO MATCH: '+task.bonusId)
 				cb(task.item)
 			}else{
+				console.log(task.item.contextDetails);
+				console.log("________")
 				task.item.contextDetails[task.context].bonusListDetails[task.bonusId] = {}
 				var bonus =  task.item.contextDetails[task.context].bonusListDetails[task.bonusId]
 				for(key in body){

@@ -58,13 +58,18 @@ var itemQueue = async.queue(function(task, callback){
 })
 
 var contextQueue = async.queue(function(task, callback){
-	console.log("context")
-	console.log(task.context)
+	// console.log("context")
+	// console.log(task.context)
 	getContextItem(task.item, task.context, function(newItem, error){
 		if(error) {
 			callback(newItem)
 			return;
 		}
+		console.log("3333333333333333")
+		console.log(context);
+		console.log(task.context)
+		console.log(newItem.contextDetail[context])
+		console.log("444444444444")
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
 			empty = false

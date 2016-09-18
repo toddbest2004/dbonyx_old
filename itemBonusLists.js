@@ -69,11 +69,13 @@ var contextQueue = async.queue(function(task, callback){
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){
 			empty = false
 			console.log("bonusList pushed to queue")
+			console.log(bonusId)
 			bonusListQueue.push({item:newItem,context:task.context,bonusId:bonusId},function(item){newItem = item})
 		})
 		newItem.contextDetails[context].defaultBonusLists.forEach(function(bonusId){
 			empty = false
 			console.log("defaultBonusList pushed to queue")
+			console.log(bonusId)
 			bonusListQueue.push({item:newItem,context:task.context,bonusId:bonusId},function(item){newItem = item})
 		})
 		if(empty){
@@ -164,6 +166,7 @@ console.log(url);
 
 function getBonusDetails(task, cb){
 	console.log("bonus details")
+	console.log(task.bonusId)
 	var url = "https://us.api.battle.net/wow/item/"+task.item.itemId
 	if(task.context!==""){
 		url+="/"+task.context

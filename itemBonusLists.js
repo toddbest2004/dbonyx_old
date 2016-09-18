@@ -68,7 +68,7 @@ var contextQueue = async.queue(function(task, callback){
 		console.log("3333333333333333")
 		console.log(context);
 		console.log(task.context)
-		console.log(newItem.contextDetail[context])
+		console.log(newItem.contextDetails[context])
 		console.log("444444444444")
 		var empty = true
 		newItem.contextDetails[context].bonusLists.forEach(function(bonusId){

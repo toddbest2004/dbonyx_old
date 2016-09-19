@@ -9,7 +9,7 @@ angular.module('dbonyx')
 		}
 	});
 }])
-.controller('forumCatCtrl', ['$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($scope, $routeParams, $route, forumService, onyxUser){
+.controller('forumCatCtrl', ['$sce', '$scope', '$routeParams', '$route', 'forumService', 'onyxUser', function($sce, $scope, $routeParams, $route, forumService, onyxUser){
 	$scope.categoryId = $routeParams.categoryId;
 	$scope.user = onyxUser;
 	forumService.getCategory($scope.categoryId, function(err, data){
@@ -31,6 +31,12 @@ angular.module('dbonyx')
 			if(result) {
 				$route.reload();
 			}
+		});
+	};
+	$scope.previewThread = function(){
+		$scope.error = false;
+		forumService.previewPost($scope.message, function(err, preview) {
+			$scope.preview = $sce.trustAsHtml(preview);
 		});
 	};
 }])

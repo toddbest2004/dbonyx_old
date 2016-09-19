@@ -29,13 +29,16 @@
 		<div class="warning" ng-if="!user.loggedin">
 			You must be logged in to make a post.
 		</div>
-		<form ng-submit="newThread()">
-			<label for="forumTitle">Title: </label>
-			<input id="forumTitle" class="form-control" type="text" ng-model="title" ng-disabled="!user.loggedin">
-			<label for="forumMessage">Message: </label>
-			<textarea rows="10" id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
-			<input class="form-control btn" type="submit" value="Post Message" ng-disabled="!user.loggedin">
-		</form>
+		<label for="forumTitle">Title: </label>
+		<input id="forumTitle" class="form-control" type="text" ng-model="title" ng-disabled="!user.loggedin">
+		<label for="forumMessage">Message: </label>
+		<textarea rows="10" id="forumMessage" class="form-control" ng-model="message" ng-disabled="!user.loggedin"></textarea>
+		<button class="form-control btn" ng-disabled="!user.loggedin" ng-click="previewThread()">Preview Message</button>
+		<button class="form-control btn" ng-disabled="!user.loggedin" ng-click="newThread()">Post Message</button>
+		<div ng-if="preview">
+		<strong>Preview:</strong>
+		<div ng-bind-html="preview" class="forumPostContent"></div>
+		</div>
 	</div>
 </div>
 <sidebar>

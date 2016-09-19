@@ -5,12 +5,12 @@ angular.module('dbonyx')
 		angular.element( document.getElementById('errorDiv')).html("");
 		angular.element( document.getElementById('testDiv')).html("Parsing...");
 		$http({
-			url: "/api/forum/parser",
+			url: "/api/forum/preview",
 			method: "POST",
-			data: {input:$scope.parsetext}
+			data: {message:$scope.parsetext}
 		}).then(function success(response){
-			var el = $compile("<div>"+response.data+"</div>")($scope);
-			$scope.parsedtext = response.data;
+			var el = $compile("<div>"+response.data.preview+"</div>")($scope);
+			$scope.parsedtext = response.data.preview;
 			angular.element( document.getElementById('testDiv')).html("").append(el);
 		},function error(response){
 			$scope.parsedtext = response.data;

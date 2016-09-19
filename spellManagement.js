@@ -5,7 +5,7 @@ var async = require("async");
 var startCount = 0
 var myCount = 0
 var intervalId = 0
-var increment = 80
+var increment = 40
 
 var knownTags = ['id', 'name','icon','description','powerCost','castTime','range','cooldown', 'subtext']
 
@@ -37,6 +37,7 @@ function findSpells(){
 	myCount+=increment
 	if(myCount > startCount + 10000){
 		clearInterval(intervalId)
+		console.log("Done");
 	}
 }
 
@@ -73,6 +74,7 @@ function insertSpell(body, callback){
 					spell[key]=body[key]
 				}
 				spell.save(function(err){
+					console.log(spell)
 					console.log("saved")
 					if(err){
 						console.log(err)

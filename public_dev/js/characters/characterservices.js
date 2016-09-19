@@ -42,7 +42,7 @@ angular.module('dbonyx')
 				character.loading=false;
 				character.loaded=true;
 				character.runOnLoad();
-				callback(response.data);
+				callback(character);
 			}else{
 				//show all characters for choosing
 				character.loading=false;
@@ -65,7 +65,7 @@ angular.module('dbonyx')
 			getOnLoad.push(key);
 			return;
 		}
-		if(!character[key]){
+		// if(!character[key]){
 			if(!character.name||!character.realm||!character.region){
 				return;
 			}
@@ -75,13 +75,16 @@ angular.module('dbonyx')
 				url: '/api/character/'+key,
 				params: params
 			}).then(function success(response){
-				// console.log(response.data);
+				console.log(key);
 				character[key]=response.data[key];
+				if(key==="professions"){
+					console.log(response.data)
+				}
 			},function error(response){
-				// conosle.log(response);
+				conosle.log(response);
 				//todo: error handling
 			});
-		}
+		// }
 	};
 
 	return character;

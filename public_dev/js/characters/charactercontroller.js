@@ -17,11 +17,11 @@ angular.module('dbonyx')
 			return;
 		}
 
-		$scope.character.search(name, realm, function(result) {
-			if(result){
-				var name = result.character.name,
-					realm = result.character.realm,
-					region = result.character.region;
+		$scope.character.search(name, realm, function(character) {
+			if(character){
+				var name = character.name,
+					realm = character.realm,
+					region = character.region;
 				$location.url('/c/'+name+'/'+realm+'-'+region+'/');
 			}else{
 				//TODO: handle character not found
@@ -48,7 +48,11 @@ angular.module('dbonyx')
 	var name = $routeParams.name,
 		realm = $routeParams.server;
 	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
-		onyxCharacter.search(name, realm, function() {
+		onyxCharacter.search(name, realm, function(character) {
+			if(!character) {
+				return;
+			}
+			$scope.character = character;
 			console.log("loaded");
 		});
 	}
@@ -58,8 +62,19 @@ angular.module('dbonyx')
 	$scope.character.get('achievements');
 	$scope.character.get('reputation');
 }])
-.controller('characterProfessions', ['onyxCharacter', '$scope', function(onyxCharacter, $scope){
-	$scope.character = onyxCharacter;
+.controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
+	var name = $routeParams.name,
+		realm = $routeParams.server;
+	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
+		onyxCharacter.search(name, realm, function(character) {
+			if(!character) {
+				return;
+			}
+			$scope.character = character;
+			console.log("loaded");
+		});
+	}
+	$scope.character=onyxCharacter;
 	$scope.character.get('professions');
 	$scope.expandRecipes = [false,false,false,false,false,false];
 	$scope.expandToggle = function(index){

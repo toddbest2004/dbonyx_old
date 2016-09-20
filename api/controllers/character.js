@@ -171,7 +171,9 @@ function findCharacter(realm, name, res){
 			level:character.level,
 			faction:character.faction,
 			thumbnail:character.thumbnail,
-			guildName:character.guildName}});
+			guildName:character.guildName,
+			guildRealm:character.guildRealm
+		}});
 	});
 	// db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
 	// 	if(err){

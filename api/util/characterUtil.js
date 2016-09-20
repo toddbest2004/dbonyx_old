@@ -121,7 +121,7 @@ function updateCharacter(character, body, callback) {
 	character.talents=body.talents;
 	character.pvp=body.pvp;
 	character.save(function(err){
-		importCharacterImages(body.thumbnail, function(){
+		importCharacterImages(body.thumbnail, function() {
 			callback(false, character);
 		});
 	});

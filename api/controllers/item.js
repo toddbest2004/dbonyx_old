@@ -30,8 +30,8 @@ router.get("/pretty/:id", function(req, res){
 		res.status(400).send({error:"Invalid id."})
 		return
 	}
-	console.log(id);
-	console.log(modifiers)
+	// console.log(id);
+	// console.log(modifiers)
 	db.item.findOne({_id:id}).populate('itemSet.items').lean().exec(function(err, item){
 		if(err){
 			res.status(400).send({error:"Invalid id."})
@@ -107,22 +107,19 @@ function prettify(item, modifiers, res){
 	if(modifiers.bonusLists){
 		modifiers.bonusLists.forEach(function(bonusId){
 			//auctionhouse conversion
-			console.log(bonusId)
+			// console.log(bonusId)
 			if(bonusId.bonusListId){
 				bonusId=bonusId.bonusListId;
 			}
-console.log(item)
-console.log("-----")
-console.log(modifiers)
 			if(modifiers.bonusLists) {
 				modifiers.bonusLists.forEach(function(bonusId) {
-					console.log(item.contextDetails[''].bonusStats) 
+					// console.log(item.contextDetails[''].bonusStats) 
 				});
 			}
 //			old item prettify stuff
-			if(item.contextDetails){
+			if(item.contextDetails && item.contextDetails[item.context] && item.contextDetails[item.context].bonusListDetails){
 				var bonuses = item.contextDetails[item.context].bonusListDetails[bonusId]
-console.log(bonuses)
+// console.log(bonuses)
 				for(key in bonuses){
 					if(key==='statDeltas'){
 

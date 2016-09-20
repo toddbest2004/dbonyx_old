@@ -3,7 +3,7 @@ angular.module('dbonyx')
 .factory('onyxCharacter', ['$http', function($http) {
 	var character = {},
 		getOnLoad =[],
-		validKeys = {items:true, mounts:true, achievements:true, reputation:true, professions:true};
+		validKeys = {items:true, mounts:true, achievements:true, reputation:true, professions:true, battlepets:true};
 	
 	character.loaded=false;
 

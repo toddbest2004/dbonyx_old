@@ -75,17 +75,21 @@ var characterSchema = new Schema({
 		value:Number,
 		max:Number}],
 	mounts:[{type:Number, ref:"mount"}],
-	battlePets:[{
-		creatureId:Number,
-		speciesId:Number,
-		breedId:Number,
-		petQualityId:Number,
-		level:Number,
-		health:Number,
-		power:Number,
-		speed:Number,
-		battlePetGuid:String,
-		name:String}],
+	battlepets:{
+		numCollected: Number,
+		numNotCollected: Number,
+		collected: [{
+			details: {type:Number, ref:"battlepet"}, //species Id
+			stats: {},
+			name:String,
+			creatureName: String,
+			isFavorite: Boolean,
+			isFirstAbilitySlotSelected: Boolean,
+			isSecondAbilitySlotSelected: Boolean,
+			isThirdAbilitySlotSelected: Boolean,
+			canBattle: Boolean
+		}]
+	},
 	quests:[{type:Number, ref:"Quest"}],
 	criteria:[{
 		id:Number,

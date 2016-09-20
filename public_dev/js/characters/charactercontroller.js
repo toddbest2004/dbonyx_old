@@ -61,6 +61,7 @@ angular.module('dbonyx')
 	$scope.character.get('mounts');
 	$scope.character.get('achievements');
 	$scope.character.get('reputation');
+	$scope.character.get('battlepets');
 }])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
 	var name = $routeParams.name,

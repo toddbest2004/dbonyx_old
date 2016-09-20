@@ -9,8 +9,10 @@
 		<div class="row">
 			<div ng-repeat='mount in character.mounts'>
 				<div class="col-xs-3 mount-display">
-					<a href="/mount/{{mount._id}}"><img src="/images/icons/{{mount.icon}}.png" class="borderQuality{{mount.qualityId}} mount-icon">
-					<h5>{{mount.name}}</h5></a>
+					<a href="/mount/{{mount._id}}" class="itemQuality{{mount.qualityId}}">
+					<div><img src="/images/icons/{{mount.icon}}.png" class="borderQuality{{mount.qualityId}} mount-icon"></div>
+					<div><strong>{{mount.name}}</strong></div>
+					</a>
 				</div>
 				<div class="clearfix" ng-if="$index%4===3"></div>
 			</div>

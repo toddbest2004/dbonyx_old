@@ -106,6 +106,12 @@ function updateCharacter(character, body, callback) {
 			timestamp:body.achievements.achievementsCompletedTimestamp[i]
 		});
 	}
+	
+	character.battlepets = body.pets;
+	character.battlepets.collected.forEach(function(pet) {
+		pet.details = pet.stats.speciesId;
+	});
+
 	character.reputation=body.reputation;
 	character.appearance=body.appearance;
 	character.items=body.items;

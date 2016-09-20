@@ -6,7 +6,10 @@
 <h3>&lt;{{character.guildName}}&gt;</h3>
 <h5>Level {{character.level}}</h5>
 </div>
-Battlepet Placeholder
+	<h1>Pets Owned:</h1>
+	<div ng-repeat="pet in character.battlepets.collected">
+		{{pet.stats.level}} - <a href="/battlepet/{{pet.details.speciesId}}" class="itemQuality{{pet.stats.petQualityId}}">{{pet.details.name}}</a>
+	</div>
 </div>
 <sidebar>
 	<character-links></character-links>

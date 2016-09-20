@@ -7,28 +7,27 @@
 		<h5>Level {{character.level}}</h5>
 	</div>
 	<div>
-		<h1>Primary Professions</h1>
 		<div ng-repeat="profession in character.professions.primary">
-			<h2>{{profession.name}}:</h2> {{profession.rank}}/{{profession.max}}
-			<div ng-if="profession.recipes.length">
-				<button  ng-click="expandToggle($index)">+</button>Recipes: {{profession.recipes.length}}
-				<ul ng-if="expandRecipes[$index]">
-					<li ng-repeat="recipe in profession.recipes">{{recipe}}</li>
-				</ul>
+			<div ng-click="expandToggle($index)" class="characterProfessionBar">
+				<strong>{{profession.name}}:</strong>
+				{{profession.rank}}/{{profession.max}}
+				Recipes: {{profession.recipes.length}}
 			</div>
+			<ul ng-if="expandRecipes[$index]">
+				<li ng-repeat="recipe in profession.recipes">{{recipe.name}}</li>
+			</ul>
 		</div>
-
 	</div>
 	<div>
-		<h1>Secondary Professions</h1>
 		<div ng-repeat="profession in character.professions.secondary">
-			<h2>{{profession.name}}:</h2> {{profession.rank}}/{{profession.max}}
-			<div ng-if="profession.recipes.length">
-				<button  ng-click="expandToggle($index+2)">+</button>Recipes: {{profession.recipes.length}}
-				<ul ng-if="expandRecipes[$index+2]">
-					<li ng-repeat="recipe in profession.recipes">{{recipe}}</li>
-				</ul>
+			<div ng-click="expandToggle($index+2)" class="characterProfessionBar">
+				<strong>{{profession.name}}:</strong>
+				{{profession.rank}}/{{profession.max}}
+				Recipes: {{profession.recipes.length}}
 			</div>
+			<ul ng-if="expandRecipes[$index+2]">
+				<li ng-repeat="recipe in profession.recipes">{{recipe.name}}</li>
+			</ul>
 		</div>
 	</div>
 </div>

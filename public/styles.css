@@ -335,6 +335,15 @@ h4 {
 .footer {
   margin: 32px 0px; }
 
+.characterProfessionBar {
+  padding: 2px;
+  background-color: #303030; }
+  .characterProfessionBar:hover {
+    background-color: #424242; }
+
+/* Sitewide style colors */
+/* Sitewide font colors */
+/* Anchor Colors */
 .auctionResultCell {
   line-height: 42px;
   vertical-align: middle;

@@ -42,7 +42,7 @@ router.get("/professions", function(req, res){
 		res.status(400).json({error:"Improper query string."});
 		return;
 	}
-	db.character.findOne({name:name, region:region, realm:realm}).exec(function(err, character){
+	db.character.findOne({name:name, region:region, realm:realm}).populate("professions.primary.recipes professions.secondary.recipes").exec(function(err, character){
 		if(err||!character){
 			res.status(404).json({error:"Character not found."});
 			return;

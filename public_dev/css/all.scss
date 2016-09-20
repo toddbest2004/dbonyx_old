@@ -434,3 +434,31 @@ h4 {
   margin: 32px 0px;
 
 }
+
+.characterProfessionBar {
+  padding: 2px;
+  background-color: $mainBackgroundColor;
+  &:hover {
+    background-color: $lightBackgroundColor;
+  }
+}
+
+/* Sitewide style colors */
+
+$darkBackgroundColor: #212121;
+$mainBackgroundColor: #303030;
+$lightBackgroundColor: #424242;
+$advertBackgroundColor: rgba(255,255,255,.1);
+$accentColor: #FF8000;
+
+/* Sitewide font colors */
+
+$darkTextColor: #BDBDBD;
+$mainTextColor: #E0E0E0;
+$lightTextColor: #EEEEEE;
+$superLightTextColor: #F5F5F5;
+
+/* Anchor Colors */
+
+$linkColor: #1B9EC0;
+$hoverColor: lighten($linkColor, 15%);

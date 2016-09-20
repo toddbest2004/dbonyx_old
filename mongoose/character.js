@@ -26,7 +26,24 @@ var characterSchema = new Schema({
 	// feed:
 	appearance:{faceVariation:Number,skinColor:Number,hairVariation:Number,hairColor:Number,featureVariation:Number,showHelm:Boolean,showCloak:Boolean},
 	progression:{},
-	professions:{},
+	professions:{
+		primary: [{
+			recipes: [{type:Number, ref:"spell"}],
+			max: Number,
+			rank: Number,
+			icon: String,
+			name: String,
+			id: Number
+		}],
+		secondary: [{
+			recipes: [{type:Number, ref:"spell"}],
+			max: Number,
+			rank: Number,
+			icon: String,
+			name: String,
+			id: Number
+		}]
+	},
 	stats:{},
 	talents:{},
 	pvp:{},

@@ -81,7 +81,7 @@ angular.module('dbonyx')
 					console.log(response.data)
 				}
 			},function error(response){
-				conosle.log(response);
+				console.log(response);
 				//todo: error handling
 			});
 		// }

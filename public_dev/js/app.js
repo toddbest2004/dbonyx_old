@@ -12,6 +12,9 @@ $routeProvider
 .when('/auctions', {
 	templateUrl: 'app/views/auctions.html'
 }) 
+.when('/auctions/:realm', {
+	templateUrl: 'app/views/auctions.html'
+})
 .when('/database', {
 	templateUrl: 'app/views/database.html'
 })

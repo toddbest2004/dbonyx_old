@@ -43,12 +43,14 @@ app.get('/', function(req, res){
 		  ph.createPage().then(function(page) {
 		    page.open('https://www.dbonyx.com'+req.query._escaped_fragment_).then(function() {
 		      // console.log(status);
-		      page.property('content').then(function(content) {
-		        // console.log(content);
-		        res.send(content);
-		        page.close();
-		        ph.exit();
-		      });
+		      setTimeout(function() {
+			      page.property('content').then(function(content) {
+			        // console.log(content);
+			        res.send(content);
+			        page.close();
+			        ph.exit();
+			      });
+		  	  }, 500);
 		    });
 		  });
 		});

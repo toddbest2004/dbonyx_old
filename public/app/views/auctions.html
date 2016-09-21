@@ -20,7 +20,17 @@
 			</form>
 		</div>
 		<div id="auctionData">
-		<div id="auctionIntro" ng-if="!auctionResults&&!loading">Select a realm to get started</div>
+			<div id="auctionIntro" ng-if="!auctionResults&&!loading">
+				Select a realm above to get started
+				<div class="row" style="margin-top: 20px">
+					<div class="col-xs-12">
+						Some random realms:
+					</div>
+					<div class="col-xs-3" style="font-size:12px" ng-repeat="realm in realms | limitTo:12">
+						<a href="/auctions/{{realm}}">{{realm}}</a>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="pull-left" ng-if="auctionResults&&!auctionResults.auctions.length&&!loading">
 			<h1>No auctions match your search</h1>

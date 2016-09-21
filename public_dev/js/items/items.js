@@ -109,7 +109,7 @@ angular.module('ItemCtrls', [])
 		wireItem();
 
 		function wireItem() {
-			console.log($scope.item)
+			// console.log($scope.item)
 			$scope.itemLinkPath = "/item/"+$scope.item.itemId;
 
 			var options = []
@@ -164,7 +164,7 @@ angular.module('ItemCtrls', [])
 					scope.el = angular.element("<div class='itemHover'>")
 					itemDisplay = scope.el.append($compile("<item-display item-id='"+itemId+"' modifiers='item'>")(scope))
 					angular.element(document.body).append(itemDisplay)
-					console.log(item)
+					// console.log(item)
 					itemDisplay.css(css)
 				}else{
 					angular.element(document.body).append(scope.el)

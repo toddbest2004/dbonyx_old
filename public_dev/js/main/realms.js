@@ -5,18 +5,26 @@ angular.module('dbonyx')
 	realms.realms = []
 
 	realms.getRealms=function(cb){
-		if(realms.realms.length)
-			return cb()
+		if(realms.realms.length) {
+			if(cb){
+				return cb();
+			}
+			return;
+		}
 		realms.realms = ['Loading Realms']
 		$http({
 			method: 'GET',
 			url: '/api/realms'
 		}).then(function success(response){
 			realms.realms = response.data
-			cb()
+			if(cb){
+				cb()
+			}
 		}, function error(response){
-			realms.realms = ['Unable to Load Realms']
-			cb()
+			realms.realms = ['Unable to Load Realms'];
+			if(cb){
+				cb();
+			}
 		})
 	}
 

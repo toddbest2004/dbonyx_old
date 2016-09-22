@@ -37,9 +37,9 @@ angular.module('dbonyx')
 		$scope.realmInputSelected=false
 		$scope.realms=realmService.realms
 		$scope.blurIn=function(element){
-			if($scope.realms.length==0){
+			// if($scope.realms.length==0){
 				$scope.getRealms()
-			}
+			// }
 			$scope[element]=true
 		}
 		$scope.blurOut=function(element){

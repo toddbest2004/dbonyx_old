@@ -7,7 +7,7 @@
 			<form action="" id="filterForm"  autocomplete="off">
 				<div class="col-md-4 col-xs-12">
 				<label for="realmInput">Select Realm:</label>
-				<auto-complete realm-input="realmInput" search="search()"></auto-complete>
+				<auto-complete realm-input="realmInput" search="loadRealm()"></auto-complete>
 				</div>
 				<div class="col-md-4 col-xs-12">
 				<label for="search">Search Term:</label>
@@ -26,7 +26,7 @@
 					<div class="col-xs-12">
 						Some random realms:
 					</div>
-					<div class="col-xs-3" style="font-size:12px" ng-repeat="realm in realms | limitTo:12">
+					<div class="col-xs-3" style="font-size:12px" ng-repeat="realm in randomRealms | limitTo:12">
 						<a href="/auctions/{{realm}}">{{realm}}</a>
 					</div>
 				</div>

@@ -41,6 +41,7 @@ itemConstants.bonusStats = {
 	36: {name: 'Haste', class: 2},
 	38: {name: 'Attack Power', class: 2},
 	39: {name: 'Ranged Attack Power', class: 2},
+	40: {name: 'Versatility', class: 2},
 	45: {name: 'Spell Power', class: 2},
 	46: {name: 'Health per 5 sec.', class: 2},
 	47: {name: 'Spell Penetration', class: 2},

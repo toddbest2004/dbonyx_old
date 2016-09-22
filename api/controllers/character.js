@@ -164,16 +164,7 @@ function findCharacter(realm, name, res){
 		if(err||!character) {
 			return res.status(400).json({error: err});
 		}
-		res.json({status:"success", count:1, character:{
-			name:character.name,
-			realm:character.realm,
-			region:character.region.toUpperCase(),
-			level:character.level,
-			faction:character.faction,
-			thumbnail:character.thumbnail,
-			guildName:character.guildName,
-			guildRealm:character.guildRealm
-		}});
+		res.json({status:"success", count:1, character:character});
 	});
 	// db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
 	// 	if(err){

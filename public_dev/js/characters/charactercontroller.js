@@ -57,11 +57,11 @@ angular.module('dbonyx')
 		});
 	}
 	$scope.character=onyxCharacter;
-	$scope.character.get('items');
-	$scope.character.get('mounts');
-	$scope.character.get('achievements');
-	$scope.character.get('reputation');
-	$scope.character.get('battlepets');
+	// $scope.character.get('items');
+	// $scope.character.get('mounts');
+	// $scope.character.get('achievements');
+	// $scope.character.get('reputation');
+	// $scope.character.get('battlepets');
 }])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
 	var name = $routeParams.name,
@@ -76,7 +76,7 @@ angular.module('dbonyx')
 		});
 	}
 	$scope.character=onyxCharacter;
-	$scope.character.get('professions');
+	// $scope.character.get('professions');
 	$scope.expandRecipes = [false,false,false,false,false,false];
 	$scope.expandToggle = function(index){
 		// console.log(index)

@@ -1,6 +1,6 @@
 "use strict";
 angular.module('AuctionCtrls', [])
-.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', 'onyxPersistence', 'auctionService', 'realmService', function($scope, $http, $location, $routeParams, onyxPersistence, auctionService, realmService) {
+.controller('AuctionCtrl', ['$scope', '$http', '$location', '$routeParams', '$window', 'onyxPersistence', 'auctionService', 'realmService', function($scope, $http, $location, $routeParams, $window, onyxPersistence, auctionService, realmService) {
 	var searchValues = $location.search();
 	$scope.auctionService = auctionService;
 	$scope.searchTerm=searchValues.s||'';
@@ -9,6 +9,10 @@ angular.module('AuctionCtrls', [])
 	$scope.validFilters = [{name:'Item Level',type:'Number'},{name:'Required Level',type:'Number'},{name:"Is Equippable",type:'Boolean'}];
 	$scope.itemQualities = ['Poor','Common','Uncommon','Rare','Epic','Legendary','Artifact','Heirloom'];
 	$scope.selectedQuality = '';
+	realmService.getRealms(function(){
+		$scope.realms=realmService.realms;
+		$scope.randomRealms = shuffleArray($scope.realms.slice());
+	});
 
 	$scope.auctionResults = auctionService.auctionResults;
 	$scope.loading=false;
@@ -19,24 +23,22 @@ angular.module('AuctionCtrls', [])
 	$scope.auctionSettings = auctionService.settings;
 	// $scope.hoverIndex=''
 
+	var shuffleArray = function(arr) {
+		var i = arr.length, temp, rand;
+		while(i>0) {
+			rand = Math.floor(Math.random()*i);
+			temp = arr[rand];
+			arr[rand] = arr[i-1];
+			arr[i-1] = temp;
+			i--;
+		}
+		return arr;
+	};
+
 	//start pagination
 
-    var shuffleArray = function(array) {
-		var currentIndex = array.length, temporaryValue, randomIndex;
 
-		// While there remain elements to shuffle...
-		while (0 !== currentIndex) {
-			randomIndex = Math.floor(Math.random() * currentIndex);
-			currentIndex--;
-			temporaryValue = array[currentIndex];
-			array[currentIndex] = array[randomIndex];
-			array[randomIndex] = temporaryValue;
-		}
-		return array;
-    };
-	realmService.getRealms(function() {
-		$scope.realms = shuffleArray(realmService.realms);
-	});
+	//end pagination
 
 	$scope.setSortBy = function(sort) {
 		// console.log(sort)
@@ -97,6 +99,11 @@ angular.module('AuctionCtrls', [])
 		auctionService.setRealm($scope.realmInput);
 		auctionService.search(auctionUpdate);
 	};
+	$scope.loadRealm = function() {
+		if($scope.realmInput) {
+			$window.location.href = "/auctions/"+$scope.realmInput
+		}
+	}
 	if($scope.realmInput){
 		$scope.search();
 	}

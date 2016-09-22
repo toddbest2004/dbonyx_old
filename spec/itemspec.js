@@ -103,9 +103,9 @@ describe("Item Prettify", function(){
 					amount: 11
 				})
 				expect(item.stats).toContain({
-					name: 'Spirit',
+					name: 'Versatility',
 					class: 'itemSecondaryProperty',
-					order: 6,
+					order: 40,
 					amount: 7 
 				})
 				expect(item.stats).toContain({ 

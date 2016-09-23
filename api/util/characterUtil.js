@@ -13,7 +13,7 @@ characterUtil.getCharacter = function(name, realm, region, callback) {
 	name = name.toLowerCase();
 	realm = realm.toLowerCase();
 	region = region.toLowerCase();
-	db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {$set:{lastChecked:Date.now()}}).populate("professions.primary.recipes professions.secondary.recipes").exec(function(err, character) {
+	db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {$set:{lastChecked:Date.now()}}).populate("professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts achievements.id").exec(function(err, character) {
 		if(err){
 			callback("There was an error finding character in our database.");
 			return;

@@ -9,10 +9,6 @@ angular.module('AuctionCtrls', [])
 	$scope.validFilters = [{name:'Item Level',type:'Number'},{name:'Required Level',type:'Number'},{name:"Is Equippable",type:'Boolean'}];
 	$scope.itemQualities = ['Poor','Common','Uncommon','Rare','Epic','Legendary','Artifact','Heirloom'];
 	$scope.selectedQuality = '';
-	realmService.getRealms(function(){
-		$scope.realms=realmService.realms;
-		$scope.randomRealms = shuffleArray($scope.realms.slice());
-	});
 
 	$scope.auctionResults = auctionService.auctionResults;
 	$scope.loading=false;
@@ -35,6 +31,10 @@ angular.module('AuctionCtrls', [])
 		return arr;
 	};
 
+	realmService.getRealms(function(){
+		$scope.realms=realmService.realms;
+		$scope.randomRealms = shuffleArray($scope.realms.slice());
+	});
 	//start pagination
 
 

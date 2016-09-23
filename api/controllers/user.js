@@ -161,7 +161,12 @@ router.get('/publicProfile', function(req, res){
 router.get('/privateProfile', function(req, res){
 	passport.authenticate('jwt', function(err, user, info) {
 		if (user) {
-			res.send(user)
+			db.forumPost.find({author:user._id}).populate("thread").exec(function(err, posts) {
+				if(err) {
+					return res.status(401).json({error:"Error fetching user data"});
+				}
+				res.json({user:user, posts:posts});
+			});
   		} else {
 	  		res.status(401).json({error:"Unable to verify user. Please try re-logging in."})
 		}

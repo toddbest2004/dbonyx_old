@@ -4,7 +4,8 @@ angular.module('dbonyx')
 	$scope.loading = true
 	onyxUser.getPrivateProfile(function(err, data){
 		$scope.loading = false
-		$scope.profileData = data
+		$scope.userData = data.user;
+		$scope.forumPosts = data.posts;
 		$scope.error = err
 	})
 }])

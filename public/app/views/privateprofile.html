@@ -2,7 +2,7 @@
 You are not logged in.
 </div>
 <div ng-if="user.loggedin">
-<h1>{{user.username}}</h1>
+<h1>{{user.username}} <small>Private Profile</small></h1>
 <h3>Your Characters</h3>
 <div ng-controller="watchlistCtrl">
 <h3>Watchlists</h3>
@@ -11,7 +11,7 @@ You are not logged in.
 <li>Item Quantity Realm Price Settings - Restart Edit Delete</li>
 </ul>
 <h3>Forum Posts</h3>
-{{profileData}}
+<div ng-repeat="post in forumPosts"><a href="/forums/thread/{{post.thread._id}}">{{post.thread.name}}</a></div>
 {{error}}
 </div>
 </div>

@@ -161,5 +161,5 @@ itemConstants.itemSpellTriggers = {
 	ON_LEARN:""
 };
 
-itemConstants.characterClasses = ['','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'];
+itemConstants.characterClasses = ['','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid', 'Demon Hunter'];
 module.exports = itemConstants;

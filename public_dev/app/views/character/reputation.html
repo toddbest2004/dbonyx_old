@@ -6,7 +6,7 @@
 		<h3>&lt;<a href="/g/{{character.guildName}}/{{character.guildRealm}}">{{character.guildName}}</a>&gt;</h3>
 		<h5>Level {{character.level}}</h5>
 	</div>
-	<div class="row" ng-repeat="rep in character.reputation" style="margin:3px;">
+	<div class="row highlight-hover" ng-repeat="rep in character.reputation" style="margin:3px;">
 		<div class="col-md-3 col-sm-3 col-xs-3 col-lg-3">{{rep.name}}:</div>
 		<div class="col-md-9 col-sm-9 col-xs-9 col-lg-9 center">
 			<div class="reputationBarBack reputation{{rep.standing}}" style="width:{{rep.value/rep.max*100}}%;" ng-if="rep.value">&nbsp;</div>

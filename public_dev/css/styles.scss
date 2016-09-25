@@ -1,5 +1,6 @@
 /* wow class text colors */
 $deathknight-class: #C41F3B;
+$demonhunter-class: #A330C9;
 $druid-class: #FF7D0A;
 $hunter-class: #ABD473;
 $mage-class: #69CCF0;
@@ -321,8 +322,10 @@ $quality7: #E6CC80;
   float:left;
   border-radius:5px;
   border:1px solid #00010D;
+  padding:1px;
 }
 .reputationBarText{
+  margin: 2px 5px;
   position:absolute;
   width:100%;
   font-weight: bold;
@@ -498,4 +501,43 @@ $quality7: #E6CC80;
   border-width: 2px;
   border-style: solid;
   border-radius: 8px;
+}
+.characterClass1 { /* Warrior */
+  color: $warrior-class;
+}
+.characterClass2 {
+  color: $paladin-class;
+}
+.characterClass3 {
+  color: $hunter-class;
+}
+.characterClass4 {
+  color: $rogue-class;
+}
+.characterClass5 {
+  color: $priest-class;
+}
+.characterClass6 {
+  color: $deathknight-class;
+}
+.characterClass7 {
+  color: $shaman-class;
+}
+.characterClass8 {
+  color: $mage-class;
+}
+.characterClass9 {
+  color: $warlock-class;
+}
+.characterClass10 {
+  color: $monk-class;
+}
+.characterClass11 {
+  color: $druid-class;
+}
+.characterClass12 {
+  color: $demonhunter-class;
+}
+.highlight-hover:hover {
+  background-color: $lightBackgroundColor;
 }

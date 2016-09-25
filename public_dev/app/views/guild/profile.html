@@ -1,11 +1,53 @@
 <div class="row" id="content-column-wrapper">
 <div id="main-content">
-	GUILD STUFF
-	{{guildName}}
-	{{guildServer}}
-	<div ng-repeat="member in guild.members | orderBy:'rank'">
+	<h1>&lt;{{guildName}}&gt; <small>{{guildServer}}</small></h1>
+	<h3>Guild Roster</h3>
+	<div class="row">
+		<div class="col-xs-3 text-center">
+			<strong>Name</strong>
+		</div>
+		<div class="col-xs-1 text-center">
+			<strong>Lvl</strong>
+		</div>
+		<div class="col-xs-2 text-center characterClass{{member.character.class}}">
+			<strong>Class</strong>
+		</div>
+		<div class="col-xs-2 text-center">
+			<strong>Spec</strong>
+		</div>
+		<div class="col-xs-1 text-center">
+			<strong>Role</strong>
+		</div>
+		<div class="col-xs-2 text-center">
+			<strong>Achievements</strong>
+		</div>
+		<div class="col-xs-1 text-center">
+			<strong>Rank</strong>
+		</div>
+	</div>
+	<div ng-repeat="member in guild.members | orderBy:'rank'" class="row highlight-hover">
 	<a href="/c/{{member.character.name}}/{{member.character.realm}}-US/">
-		{{member.character.level}} - {{member.character.name}}
+		<div class="col-xs-3">
+			{{member.character.name}}
+		</div>
+		<div class="col-xs-1 text-right">
+			{{member.character.level}}
+		</div>
+		<div class="col-xs-2 characterClass{{member.character.class}}">
+			{{characterClasses[member.character.class]}}
+		</div>
+		<div class="col-xs-2">
+			{{member.character.spec.name}}
+		</div>
+		<div class="col-xs-1">
+			 {{member.character.spec.role}}
+		</div>
+		<div class="col-xs-2 text-right">
+			{{member.character.achievementPoints}}
+		</div>
+		<div class="col-xs-1 text-right">
+			{{member.rank}}
+		</div>
 	</a>
 	</div>
 </div>

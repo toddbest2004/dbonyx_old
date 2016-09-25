@@ -46,7 +46,7 @@ function findQuests(){
 	 	findQuest(i);
 	}
 	myCount+=increment;
-	if(myCount > 45000){
+	if(myCount > 50000){
 		console.log("Item id: "+myCount);
 		console.log("Maximum id reached. Ending.");
 		clearInterval(intervalId);

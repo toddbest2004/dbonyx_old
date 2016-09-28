@@ -5,6 +5,8 @@ var fs = require("fs");
 
 var characterUtil = {};
 
+var characterFullPopulate = "professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts achievements.id";
+
 characterUtil.getCharacter = function(name, realm, region, callback) {
 	if(!name||!realm||!region) {
 		callback("Missing one or more required fields");
@@ -13,7 +15,7 @@ characterUtil.getCharacter = function(name, realm, region, callback) {
 	name = name.toLowerCase();
 	realm = realm.toLowerCase();
 	region = region.toLowerCase();
-	db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {$set:{lastChecked:Date.now()}}).populate("professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts achievements.id").exec(function(err, character) {
+	db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {$set:{lastChecked:Date.now()}}).populate(characterFullPopulate).exec(function(err, character) {
 		if(err){
 			callback("There was an error finding character in our database.");
 			return;
@@ -120,9 +122,11 @@ function updateCharacter(character, body, callback) {
 	character.progression=body.progression;
 	character.talents=body.talents;
 	character.pvp=body.pvp;
-	character.save(function(err){
-		importCharacterImages(body.thumbnail, function() {
-			callback(false, character);
+	character.save(function(err, updatedCharacter){
+		updatedCharacter.populate(characterFullPopulate, function(err){
+			importCharacterImages(body.thumbnail, function() {
+				callback(false, updatedCharacter);
+			});
 		});
 	});
 }
@@ -139,8 +143,9 @@ function importCharacterImages(thumbnail, callback){
 var download = function(uri, filename, callback){
 	request.head(uri, function(err, res, body){
 		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
-			if(callback)
+			if(callback) {
 				callback();
+			}
 		});
 	});
 };

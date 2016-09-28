@@ -43,6 +43,7 @@ angular.module('dbonyx')
 				character.loaded=true;
 				character.runOnLoad();
 				callback(character);
+				// console.log(character);
 			}else{
 				//show all characters for choosing
 				character.loading=false;

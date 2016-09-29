@@ -18,7 +18,8 @@ var achievementSchema = new Schema({
 		max: Number
 	}],
 	accountWide:Boolean,
-	factionId:Number
+	factionId:Number,
+	order: Number
 });
 
 

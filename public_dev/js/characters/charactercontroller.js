@@ -66,6 +66,15 @@ angular.module('dbonyx')
 .controller('characterAchievementCtrl', ['onyxCharacter', 'achievementService', '$routeParams', '$scope', function(onyxCharacter, achievementService, $routeParams, $scope) {
 	var name = $routeParams.name,
 		realm = $routeParams.server;
+	$scope.activeAchievements = [];
+	$scope.selectSubCat = function(cat, sub) {
+		$scope.activeAchievements = $scope.categories[cat].categories[sub].achievements;
+	};
+	$scope.selectCat = function(cat) {
+		$scope.activeAchievements = $scope.categories[cat].achievements;
+		$scope.categories[cat].expanded = !$scope.categories[cat].expanded;
+	};
+
 	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
 		onyxCharacter.search(name, realm, function(character) {
 			if(!character) {
@@ -75,13 +84,6 @@ angular.module('dbonyx')
 			console.log("loaded");
 		});
 	}
-	achievementService.getAchievements(function(err, achievements) {
-		if(err) {
-			//todo: err
-			return;
-		}
-		$scope.achievements = achievements;
-	});
 	achievementService.getCategories(function(err, categories) {
 		if(err) {
 			//todo: err

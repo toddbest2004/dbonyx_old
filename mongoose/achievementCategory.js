@@ -7,7 +7,8 @@ var achievementCategorySchema = new Schema({
 	parentCategory: Number,
 	categories:[{type:Number, ref:'achievementCategory'}],
 	achievements:[{type:Number, ref:'achievement'}],
-	name:String
+	name:String,
+	order: Number
 });
 
 

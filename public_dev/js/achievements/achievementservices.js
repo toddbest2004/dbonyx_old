@@ -24,7 +24,7 @@ angular.module('dbonyx')
 	achievement.getCategories = function(cb) {
 		$http({
 			method: 'GET',
-			url: '/api/achievements/categories',
+			url: '/api/achievements/categories'
 		}).then(function success(response){
 			achievement.categories = response.data;
 			if(cb) {

@@ -28,6 +28,7 @@ $routeProvider
 	templateUrl: 'app/views/character/reputation.html'
 })
 .when('/c/:name/:server/achievements',{
+	controller: 'characterAchievementCtrl',
 	templateUrl: 'app/views/character/achievements.html'
 })
 .when('/c/:name/:server/mounts',{

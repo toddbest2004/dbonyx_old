@@ -1,4 +1,3 @@
-<div ng-controller="characterMain">
 <div class="row" id="content-column-wrapper">
 	<div id="main-content" class="container">
 		<div ng-if="!character.loading">
@@ -6,13 +5,21 @@
 			<h3>&lt;<a href="/g/{{character.guildName}}/{{character.guildRealm}}">{{character.guildName}}</a>&gt;</h3>
 			<h5>Level {{character.level}}</h5>
 		</div>
-		<div ng-repeat='achievement in character.achievements'>
-			<h3>{{achievement.id.title}} ({{achievement.id.points}}) </h3>
-			{{achievement.id.description}}
+		<div class="row">
+			<div class="col-xs-4">
+				<div ng-repeat="category in categories">
+					<span ng-if="category.categoryId!==0"> -- </span> {{category.title}}
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div ng-repeat='achievement in character.achievements' ng-show="achievement.id.category === 92">
+					<h3>{{achievement.id.title}} ({{achievement.id.points}}) </h3>
+					{{achievement.id.description}}
+				</div>
+			</div>
 		</div>
 	</div>
 	<sidebar>
 	<character-links></character-links>
 	</sidebar>
-</div>
 </div>

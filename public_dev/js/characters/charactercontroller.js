@@ -63,6 +63,39 @@ angular.module('dbonyx')
 	// $scope.character.get('reputation');
 	// $scope.character.get('battlepets');
 }])
+.controller('characterAchievementCtrl', ['onyxCharacter', 'achievementService', '$routeParams', '$scope', function(onyxCharacter, achievementService, $routeParams, $scope) {
+	var name = $routeParams.name,
+		realm = $routeParams.server;
+	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
+		onyxCharacter.search(name, realm, function(character) {
+			if(!character) {
+				return;
+			}
+			$scope.character = character;
+			console.log("loaded");
+		});
+	}
+	achievementService.getAchievements(function(err, achievements) {
+		if(err) {
+			//todo: err
+			return;
+		}
+		$scope.achievements = achievements;
+	});
+	achievementService.getCategories(function(err, categories) {
+		if(err) {
+			//todo: err
+			return;
+		}
+		$scope.categories = categories;
+	});
+	$scope.character=onyxCharacter;
+	// $scope.character.get('items');
+	// $scope.character.get('mounts');
+	// $scope.character.get('achievements');
+	// $scope.character.get('reputation');
+	// $scope.character.get('battlepets');
+}])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
 	var name = $routeParams.name,
 		realm = $routeParams.server;

@@ -7,12 +7,14 @@ var db = require("../mongoose");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-var characterCtrl = require("./controllers/character");
-router.use("/character", characterCtrl);
+var achievementCtrl = require("./controllers/achievements");
+router.use("/achievements", achievementCtrl);
 var auctionCtrl = require("./controllers/auction");
 router.use("/auction", auctionCtrl);
 var battlepetCtrl = require("./controllers/battlepets");
 router.use("/battlepet", battlepetCtrl);
+var characterCtrl = require("./controllers/character");
+router.use("/character", characterCtrl);
 // var dataCtrl = require("./controllers/data");
 // router.use("/data", dataCtrl);
 var forumCtrl = require('./controllers/forums');

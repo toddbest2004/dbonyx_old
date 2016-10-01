@@ -4,8 +4,10 @@ angular.module('dbonyx')
 	var achievement = {};
 
 	achievement.achievements = [];
+	achievement.categories = [];
 
 	achievement.getAchievements = function(cb) {
+
 		$http({
 			method: 'GET',
 			url: '/api/achievements/achievements',
@@ -22,6 +24,9 @@ angular.module('dbonyx')
 	};
 
 	achievement.getCategories = function(cb) {
+		if (achievement.categories.length!==0) {
+			return;
+		}
 		$http({
 			method: 'GET',
 			url: '/api/achievements/categories'

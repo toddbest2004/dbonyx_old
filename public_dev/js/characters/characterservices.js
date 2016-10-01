@@ -22,36 +22,58 @@ angular.module('dbonyx')
 
 	character.search=function(name, realmInput, callback){
 		// console.log("searching", name, realmInput);
-		character.loading=true;
 		if(!name){
 			character.loading=false;
 			callback(false);
 			return;
 		}
-		var params = {name:name};
-		if(realmInput){
-			params.realm=realmInput;
+		if(!realmInput){
+			return;
 		}
+
+		var params = {name:name, realm:realmInput};
+		var realmSplit = realmInput.split("-");
+		if(character.name === name && character.realm === realmSplit[0] && character.region === realmSplit[1]) {
+			//asked to load current character, short circuit.
+			if(callback) {
+				callback(character);
+			}
+			return;
+		}
+		//TODO: clear character
+
+		character.realm = realmSplit[0];
+		character.region = realmSplit[1];
+		character.name = name;
+		character.loading = true;
+		character.loaded = false;
+
 		$http({
 			method: 'GET',
 			url: '/api/character/search',
 			params: params
 		}).then(function success(response){
-			if(response.data.count===1){
+			if (response.data.count === 1) {
 				character.setCharacter(response.data.character);
-				character.loading=false;
-				character.loaded=true;
+				character.loading = false;
+				character.loaded = true;
 				character.runOnLoad();
-				callback(character);
-				console.log(character);
-			}else{
+				if (callback) {
+					callback(character);
+				}
+			} else {
 				//show all characters for choosing
-				character.loading=false;
-				callback(response.data.characters);
+				character.loading = false;
+				if(callback) {
+					callback(response.data.characters);
+				}
 			}
 		}, function error(response){
-			character.loading=false;
-			callback(false);
+			character.loading = false;
+			character.loaded = false;
+			if(callback) {
+				callback(false);
+			}
 			//Handle Character not found, unable to connect, etc.
 		});
 	};

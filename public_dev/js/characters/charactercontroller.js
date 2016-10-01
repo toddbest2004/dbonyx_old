@@ -47,16 +47,9 @@ angular.module('dbonyx')
 .controller('characterMain', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope) {
 	var name = $routeParams.name,
 		realm = $routeParams.server;
-	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
-		onyxCharacter.search(name, realm, function(character) {
-			if(!character) {
-				return;
-			}
-			$scope.character = character;
-			console.log("loaded");
-		});
-	}
+	
 	$scope.character=onyxCharacter;
+	$scope.character.search(name, realm);
 	// $scope.character.get('items');
 	// $scope.character.get('mounts');
 	// $scope.character.get('achievements');
@@ -66,6 +59,7 @@ angular.module('dbonyx')
 .controller('characterAchievementCtrl', ['onyxCharacter', 'achievementService', '$routeParams', '$scope', function(onyxCharacter, achievementService, $routeParams, $scope) {
 	var name = $routeParams.name,
 		realm = $routeParams.server;
+
 	$scope.activeAchievements = [];
 	$scope.selectSubCat = function(cat, sub) {
 		$scope.activeAchievements = $scope.categories[cat].categories[sub].achievements;
@@ -75,42 +69,22 @@ angular.module('dbonyx')
 		$scope.categories[cat].expanded = !$scope.categories[cat].expanded;
 	};
 
-	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
-		onyxCharacter.search(name, realm, function(character) {
-			if(!character) {
-				return;
-			}
-			$scope.character = character;
-			console.log("loaded");
-		});
-	}
-	achievementService.getCategories(function(err, categories) {
-		if(err) {
-			//todo: err
-			return;
-		}
-		$scope.categories = categories;
-	});
 	$scope.character=onyxCharacter;
-	// $scope.character.get('items');
-	// $scope.character.get('mounts');
-	// $scope.character.get('achievements');
-	// $scope.character.get('reputation');
-	// $scope.character.get('battlepets');
+	$scope.character.search(name, realm);
+
+	$scope.categories = achievementService.categories;
+	achievementService.getCategories(function() {
+		$scope.categories = achievementService.categories;
+	});
+
+	$scope.achievements = achievementService.achievements;
 }])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
 	var name = $routeParams.name,
 		realm = $routeParams.server;
-	if (!onyxCharacter.name||onyxCharacter.name!=$routeParams.name) {
-		onyxCharacter.search(name, realm, function(character) {
-			if(!character) {
-				return;
-			}
-			$scope.character = character;
-			console.log("loaded");
-		});
-	}
+	
 	$scope.character=onyxCharacter;
+	$scope.character.search(name, realm);
 	// $scope.character.get('professions');
 	$scope.expandRecipes = [false,false,false,false,false,false];
 	$scope.expandToggle = function(index){

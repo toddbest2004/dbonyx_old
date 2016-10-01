@@ -5,9 +5,12 @@
 			<h3>&lt;<a href="/g/{{character.guildName}}/{{character.guildRealm}}">{{character.guildName}}</a>&gt;</h3>
 			<h5>Level {{character.level}}</h5>
 		</div>
+		<div ng-if="character.loading">
+			Loading Character...
+		</div>
 		<div class="row">
 			<div class="col-xs-3">
-				<div ng-if="categories">Summary</div>
+				<div ng-if="categories.length>0">Summary</div>
 				<div ng-repeat="category in categories">
 					<div ng-click="selectCat(category.order)">{{category.name}}</div>
 					<div ng-repeat="sub in category.categories" ng-click="selectSubCat(category.order, sub.order)" ng-if="category.expanded">
@@ -18,7 +21,7 @@
 			<div class="col-xs-9">
 				<div ng-repeat='achievement in activeAchievements' ng-show="achievement.factionId===character.faction||achievement.factionId===2">
 					<h3>{{achievement.title}} ({{achievement.points}}) </h3>
-					{{achievement.description}} {{achievement.factionId}}
+					{{achievement.description}}
 				</div>
 			</div>
 		</div>

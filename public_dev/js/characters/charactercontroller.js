@@ -66,11 +66,20 @@ angular.module('dbonyx')
 
 	$scope.activeAchievements = [];
 	$scope.selectSubCat = function(cat, sub) {
+		$scope.cat = cat;
+		$scope.subcat = sub;
+		$scope.catId = $scope.categories[cat]._id;
 		$scope.activeAchievements = $scope.categories[cat].categories[sub].achievements;
 	};
 	$scope.selectCat = function(cat) {
+		$scope.cat = cat;
+		$scope.subcat = null;
+		$scope.catId = $scope.categories[cat]._id;
 		$scope.activeAchievements = $scope.categories[cat].achievements;
 		$scope.categories[cat].expanded = !$scope.categories[cat].expanded;
+	};
+	$scope.activeSub = function(sub) {
+		return sub.order===$scope.subcat&&$scope.catId===sub.parentCategory;
 	};
 
 	$scope.character=onyxCharacter;

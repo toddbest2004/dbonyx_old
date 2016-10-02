@@ -1184,6 +1184,9 @@ oi-select.loading:not(.multiple) .select-search:after {
 .incompleteAchievement {
   background-color: #212121; }
 
+.selectedAchievementCategory {
+  background-color: #424242; }
+
 #user-panel {
   height: 200px;
   background: #212121;

@@ -60,6 +60,10 @@ angular.module('dbonyx')
 	var name = $routeParams.name,
 		realm = $routeParams.server;
 
+	$scope.completedAchievements = {};
+	$scope.showComplete = true;
+	$scope.showIncomplete = true;
+
 	$scope.activeAchievements = [];
 	$scope.selectSubCat = function(cat, sub) {
 		$scope.activeAchievements = $scope.categories[cat].categories[sub].achievements;
@@ -70,7 +74,11 @@ angular.module('dbonyx')
 	};
 
 	$scope.character=onyxCharacter;
-	$scope.character.search(name, realm);
+	$scope.character.search(name, realm, function(char) {
+		char.achievements.forEach(function(achievement) {
+			$scope.completedAchievements[achievement.id] = achievement;
+		});
+	});
 
 	$scope.categories = achievementService.categories;
 	achievementService.getCategories(function() {
@@ -78,6 +86,15 @@ angular.module('dbonyx')
 	});
 
 	$scope.achievements = achievementService.achievements;
+
+	$scope.checkCompleted = function(achievement) {
+		return $scope.completedAchievements[achievement._id];
+	};
+	$scope.checkFaction = function(achievement) {
+		return achievement.factionId === $scope.character.faction || achievement.factionId === 2;
+
+	}
+
 }])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){
 	var name = $routeParams.name,

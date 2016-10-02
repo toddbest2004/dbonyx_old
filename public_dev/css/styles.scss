@@ -541,3 +541,16 @@ $quality7: #E6CC80;
 .highlight-hover:hover {
   background-color: $lightBackgroundColor;
 }
+.achievementCategory {
+  border: 1px solid $lightBackgroundColor;
+}
+.characterAchievement {
+  padding: 5px;
+  margin: 0;
+  border: 1px solid $lightBackgroundColor;
+}
+.incompleteAchievement {
+  background-color: $darkBackgroundColor;
+}
+.completeAchievement {
+}

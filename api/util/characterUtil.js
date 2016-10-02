@@ -5,7 +5,7 @@ var fs = require("fs");
 
 var characterUtil = {};
 
-var characterFullPopulate = "professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts achievements.id";
+var characterFullPopulate = "professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts";
 
 characterUtil.getCharacter = function(name, realm, region, callback) {
 	if(!name||!realm||!region) {

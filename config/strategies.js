@@ -7,6 +7,7 @@ var opts = {
   secretOrKey: process.env.JWT_SECRET
 };
 
+console.log(process.env)
 console.log(opts.secretOrKey)
 
 module.exports = {

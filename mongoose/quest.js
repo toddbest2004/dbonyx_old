@@ -18,6 +18,8 @@ var questSchema = new Schema({
 	itemRewards:[{itemId:{type:Number,ref:'item'},quantity:Number}],
 	itemChoices:[{itemId:{type:Number,ref:'item'},quantity:Number}],
 	factionChanges:[{factionId:Number,change:Number}],//not yet implemented
+	allianceCompletions: [{type:Schema.Types.ObjectId, ref:'character'}],
+	hordeCompletions: [{type:Schema.Types.ObjectId, ref:'character'}]
 });
 
 var quest = mongoose.model('quest', questSchema);

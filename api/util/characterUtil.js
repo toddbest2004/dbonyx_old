@@ -26,7 +26,7 @@ characterUtil.getCharacter = function(name, realm, region, callback) {
 		}
 		var oneDay = 1000*60*60*24;
 		if(Date.now() - character.lastChecked > oneDay) {
-			console.log("Guild exists. Updating with fresh data.");
+			console.log("Character exists. Updating with fresh data.");
 			importCharacterFromServer(name, realm, region, callback);
 			return;
 		}
@@ -126,6 +126,7 @@ function updateCharacter(character, body, callback) {
 		updatedCharacter.populate(characterFullPopulate, function(err){
 			importCharacterImages(body.thumbnail, function() {
 				callback(false, updatedCharacter);
+				processQuestCompletion(updatedCharacter);
 			});
 		});
 	});
@@ -143,6 +144,7 @@ function importCharacterImages(thumbnail, callback){
 var download = function(uri, filename, callback){
 	request.head(uri, function(err, res, body){
 		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
+			console.log("callback chain start");
 			if(callback) {
 				callback();
 			}
@@ -151,3 +153,19 @@ var download = function(uri, filename, callback){
 };
 
 module.exports = characterUtil;
+
+function processQuestCompletion(character) {
+	var faction = character.faction;
+	var id = character._id;
+	console.log(id);
+	if(faction === 0) {
+		character.quests.forEach(function(quest) {
+			db.quest.findOneAndUpdate({_id:quest}, {$addToSet:{allianceCompletions:id}}, function() {});
+		});
+	}
+	if(faction === 1) {
+		character.quests.forEach(function(quest) {
+			db.quest.findOneAndUpdate({_id:quest}, {$addToSet:{hordeCompletions:id}}, function() {});
+		});	
+	}
+}

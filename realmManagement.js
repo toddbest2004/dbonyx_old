@@ -1,86 +1,89 @@
+"use strict";
 var request = require("request");
-var db = require('./mongoose');
-var async = require("async");
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+	host: process.env.DATABASE_HOST,
+	user: process.env.DATABASE_USER,
+	password: process.env.DATABASE_PASS,
+	database: process.env.DATABASE_NAME
+});
+
+connection.connect();
 
 var realms = {};
 var masterSlugs = {};
-var region = 'us'
+var region = 'us';
 
-getRealms()
+getRealms();
 
 function getRealms(){
 	//console.log("loading")
-	var url = "https://"+region+".api.battle.net/wow/realm/status?locale=en_US&apikey="+process.env.API
-	console.log(url)
+	var url = "https://"+region+".api.battle.net/wow/realm/status?locale=en_US&apikey="+process.env.API;
+	console.log(url);
 	request({
 		uri: url,
 		json: true
-	}, function(error, response, body){
-		console.log("Data returned")
-		if(!error && response.statusCode===200){
-			process_realm_data(body, 'us')
-		}else{
-			console.log("error: "+response.statusCode)
+	}, function(error, response, body) {
+		console.log("Data returned");
+		if (!error && response.statusCode===200) {
+			console.log("Starting Process");
+			addRealm(body.realms, region, 0);
+		} else {
+			console.log("error: "+response.statusCode);
 		}
-	})
+	});
 }
 
-function process_realm_data(data, region){
-	//TODO: load existing realm data to ensure master-slug doesn't get changed by new (or removed) realms
-	console.log("Starting Process")
-	data.realms.forEach(function(realm){
-		db.realm.create({slug:realm.slug, region:region}).then(function(instance){
-			
-			if(!masterSlugs[realm.slug]){ //if this is the first time seeing this realm, it becomes the master slug for itself and all connected realms
-				masterSlugs[realm.slug]=instance._id
-				// console.log(instance._id)
-				instance.masterSlug = instance._id
-				instance.auctiontouch = 0
-				instance.isMasterSlug = true
-					
-				realm.connected_realms.forEach(function(connected){
-					masterSlugs[connected]=instance._id;
-				})
+function addRealm(realms, region, count){
+	var realm = realms[count];
+	var attributes = [region, realm.name, realm.slug, 0, realm.type, realm.population, realm.battlegroup, realm.locale, realm.timezone, realm.queue];
+	var query = connection.query("INSERT IGNORE INTO realms (region, name, slug, auctiontouch, type, population, battlegroup, locale, timezone, queue) VALUES (?)", [attributes], function(err, res) {
+		if(err) {
+			console.log(err);
+			return;
+		}
+		console.log(res.insertId);
+		updateMasterSlugs(realm, res.insertId, function() {
+			count++;
+			if(count < realms.length) {
+				addRealm(realms, region, count);
+			} else {
+				console.log("done");
+				connection.end();
+				return;
 			}
-			instance.name=realm.name
-			instance.masterSlug=masterSlugs[realm.slug]
-			instance.type=realm.type
-			instance.population=realm.population
-			instance.battlegroup=realm.battlegroup
-			instance.locale=realm.locale
-			instance.timezone=realm.timezone
-			instance.queue=realm.queue
-			instance.save().then(function(){});
 		});
-		//add realms to realm model
-		// addRealm(realm, region)
-	})
-	// fs.open(__dirname+"/../../static/realms.json", "w", function(err, fd){
-	// 	if(!err){
-	// 		fs.write(fd, JSON.stringify(realms), 0, 0, function(err){
-	// 			if(err){
-	// 				console.log(err);
-	// 			}else{
-	// 				console.log("File saved!");
-	// 			}
-	// 		})
-	// 	}else{
-	// 		console.log(err);
-	// 	}
-	// });	
-}
-
-function addRealm(realm, region){
-	db.realm.findOrCreate({where:{slug:realm.slug, region:region}}).spread(function(instance, isnew){
-		instance.name=realm.name,
-		instance.masterSlug=masterSlugs[realm.slug],
-		instance.type=realm.type,
-		instance.population=realm.population,
-		instance.battlegroup=realm.battlegroup,
-		instance.locale=realm.locale,
-		instance.timezone=realm.timezone,
-		instance.queue=realm.queue
-		instance.save();
 	});
 	realms[realm.name] = realm.slug;
+}
+
+function updateMasterSlugs(realm, id, cb) {
+	if (!masterSlugs[realm.slug]) {
+		masterSlugs[realm.slug] = id;
+		connection.query("UPDATE realms SET isMasterSlug = ?, master_id = ? WHERE id = ?", [true, id, id], function(err, res) {
+			if(err) {
+				console.log(err);
+				return;
+			}
+			realm.connected_realms.forEach(function(connected) {
+				masterSlugs[connected] = id;
+			});
+			console.log('good so far');
+			if(cb) {
+				cb();
+			}
+		});
+	} else {
+		var masterId = masterSlugs[realm.slug];
+		connection.query("UPDATE realms SET isMasterSlug = ?, master_id = ? WHERE id = ?", [false, masterId, id], function(err, res) {
+			if(err) {
+				console.log(err);
+				return;
+			}
+			console.log("good so far");
+			if(cb) {
+				cb();
+			}
+		});
+	}
 }

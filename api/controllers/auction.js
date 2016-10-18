@@ -7,6 +7,7 @@
 var express = require("express");
 var router = express.Router();
 var db = require("../../mongoose");
+var mysql = require("../../mysql");
 
 var itemConstants = require('../util/itemConstants');
 var validComparators = {number:{'>':'$gt', '=':'$eq','<':'$lt'},boolean:{'True':true,'False':false}};
@@ -25,13 +26,13 @@ db.battlepet.find({},function(err, battlepets){
 	});
 });
 
-db.realm.find({}).populate('masterSlug').exec(function(err, realms){
-	realms.forEach(function(realm){
-		realmArray[realm.name.toLowerCase()]=realm.masterSlug.slug;
+mysql.Realm.fetchAll({withRelated:['masterSlug']}).then(function(realms) {
+	realms.toJSON().forEach(function(realm) {
+		realmArray[realm.name.toLowerCase()] = realm.masterSlug.slug;
 	});
 });
 
-router.get("/fetchauctions", function(req, res){
+router.get("/fetchauctions", function(req, res) {
 	var query = req.query;
 	//default qualities to empty array if it is not sent
 	if(!query.qualities)

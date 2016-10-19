@@ -8,6 +8,7 @@ var express = require("express");
 var router = express.Router();
 var db = require("../../mongoose");
 var mysql = require("../../mysql");
+var realmUtil = require("../util/realmUtil");
 
 var itemConstants = require('../util/itemConstants');
 var validComparators = {number:{'>':'$gt', '=':'$eq','<':'$lt'},boolean:{'True':true,'False':false}};
@@ -17,8 +18,10 @@ var validFilters = {
 	'Is Equippable':{name:'equippable',type:'boolean'}
 	// 'Agility':{'bonusStats.stat':3}
 };
+var validSorts = ["buyout", "bid"];
+var validSortOrders = [-1, 1];
 var battlepetNames = {};
-var realmArray = {};
+var realmArray = {"us":{}, "eu":{}};
 
 db.battlepet.find({},function(err, battlepets){
 	battlepets.forEach(function(pet){
@@ -28,108 +31,144 @@ db.battlepet.find({},function(err, battlepets){
 
 mysql.Realm.fetchAll({withRelated:['masterSlug']}).then(function(realms) {
 	realms.toJSON().forEach(function(realm) {
-		realmArray[realm.name.toLowerCase()] = realm.masterSlug.slug;
+		realmArray['us'][realm.name.toLowerCase()] = realm.masterSlug.id;
 	});
 });
 
 router.get("/fetchauctions", function(req, res) {
-	var query = req.query;
-	//default qualities to empty array if it is not sent
-	if(!query.qualities)
-		query.qualities=[];
-	var searchTerm='';
-	// var qualities=[];
-	var filters={};
-	var sort={};
-	if(query.sortBy&&query.sortOrder){
-		// console.log(query.sortBy, query.sortOrder)
-		sort[query.sortBy]=parseInt(query.sortOrder);
+	var realmData = realmUtil.realmSplit(req.query.realm),
+		limit = 25,
+		offset = 0,
+		slug_id,
+		sort = "buyout",
+		sortOrder = "DESC";
+
+	offset = parseInt(req.query.offset);
+	if (!offset) {
+		offset = 0;
 	}
-	if(!query.realm||typeof(query.realm)!=='string'){
-		res.status(400).json({error:"Improper query string supplied."});
-		return;
+
+	if (!realmData) {
+		return res.status(400).json({error:"Improper realm supplied."});
 	}
-	var realmSplit = query.realm.split('-');
-	if(realmSplit.length!==2){
-		res.status(400).json({error:"Improper query string supplied."});
-		return;
+	slug_id = realmArray[realmData.region][realmData.realm];
+	if (!slug_id) {
+		return res.status(400).json({error:"Improper realm supplied."});
 	}
-	
-	var limit = parseInt(query.limit);
-	var offset = parseInt(query.offset);
-	if(limit>50){
-		limit=50;
+
+	if (req.query.sort && validSorts.indexOf(req.query.sort) !== -1) {
+		sort = req.query.sort;
 	}
-	var region = realmSplit[1].toLowerCase();
-	var realmName = realmSplit[0].toLowerCase();
-	var slugName = realmArray[realmName]||false;
-	if(!slugName){
-		res.status(400).json({error:"Cannot find realm."});
-		return;
+	if (req.query.sortOrder && req.query.sortOrder === "1") {
+		sortOrder = "ASC";
 	}
-	var itemsFiltered = false;
-	var itemQuery = db.item.find().select('_id');
-	if(query.qualities&&query.qualities.length>0){
-		filters.qualities=[];
-		var myQualities = query.qualities;
-		if(typeof(myQualities)==='object'){
-			//qualities is an array with at least one item
-			filters.qualities=myQualities.map(function(item){
-				if(!isNaN(parseInt(item))){
-					return parseInt(item);
-				}
-			}).filter(function(item){
-				if(item||item===0){
-					return true;
-				}
-			});
-			itemsFiltered = true;
-			itemQuery.where('quality').in(filters.qualities);
-		}else{
-			res.status(400).json({error:"Improper query string supplied."});
-			return;
-		}
-	}
-	if(query.searchTerm){
-		if(typeof(query.searchTerm)!=='string'){
-			res.status(400).json({error:"Improper query string supplied."});
-			return;
-		}
-		if(query.searchTerm.length>2){
-			searchTerm=query.searchTerm;
-			itemsFiltered = true;
-			var re = new RegExp(searchTerm,"i");
-			itemQuery.regex('name',re);
-		}
-	}
-	if(query.filters&&query.filters.length>0){
-		if(typeof(query.filters)==='string'){
-			processFilter(query.filters, itemQuery);
-		}else{
-			query.filters.forEach(function(filter){
-				processFilter(filter,itemQuery);
-			});
-		}
-		itemsFiltered=true;
-	}
-	if(itemsFiltered){
-		itemQuery.exec(function(err, items){
-			if(err||!items){
-				res.status(400).json({error:"There was an error fetching data from the server."});
-				return;
-			}
-			if(items.length===0){
-				res.json({success:true, count:0, auctions:[], offset:offset, limit:limit});
-				return;
-			}
-			var itemIds = items.map(function(item){
-				return item._id;
-			});
-			auctionQuery(res, region, slugName, limit, offset, sort, itemIds);
+
+	mysql.Auction.query({}).where({slug_id:slug_id}).count().then(function(count) {
+		mysql.Auction.query(function(qb) {
+			qb.limit(limit).offset(offset);
+		}).where({slug_id:slug_id}).orderBy(sort, sortOrder).fetchAll({withRelated:["item"]}).then(function(auctions) {
+			auctions = auctions.toJSON();
+			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit});
 		});
-	}else{
-		auctionQuery(res, region, slugName, limit, offset, sort, []);
-	}
+	});
+
+	// var query = req.query;
+	// //default qualities to empty array if it is not sent
+	// if(!query.qualities)
+	// 	query.qualities=[];
+	// var searchTerm='';
+	// // var qualities=[];
+	// var filters={};
+	// var sort={};
+	// if(query.sortBy&&query.sortOrder){
+	// 	// console.log(query.sortBy, query.sortOrder)
+	// 	sort[query.sortBy]=parseInt(query.sortOrder);
+	// }
+	// if(!query.realm||typeof(query.realm)!=='string'){
+	// 	res.status(400).json({error:"Improper query string supplied."});
+	// 	return;
+	// }
+	// var realmSplit = query.realm.split('-');
+	// if(realmSplit.length!==2){
+	// 	res.status(400).json({error:"Improper query string supplied."});
+	// 	return;
+	// }
+	
+	// var limit = parseInt(query.limit);
+	// var offset = parseInt(query.offset);
+	// if(limit>50){
+	// 	limit=50;
+	// }
+	// var region = realmSplit[1].toLowerCase();
+	// var realmName = realmSplit[0].toLowerCase();
+	// var slugName = realmArray[realmName]||false;
+	// if(!slugName){
+	// 	res.status(400).json({error:"Cannot find realm."});
+	// 	return;
+	// }
+	// var itemsFiltered = false;
+	// var itemQuery = db.item.find().select('_id');
+	// if(query.qualities&&query.qualities.length>0){
+	// 	filters.qualities=[];
+	// 	var myQualities = query.qualities;
+	// 	if(typeof(myQualities)==='object'){
+	// 		//qualities is an array with at least one item
+	// 		filters.qualities=myQualities.map(function(item){
+	// 			if(!isNaN(parseInt(item))){
+	// 				return parseInt(item);
+	// 			}
+	// 		}).filter(function(item){
+	// 			if(item||item===0){
+	// 				return true;
+	// 			}
+	// 		});
+	// 		itemsFiltered = true;
+	// 		itemQuery.where('quality').in(filters.qualities);
+	// 	}else{
+	// 		res.status(400).json({error:"Improper query string supplied."});
+	// 		return;
+	// 	}
+	// }
+	// if(query.searchTerm){
+	// 	if(typeof(query.searchTerm)!=='string'){
+	// 		res.status(400).json({error:"Improper query string supplied."});
+	// 		return;
+	// 	}
+	// 	if(query.searchTerm.length>2){
+	// 		searchTerm=query.searchTerm;
+	// 		itemsFiltered = true;
+	// 		var re = new RegExp(searchTerm,"i");
+	// 		itemQuery.regex('name',re);
+	// 	}
+	// }
+	// if(query.filters&&query.filters.length>0){
+	// 	if(typeof(query.filters)==='string'){
+	// 		processFilter(query.filters, itemQuery);
+	// 	}else{
+	// 		query.filters.forEach(function(filter){
+	// 			processFilter(filter,itemQuery);
+	// 		});
+	// 	}
+	// 	itemsFiltered=true;
+	// }
+	// if(itemsFiltered){
+	// 	itemQuery.exec(function(err, items){
+	// 		if(err||!items){
+	// 			res.status(400).json({error:"There was an error fetching data from the server."});
+	// 			return;
+	// 		}
+	// 		if(items.length===0){
+	// 			res.json({success:true, count:0, auctions:[], offset:offset, limit:limit});
+	// 			return;
+	// 		}
+	// 		var itemIds = items.map(function(item){
+	// 			return item._id;
+	// 		});
+	// 		auctionQuery(res, region, slugName, limit, offset, sort, itemIds);
+	// 	});
+	// }else{
+	// 	auctionQuery(res, region, slugName, limit, offset, sort, []);
+	// }
 });
 
 // //route for getting detailed statistics for a single item
@@ -171,30 +210,23 @@ router.get("/fetchauctions", function(req, res) {
 
 router.get("/auctionHistory", function(req, res){
 	var query = req.query;
-	// console.log(req.query.realm)
+	console.log(req.query);
 	if(!query.item){
 		res.status(400).json({error:"Improper query string supplied."});
 		return;
 	}
-	if(!query.realm||typeof(query.realm)!=='string'){
-		res.status(400).json({error:"Improper query string supplied."});
-		return;
+	var realmData = realmUtil.realmSplit(query.realm);
+	if (!realmData) {
+		return res.status(400).json({error:"Improper realm supplied."});
 	}
-	var realmSplit = query.realm.split('-');
-	if(realmSplit.length!==2){
-		res.status(400).json({error:"Improper query string supplied."});
-		return;
+	var slug_id = realmArray[realmData.region][realmData.realm];
+	if (!slug_id) {
+		return res.status(400).json({error:"Improper realm supplied."});
 	}
 	var item = parseInt(query.item);
-	var region = realmSplit[1].toLowerCase();
-	var realmName = realmSplit[0].toLowerCase();
-	var masterSlug = realmArray[realmName]||false;
-	if(!masterSlug){
-		res.status(400).json({error:"Cannot find realm."});
-		return;
-	}
-	db.auctionhistory.find({slugName:masterSlug,region:region,item:item}).exec(function(err, data){
-		if(err) return res.json({error:"Error executing query."});
+
+	mysql.AuctionHistory.where({slug_id:slug_id,item_id:item}).fetchAll().then(function(auctionHistories) {
+		var data = auctionHistories.toJSON();
 		var min=9999999999999999,max=0,maxQuantity=0;
 		for(var i=0;i<data.length;i++){
 			data[i].sold = data[i].sold||0;

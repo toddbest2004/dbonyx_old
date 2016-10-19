@@ -36,7 +36,7 @@ angular.module('AuctionCtrls')
 				url: '/api/watchlist',
 				data: {
 					price: price,
-					item: $scope.item._id,
+					item: $scope.item.id,
 					min: $scope.minQuantity,
 					max: $scope.maxQuantity,
 					realm: $scope.realmInput
@@ -63,7 +63,7 @@ angular.module('AuctionCtrls')
 	//expects $scope.item to be an instance of Item
 	var controller = ['$scope', 'auctionHistory',function($scope, auctionHistory){
 		if($scope.item){
-			auctionHistory.search($scope.item._id,$scope.realmInput,function(err, data){
+			auctionHistory.search($scope.item.id,$scope.realmInput,function(err, data){
 				$scope.aucHistoryLoading=false
 				if(err||!data){
 					//TODO: handle Error

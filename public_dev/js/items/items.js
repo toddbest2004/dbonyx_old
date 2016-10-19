@@ -94,8 +94,8 @@ angular.module('ItemCtrls', [])
 })
 .directive('itemLink', [function(){
 	var controller = ['$scope', 'itemService', function($scope, itemService) {
-		if($scope.itemid) {
-			itemService.getItem($scope.itemid, {}, function(item) {
+		if($scope.id) {
+			itemService.getItem($scope.id, {}, function(item) {
 				if(item){
 					$scope.item=item;
 					wireItem();
@@ -103,14 +103,14 @@ angular.module('ItemCtrls', [])
 			});
 		}
 		if(!$scope.item){ //defaults if item isn't passed properly
-			$scope.item={name:"Unknown Item", itemId:0,_id:0};
+			$scope.item={name:"Unknown Item", id:0};
 		}
 
 		wireItem();
 
 		function wireItem() {
 			// console.log($scope.item)
-			$scope.itemLinkPath = "/item/"+$scope.item.itemId;
+			$scope.itemLinkPath = "/item/"+$scope.item.id;
 
 			var options = []
 			if($scope.rand!=='0'&&$scope.rand!==undefined){
@@ -156,7 +156,7 @@ angular.module('ItemCtrls', [])
 				}
 				if(!scope.el){
 					var item = scope.item||scope.$parent.item
-					var itemId = item.id||item._id||item.itemId
+					var itemId = item.id;
 					if(itemDisplay){
 						itemDisplay.remove()
 					}

@@ -15,9 +15,9 @@
 			<div>Health: {{pet.computed.health}} Power: {{pet.computed.power}} Speed: {{pet.computed.speed}}</div>
 			<div class="row">
 				<div class="col-xs-4" ng-repeat="ability in pet.abilities | orderBy: 'order'">
-				<h3><img src="/images/icons/{{ability.details.icon}}.png" class="icon">{{ability.details.name}}</h3>
-				Required Level: {{ability.requiredLevel}}
-				{{petFamilies[ability.details.petTypeId]}}
+				<h3><img src="/images/icons/{{ability.icon}}.png" class="icon">{{ability.name}}</h3>
+				Required Level: {{ability._pivot_requiredLevel}}
+				{{petFamilies[ability.petTypeId]}}
 				</div>
 			</div>
 		</div>

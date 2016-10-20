@@ -1,43 +1,48 @@
+"use strict";
 angular.module('dbonyx')
 .controller('battlepetCtrl', ['$scope','$routeParams','$location','battlepetService',function($scope,$routeParams,$location,battlepetService){
-	$scope.id = $routeParams.id
-	$scope.petFamilies = battlepetService.petFamilies
-	var searchValues = $location.search()
+	$scope.id = $routeParams.id;
+	$scope.petFamilies = battlepetService.petFamilies;
+	var searchValues = $location.search();
 	// o=owner?
 
 	$scope.applyChanges = function(){
-		if(!$scope.pet.breedId)
-			$scope.pet.breedId=parseInt(searchValues.b)||3
-		if(!$scope.pet.level)
-			$scope.pet.level=parseInt(searchValues.l)||1
-		if(!$scope.pet.quality)
-			$scope.pet.quality=parseInt(searchValues.q)||$scope.pet.qualityId||0
+		if (!$scope.pet.breedId) {
+			$scope.pet.breedId=parseInt(searchValues.b)||3;
+		}
+		if (!$scope.pet.level) {
+			$scope.pet.level=parseInt(searchValues.l)||1;
+		}
+		if (!$scope.pet.quality) {
+			$scope.pet.quality=parseInt(searchValues.q)||$scope.pet.qualityId||0;
+		}
 	}
 
 	$scope.computeStats = function(){
-		if(!$scope.pet.computed)
-			$scope.pet.computed={}
+		if (!$scope.pet.computed) {
+			$scope.pet.computed={};
+		}
 		var qualityMultiplier = (1+$scope.pet.quality/10)
 		var breed = battlepetService.breeds[$scope.pet.breedId]||battlepetService.breeds[0]
 		var level = $scope.pet.level
-		$scope.pet.computed.health = Math.round(100+($scope.pet.stats.health+breed.h*10)*level*qualityMultiplier)
-		$scope.pet.computed.power = Math.round(($scope.pet.stats.power+breed.p*2)*level*qualityMultiplier)
-		$scope.pet.computed.speed = Math.round(($scope.pet.stats.speed+breed.s*2)*level*qualityMultiplier)
-
+		$scope.pet.computed.health = Math.round(100+($scope.pet.health+breed.h*10)*level*qualityMultiplier)
+		$scope.pet.computed.power = Math.round(($scope.pet.power+breed.p*2)*level*qualityMultiplier)
+		$scope.pet.computed.speed = Math.round(($scope.pet.speed+breed.s*2)*level*qualityMultiplier)
 	}
 
 	$scope.getPet = function(){
-		$scope.loading=true
-		battlepetService.getOne($scope.id,{},function(err, pet){
-			$scope.loading=false
-			if(err)
-				return $scope.error = err
-			$scope.pet = pet
-			$scope.applyChanges()
-			$scope.computeStats()
-		})
+		$scope.loading=true;
+		battlepetService.getOne($scope.id,{},function(err, pet) {
+			$scope.loading=false;
+			if (err) {
+				return $scope.error = err;
+			}
+			$scope.pet = pet;
+			$scope.applyChanges();
+			$scope.computeStats();
+		});
 	}
-	$scope.getPet()
+	$scope.getPet();
 }])
 .controller('allpetsCtrl', ['$scope','$location','battlepetService',function($scope,$location,battlepetService){
 	var searchValues = $location.search()
@@ -110,6 +115,7 @@ angular.module('dbonyx')
 				modifiers: modifiers
 			}
 		}).then(function success(response){
+			console.log(response)
 			cb(null, response.data)
 		}, function error(response){
 			cb(response.error)

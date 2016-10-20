@@ -2,7 +2,8 @@
 var express = require("express");
 var router = express.Router();
 
-var db = require("../../mongoose");
+var mysql = require("../../mysql");
+// var db = require("../../mongoose");
 
 var petFamilies = ['humanoid','dragonkin','flying','undead','critter','magical','elemental','beast','water','mechanical'];
 
@@ -23,12 +24,18 @@ router.get("/", function(req, res){
 	var offset = parseInt(req.query.offset)||0;
 	var limit = parseInt(req.query.limit)||25;
 	var filters;
-	try{
+
+	try {
 		filters = JSON.parse(req.query.filters) || null;
-	}catch(err){
+	} catch(err) {
 		filters = null;
 	}
-	var battlepetQuery = db.battlepet.find().skip(offset).limit(limit).populate('abilities.details');
+
+	if (limit>50) {
+		limit = 25;
+	}
+
+	// var battlepetQuery = db.battlepet.find().skip(offset).limit(limit).populate('abilities.details');
 	if(filters){
 		if(filters.families&&Array.isArray(filters.families)){
 			var familyArray = [];
@@ -36,31 +43,37 @@ router.get("/", function(req, res){
 				if(filters.families[i])
 					familyArray.push(i);
 			}
-			if(familyArray.length>0)
-				battlepetQuery.where({petTypeId:{$in:familyArray}});
+			if(familyArray.length>0);
+				// battlepetQuery.where({petTypeId:{$in:familyArray}});
 		}
 	}
-	if(limit>50)
-		limit = 25;
-	battlepetQuery.exec(function(err, pets){
-		battlepetQuery.skip(0).limit(0).count(function(err, count){
-			if(err||!pets){
-				console.log(err);
-				return res.status(404).json({error:"Unable to find pets."});
-			}
-			res.send({pets:pets,count:count});		
+	mysql.Battlepet.query({}).count().then(function(count) {
+		mysql.Battlepet.query(function(qb) {
+			qb.offset(offset).limit(limit);
+		}).fetchAll({withRelated:["abilities"]}).then(function(pets) {
+			res.json({pets:pets.toJSON(), count:count});
 		});
 	});
+
+
+	// battlepetQuery.exec(function(err, pets){
+	// 	battlepetQuery.skip(0).limit(0).count(function(err, count){
+	// 		if(err||!pets){
+	// 			console.log(err);
+	// 			return res.status(404).json({error:"Unable to find pets."});
+	// 		}
+	// 		res.send({pets:pets,count:count});		
+	// 	});
+	// });
 });
 
 router.get("/:id", function(req, res){
 	var id = parseInt(req.params.id);
-	if(!id)
+	if (!id) {
 		return res.status(400).json({error:"Improper id supplied."});
-	db.battlepet.findOne({speciesId:id}).populate('abilities.details').exec(function(err, pet){
-		if(err||!pet)
-			return res.status(404).json({error:"Unable to find pet."});
-		res.send(pet);
+	}
+	mysql.Battlepet.where({id:id}).fetch({withRelated:["abilities"]}).then(function(pet) {
+		res.json(pet.toJSON());
 	});
 });
 

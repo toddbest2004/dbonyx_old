@@ -1,65 +1,68 @@
 'use strict';
 var request = require("request");
-var db = require("../../mongoose");
+var mysql = require("../../mysql");
+
+var knex = require("knex")({
+	client: 'mysql',
+	connection: {
+		host     : process.env.DATABASE_HOST,
+		user     : process.env.DATABASE_USER,
+		password : process.env.DATABASE_PASS,
+		database : process.env.DATABASE_NAME,
+		charset: 'utf8'
+	}
+});
 var fs = require("fs");
+var realmUtil = require("../util/realmUtil");
 
 var characterUtil = {};
 
 var characterFullPopulate = "professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts";
 
-characterUtil.getCharacter = function(name, realm, region, callback) {
-	if(!name||!realm||!region) {
+characterUtil.getCharacter = function(name, realmString, callback) {
+	if(!name||!realmString) {
 		callback("Missing one or more required fields");
 		return;
 	}
 	name = name.toLowerCase();
-	realm = realm.toLowerCase();
-	region = region.toLowerCase();
-	db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {$set:{lastChecked:Date.now()}}).populate(characterFullPopulate).exec(function(err, character) {
-		if(err){
-			callback("There was an error finding character in our database.");
-			return;
-		}
-		if(!character) {
-			importCharacterFromServer(name, realm, region, callback);
+	var realmSplit = realmUtil.realmSplit(realmString),
+		realm = realmSplit.realm,
+		region = realmSplit.region,
+		slugId = realmUtil.realmStringToSlug(realmString);
+
+	mysql.Character.where({name:name, slug_id:slugId}).fetch().then(function(character) {
+		console.log(character);
+		if (!character) {
+			importCharacter(name, realmSplit, callback);
 			return;
 		}
 		var oneDay = 1000*60*60*24;
+		character = character.toJSON();
 		if(Date.now() - character.lastChecked > oneDay) {
 			console.log("Character exists. Updating with fresh data.");
-			importCharacterFromServer(name, realm, region, callback);
+			updateCharacter(name, realmSplit, callback);
 			return;
 		}
 		//Character exists and is up to date
 		console.log("character up to date");
 		callback(false, character);
+	}).catch(function(err) {
+		callback("There was an error finding character in our database.");
+		return;
 	});
 };
 
-var importCharacterFromServer = function(name, realm, region, callback) {
+var getCharacterFromServer = function(name, realmSplit, callback) {
 	console.log("Importing character");
+	var realm = realmSplit.realm;
+	var region = realmSplit.region;
 	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API;
 	request({
 		uri: url,
 		json: true
 	}, function(error, response, body){
 		if (!error && response.statusCode===200) {
-			body.lastChecked = Date.now();
-			body.realmSlug = realm;
-			body.nameSlug = name;
-			// body.region = region;
-			// console.log(body.mounts);
-			db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {}, {upsert: true, new:true}, function(err, character) {
-				// console.log(err);
-				// console.log(character);
-				if(err) {
-					callback("There was an error updating character in the database.");
-					return;
-				}
-				updateCharacter(character, body, callback);
-				// callback(false, body); //send body instead of guild. Guild is null when newly created here
-				return;
-			});
+			callback(false, body);
 		} else {
 			console.log("Character doesn't seem to exist.");
 			callback("Character doesn't seem to exist.");
@@ -67,7 +70,58 @@ var importCharacterFromServer = function(name, realm, region, callback) {
 	});
 };
 
-function updateCharacter(character, body, callback) {
+function updateCharacter (name, realmSplit, callback) {
+	getCharacterFromServer(name, realmSplit, function(err, body) {
+		body.lastChecked = Date.now();
+		body.nameSlug = name;
+
+		console.log(body);
+		console.log("update");
+	});
+}
+
+function importCharacter (name, realmSplit, callback) {
+	getCharacterFromServer(name, realmSplit, function(err, body) {
+		body.lastChecked = Date.now();
+		body.nameSlug = name;
+
+		console.log(body);
+		console.log("new");
+		// var test = knex("characters").insert({name:body.name, slug_id:slugId}).then(function(outs) {
+		// 	console.log(outs);
+		// }).catch(function(err) {
+		// 	console.log(err);
+		// });
+		//.raw(" ON DUPLICATE KEY IGNORE").then(function(vals) {
+		// 	console.log(vals);
+		// }).catch(function(errs) {
+		// 	console.log(errs);
+		// })
+
+		// mysql.Character.forge({name:body.name, slug_id:slugId}).save().then(function(newCharacter) {
+		// 	updateCharacter(newCharacter, body, callback);
+		// }).catch(function(err) {
+		// 	console.log(err);
+		// 	callback("There was an error updating character");
+		// 	return;
+		// })
+
+
+		// db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {}, {upsert: true, new:true}, function(err, character) {
+		// 	// console.log(err);
+		// 	// console.log(character);
+		// 	if(err) {
+		// 		callback("There was an error updating character in the database.");
+		// 		return;
+		// 	}
+		// 	updateCharacter(character, body, callback);
+		// 	// callback(false, body); //send body instead of guild. Guild is null when newly created here
+		// 	return;
+		// });
+	});
+}
+
+function updateCharacterOld(character, body, callback) {
 	console.log("updating character")
 	// console.log(body)
 	body.thumbnail = body.thumbnail.replace("avatar.jpg","");
@@ -122,7 +176,9 @@ function updateCharacter(character, body, callback) {
 	character.progression=body.progression;
 	character.talents=body.talents;
 	character.pvp=body.pvp;
+	console.log("start")
 	character.save(function(err, updatedCharacter){
+		console.log("saved?")
 		updatedCharacter.populate(characterFullPopulate, function(err){
 			importCharacterImages(body.thumbnail, function() {
 				callback(false, updatedCharacter);
@@ -130,6 +186,7 @@ function updateCharacter(character, body, callback) {
 			});
 		});
 	});
+	console.log("end?")
 }
 
 function importCharacterImages(thumbnail, callback){

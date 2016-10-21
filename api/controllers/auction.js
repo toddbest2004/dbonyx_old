@@ -21,17 +21,11 @@ var validFilters = {
 var validSorts = ["buyout", "bid"];
 var validSortOrders = [-1, 1];
 var battlepetNames = {};
-var realmArray = {"us":{}, "eu":{}};
+var realmArray = realmUtil.realmArray;
 
 db.battlepet.find({},function(err, battlepets){
 	battlepets.forEach(function(pet){
 		battlepetNames[pet._id]=pet.name;
-	});
-});
-
-mysql.Realm.fetchAll({withRelated:['masterSlug']}).then(function(realms) {
-	realms.toJSON().forEach(function(realm) {
-		realmArray['us'][realm.name.toLowerCase()] = realm.masterSlug.id;
 	});
 });
 

@@ -1,7 +1,7 @@
 'use strict';
+var mysql = require("../../mysql");
 
 var realmUtil = {};
-
 var validRegions = ['us', 'na', 'eu'];
 
 realmUtil.realmSplit = function(realmString) {
@@ -17,5 +17,20 @@ realmUtil.realmSplit = function(realmString) {
 
 	return {region:region, realm:realm};
 };
+
+realmUtil.realmStringToSlug = function(realmString) {
+	var splits = realmUtil.realmSplit(realmString);
+	var slugId = realmUtil.realmArray[splits.region][splits.realm];
+	console.log("slug "+slugId);
+	return slugId;
+};
+
+realmUtil.realmArray = {"us":{}, "eu":{}};
+
+mysql.Realm.fetchAll({withRelated:['masterSlug']}).then(function(realms) {
+	realms.toJSON().forEach(function(realm) {
+		realmUtil.realmArray['us'][realm.name.toLowerCase()] = realm.masterSlug.id;
+	});
+});
 
 module.exports = realmUtil;

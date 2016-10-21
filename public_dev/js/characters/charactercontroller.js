@@ -44,12 +44,15 @@ angular.module('dbonyx')
 	// $scope.test=$routeParams.characterName
 	
 }])
+.controller('characterLookup', ['onyxCharacter', '$scope', function(onyxCharacter, $scope) {
+	$scope.character=onyxCharacter;
+}])
 .controller('characterMain', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope) {
 	var name = $routeParams.name,
 		realm = $routeParams.server;
 	
 	$scope.character=onyxCharacter;
-	$scope.character.search(name, realm);
+	// $scope.character.search(name, realm);
 	// $scope.character.get('items');
 	// $scope.character.get('mounts');
 	// $scope.character.get('achievements');

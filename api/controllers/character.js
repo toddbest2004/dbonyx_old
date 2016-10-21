@@ -4,20 +4,13 @@ var request = require("request");
 var fs = require("fs");
 var router = express.Router();
 var encodeUrl = require('encodeurl');
+var mysql = require("../../mysql");
 
-var realmArray;
-var regionArray = ['us', 'eu'];
+var realmUtil = require("../util/realmUtil");
+
+var realmArray = realmUtil.realmArray;
 
 var characterUtil = require("../util/characterUtil");
-var db = require("../../mongoose");
-// var characterData = require("../strangerogue.json")
-// var itemPositions = require("../static/itemPositions")
-// var util = require("./modules/util")
-db.realm.find({}, function(err, realms){
-	realmArray = realms.map(function(realm){return realm.name.toLowerCase();});
-});
-
-
 
 router.get("/search", function(req, res){
 	if(!req.query.name||!req.query.realm) {
@@ -152,53 +145,12 @@ router.get("/reputation", function(req,res){
 module.exports = router;
 
 function findCharacter(realm, name, res){
-	var realmSplit = realm.split('-');
-	if(realmSplit.length!==2){
-		res.status(400).json({error:"Improper query string supplied."});
-		return;
-	}
-	var region = realmSplit[1].toLowerCase();
-	var realmName = realmSplit[0];
-
-	characterUtil.getCharacter(name, realmName, region, function(err, character) {
+	characterUtil.getCharacter(name, realm, function(err, character) {
 		if(err||!character) {
 			return res.status(400).json({error: err});
 		}
 		res.json({status:"success", count:1, character:character});
 	});
-	// db.character.findOne({name:name,realm:realmName,region:region}).populate('achievements.id').populate('mounts').exec(function(err, character){
-	// 	if(err){
-	// 		res.status(400).json({error:"Error reading database."});
-	// 		return;
-	// 	}
-	// 	if(!character){
-			// importCharacter(name,realmName,region,function(result){
-			// 	if(!result){
-			// 		res.status(404).json({error:"Not Found.", result:false});
-			// 		return;
-			// 	}
-			// 	db.character.findOne({name:name, realm:realmName, region:region}, function(err, character){
-			// 		res.json({status:"success", count:1, character:{
-			// 			name:character.name,
-			// 			realm:character.realm,
-			// 			region:character.region.toUpperCase(),
-			// 			level:character.level,
-			// 			faction:character.faction,
-			// 			thumbnail:character.thumbnail,
-			// 			guildName:character.guildName}});
-			// 	});
-			// });
-		// }else{
-		// 	res.json({status:"success", count:1, character:{
-		// 				name:character.name,
-		// 				realm:character.realm,
-		// 				region:character.region.toUpperCase(),
-		// 				level:character.level,
-		// 				faction:character.faction,
-		// 				thumbnail:character.thumbnail,
-		// 				guildName:character.guildName}})
-	// 	}
-	// });
 }
 
 function findMultipleCharacters(name, res){

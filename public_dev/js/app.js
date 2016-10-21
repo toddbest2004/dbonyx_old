@@ -19,6 +19,7 @@ $routeProvider
 	templateUrl: 'app/views/database.html'
 })
 .when('/character', {
+	controller: 'characterLookup',
 	templateUrl: 'app/views/character/lookup.html'
 })
 .when('/c/:name/:server/',{

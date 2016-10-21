@@ -2,22 +2,18 @@
 var request = require("request");
 var mysql = require("../../mysql");
 
-var knex = require("knex")({
-	client: 'mysql',
-	connection: {
-		host     : process.env.DATABASE_HOST,
-		user     : process.env.DATABASE_USER,
-		password : process.env.DATABASE_PASS,
-		database : process.env.DATABASE_NAME,
-		charset: 'utf8'
-	}
+var raw = require("mysql");
+var rawConnection = raw.createConnection({
+	host: process.env.DATABASE_HOST,
+	user: process.env.DATABASE_USER,
+	password: process.env.DATABASE_PASS,
+	database: process.env.DATABASE_NAME
 });
+
 var fs = require("fs");
 var realmUtil = require("../util/realmUtil");
 
 var characterUtil = {};
-
-var characterFullPopulate = "professions.primary.recipes professions.secondary.recipes battlepets.collected.details mounts";
 
 characterUtil.getCharacter = function(name, realmString, callback) {
 	if(!name||!realmString) {
@@ -25,28 +21,25 @@ characterUtil.getCharacter = function(name, realmString, callback) {
 		return;
 	}
 	name = name.toLowerCase();
-	var realmSplit = realmUtil.realmSplit(realmString),
-		realm = realmSplit.realm,
-		region = realmSplit.region,
-		slugId = realmUtil.realmStringToSlug(realmString);
+	var slugId = realmUtil.realmStringToSlug(realmString),
+		realmSplit = realmUtil.realmSplit(realmString);
 
 	mysql.Character.where({name:name, slug_id:slugId}).fetch().then(function(character) {
-		console.log(character);
 		if (!character) {
-			importCharacter(name, realmSplit, callback);
+			createCharacter(name, realmSplit, callback);
 			return;
 		}
 		var oneDay = 1000*60*60*24;
 		character = character.toJSON();
 		if(Date.now() - character.lastChecked > oneDay) {
 			console.log("Character exists. Updating with fresh data.");
-			updateCharacter(name, realmSplit, callback);
+			updateCharacter(name, character.id, realmSplit, callback);
 			return;
 		}
 		//Character exists and is up to date
 		console.log("character up to date");
 		callback(false, character);
-	}).catch(function(err) {
+	}).catch(function() {
 		callback("There was an error finding character in our database.");
 		return;
 	});
@@ -70,123 +63,180 @@ var getCharacterFromServer = function(name, realmSplit, callback) {
 	});
 };
 
-function updateCharacter (name, realmSplit, callback) {
+function updateCharacter (name, id, realmSplit, callback) {
 	getCharacterFromServer(name, realmSplit, function(err, body) {
+		if(err) {
+			callback(err);
+			return;
+		}
+		var slugId = realmUtil.realmStringToSlug(realmSplit.realm+"-"+realmSplit.region);
 		body.lastChecked = Date.now();
 		body.nameSlug = name;
 
-		console.log(body);
-		console.log("update");
+		mysql.Character.forge({id:id, name:body.name, slug_id:slugId}).save({
+			lastModified:new Date(body.lastModified),
+			lastChecked:new Date()
+		}, {method:"update"}).then(function(newCharacter) {
+			updateCharacterDetails(newCharacter, body, callback);
+		}).catch(function(err) {
+			console.log(err);
+			callback("There was an error updating character");
+			return;
+		});
 	});
 }
 
-function importCharacter (name, realmSplit, callback) {
+function createCharacter (name, realmSplit, callback) {
 	getCharacterFromServer(name, realmSplit, function(err, body) {
+		if(err) {
+			callback(err);
+			return;
+		}
+		var slugId = realmUtil.realmStringToSlug(realmSplit.realm+"-"+realmSplit.region);
 		body.lastChecked = Date.now();
 		body.nameSlug = name;
 
-		console.log(body);
-		console.log("new");
-		// var test = knex("characters").insert({name:body.name, slug_id:slugId}).then(function(outs) {
-		// 	console.log(outs);
-		// }).catch(function(err) {
-		// 	console.log(err);
-		// });
-		//.raw(" ON DUPLICATE KEY IGNORE").then(function(vals) {
-		// 	console.log(vals);
-		// }).catch(function(errs) {
-		// 	console.log(errs);
-		// })
-
-		// mysql.Character.forge({name:body.name, slug_id:slugId}).save().then(function(newCharacter) {
-		// 	updateCharacter(newCharacter, body, callback);
-		// }).catch(function(err) {
-		// 	console.log(err);
-		// 	callback("There was an error updating character");
-		// 	return;
-		// })
-
-
-		// db.character.findOneAndUpdate({nameSlug:name, realmSlug:realm, region:region}, {}, {upsert: true, new:true}, function(err, character) {
-		// 	// console.log(err);
-		// 	// console.log(character);
-		// 	if(err) {
-		// 		callback("There was an error updating character in the database.");
-		// 		return;
-		// 	}
-		// 	updateCharacter(character, body, callback);
-		// 	// callback(false, body); //send body instead of guild. Guild is null when newly created here
-		// 	return;
-		// });
+		mysql.Character.forge({name:body.name, slug_id:slugId}).save({
+			lastModified:new Date(body.lastModified),
+			lastChecked:new Date()
+		}).then(function(newCharacter) {
+			updateCharacterDetails(newCharacter, body, callback);
+		}).catch(function(err) {
+			console.log(err);
+			callback("There was an error updating character");
+			return;
+		});
 	});
 }
 
-function updateCharacterOld(character, body, callback) {
-	console.log("updating character")
-	// console.log(body)
-	body.thumbnail = body.thumbnail.replace("avatar.jpg","");
-	character.lastModified=body.lastModified;
-	character.lastChecked=Date.now();
-	character.name = body.name;
-	character.realm = body.realm;
-	character.class=body.class;
-	character.race=body.race;
-	character.gender=body.gender;
-	character.level=body.level;
-	character.achievementPoints=body.achievementPoints;
-	character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","");
-	character.calcClass=body.calcClass;
-	character.faction=body.faction;
-	if(body.guild) {
-		character.guildName = body.guild.name;
-		character.guildRealm = body.guild.realm;
-	}
-	character.quests=body.quests;
-	character.titles=body.titles;
-	character.mounts=body.mounts.collected.map(function(mount){
-		return mount.spellId;
+function updateCharacterDetails(character, body, callback) {
+	console.log("updating character");
+
+	//these update functions should run in parallel to increase import speed.
+	Promise.all([
+		updateCharacterAchievements(character.id, body.achievements),
+		updateCharacterMounts(character.id, body.mounts),
+		updateCharacterPets(character.id, body.pets),
+		updateCharacterQuests(character.id, body.quests),
+	]).then(function() {
+		mysql.Character.where({id:character.id}).fetch({withRelated:["achievements", "battlepets", "mounts", "quests", "reputation", "titles"]}).then(function(character) {
+			console.log(character.toJSON().quests);
+			callback("err");
+		});
 	});
-	character.criteria=[];
-	for(var i=0; i<body.achievements.criteria.length;i++){
-		character.criteria.push({
-			id:body.achievements.criteria[i],
-			quantity:body.achievements.criteriaQuantity[i],
-			timestamp:body.achievements.criteriaTimestamp[i],
-			created:body.achievements.criteriaCreated[i]
-		});
-	}
-	character.achievements=[];
-	for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
-		character.achievements.push({
-			id:body.achievements.achievementsCompleted[i],
-			timestamp:body.achievements.achievementsCompletedTimestamp[i]
-		});
-	}
+	// body.thumbnail = body.thumbnail.replace("avatar.jpg","");
+	// character.lastModified=body.lastModified;
+	// character.lastChecked=Date.now();
+	// character.name = body.name;
+	// character.realm = body.realm;
+	// character.class=body.class;
+	// character.race=body.race;
+	// character.gender=body.gender;
+	// character.level=body.level;
+	// character.achievementPoints=body.achievementPoints;
+	// character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","");
+	// character.calcClass=body.calcClass;
+	// character.faction=body.faction;
+	// if(body.guild) {
+	// 	character.guildName = body.guild.name;
+	// 	character.guildRealm = body.guild.realm;
+	// }
+	// character.quests=body.quests;
+	// character.titles=body.titles;
+	// character.mounts=body.mounts.collected.map(function(mount){
+	// 	return mount.spellId;
+	// });
+	// character.criteria=[];
+	// for(var i=0; i<body.achievements.criteria.length;i++){
+	// 	character.criteria.push({
+	// 		id:body.achievements.criteria[i],
+	// 		quantity:body.achievements.criteriaQuantity[i],
+	// 		timestamp:body.achievements.criteriaTimestamp[i],
+	// 		created:body.achievements.criteriaCreated[i]
+	// 	});
+	// }
+	// character.achievements=[];
+	// for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
+	// 	character.achievements.push({
+	// 		id:body.achievements.achievementsCompleted[i],
+	// 		timestamp:body.achievements.achievementsCompletedTimestamp[i]
+	// 	});
+	// }
 	
-	character.battlepets = body.pets;
-	character.battlepets.collected.forEach(function(pet) {
-		pet.details = pet.stats.speciesId;
-	});
+	// character.battlepets = body.pets;
+	// character.battlepets.collected.forEach(function(pet) {
+	// 	pet.details = pet.stats.speciesId;
+	// });
 
-	character.reputation=body.reputation;
-	character.appearance=body.appearance;
-	character.items=body.items;
-	character.stats=body.stats;
-	character.professions=body.professions;
-	character.progression=body.progression;
-	character.talents=body.talents;
-	character.pvp=body.pvp;
-	console.log("start")
-	character.save(function(err, updatedCharacter){
-		console.log("saved?")
-		updatedCharacter.populate(characterFullPopulate, function(err){
-			importCharacterImages(body.thumbnail, function() {
-				callback(false, updatedCharacter);
-				processQuestCompletion(updatedCharacter);
-			});
+	// character.reputation=body.reputation;
+	// character.appearance=body.appearance;
+	// character.items=body.items;
+	// character.stats=body.stats;
+	// character.professions=body.professions;
+	// character.progression=body.progression;
+	// character.talents=body.talents;
+	// character.pvp=body.pvp;
+	// console.log("start")
+	// character.save(function(err, updatedCharacter){
+	// 	console.log("saved?")
+	// 	updatedCharacter.populate(characterFullPopulate, function(err){
+	// 		importCharacterImages(body.thumbnail, function() {
+	// 			callback(false, updatedCharacter);
+	// 			processQuestCompletion(updatedCharacter);
+	// 		});
+	// 	});
+	// });
+	console.log("end?");
+}
+
+function joinTableQuery(query, data) {
+	return new Promise(function(resolve, reject) {
+		rawConnection.query(query, [data], function(err) {
+			if (err) {
+				console.log("Error importing character's quests");
+				reject();
+				return;
+			}
+			resolve();
 		});
 	});
-	console.log("end?")
+}
+
+function updateCharacterAchievements(characterId, achievements) {
+	var query = "INSERT IGNORE INTO characters_achievements (character_id, achievement_id, timestamp) VALUES ?";
+	var achievementData = [];
+	for (var i=0; i < achievements.achievementsCompleted.length; i++) {
+		achievementData.push([characterId, achievements.achievementsCompleted[i], new Date(achievements.achievementsCompletedTimestamp[i])]);
+	}
+
+	return joinTableQuery(query, achievementData);
+}
+
+function updateCharacterMounts(characterId, mounts) {
+	var query = "INSERT IGNORE INTO characters_mounts (character_id, mount_id) VALUES ?";
+	var mountData = mounts.collected.map(function(mount) {
+		return [characterId, mount.creatureId];
+	});
+
+	return joinTableQuery(query, mountData);
+}
+
+function updateCharacterPets(characterId, pets) {
+	var query = "INSERT IGNORE INTO characters_pets (character_id, battlepet_guid, battlepet_id, breed, quality, level, isFirstAbilitySlotSelected, isSecondAbilitySlotSelected, isThirdAbilitySlotSelected) VALUES ?";
+	var petData = pets.collected.map(function(pet) {
+		return [characterId, pet.battlePetGuid, pet.stats.speciesId, pet.stats.breedId, pet.stats.petQualityId, pet.stats.level, pet.isFirstAbilitySlotSelected, pet.isSecondAbilitySlotSelected, pet.isThirdAbilitySlotSelected];
+	});
+
+	return joinTableQuery(query, petData);
+}
+
+function updateCharacterQuests(characterId, quests) {
+	var query = "INSERT IGNORE INTO characters_quests (character_id, quest_id) values ?";
+	var questData = quests.map(function(quest) {
+		return([characterId, quest]);
+	});
+
+	return joinTableQuery(query, questData);
 }
 
 function importCharacterImages(thumbnail, callback){
@@ -210,19 +260,3 @@ var download = function(uri, filename, callback){
 };
 
 module.exports = characterUtil;
-
-function processQuestCompletion(character) {
-	var faction = character.faction;
-	var id = character._id;
-	console.log(id);
-	if(faction === 0) {
-		character.quests.forEach(function(quest) {
-			db.quest.findOneAndUpdate({_id:quest}, {$addToSet:{allianceCompletions:id}}, function() {});
-		});
-	}
-	if(faction === 1) {
-		character.quests.forEach(function(quest) {
-			db.quest.findOneAndUpdate({_id:quest}, {$addToSet:{hordeCompletions:id}}, function() {});
-		});	
-	}
-}

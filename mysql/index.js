@@ -12,6 +12,7 @@ models.BattlepetAbilityJoin = require("./battlepetAbilityJoin");
 models.Character = require("./character");
 models.Faction = require("./faction");
 models.Item = require("./item");
+models.Mount = require("./mount");
 models.Quest = require("./quest");
 models.Realm = require("./realm");
 models.Title = require("./title");

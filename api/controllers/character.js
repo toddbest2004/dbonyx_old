@@ -12,7 +12,10 @@ var realmArray = realmUtil.realmArray;
 
 var characterUtil = require("../util/characterUtil");
 
+var globalTimestamp;
+
 router.get("/search", function(req, res){
+	globalTimestamp = new Date();
 	if(!req.query.name||!req.query.realm) {
 		res.status(400).json({error:"Missing one or more required fields."});
 		return;
@@ -146,6 +149,7 @@ module.exports = router;
 
 function findCharacter(realm, name, res){
 	characterUtil.getCharacter(name, realm, function(err, character) {
+		console.log(new Date() - globalTimestamp);
 		if(err||!character) {
 			return res.status(400).json({error: err});
 		}

@@ -118,11 +118,16 @@ function updateCharacterDetails(character, body, callback) {
 		updateCharacterMounts(character.id, body.mounts),
 		updateCharacterPets(character.id, body.pets),
 		updateCharacterQuests(character.id, body.quests),
+		updateCharacterReputation(character.id, body.reputation),
+		updateCharacterTitles(character.id, body.titles)
 	]).then(function() {
 		mysql.Character.where({id:character.id}).fetch({withRelated:["achievements", "battlepets", "mounts", "quests", "reputation", "titles"]}).then(function(character) {
-			console.log(character.toJSON().quests);
-			callback("err");
+			callback(false, character.toJSON());
+		}).catch(function() {
+			throwError(callback);
 		});
+	}).catch(function() {
+		throwError(callback);
 	});
 	// body.thumbnail = body.thumbnail.replace("avatar.jpg","");
 	// character.lastModified=body.lastModified;
@@ -230,6 +235,24 @@ function updateCharacterPets(characterId, pets) {
 	return joinTableQuery(query, petData);
 }
 
+function updateCharacterReputation(characterId, factions) {
+	var query = "INSERT IGNORE INTO characters_reputation (character_id, faction_id, standing, value, max) values ?";
+	var factionData = factions.map(function(faction) {
+		return([characterId, faction.id, faction.standing, faction.value, faction.max]);
+	});
+
+	return joinTableQuery(query, factionData);
+}
+
+function updateCharacterTitles(characterId, titles) {
+	var query = "INSERT IGNORE INTO characters_titles (character_id, title_id) values ?";
+	var titleData = titles.map(function(title) {
+		return([characterId, title.id]);
+	});
+
+	return joinTableQuery(query, titleData);
+}
+
 function updateCharacterQuests(characterId, quests) {
 	var query = "INSERT IGNORE INTO characters_quests (character_id, quest_id) values ?";
 	var questData = quests.map(function(quest) {
@@ -239,24 +262,28 @@ function updateCharacterQuests(characterId, quests) {
 	return joinTableQuery(query, questData);
 }
 
-function importCharacterImages(thumbnail, callback){
-	var uri = "http://us.battle.net/static-render/us/"+thumbnail;
-	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"");
-	download(uri+"avatar.jpg",filename+"avatar.jpg");
-	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback);
-	download(uri+"inset.jpg",filename+"inset.jpg");
-	// download(uri+"card.jpg",filename+"card.jpg")
-}
+// function importCharacterImages(thumbnail, callback){
+// 	var uri = "http://us.battle.net/static-render/us/"+thumbnail;
+// 	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"");
+// 	download(uri+"avatar.jpg",filename+"avatar.jpg");
+// 	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback);
+// 	download(uri+"inset.jpg",filename+"inset.jpg");
+// 	// download(uri+"card.jpg",filename+"card.jpg")
+// }
 
-var download = function(uri, filename, callback){
-	request.head(uri, function(err, res, body){
-		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
-			console.log("callback chain start");
-			if(callback) {
-				callback();
-			}
-		});
-	});
-};
+// var download = function(uri, filename, callback){
+// 	request.head(uri, function(err, res, body){
+// 		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
+// 			console.log("callback chain start");
+// 			if(callback) {
+// 				callback();
+// 			}
+// 		});
+// 	});
+// };
+
+function throwError(callback) {
+	callback("There was a database error");
+}
 
 module.exports = characterUtil;

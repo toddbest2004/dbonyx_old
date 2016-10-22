@@ -1,3 +1,9 @@
+SELECT a.id, IF(chart.character_id IS NULL, FALSE, TRUE) as b, chart.character_id FROM achievements a LEFT JOIN characters_achievements as chart ON (chart.achievement_id = a.id) WHERE chart.character_id = 39;
+(Select all auctions, and true/false if character 39 has completed them)
+
+
+
+
 Re-add the following to menubar.html in templates
  ng-mouseover="select(menu)" ng-mouseleave="off(menu)"
 

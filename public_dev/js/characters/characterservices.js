@@ -53,6 +53,7 @@ angular.module('dbonyx')
 			url: '/api/character/search',
 			params: params
 		}).then(function success(response){
+			console.log(response);
 			if (response.data.count === 1) {
 				character.setCharacter(response.data.character);
 				character.loading = false;

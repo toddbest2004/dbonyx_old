@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
 	password: process.env.DATABASE_PASS,
 	database: process.env.DATABASE_NAME
 });
-var mongo = require("./mongoose");
+var mongo = require("../mongoose");
 
 setTimeout(function(){ 
 	getItemsAndImport(0);

@@ -144,7 +144,6 @@ router.get("/reputation", function(req,res){
 	});
 });
 
-
 module.exports = router;
 
 function findCharacter(realm, name, res){
@@ -157,152 +156,32 @@ function findCharacter(realm, name, res){
 	});
 }
 
-function findMultipleCharacters(name, res){
-	if(typeof(name)!=='string'){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.find({name:name}, function(err, characters){
-		if(err){
-			res.status(400).json({error:"Error reading database."});
-			return;
-		}
-		if(characters.length===0){
-			res.status(404).json({error:"Not Found.", result:false});
-			return;
-		}
-		if(characters.length===1){
-			var character = characters[0];
-			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}});
-			return;
-		}
-		//characters.length>1
-		var characterArray = [];
-		for(var i=0; i<characters.length;i++){
-			var character = characters[i];
-			characterArray.push({name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail});
-		}
-		res.json({status:"success", count:characters.count, characters:characterArray});
-		return;
-	});
-}
-
-function importCharacter(name, realm, region, callback){
-	console.log("Importing Character: "+name);
-	console.log(name, realm, region);
-	var url = "https://"+region+".api.battle.net/wow/character/"+realm+"/"+name+"?fields=achievements,appearance,feed,guild,hunterPets,items,mounts,pets,petSlots,progression,professions,pvp,quests,reputation,stats,talents,titles,audit&locale=en_US&apikey="+process.env.API;
-	url = encodeUrl(url);
-	request({
-		uri: url,
-		json: true
-	}, function(error, response, body){
-		// console.log(response)
-		if(!error && response.statusCode===200){
-			processCharacter(name, realm, region, body, callback);
-		}else{
-			// console.log(response.statusCode);
-			// console.log(body);
-			// console.log(url);
-			// console.log(encodeUrl(url));
-			callback(false);
-		}
-	});
-}
-
-function processCharacter(name, realm, region, body, callback){
-	db.character.findOne({name:name,realm:realm,region:region}, function(err, character){
-		if(err){
-			callback(false);
-			return;
-		}
-		if(!character){
-			db.character.create({name:name,realm:realm,region:region, importing:true}, function(err, character){
-				updateCharacter(character, body, callback);
-			});
-		}else{
-			if(!character.lastModified||character.lastModified<body.lastModified){
-				updateCharacter(character, body, callback);
-			}else {
-				//character up to date
-				callback(true);
-			}
-		}
-	});
-}
-
-function updateCharacter(character, body, callback) {
-	body.thumbnail = body.thumbnail.replace("avatar.jpg","");
-	character.lastModified=body.lastModified;
-	character.lastChecked=Date.now();
-	character.class=body.class;
-	character.race=body.race;
-	character.gender=body.gender;
-	character.level=body.level;
-	character.achievementPoints=body.achievementPoints;
-	character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","");
-	character.calcClass=body.calcClass;
-	character.faction=body.faction;
-	if(body.guild) {
-		character.guildName=body.guild.name;
-	}
-	character.quests=body.quests;
-	character.titles=body.titles;
-	character.mounts=body.mounts.collected.map(function(mount){
-		return mount.spellId;
-	});
-	character.criteria=[];
-	for(var i=0; i<body.achievements.criteria.length;i++){
-		character.criteria.push({
-			id:body.achievements.criteria[i],
-			quantity:body.achievements.criteriaQuantity[i],
-			timestamp:body.achievements.criteriaTimestamp[i],
-			created:body.achievements.criteriaCreated[i]
-		});
-	}
-	character.achievements=[];
-	for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
-		character.achievements.push({
-			id:body.achievements.achievementsCompleted[i],
-			timestamp:body.achievements.achievementsCompletedTimestamp[i]
-		});
-	}
-	character.reputation=body.reputation;
-	character.appearance=body.appearance;
-	character.items=body.items;
-	character.stats=body.stats;
-	character.professions=body.professions;
-	character.progression=body.progression;
-	character.talents=body.talents;
-	character.pvp=body.pvp;
-	character.save(function(err){
-		importCharacterImages(body.thumbnail, callback);
-	});
-}
-
-function importCharacterImages(thumbnail, callback){
-	var uri = "http://us.battle.net/static-render/us/"+thumbnail;
-	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"");
-	download(uri+"avatar.jpg",filename+"avatar.jpg");
-	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback);
-	download(uri+"inset.jpg",filename+"inset.jpg");
-	// download(uri+"card.jpg",filename+"card.jpg")
-}
-
-var download = function(uri, filename, callback){
-	request.head(uri, function(err, res, body){
-		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
-			if(callback)
-				callback(true);
-		});
-	});
-};
-
-function verifyRealm(realm, region){
-	if(realmArray.indexOf(realm.toLowerCase())===-1){
-		return false;
-	}
-	if(regionArray.indexOf(region.toLowerCase())===-1){
-		return false;
-	}
-	return true;
-}
+// function findMultipleCharacters(name, res){
+// 	if(typeof(name)!=='string'){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.find({name:name}, function(err, characters){
+// 		if(err){
+// 			res.status(400).json({error:"Error reading database."});
+// 			return;
+// 		}
+// 		if(characters.length===0){
+// 			res.status(404).json({error:"Not Found.", result:false});
+// 			return;
+// 		}
+// 		if(characters.length===1){
+// 			var character = characters[0];
+// 			res.json({status:"success", count:1, character:{name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail,guildName:character.guildName}});
+// 			return;
+// 		}
+// 		//characters.length>1
+// 		var characterArray = [];
+// 		for(var i=0; i<characters.length;i++){
+// 			var character = characters[i];
+// 			characterArray.push({name:character.name,realm:character.realm,region:character.region.toUpperCase(),level:character.level,faction:character.faction,thumbnail:character.thumbnail});
+// 		}
+// 		res.json({status:"success", count:characters.count, characters:characterArray});
+// 		return;
+// 	});
+// }

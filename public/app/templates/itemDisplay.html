@@ -12,7 +12,7 @@
 <li ng-if="item.weaponInfo.weaponSpeed" class="float-right">Speed {{item.weaponInfo.weaponSpeed}}</li>
 <li ng-if="item.weaponInfo">{{item.weaponInfo.damage.min}} - {{item.weaponInfo.damage.max}} Damage</li>
 <li ng-if="item.weaponInfo">({{item.weaponInfo.dps}} Damage Per Second)</li>
-<li class="{{stat.class}}" ng-repeat="stat in item.stats|orderBy: 'order'">+ {{stat.amount}} {{stat.name}}</li>
+<li class="{{stat.class}}" ng-repeat="stat in item.stats|orderBy: 'order'">+ {{stat._pivot_amount}} {{stat.name}}</li>
 
 
 <ul ng-if="item.hasSockets">

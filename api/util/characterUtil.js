@@ -11,9 +11,12 @@ var rawConnection = raw.createConnection({
 });
 
 var fs = require("fs");
-var realmUtil = require("../util/realmUtil");
+var realmUtil = require("./realmUtil");
+var itemConstants = require("./itemConstants");
+var characterRelatedArray = ["achievements", "battlepets", "items", "mounts", "quests", "reputation", "titles"];
 
 var characterUtil = {};
+
 
 characterUtil.getCharacter = function(name, realmString, callback) {
 	if(!name||!realmString) {
@@ -38,7 +41,9 @@ characterUtil.getCharacter = function(name, realmString, callback) {
 		}
 		//Character exists and is up to date
 		console.log("character up to date");
-		callback(false, character);
+		mysql.Character.where({name:name, slug_id:slugId}).fetch({withRelated:characterRelatedArray}).then(function(character) {
+			callback(false, character);
+		});
 	}).catch(function() {
 		callback("There was an error finding character in our database.");
 		return;
@@ -77,7 +82,7 @@ function updateCharacter (name, id, realmSplit, callback) {
 			lastModified:new Date(body.lastModified),
 			lastChecked:new Date()
 		}, {method:"update"}).then(function(newCharacter) {
-			updateCharacterDetails(newCharacter, body, callback);
+			updateCharacterDetails(newCharacter, body, realmSplit.region, callback);
 		}).catch(function(err) {
 			console.log(err);
 			callback("There was an error updating character");
@@ -100,7 +105,7 @@ function createCharacter (name, realmSplit, callback) {
 			lastModified:new Date(body.lastModified),
 			lastChecked:new Date()
 		}).then(function(newCharacter) {
-			updateCharacterDetails(newCharacter, body, callback);
+			updateCharacterDetails(newCharacter, body, realmSplit.region, callback);
 		}).catch(function(err) {
 			console.log(err);
 			callback("There was an error updating character");
@@ -109,48 +114,31 @@ function createCharacter (name, realmSplit, callback) {
 	});
 }
 
-function updateCharacterDetails(character, body, callback) {
+function updateCharacterDetails(character, body, region, callback) {
 	console.log("updating character");
 
 	//these update functions should run in parallel to increase import speed.
 	Promise.all([
+		updateCharacterBasic(character.id, body, region),
 		updateCharacterAchievements(character.id, body.achievements),
+		updateCharacterEquipment(character.id, body.items),
 		updateCharacterMounts(character.id, body.mounts),
 		updateCharacterPets(character.id, body.pets),
 		updateCharacterQuests(character.id, body.quests),
 		updateCharacterReputation(character.id, body.reputation),
 		updateCharacterTitles(character.id, body.titles)
 	]).then(function() {
-		mysql.Character.where({id:character.id}).fetch({withRelated:["achievements", "battlepets", "mounts", "quests", "reputation", "titles"]}).then(function(character) {
+		mysql.Character.where({id:character.id}).fetch({withRelated:characterRelatedArray}).then(function(character) {
 			callback(false, character.toJSON());
-		}).catch(function() {
+		}).catch(function(err) {
+			console.log(err);
 			throwError(callback);
 		});
-	}).catch(function() {
+	}).catch(function(err) {
+		console.log(err);
 		throwError(callback);
 	});
-	// body.thumbnail = body.thumbnail.replace("avatar.jpg","");
-	// character.lastModified=body.lastModified;
-	// character.lastChecked=Date.now();
-	// character.name = body.name;
-	// character.realm = body.realm;
-	// character.class=body.class;
-	// character.race=body.race;
-	// character.gender=body.gender;
-	// character.level=body.level;
-	// character.achievementPoints=body.achievementPoints;
-	// character.thumbnail=body.thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","");
-	// character.calcClass=body.calcClass;
-	// character.faction=body.faction;
-	// if(body.guild) {
-	// 	character.guildName = body.guild.name;
-	// 	character.guildRealm = body.guild.realm;
-	// }
-	// character.quests=body.quests;
-	// character.titles=body.titles;
-	// character.mounts=body.mounts.collected.map(function(mount){
-	// 	return mount.spellId;
-	// });
+
 	// character.criteria=[];
 	// for(var i=0; i<body.achievements.criteria.length;i++){
 	// 	character.criteria.push({
@@ -160,44 +148,20 @@ function updateCharacterDetails(character, body, callback) {
 	// 		created:body.achievements.criteriaCreated[i]
 	// 	});
 	// }
-	// character.achievements=[];
-	// for(var i=0;i<body.achievements.achievementsCompleted.length;i++){
-	// 	character.achievements.push({
-	// 		id:body.achievements.achievementsCompleted[i],
-	// 		timestamp:body.achievements.achievementsCompletedTimestamp[i]
-	// 	});
-	// }
 	
-	// character.battlepets = body.pets;
-	// character.battlepets.collected.forEach(function(pet) {
-	// 	pet.details = pet.stats.speciesId;
-	// });
-
-	// character.reputation=body.reputation;
 	// character.appearance=body.appearance;
-	// character.items=body.items;
 	// character.stats=body.stats;
 	// character.professions=body.professions;
 	// character.progression=body.progression;
 	// character.talents=body.talents;
 	// character.pvp=body.pvp;
-	// console.log("start")
-	// character.save(function(err, updatedCharacter){
-	// 	console.log("saved?")
-	// 	updatedCharacter.populate(characterFullPopulate, function(err){
-	// 		importCharacterImages(body.thumbnail, function() {
-	// 			callback(false, updatedCharacter);
-	// 			processQuestCompletion(updatedCharacter);
-	// 		});
-	// 	});
-	// });
-	console.log("end?");
 }
 
 function joinTableQuery(query, data) {
 	return new Promise(function(resolve, reject) {
-		rawConnection.query(query, [data], function(err) {
+		rawConnection.query(query, data, function(err) {
 			if (err) {
+				console.log(err);
 				console.log("Error importing character's quests");
 				reject();
 				return;
@@ -207,6 +171,16 @@ function joinTableQuery(query, data) {
 	});
 }
 
+function updateCharacterBasic(characterId, body, region) {
+	var query = "UPDATE characters SET ? WHERE id = ?";
+	var thumbnail = body.thumbnail.replace("avatar.jpg","");
+	importCharacterImages(thumbnail);
+	thumbnail = thumbnail.replace(new RegExp("/", 'g'),"").replace("thumbnail.jpg","");
+	var info = [{class:body.class,race:body.race,gender:body.gender,level:body.level,faction:body.faction,achievementPoints:body.achievementPoints,thumbnail:thumbnail, calcClass:body.calcClass, guildName:body.guild.name, guildRealm:body.guild.realm+'-'+region}, characterId];
+
+	return joinTableQuery(query, info);
+}
+
 function updateCharacterAchievements(characterId, achievements) {
 	var query = "INSERT IGNORE INTO characters_achievements (character_id, achievement_id, timestamp) VALUES ?";
 	var achievementData = [];
@@ -214,7 +188,19 @@ function updateCharacterAchievements(characterId, achievements) {
 		achievementData.push([characterId, achievements.achievementsCompleted[i], new Date(achievements.achievementsCompletedTimestamp[i])]);
 	}
 
-	return joinTableQuery(query, achievementData);
+	return joinTableQuery(query, [achievementData]);
+}
+
+function updateCharacterEquipment(characterId, itemInfo) {
+	var query = "INSERT INTO characters_equipment (character_id, item_id, slot_id) VALUES ?";
+	delete itemInfo.averageItemLevel;
+	delete itemInfo.averageItemLevelEquipped;
+	var itemSlots = [];
+	for (var slotName in itemInfo) {
+		itemSlots.push([characterId, itemInfo[slotName].id, itemConstants.itemSlots.indexOf(slotName)]);
+	}
+
+	return joinTableQuery(query, [itemSlots]);
 }
 
 function updateCharacterMounts(characterId, mounts) {
@@ -223,7 +209,7 @@ function updateCharacterMounts(characterId, mounts) {
 		return [characterId, mount.creatureId];
 	});
 
-	return joinTableQuery(query, mountData);
+	return joinTableQuery(query, [mountData]);
 }
 
 function updateCharacterPets(characterId, pets) {
@@ -232,7 +218,7 @@ function updateCharacterPets(characterId, pets) {
 		return [characterId, pet.battlePetGuid, pet.stats.speciesId, pet.stats.breedId, pet.stats.petQualityId, pet.stats.level, pet.isFirstAbilitySlotSelected, pet.isSecondAbilitySlotSelected, pet.isThirdAbilitySlotSelected];
 	});
 
-	return joinTableQuery(query, petData);
+	return joinTableQuery(query, [petData]);
 }
 
 function updateCharacterReputation(characterId, factions) {
@@ -241,7 +227,7 @@ function updateCharacterReputation(characterId, factions) {
 		return([characterId, faction.id, faction.standing, faction.value, faction.max]);
 	});
 
-	return joinTableQuery(query, factionData);
+	return joinTableQuery(query, [factionData]);
 }
 
 function updateCharacterTitles(characterId, titles) {
@@ -250,7 +236,7 @@ function updateCharacterTitles(characterId, titles) {
 		return([characterId, title.id]);
 	});
 
-	return joinTableQuery(query, titleData);
+	return joinTableQuery(query, [titleData]);
 }
 
 function updateCharacterQuests(characterId, quests) {
@@ -259,28 +245,27 @@ function updateCharacterQuests(characterId, quests) {
 		return([characterId, quest]);
 	});
 
-	return joinTableQuery(query, questData);
+	return joinTableQuery(query, [questData]);
 }
 
-// function importCharacterImages(thumbnail, callback){
-// 	var uri = "http://us.battle.net/static-render/us/"+thumbnail;
-// 	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"");
-// 	download(uri+"avatar.jpg",filename+"avatar.jpg");
-// 	download(uri+"profilemain.jpg",filename+"profilemain.jpg", callback);
-// 	download(uri+"inset.jpg",filename+"inset.jpg");
-// 	// download(uri+"card.jpg",filename+"card.jpg")
-// }
+function importCharacterImages(thumbnail){
+	console.log(thumbnail);
+	var uri = "http://us.battle.net/static-render/us/"+thumbnail;
+	var filename = "public/images/characters/"+thumbnail.replace(new RegExp("/", 'g'),"");
+	console.log(filename);
+	download(uri+"avatar.jpg",filename+"avatar.jpg");
+	download(uri+"profilemain.jpg",filename+"profilemain.jpg");
+	download(uri+"inset.jpg",filename+"inset.jpg");
+	// download(uri+"card.jpg",filename+"card.jpg")
+}
 
-// var download = function(uri, filename, callback){
-// 	request.head(uri, function(err, res, body){
-// 		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
-// 			console.log("callback chain start");
-// 			if(callback) {
-// 				callback();
-// 			}
-// 		});
-// 	});
-// };
+var download = function(uri, filename){
+	request.head(uri, function(err, res, body){
+		request(uri).pipe(fs.createWriteStream(filename)).on('close', function(){
+			console.log("Character image downloaded.");
+		});
+	});
+};
 
 function throwError(callback) {
 	callback("There was a database error");

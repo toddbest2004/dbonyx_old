@@ -52,7 +52,7 @@ angular.module('dbonyx')
 		realm = $routeParams.server;
 	
 	$scope.character=onyxCharacter;
-	// $scope.character.search(name, realm);
+	$scope.character.search(name, realm);
 	// $scope.character.get('items');
 	// $scope.character.get('mounts');
 	// $scope.character.get('achievements');
@@ -71,18 +71,18 @@ angular.module('dbonyx')
 	$scope.selectSubCat = function(cat, sub) {
 		$scope.cat = cat;
 		$scope.subcat = sub;
-		$scope.catId = $scope.categories[cat]._id;
-		$scope.activeAchievements = $scope.categories[cat].categories[sub].achievements;
+		$scope.catId = $scope.categories[cat].id;
+		$scope.activeAchievements = $scope.categories[cat].subCategories[sub].achievements;
 	};
 	$scope.selectCat = function(cat) {
 		$scope.cat = cat;
 		$scope.subcat = null;
-		$scope.catId = $scope.categories[cat]._id;
+		$scope.catId = $scope.categories[cat].id;
 		$scope.activeAchievements = $scope.categories[cat].achievements;
 		$scope.categories[cat].expanded = !$scope.categories[cat].expanded;
 	};
 	$scope.activeSub = function(sub) {
-		return sub.order===$scope.subcat&&$scope.catId===sub.parentCategory;
+		return sub.displayOrder===$scope.subcat&&$scope.catId===sub.parentCategory;
 	};
 
 	$scope.character=onyxCharacter;
@@ -100,12 +100,11 @@ angular.module('dbonyx')
 	$scope.achievements = achievementService.achievements;
 
 	$scope.checkCompleted = function(achievement) {
-		return $scope.completedAchievements[achievement._id];
+		return $scope.completedAchievements[achievement.id];
 	};
 	$scope.checkFaction = function(achievement) {
-		return achievement.factionId === $scope.character.faction || achievement.factionId === 2;
-
-	}
+		return achievement.faction_id === $scope.character.faction || achievement.faction_id === 2;
+	};
 
 }])
 .controller('characterProfessions', ['onyxCharacter', '$routeParams', '$scope', function(onyxCharacter, $routeParams, $scope){

@@ -1,12 +1,13 @@
+"use strict";
 angular.module('ItemCtrls', [])
 .factory('itemService', ['$http',function($http){
 	// var inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun']
-	var item = {}
-	item.getItem = function(itemId, modifiers, callback){
-		var id = parseInt(itemId)
+	var item = {};
+	item.getItem = function(itemId, modifiers, callback) {
+		var id = parseInt(itemId);
 		if(item.id===id){
-			callback(item)
-			return
+			callback(item);
+			return;
 		}
 		$http({
 			method: 'GET',
@@ -14,6 +15,7 @@ angular.module('ItemCtrls', [])
 			params: {modifiers:modifiers||{}}
 		}).then(function success(response){
 			var item=response.data.item
+			console.log(item);
 			callback(item)
 		}, function error(response){
 			callback(false)

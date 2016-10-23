@@ -1,16 +1,22 @@
 "use strict";
 var express = require("express");
 var router = express.Router();
-var db = require("../../mongoose");
+var mysql = require("../../mysql");
 
 router.get("/achievements", function(req, res) {
-	db.achievement.find({}).exec(function(err, achievements) {
-		res.json(achievements);
+	mysql.Achievement.where({}).fetchAll().then(function(achievements) {
+		res.json(achievements.toJSON());
 	});
 });
 
 router.get("/categories", function(req, res) {
-	db.achievementCategory.find({parentCategory:0}).sort({order:1}).populate(["achievements", {path:"categories",populate:["achievements"]}]).exec(function(err, categories) {
+	mysql.AchievementCategory.where({parent_id:0}).orderBy("displayOrder", "ASC").fetchAll({withRelated:["achievements", "subCategories.achievements"]}).then(function(categories) {
+		categories = categories.toJSON();
+		categories.forEach(function(cat, idx) {
+			cat.subCategories.forEach(function(sub) {
+				console.log(sub.name, sub.achievements.length);
+			});
+		});
 		res.json(categories);
 	});
 });

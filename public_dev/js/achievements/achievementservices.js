@@ -31,6 +31,7 @@ angular.module('dbonyx')
 			method: 'GET',
 			url: '/api/achievements/categories'
 		}).then(function success(response){
+			console.log(response.data)
 			achievement.categories = response.data;
 			if(cb) {
 				cb(null, achievement.categories);

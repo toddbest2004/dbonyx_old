@@ -1,3 +1,4 @@
+"use strict";
 angular.module('dbonyx')
 .directive('sidebar', [function(){
 	return {
@@ -46,10 +47,10 @@ angular.module('dbonyx')
 			$scope[element]=false
 		}
 		$scope.getRealms=function(){
-			// $scope.realms=['Loading Realms']
-			realmService.getRealms(function(){
-				$scope.realms=realmService.realms
-			})
+			$scope.realms=['Loading Realms']
+			realmService.getRealms(function() {
+				$scope.realms=realmService.realms;
+			});
 		}
 		$scope.selectRealm = function(realm){
 			$scope.realmInput=realm

@@ -3,7 +3,7 @@
 		<h1>Browse Quests</h1>
 				<onyx-pagination term="quests" update="getQuests()" paginate="settings"></onyx-pagination>
 		<div ng-repeat="quest in quests track by $index">
-			<a href="/quests/{{quest._id}}">{{quest.title}}</a>
+			<a href="/quests/{{quest.id}}">{{quest.title}}</a>
 		</div>
 	</div>
 	<sidebar></sidebar>

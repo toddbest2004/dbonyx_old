@@ -1,7 +1,8 @@
+"use strict";
 var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
-var db = require('./../mongoose');
+// var db = require('./../mongoose');
 var opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeader(),
   secretOrKey: process.env.JWT_SECRET

@@ -6,7 +6,7 @@
 
 var express = require("express");
 var router = express.Router();
-var db = require("../../mongoose");
+
 var mysql = require("../../mysql");
 var realmUtil = require("../util/realmUtil");
 
@@ -23,11 +23,11 @@ var validSortOrders = [-1, 1];
 var battlepetNames = {};
 var realmArray = realmUtil.realmArray;
 
-db.battlepet.find({},function(err, battlepets){
-	battlepets.forEach(function(pet){
-		battlepetNames[pet._id]=pet.name;
-	});
-});
+// db.battlepet.find({},function(err, battlepets){
+// 	battlepets.forEach(function(pet){
+// 		battlepetNames[pet._id]=pet.name;
+// 	});
+// });
 
 router.get("/fetchauctions", function(req, res) {
 	var realmData = realmUtil.realmSplit(req.query.realm),
@@ -254,84 +254,84 @@ module.exports = router;
 // 	return parsedFilters;
 // }
 
-function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems){
-	var auctionQuery = db.auction.find({region:region,slugName:slugName});
-	auctionQuery.populate({path:'item'}).sort(sort).skip(offset).limit(limit);
-	if(filteredItems.length>0){
-		auctionQuery.where('item').in(filteredItems);
-	}
-	auctionQuery.lean().exec(function(err, auctions){
-		auctionQuery.limit(0).skip(0).count(function(err, count){
-			auctions.map(function(auction){
-				auction.item=auction.item||{name:"Unknown Item",_id:0,itemId:0};
-				if(auction.rand){
-					auction.item.suffix=itemConstants.randIds[auction.rand]?itemConstants.randIds[auction.rand].suffix:" of unknown Enchant";
-				}
-				for(var key in auction){
-					// console.log(key);
-					if(key!=='item'&&key!=='_id'){
-						auction.item[key]=auction[key];
-					}
-				}
-				if(auction.item._id===82800){
-					auction.item.modifiers.forEach(function(modifier){
-						if(modifier.type===3){
-							auction.item.name="Cage: "+battlepetNames[modifier.value];
-						}
-					});
-					auction.item.quality=auction.item.petQualityId;
-				}
-				return auction;
-			});
-			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit});
-		});
-	});
-}
+// function auctionQuery(res, region, slugName, limit, offset, sort, filteredItems){
+// 	var auctionQuery = db.auction.find({region:region,slugName:slugName});
+// 	auctionQuery.populate({path:'item'}).sort(sort).skip(offset).limit(limit);
+// 	if(filteredItems.length>0){
+// 		auctionQuery.where('item').in(filteredItems);
+// 	}
+// 	auctionQuery.lean().exec(function(err, auctions){
+// 		auctionQuery.limit(0).skip(0).count(function(err, count){
+// 			auctions.map(function(auction){
+// 				auction.item=auction.item||{name:"Unknown Item",_id:0,itemId:0};
+// 				if(auction.rand){
+// 					auction.item.suffix=itemConstants.randIds[auction.rand]?itemConstants.randIds[auction.rand].suffix:" of unknown Enchant";
+// 				}
+// 				for(var key in auction){
+// 					// console.log(key);
+// 					if(key!=='item'&&key!=='_id'){
+// 						auction.item[key]=auction[key];
+// 					}
+// 				}
+// 				if(auction.item._id===82800){
+// 					auction.item.modifiers.forEach(function(modifier){
+// 						if(modifier.type===3){
+// 							auction.item.name="Cage: "+battlepetNames[modifier.value];
+// 						}
+// 					});
+// 					auction.item.quality=auction.item.petQualityId;
+// 				}
+// 				return auction;
+// 			});
+// 			res.json({success:true, count:count, auctions:auctions, offset:offset, limit:limit});
+// 		});
+// 	});
+// }
 
-function processFilter(filter, itemQuery){
-	var tmpFilter;
-	try{
-		tmpFilter = JSON.parse(filter);
-	}catch(err){
-		return;
-	}
-	if(typeof(tmpFilter.type)!=='string'){
-		return;
-	}
-	var filterData = validFilters[tmpFilter.type];
-	if(filterData){
-		if(filterData.type==='number'){
-			processNumberFilter(filterData,tmpFilter,itemQuery);
-		}else if(filterData.type==='boolean'){
-			processBooleanFilter(filterData,tmpFilter,itemQuery);
-		}
-	}	
-	return;
-}
+// function processFilter(filter, itemQuery){
+// 	var tmpFilter;
+// 	try{
+// 		tmpFilter = JSON.parse(filter);
+// 	}catch(err){
+// 		return;
+// 	}
+// 	if(typeof(tmpFilter.type)!=='string'){
+// 		return;
+// 	}
+// 	var filterData = validFilters[tmpFilter.type];
+// 	if(filterData){
+// 		if(filterData.type==='number'){
+// 			processNumberFilter(filterData,tmpFilter,itemQuery);
+// 		}else if(filterData.type==='boolean'){
+// 			processBooleanFilter(filterData,tmpFilter,itemQuery);
+// 		}
+// 	}	
+// 	return;
+// }
 
-function processNumberFilter(filterData,tmpFilter,itemQuery){
-	var comparatorType = validComparators.number[tmpFilter.comparator];
-	var tmpWhere={};
-	tmpWhere[filterData.name]={};
-	if(comparatorType){
-		if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
-			tmpWhere[filterData.name][comparatorType]=parseInt(tmpFilter.value);
-			itemQuery.where(tmpWhere);
-			console.log(tmpWhere);
-			// itemQuery.where({'bonusStats.stat':4,'bonusStats.amount':{$lte:10}})
-			// itemQuery.where({'bonusStats.amount':{$lte:10}})
-			// itemQuery.populate({path:'bonusStat', match:{stat:4,amount:{$lte:10}}})
-		}
-	}
-}
+// function processNumberFilter(filterData,tmpFilter,itemQuery){
+// 	var comparatorType = validComparators.number[tmpFilter.comparator];
+// 	var tmpWhere={};
+// 	tmpWhere[filterData.name]={};
+// 	if(comparatorType){
+// 		if(typeof(tmpFilter.value)==='string'||typeof(tmpFilter.value)==='number'){
+// 			tmpWhere[filterData.name][comparatorType]=parseInt(tmpFilter.value);
+// 			itemQuery.where(tmpWhere);
+// 			console.log(tmpWhere);
+// 			// itemQuery.where({'bonusStats.stat':4,'bonusStats.amount':{$lte:10}})
+// 			// itemQuery.where({'bonusStats.amount':{$lte:10}})
+// 			// itemQuery.populate({path:'bonusStat', match:{stat:4,amount:{$lte:10}}})
+// 		}
+// 	}
+// }
 
-function processBooleanFilter(filterData,tmpFilter,itemQuery){
-	var tmpWhere={};
-	if(typeof(validComparators.boolean[tmpFilter.comparator])==='boolean'){
-		tmpWhere[filterData.name]=validComparators.boolean[tmpFilter.comparator];
-		itemQuery.where(tmpWhere);
-	}
-	// if(typeof(validComparators.number[tmpFilter.comparator])){
+// function processBooleanFilter(filterData,tmpFilter,itemQuery){
+// 	var tmpWhere={};
+// 	if(typeof(validComparators.boolean[tmpFilter.comparator])==='boolean'){
+// 		tmpWhere[filterData.name]=validComparators.boolean[tmpFilter.comparator];
+// 		itemQuery.where(tmpWhere);
+// 	}
+// 	// if(typeof(validComparators.number[tmpFilter.comparator])){
 
-	// }
-}
+// 	// }
+// }

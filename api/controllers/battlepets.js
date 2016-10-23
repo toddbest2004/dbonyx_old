@@ -3,22 +3,21 @@ var express = require("express");
 var router = express.Router();
 
 var mysql = require("../../mysql");
-// var db = require("../../mongoose");
 
 var petFamilies = ['humanoid','dragonkin','flying','undead','critter','magical','elemental','beast','water','mechanical'];
 
-var breeds = {
-	3:{h:0.25,p:0.25,s:0.25,n:"B/B"},
-	4:{h:0,p:1,s:0,n:"P/P"},
-	5:{h:0,p:0,s:1,n:"S/S"},
-	6:{h:1,p:0,s:0,n:"H/H"},
-	7:{h:0.45,p:0.45,s:0,n:"H/P"},
-	8:{h:0,p:0.45,s:0.45,n:"P/S"},
-	9:{h:0.45,p:0,s:0.45,n:"H/S"},
-	10:{h:0.2,p:0.45,s:0.2,n:"P/B"},
-	11:{h:0.2,p:0.2,s:0.45,n:"S/B"},
-	12:{h:0.45,p:0.2,s:0.2,n:"H/B"},
-};
+// var breeds = {
+// 	3:{h:0.25,p:0.25,s:0.25,n:"B/B"},
+// 	4:{h:0,p:1,s:0,n:"P/P"},
+// 	5:{h:0,p:0,s:1,n:"S/S"},
+// 	6:{h:1,p:0,s:0,n:"H/H"},
+// 	7:{h:0.45,p:0.45,s:0,n:"H/P"},
+// 	8:{h:0,p:0.45,s:0.45,n:"P/S"},
+// 	9:{h:0.45,p:0,s:0.45,n:"H/S"},
+// 	10:{h:0.2,p:0.45,s:0.2,n:"P/B"},
+// 	11:{h:0.2,p:0.2,s:0.45,n:"S/B"},
+// 	12:{h:0.45,p:0.2,s:0.2,n:"H/B"},
+// };
 
 router.get("/", function(req, res){
 	var offset = parseInt(req.query.offset)||0;
@@ -35,7 +34,6 @@ router.get("/", function(req, res){
 		limit = 25;
 	}
 
-	// var battlepetQuery = db.battlepet.find().skip(offset).limit(limit).populate('abilities.details');
 	if(filters){
 		if(filters.families&&Array.isArray(filters.families)){
 			var familyArray = [];
@@ -54,17 +52,6 @@ router.get("/", function(req, res){
 			res.json({pets:pets.toJSON(), count:count});
 		});
 	});
-
-
-	// battlepetQuery.exec(function(err, pets){
-	// 	battlepetQuery.skip(0).limit(0).count(function(err, count){
-	// 		if(err||!pets){
-	// 			console.log(err);
-	// 			return res.status(404).json({error:"Unable to find pets."});
-	// 		}
-	// 		res.send({pets:pets,count:count});		
-	// 	});
-	// });
 });
 
 router.get("/:id", function(req, res){
@@ -79,15 +66,15 @@ router.get("/:id", function(req, res){
 
 router.get("/ability/:id", function(req, res){
 	var id = parseInt(req.params.id);
-	if(!id)
+	if (!id) {
 		return res.status(400).json({error:"Improper id supplied."});
-	db.battlepetAbility.findOne({_id:id}).exec(function(err, ability){
-		if(err||!ability)
+	}
+	mysql.BattlepetAbility.where({_id:id}).fetch().then(function(ability) {
+		if (!ability) {
 			return res.status(404).json({error:"Unable to find pet ability."});
+		}
 		res.send(ability);
 	});
 });
-
-
 
 module.exports = router;

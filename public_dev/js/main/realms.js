@@ -18,7 +18,13 @@ angular.module('dbonyx')
 			method: 'GET',
 			url: '/api/realms'
 		}).then(function success(response){
-			realms.realms = response.data;
+			var realmData = [];
+			for(var region in response.data) {
+				for(var realm in response.data[region]) {
+					realmData.push(realm+"-"+region);
+				}
+			}
+			realms.realms = realmData;
 			if(cb) {
 				cb();
 			}

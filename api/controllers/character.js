@@ -1,14 +1,6 @@
 'use strict';
 var express = require("express");
-var request = require("request");
-var fs = require("fs");
 var router = express.Router();
-var encodeUrl = require('encodeurl');
-var mysql = require("../../mysql");
-
-var realmUtil = require("../util/realmUtil");
-
-var realmArray = realmUtil.realmArray;
 
 var characterUtil = require("../util/characterUtil");
 
@@ -30,119 +22,119 @@ router.get("/search", function(req, res){
 // router.get("/importing", function(req, res){
 // })
 
-router.get("/professions", function(req, res){
-	var name = req.query.name.capitalize();
-	var realm = req.query.realm;
-	var region = req.query.region.toLowerCase();
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({name:name, region:region, realm:realm}).populate("professions.primary.recipes professions.secondary.recipes").exec(function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		res.json({professions:character.professions});
-	});
-});
+// router.get("/professions", function(req, res){
+// 	var name = req.query.name.capitalize();
+// 	var realm = req.query.realm;
+// 	var region = req.query.region.toLowerCase();
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({name:name, region:region, realm:realm}).populate("professions.primary.recipes professions.secondary.recipes").exec(function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		res.json({professions:character.professions});
+// 	});
+// });
 
-router.get("/items", function(req, res){
-	var name = req.query.name.capitalize();
-	var realm = req.query.realm;
-	var region = req.query.region.toLowerCase();
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({name:name, region:region, realm:realm}).lean().exec(function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		// console.log(character.items)
-		// for(var key in character.items){
-		// 	// console.log(key)
-		// 	if(character.items[key].stats){
-		// 		// console.log(key)
-		// 		character.items[key].stats.forEach(function(stat){
-		// 			// console.log(stat)
-		// 		});
-		// 		// console.log('_____')
-		// 	}
-		// }
-		res.json({items:character.items});
-	});
-});
+// router.get("/items", function(req, res){
+// 	var name = req.query.name.capitalize();
+// 	var realm = req.query.realm;
+// 	var region = req.query.region.toLowerCase();
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({name:name, region:region, realm:realm}).lean().exec(function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		// console.log(character.items)
+// 		// for(var key in character.items){
+// 		// 	// console.log(key)
+// 		// 	if(character.items[key].stats){
+// 		// 		// console.log(key)
+// 		// 		character.items[key].stats.forEach(function(stat){
+// 		// 			// console.log(stat)
+// 		// 		});
+// 		// 		// console.log('_____')
+// 		// 	}
+// 		// }
+// 		res.json({items:character.items});
+// 	});
+// });
 
-router.get("/achievements", function(req, res){
-	var name = req.query.name.capitalize();
-	var realm = req.query.realm;
-	var region = req.query.region.toLowerCase();
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({name:name,realm:realm,region:region}).populate('achievements.id').exec(function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		// console.log(character.achievements)
-		res.json({status:"success",achievements:character.achievements});
-	});
-});
+// router.get("/achievements", function(req, res){
+// 	var name = req.query.name.capitalize();
+// 	var realm = req.query.realm;
+// 	var region = req.query.region.toLowerCase();
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({name:name,realm:realm,region:region}).populate('achievements.id').exec(function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		// console.log(character.achievements)
+// 		res.json({status:"success",achievements:character.achievements});
+// 	});
+// });
 
-router.get("/mounts", function(req, res){
-	var name = req.query.name.toLowerCase();
-	var realm = req.query.realm.toLowerCase();
-	var region = req.query.region.toLowerCase();
-	if (!verifyRealm(realm, region)) {
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({nameSlug:name,realmSlug:realm,region:region}).populate('mounts').exec(function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		res.json({status:"success",mounts:character.mounts});
-	});
-});
+// router.get("/mounts", function(req, res){
+// 	var name = req.query.name.toLowerCase();
+// 	var realm = req.query.realm.toLowerCase();
+// 	var region = req.query.region.toLowerCase();
+// 	if (!verifyRealm(realm, region)) {
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({nameSlug:name,realmSlug:realm,region:region}).populate('mounts').exec(function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		res.json({status:"success",mounts:character.mounts});
+// 	});
+// });
 
-router.get("/battlepets", function(req, res){
-	var name = req.query.name.capitalize();
-	var realm = req.query.realm;
-	var region = req.query.region.toLowerCase();
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({name:name,realm:realm,region:region}).populate('battlepets.collected.details').exec(function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		res.json({status:"success",battlepets:character.battlepets});
-	});
-});
+// router.get("/battlepets", function(req, res){
+// 	var name = req.query.name.capitalize();
+// 	var realm = req.query.realm;
+// 	var region = req.query.region.toLowerCase();
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({name:name,realm:realm,region:region}).populate('battlepets.collected.details').exec(function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		res.json({status:"success",battlepets:character.battlepets});
+// 	});
+// });
 
-router.get("/reputation", function(req,res){
-	var name = req.query.name.capitalize();
-	var realm = req.query.realm;
-	var region = req.query.region.toLowerCase();
-	if(!verifyRealm(realm, region)){
-		res.status(400).json({error:"Improper query string."});
-		return;
-	}
-	db.character.findOne({name:name,realm:realm,region:region},function(err, character){
-		if(err||!character){
-			res.status(404).json({error:"Character not found."});
-			return;
-		}
-		res.json({status:"success",reputation:character.reputation});
-	});
-});
+// router.get("/reputation", function(req,res){
+// 	var name = req.query.name.capitalize();
+// 	var realm = req.query.realm;
+// 	var region = req.query.region.toLowerCase();
+// 	if(!verifyRealm(realm, region)){
+// 		res.status(400).json({error:"Improper query string."});
+// 		return;
+// 	}
+// 	db.character.findOne({name:name,realm:realm,region:region},function(err, character){
+// 		if(err||!character){
+// 			res.status(404).json({error:"Character not found."});
+// 			return;
+// 		}
+// 		res.json({status:"success",reputation:character.reputation});
+// 	});
+// });
 
 module.exports = router;
 

@@ -70,6 +70,7 @@ angular.module('dbonyx')
 				}
 			}
 		}, function error(response){
+			console.log(response);
 			character.loading = false;
 			character.loaded = false;
 			if(callback) {

@@ -15,6 +15,7 @@ models.Item = require("./item");
 models.Mount = require("./mount");
 models.Quest = require("./quest");
 models.Realm = require("./realm");
+models.Stat = require("./stat");
 models.Title = require("./title");
 
 module.exports = models;

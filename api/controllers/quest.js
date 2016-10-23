@@ -1,6 +1,7 @@
 'use strict';
 var express = require("express");
-var db = require("../../mongoose");
+var mysql = require("../../mysql");
+
 var router = express.Router();
 
 router.get("/", function(req, res){
@@ -9,10 +10,12 @@ router.get("/", function(req, res){
 	if(limit>100){
 		limit=50;
 	}
-	var questQuery = db.quest.find({});
-	questQuery.limit(limit).skip(offset).exec(function(err, quests){
-		questQuery.limit(0).skip(0).count(function(err,count){
-			res.json({quests:quests,count:count});
+
+	mysql.Quest.query({}).where({}).count().then(function(count) {
+		mysql.Quest.query(function(qb) {
+			qb.limit(limit).offset(offset);
+		}).where({}).orderBy("id", "ASC").fetchAll().then(function(quests) {
+			res.json({quests:quests.toJSON(), count:count});
 		});
 	});
 });
@@ -22,12 +25,9 @@ router.get("/:id", function(req, res){
 	if(!id){
 		return res.status(400).json({error:"Improper id provided."});
 	}
-	db.quest.findOne({_id:id}).populate('itemRewards.itemId itemChoices.itemId').exec(function(err, quest){
-		if(err){return res.status(400).json({error:"Error reading from the database."});}
-		if(!quest){return res.status(404).json({error:"Unable to find quest"});}
-		res.json(quest);
+	mysql.Quest.where({id:id}).fetch().then(function(quest) {
+		res.json(quest.toJSON());
 	});
-	// res.status(404).send({error:"error"});
 });
 
 module.exports = router;

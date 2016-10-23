@@ -11,11 +11,11 @@
 		<div class="row">
 			<div class="col-xs-3 no-right-pad">
 				<div ng-if="categories.length>0" class="achievementCategory highlight-hover"><h3>Summary</h3></div>
-				<div ng-repeat="category in categories">
-					<div ng-click="selectCat(category.order)" class="achievementCategory highlight-hover" ng-class="{selectedAchievementCategory: category.order===cat}">
+				<div ng-repeat="category in categories|orderBy:category.displayOrder">
+					<div ng-click="selectCat(category.displayOrder)" class="achievementCategory highlight-hover" ng-class="{selectedAchievementCategory: category.displayOrder===cat}">
 						<h3>{{category.name}}</h3>
 					</div>
-					<div ng-repeat="sub in category.categories" ng-click="selectSubCat(category.order, sub.order)" ng-if="category.expanded" class="achievementCategory highlight-hover" ng-class="{selectedAchievementCategory: activeSub(sub)}">
+					<div ng-repeat="sub in category.subCategories|orderBy:sub.displayOrder" ng-click="selectSubCat(category.displayOrder, sub.displayOrder)" ng-if="category.expanded" class="achievementCategory highlight-hover" ng-class="{selectedAchievementCategory: activeSub(sub)}">
 						--{{sub.name}}
 					</div>
 				</div>

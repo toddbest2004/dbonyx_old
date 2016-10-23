@@ -1,6 +1,7 @@
 'use strict';
 var itemConstants = {};
 
+itemConstants.itemSlots = ['head','neck','shoulder','back','chest','shirt','tabard','wrist','hands','waist','legs','feet','finger1','finger2','trinket1','trinket2','mainHand','offHand'];
 itemConstants.inventoryTypes=['None','Head','Neck','Shoulder','Shirt','Chest','Waist','Pants','Feet','Wrist','Hands','Finger','Trinket','One-handed Weapon','Shield','Bow','Back','Two-handed Weapon','Bag','Tabard','Chest','Main-hand Weapon','Off-hand Weapon','Held in Off-Hand','Projectile','Thrown','Gun'];
 itemConstants.itemBinds = ['', 'Binds when picked up', 'Binds when equipped', 'Binds when used',''];
 itemConstants.classes = [

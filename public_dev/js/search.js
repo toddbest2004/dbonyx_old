@@ -1,12 +1,13 @@
 angular.module('dbonyx')
 .controller('searchBarCtrl', ['$scope', 'searchBar',function($scope,searchBar){
-	$scope.search = function(){
+	$scope.search = function() {
 		searchBar.search($scope.searchTerm, function(err, data){
 			if(err){
 				$scope.results=[]
 				return
 			}
 			$scope.results=data
+			console.log($scope.results);
 		})
 	}
 	$scope.clear=function(){

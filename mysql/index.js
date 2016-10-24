@@ -17,5 +17,7 @@ models.Quest = require("./quest");
 models.Realm = require("./realm");
 models.Stat = require("./stat");
 models.Title = require("./title");
+models.User = require("./user");
+models.UserCredentials = require("./userCredentials");
 
 module.exports = models;

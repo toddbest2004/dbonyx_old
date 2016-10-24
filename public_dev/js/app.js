@@ -89,6 +89,7 @@ $routeProvider
 	templateUrl: 'app/views/terms.html'
 })
 .when('/validate/:user/:validateString', {
+	controller: 'validateCtrl',
 	templateUrl: 'app/views/validate.html'
 })
 .when('/forums', {

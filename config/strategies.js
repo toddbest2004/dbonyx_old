@@ -2,7 +2,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
-// var db = require('./../mongoose');
+var mysql = require("../mysql");
 var opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeader(),
   secretOrKey: process.env.JWT_SECRET
@@ -13,40 +13,45 @@ module.exports = {
 	  usernameField: 'email'
 	},
 	function(email, password, done) {
-    email = email.toLowerCase()
-	  db.onyxUser.findOne({email: email}).select('+password +email').exec(function(err, user) {
-  		if (!err&&user) {
-  		  user.comparePassword(password, function(err, result) {
-    			if (err) return done(err)
-    			if (result) {
-    			  done(null, user)
-    			} else {
-    			  done(null, false, {message: 'Invalid password'})
-    			}
-  		  })
-  		} else {
-  		  done(null, false, {message: 'Unknown user'})
-  		}
-  	})
+    email = email.toLowerCase();
+    mysql.UserCredentials.where({email:email}).fetch({withRelated:["user"]}).then(function(credentials) {
+      if (!credentials) {
+        done(null, false, {message: "Unknown user"});
+        return;
+      }
+      credentials.comparePassword(password, function(err, result) {
+        if (err) return done(err);
+        if (result) {
+          done (null, credentials.toJSON());
+        } else {
+          done(null, false, {message: "Invalid password"});
+        }
+      });
+    }).catch(function() {
+      done(null, false, {message: "Unknown user"});
+      return;
+    });
 	}),
   serializeUser: function(user, done) {
-    done(null, user._id)
+    done(null, user.id);
   },
   deserializeUser: function(id, done) {
-    db.onyxUser.findOne({_id:id}).then(function(user) {
-      done(null, user)
-    }).catch(done)
+    mysql.User.where({id:id}).then(function(user) {
+      done(null, user.toJSON());
+    }).catch(done);
   },
-  jwtStrategy: new JwtStrategy(opts, function(jwt_payload, done){
-    db.onyxUser.findOne({email: jwt_payload.email}).select('+email').exec(function(err, user){
-      if (err) {
-        return done(err, false);
-      }
-      if (user) {
-        done(null, user);
+  jwtStrategy: new JwtStrategy(opts, function(jwt_payload, done) {
+    mysql.UserCredentials.where({email: jwt_payload.email}).fetch({withRelated:["user"]}).then(function(credentials) {
+      if (credentials) {
+        credentials = credentials.toJSON();
+        if(credentials.user.username === jwt_payload.username) {
+          done(null, credentials.user);
+        } else {
+          done(null, false);
+        }
       } else {
         done(null, false);
       }
     });
   })
-}
+};

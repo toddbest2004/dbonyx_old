@@ -17,13 +17,13 @@ angular.module('UserCtrls', [])
 	}
 
 	//validates user's email (by clicking link created and sent to email)
-	user.validateUser = function(username, validateString, cb){
+	user.validateUser = function(username, validateString, cb) {
 		$http({
 			method: 'POST',
 			url: '/api/user/validate',
 			data: {username:username,validateString:validateString}
 		}).then(function success(response){
-			return response
+			return cb(false);
 		},function error(response){
 			return cb("There was an error validating your email.")
 		})
@@ -120,7 +120,13 @@ angular.module('UserCtrls', [])
 }])
 .controller('validateCtrl', ['$http','$location','$scope', '$routeParams', 'onyxUser', function($http,$location,$scope,$routeParams, onyxUser){
 	//validates user's email (by clicking link created and sent to email)
-	onyxUser.validateUser($routeParams.user, $routeParams.validateString, function(response){$scope.error=response})
+	onyxUser.validateUser($routeParams.user, $routeParams.validateString, function(response) {
+		console.log(response);
+		$scope.error=response;
+		if (!$scope.error) {
+			$scope.success = true;
+		}
+	});
 }])
 .controller('userCtrl', ['onyxUser','$scope','$http','$location', '$window', function(onyxUser,$scope,$http,$location,$window){
 	$scope.user=onyxUser

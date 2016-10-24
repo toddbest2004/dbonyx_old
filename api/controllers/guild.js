@@ -8,7 +8,7 @@ router.get("/", function(req, res) {
 		realm = req.query.realm,
 		region = req.query.region;
 
-	guildUtils.importGuild(name, realm, region, function(err, guild) {
+	guildUtils.getGuild(name, realm, region, function(err, guild) {
 		if(err||!guild) {
 			res.status(404).json({error:"Guild not found."});
 			return;

@@ -14,6 +14,7 @@ angular.module('dbonyx')
 			url: '/api/guild/',
 			params: params
 		}).then(function success(response){
+			console.log(response.data);
 			callback(false, response.data);
 		},function error(response){
 			callback(response.error);

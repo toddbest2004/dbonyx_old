@@ -11,6 +11,7 @@ models.BattlepetAbility = require("./battlepetAbility");
 models.BattlepetAbilityJoin = require("./battlepetAbilityJoin");
 models.Character = require("./character");
 models.Faction = require("./faction");
+models.Guild = require("./guild");
 models.Item = require("./item");
 models.Mount = require("./mount");
 models.Quest = require("./quest");

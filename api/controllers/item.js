@@ -3,7 +3,6 @@ var express = require("express");
 var router = express.Router();
 var itemConstants = require('../util/itemConstants');
 var mysql = require("../../mysql");
-// var db = require("../../mongoose");
 
 router.get('/search/:term', function(req, res){
 	var term = req.params.term;
@@ -36,22 +35,7 @@ router.get("/pretty/:id", function(req, res){
 	if (modifiers.context) {
 		context = modifiers.context;
 	}
-	// console.log(id);
-	// console.log(modifiers)
-	// db.item.findOne({_id:id}).populate('itemSet.items').lean().exec(function(err, item){
-	// 	if(err){
-	// 		res.status(400).send({error:"Invalid id."})
-	// 		return
-	// 	}
-	// 	if(!item){
-	// 		res.status(404).send({error:"Item not found."});
-	// 		return;
-	// 	}
 
-	// 	item=prettify(item, modifiers, res);
-	// 	// res.send({item:item})
-	// 	return;
-	// });
 	mysql.Item.where({id:id}).fetch({withRelated:[{"stats":function(qb){
 		if(context){
 			qb.where({"itemContext":context});
@@ -59,7 +43,6 @@ router.get("/pretty/:id", function(req, res){
 	}}]}).then(function(item) {
 		item = item.toJSON();
 		var prettyItem = prettify(item, modifiers);
-		console.log(prettyItem);
 		res.json({item:prettyItem});
 	}).catch(function(err) {
 		console.log(err);
@@ -73,7 +56,7 @@ function prettify(item, modifiers) {
 
 	//special handling of caged battlepets
 	if(item.itemId===82800){
-		return prettifyPet(item, modifiers);
+		// return prettifyPet(item, modifiers);
 	}
 
 	// console.log(modifiers);
@@ -114,7 +97,6 @@ function prettify(item, modifiers) {
 // 			}
 		})
 	}
-	console.log('mod done');
 		// console.log(item.itemSet)
 	item.statDetails = []
 	for(key in bonusStats){
@@ -191,31 +173,31 @@ function prettify(item, modifiers) {
 	return item;
 }
 
-function prettifyPet(item, modifiers){
-	//Item Spells
-	if (item.itemSpells) {
-		for (var i=0; i<item.itemSpells.length;i++) {
-			var spell=item.itemSpells[i];
-			if (spell.spell.description===''&&spell.trigger=="ON_USE") {
-				spell.spell.description=item.description;
-			}
-			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger];
-		}
-	}
-	if(modifiers&&modifiers.modifiers&&Array.isArray(modifiers.modifiers)){
-		var petId, petLevel;
-		modifiers.modifiers.forEach(function(modifier){
-			if(modifier.type===3){
-				petId = modifier.value;
-			}
-			if(modifier.type===5){
-				petLevel = modifier.value;
-			}
-		});
-		db.battlepet.findOne({_id:petId}, function(err, battlepet){
-			item.name=battlepet.name;
-			item.icon=battlepet.icon;
-			return item;
-		})
-	}
-}
+// function prettifyPet(item, modifiers){
+// 	//Item Spells
+// 	if (item.itemSpells) {
+// 		for (var i=0; i<item.itemSpells.length;i++) {
+// 			var spell=item.itemSpells[i];
+// 			if (spell.spell.description===''&&spell.trigger=="ON_USE") {
+// 				spell.spell.description=item.description;
+// 			}
+// 			spell.trigger = itemConstants.itemSpellTriggers[spell.trigger];
+// 		}
+// 	}
+// 	if(modifiers&&modifiers.modifiers&&Array.isArray(modifiers.modifiers)){
+// 		var petId, petLevel;
+// 		modifiers.modifiers.forEach(function(modifier){
+// 			if(modifier.type===3){
+// 				petId = modifier.value;
+// 			}
+// 			if(modifier.type===5){
+// 				petLevel = modifier.value;
+// 			}
+// 		});
+// 		db.battlepet.findOne({_id:petId}, function(err, battlepet){
+// 			item.name=battlepet.name;
+// 			item.icon=battlepet.icon;
+// 			return item;
+// 		})
+// 	}
+// }

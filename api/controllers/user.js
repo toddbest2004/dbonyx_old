@@ -17,7 +17,7 @@ router.post("/getUser", passport.authenticate('jwt', {session: false}),function(
 });
 
 router.post("/login", function(req, res){
-	passport.authenticate('local', function(err, credentials, info) {
+	passport.authenticate('local', function(err, credentials) {
 		if (credentials) {
 			var token = jwt.sign({email:credentials.email,username:credentials.user.username}, secret);
 			res.send({
@@ -113,31 +113,6 @@ router.post('/validate', function(req, res){
 			return res.status(401).json({error:"Unable to verify credentials."});
 		}
 	});
-// 	db.onyxUser.findOne({username:req.body.username}).select("+emailValidation +emailValidationCreatedDate").exec(function(err, user){
-// 		if(err||!user){
-// 			res.status(401).json({error:"User not found."})
-// 			return
-// 		}
-// 		if(user.isEmailValidated){
-// 			res.status(401).json({error:"Email already validated."})
-// 			return
-// 		}
-// 		if(req.body.validateString!==user.emailValidation){
-// 			res.status(401).json({error:"Incorrect validation string."})
-// 			return
-// 		}
-// 		var expiretime = Date.parse(user.emailValidationCreatedDate)+1000*60*60*24 //24 hours
-// 		if(Date.now()>expiretime){
-// 			res.status(401).json({error:"Validation code has expired."})
-// 			return
-// 		}
-// 		user.emailValidation = ''
-// 		user.isEmailValidated = true
-// 		user.emailValidatedDate = Date.now()
-// 		user.save(function(err){
-// 			res.json({result:"Success!"})
-// 		})
-// 	})
 });
 
 router.post('/feedback', function(req, res){

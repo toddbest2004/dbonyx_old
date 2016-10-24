@@ -26,24 +26,24 @@
 		</div>
 	</div>
 	<div ng-repeat="member in guild.members | orderBy:'rank'" class="row highlight-hover">
-	<a href="/c/{{member.character.name}}/{{member.character.realm}}-US/">
+	<a href="/c/{{member.name}}/{{member.realm}}-US/">
 		<div class="col-xs-3">
-			{{member.character.name}}
+			{{member.name}}
 		</div>
 		<div class="col-xs-1 text-right">
-			{{member.character.level}}
+			{{member.level}}
 		</div>
-		<div class="col-xs-2 characterClass{{member.character.class}}">
-			{{characterClasses[member.character.class]}}
+		<div class="col-xs-2 characterClass{{member.class}}">
+			{{characterClasses[member.class]}}
 		</div>
 		<div class="col-xs-2">
-			{{member.character.spec.name}}
+			{{member.roleName}}
 		</div>
 		<div class="col-xs-1">
-			 {{member.character.spec.role}}
+			 {{member.roleSpec}}
 		</div>
 		<div class="col-xs-2 text-right">
-			{{member.character.achievementPoints}}
+			{{member.achievementPoints}}
 		</div>
 		<div class="col-xs-1 text-right">
 			{{member.rank}}

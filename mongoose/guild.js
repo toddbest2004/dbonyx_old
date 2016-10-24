@@ -3,17 +3,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var guildSchema = new Schema({
-	lastModified: Number,
-	lastChecked: Number,
-	name: String,
-	nameSlug: String, //lowercase normalized name for searching
-	realm: String,
-	realmSlug: String,
-	region: String,
-	battlegroup: String,
-	level: Number,
-	side: Number,
-	achievementPoints: Number,
+	// lastModified: Number,
+	// lastChecked: Number,
+	// name: String,
+	// nameSlug: String, //lowercase normalized name for searching
+	// realm: String,
+	// realmSlug: String,
+	// region: String,
+	// battlegroup: String,
+	// level: Number,
+	// side: Number,
+	// achievementPoints: Number,
 	achievements: {
 		achievementsCompleted: [Number],
 		achievementsCompletedTimestamp: [Number],
